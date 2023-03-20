@@ -17,7 +17,7 @@ import 'state/applicationstate.dart';
 import 'screens/splashscreen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:gtk_flutter/auth_gate.dart';
+//import 'package:gtk_flutter/auth_gate.dart';
 
 import 'package:flutterfire_ui/auth.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gtk_flutter/screens/homePage.dart';
 import 'package:gtk_flutter/screens/mainpage.dart';
 import 'package:lottie/lottie.dart';
-import 'package:gtk_flutter/screens/maphomescreen.dart';
+//import 'package:gtk_flutter/screens/maphomescreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

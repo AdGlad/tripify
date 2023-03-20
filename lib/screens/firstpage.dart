@@ -9,7 +9,7 @@ import 'package:gtk_flutter/screens/mainpage.dart';
 import 'package:provider/provider.dart';
 
 import '../firebase_options.dart';
-import '../src/authentication.dart';
+//import '../src/authentication.dart';
 import '../state/applicationstate.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' // new

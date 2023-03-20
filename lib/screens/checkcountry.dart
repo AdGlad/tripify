@@ -31,7 +31,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:geolocator/geolocator.dart';
 //import '../src/authentication.dart';
 import '../src/ad_helper.dart';
-import '../src/authentication.dart';
+//import '../src/authentication.dart';
 import '../state/applicationstate.dart';
 //import 'dart:typed_data';
 //import 'package:audioplayers/audioplayers.dart';
