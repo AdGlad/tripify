@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "90817750920",
+    "project_id": "tripify-first",
+    "storage_bucket": "tripify-first.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90817750920:android:8291ade3eceaef19dd7c3d",
+        "android_client_info": {
+          "package_name": "com.example.gtk_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90817750920-8hmvhmkcro9kf7r5ere6j092tmo1f842.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbxyC0jLcgrjQODKyb49ryMFuWjZ193eE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90817750920-2bmot5is9ic9m61t8a7875v4ekhnj1m4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "90817750920-9307of40hl4eg62dabtvcd403s6pg5a8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tripify.tripify-first"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
