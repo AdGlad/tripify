@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gtk_flutter/screens/homePage.dart';
-import 'package:gtk_flutter/screens/mainpage.dart';
 import 'package:lottie/lottie.dart';
-//import 'package:gtk_flutter/screens/maphomescreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -37,15 +34,6 @@ class _SplashScreenState extends State<SplashScreen>
           _controller
             ..duration = composition.duration
             ..forward().whenComplete(() => context.go("/first"));
-          //   ..forward().whenComplete(() => context.go("/home"));
-          //     ..forward().whenComplete(() => context.go("/authgate"));
-
-          //Navigator.pushReplacement(
-          // context,
-          // MaterialPageRoute(builder: (context) => HomePage()),
-          // MaterialPageRoute(builder: (context) => HomeMap()),
-          // MaterialPageRoute(builder: (context) => MainPage()),
-          // ));
         },
       ),
     );

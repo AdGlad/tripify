@@ -1,9 +1,9 @@
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:gtk_flutter/map/data/countrycodes.dart';
+//import 'package:flutter/src/widgets/container.dart';
+//import 'package:flutter/src/widgets/framework.dart';
+//import 'package:gtk_flutter/map/data/countrycodes.dart';
 import 'package:gtk_flutter/screens/activecountries.dart';
 import 'package:gtk_flutter/screens/regionlistpage.dart';
 import 'package:provider/provider.dart';
@@ -14,18 +14,6 @@ import '../state/applicationstate.dart';
 
 class ActiveCountryPage extends StatefulWidget {
   const ActiveCountryPage({super.key});
-
-  //ActiveCountryPage(
-  //    {required this.usercountrylist,
-  //    required this.countryrecords,
-  //    required this.userregionlist,
-  //    required this.regionrecords,
-  //    super.key});
-
-  // List<CurrentCountry> usercountrylist;
-  //Map<String, dynamic> countryrecords;
-  //List<Region> userregionlist;
-  // Map<String, dynamic> regionrecords;
 
   @override
   State<ActiveCountryPage> createState() => _ActiveCountryPageState();
