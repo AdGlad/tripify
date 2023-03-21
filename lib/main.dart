@@ -110,30 +110,136 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       title: 'Tripify',
       theme: ThemeData(
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+          // buttonTheme: ButtonThemeData(
+          //   textTheme: ButtonTextTheme.accent,
+          //   colorScheme: Theme.of(context).colorScheme.copyWith(
+          //         primary: Colors.orange,
+          //         // secondary will be the textColor, when the textTheme is set to accent
+          //         secondary: Colors.white,
+          //       ),
+          // ),
+
+          // buttonTheme: ButtonThemeData(
+          //   buttonColor: Colors.orange,
+          //   textTheme: ButtonTextTheme.accent,
+          // ),
+
+          //   inputDecorationTheme: InputDecorationTheme(
+          //     border: OutlineInputBorder(
+          //       borderRadius: BorderRadius.circular(8),
+          //     ),
+          //   ),
+          //   outlinedButtonTheme: OutlinedButtonThemeData(
+          //     style: ButtonStyle(
+          //       padding: MaterialStateProperty.all<EdgeInsets>(
+          //         const EdgeInsets.all(1),
+          //       ),
+          //       backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+          //       foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          //     ),
+          //   ),
+          //   buttonTheme: Theme.of(context).buttonTheme.copyWith(
+          //         highlightColor: Colors.deepPurple,
+          //       ),
+//        primarySwatch: Colors.deepPurple,
+          //      textTheme:
+          // const TextTheme(
+          // displayLarge: TextStyle(color: Colors.amber),
+          // displayMedium: TextStyle(color: Colors.amber),
+          // displaySmall: TextStyle(color: Colors.amber),
+          // headlineLarge: TextStyle(color: Colors.amber),
+          // headlineMedium: TextStyle(color: Colors.amber),
+          // headlineSmall: TextStyle(color: Colors.amber),
+          // titleLarge: TextStyle(color: Colors.amber),
+          // titleMedium: TextStyle(color: Colors.amber),
+          // titleSmall: TextStyle(color: Colors.amber),
+          // bodyLarge: TextStyle(color: Colors.amber),
+          // bodyMedium: TextStyle(color: Colors.amber),
+          // bodySmall: TextStyle(color: Colors.amber),
+          // labelLarge: TextStyle(color: Colors.amber),
+          // labelMedium: TextStyle(color: Colors.amber),
+
+          //   button: TextStyle(color: Colors.amber),
+          //        labelSmall: TextStyle(color: Colors.amber),
+          //headline1: TextStyle(color: Colors.amber),
+// headline2: TextStyle(color: Colors.amber),
+// headline3: TextStyle(color: Colors.amber),
+// headline4: TextStyle(color: Colors.amber),
+// headline5: TextStyle(color: Colors.amber),
+// headline6: TextStyle(color: Colors.amber),
+// subtitle1: TextStyle(color: Colors.amber),
+// subtitle2: TextStyle(color: Colors.amber),
+// bodyText1: TextStyle(color: Colors.amber),
+// bodyText2: TextStyle(color: Colors.amber),
+// caption: TextStyle(color: Colors.amber),
+          //button: TextStyle(color: Colors.amber),
+// overline: TextStyle(color: Colors.amber),
+          // ),
+          textTheme: GoogleFonts.robotoTextTheme()
+          //TextTheme()
+          //  GoogleFonts.lato(fontSize: 5).
+          //    GoogleFonts.robotoTextTheme().copyWith(
+          // displayLarge: TextStyle(fontSize: 10),
+          // displayMedium: TextStyle(fontSize: 10),
+          // displaySmall: TextStyle(fontSize: 10),
+          // headlineLarge: TextStyle(fontSize: 10),
+          // headlineMedium: TextStyle(fontSize: 10),
+          // headlineSmall: TextStyle(fontSize: 10),
+          // titleLarge: TextStyle(fontSize: 10),
+          // titleMedium: TextStyle(fontSize: 10),
+          // titleSmall: TextStyle(fontSize: 10),
+          // bodyLarge: TextStyle(fontSize: 10),
+          // bodyMedium: TextStyle(fontSize: 10),
+          // bodySmall: TextStyle(fontSize: 10),
+          // labelLarge: TextStyle(fontSize: 10),
+          // labelMedium: TextStyle(fontSize: 10),
+          // labelSmall: TextStyle(fontSize: 10),
+          // headline1: TextStyle(fontSize: 10),
+          // headline2: TextStyle(fontSize: 10),
+          // headline3: TextStyle(fontSize: 10),
+          // headline4: TextStyle(fontSize: 10),
+          // headline5: TextStyle(fontSize: 10),
+          // headline6: TextStyle(fontSize: 10),
+          // subtitle1: TextStyle(fontSize: 10),
+          // subtitle2: TextStyle(fontSize: 10),
+          // bodyText1: TextStyle(fontSize: 10),
+          // bodyText2: TextStyle(fontSize: 10),
+          // caption: TextStyle(fontSize: 10),
+          //    button: TextStyle(fontSize: 10),
+          //  overline: TextStyle(fontSize: 10),
+          //        )
+          //  caption: TextStyle(fontSize: 10),
+          //  button: TextStyle(fontSize: 5)),
+
+//              robotoTextTheme(
+//                  TextTheme(displayLarge: TextStyle(color: Colors.amber)))
+
+//            robotoTextTheme(
+          //         Theme.of(context).textTheme,
+          // ),
+
+          //   visualDensity: VisualDensity.adaptivePlatformDensity,
+          //   useMaterial3: true,
+
+          //   inputDecorationTheme: InputDecorationTheme(
+          //     border: OutlineInputBorder(
+          //       borderRadius: BorderRadius.circular(8),
+          //     ),
+          //   ),
+          //   outlinedButtonTheme: OutlinedButtonThemeData(
+          //     style: ButtonStyle(
+          //       padding: MaterialStateProperty.all<EdgeInsets>(
+          //         const EdgeInsets.all(24),
+          //       ),
+          //       backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+          //       foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          //     ),
+          //   ),
+
+          //   // buttonTheme: Theme.of(context).buttonTheme.copyWith(
+          //   //       highlightColor: Colors.deepPurple,
+          //   //     ),
           ),
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsets>(
-              const EdgeInsets.all(1),
-            ),
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-          ),
-        ),
-        buttonTheme: Theme.of(context).buttonTheme.copyWith(
-              highlightColor: Colors.deepPurple,
-            ),
-        primarySwatch: Colors.deepPurple,
-        textTheme: GoogleFonts.robotoTextTheme(
-          Theme.of(context).textTheme,
-        ),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        useMaterial3: true,
-      ),
       routerConfig: _router,
     );
   }

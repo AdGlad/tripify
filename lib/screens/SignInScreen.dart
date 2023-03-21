@@ -14,15 +14,15 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
+        //alignment: Alignment.centerLeft,
         child: SignInScreen(
-      resizeToAvoidBottomInset: true,
+      desktopLayoutDirection: TextDirection.ltr,
+      resizeToAvoidBottomInset: false,
+
+      oauthButtonVariant: OAuthButtonVariant.icon,
       providerConfigs: [
         EmailProviderConfiguration(),
         FacebookProviderConfiguration(
@@ -91,15 +91,15 @@ class _SignInState extends State<SignIn> {
       //             'Welcome to Tripify, please sign up!'),
       //   );
       // },
-      // footerBuilder: (context, action) {
-      //   return const Padding(
-      //     padding: EdgeInsets.only(top: 4),
-      //     child: Text(
-      //       'By signing in, you agree to our terms and conditions.',
-      //       style: TextStyle(color: Colors.grey),
-      //     ),
-      //   );
-      // },
+      footerBuilder: (context, action) {
+        return const Padding(
+          padding: EdgeInsets.only(top: 4),
+          child: Text(
+            'By signing in, you agree to our terms and conditions.',
+            style: TextStyle(color: Colors.grey),
+          ),
+        );
+      },
       // sideBuilder: (context, shrinkOffset) {
       //   return Padding(
       //     padding: const EdgeInsets.all(20),
