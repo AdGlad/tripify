@@ -15,7 +15,9 @@ import 'state/applicationstate.dart';
 import 'screens/splashscreen.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:flutterfire_ui/auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
@@ -23,6 +25,21 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseUIAuth.configureProviders([
+    EmailAuthProvider(),
+    // emailLinkProviderConfig,
+    PhoneAuthProvider(),
+    GoogleProvider(
+        clientId:
+            "90817750920-9307of40hl4eg62dabtvcd403s6pg5a8.apps.googleusercontent.com"),
+    //  AppleProvider(),
+    FacebookProvider(clientId: "1dae917812269b6ffe95a586db98aca8"),
+    //TwitterProvider(
+    // apiKey: TWITTER_API_KEY,
+    // apiSecretKey: TWITTER_API_SECRET_KEY,
+    // redirectUri: TWITTER_REDIRECT_URI,
+    //),
+  ]);
 
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),

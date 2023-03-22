@@ -1,13 +1,17 @@
 import 'dart:developer';
-import 'dart:ffi';
+//import 'dart:ffi';
 
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart' // new
-    hide
-        EmailAuthProvider,
-        PhoneAuthProvider; // new
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+import 'package:firebase_auth/firebase_auth.dart'
+    hide PhoneAuthProvider, EmailAuthProvider;
+//import 'package:firebase_auth/firebase_auth.dart' // new
+//   hide
+//        EmailAuthProvider,
+//        PhoneAuthProvider; // new
 import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../firebase_options.dart';
@@ -18,6 +22,7 @@ import 'dart:developer' as developer;
 
 import '../model/triphistory.dart';
 import '../model/usertotals.dart';
+import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
@@ -36,6 +41,8 @@ class ApplicationState extends ChangeNotifier {
 
   StreamSubscription<QuerySnapshot>? _tripsSubscription;
   StreamSubscription<QuerySnapshot>? _locationCurrentSubscription;
+
+  StreamSubscription<QuerySnapshot>? _placeHistorySubscription;
 
   StreamSubscription<QuerySnapshot>? _userRegionListSubscription;
 
@@ -81,8 +88,27 @@ class ApplicationState extends ChangeNotifier {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
 
+    // FirebaseUIAuth.configureProviders([
+    //   EmailAuthProvider(),
+    //   //EmailAuthProvider(),
+    //   // EmailAuthProvider(),
+
+    //   // EmailProvider(),
+    // ]);
     FirebaseUIAuth.configureProviders([
       EmailAuthProvider(),
+      // emailLinkProviderConfig,
+      PhoneAuthProvider(),
+      GoogleProvider(
+          clientId:
+              "90817750920-9307of40hl4eg62dabtvcd403s6pg5a8.apps.googleusercontent.com"),
+      //  AppleProvider(),
+      FacebookProvider(clientId: "1dae917812269b6ffe95a586db98aca8"),
+      //TwitterProvider(
+      // apiKey: TWITTER_API_KEY,
+      // apiSecretKey: TWITTER_API_SECRET_KEY,
+      // redirectUri: TWITTER_REDIRECT_URI,
+      //),
     ]);
 
     FirebaseAuth.instance.userChanges().listen((user) {
@@ -167,6 +193,42 @@ class ApplicationState extends ChangeNotifier {
                 elevation: document.data()['elevation'] as int,
                 visitnumber: document.data()['visitnumber'] as int,
                 arrivaldate: current_arrivalDate);
+          }
+
+          notifyListeners();
+        });
+
+        _placeHistorySubscription = FirebaseFirestore.instance
+            .collectionGroup('placehistory')
+            .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .orderBy('timestamp', descending: true)
+            .snapshots()
+            .listen((snapshot) {
+          _placeHistory = [];
+
+          for (final document in snapshot.docs) {
+            //  globals.new_latitude = document.data()['latitude'] as double;
+            //  globals.new_longitude = document.data()['longitude'] as double;
+            int timeInMillis = document.data()['timestamp'] as int;
+            DateTime current_arrivalDate =
+                DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+
+            _placeHistory.add(PlaceHistory(
+                userId: FirebaseAuth.instance.currentUser!.uid,
+                name: document.data()['name'] as String,
+                latitude: document.data()['latitude'] as double,
+                longitude: document.data()['longitude'] as double,
+                streetAddress: document.data()['streetAddress'] as String,
+                city: document.data()['city'] as String,
+                countryName: document.data()['countryName'] as String,
+                countryCode: document.data()['countryCode'] as String,
+                postal: document.data()['postal'] as String,
+                region: document.data()['region'] as String,
+                regionCode: document.data()['regionCode'] as String,
+                timezone: document.data()['timezone'] as String,
+                elevation: document.data()['elevation'] as int,
+                visitnumber: document.data()['visitnumber'] as int,
+                arrivaldate: current_arrivalDate));
           }
 
           notifyListeners();
