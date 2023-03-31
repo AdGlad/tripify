@@ -37,20 +37,25 @@ class ApplicationState extends ChangeNotifier {
   bool get emailVerified => _emailVerified;
 
   //bool Location = true;
-  //StreamSubscription<QuerySnapshot>? _placeHistorySubscription;
+  StreamSubscription<QuerySnapshot>? _usersSubscription;
 
+  StreamSubscription<QuerySnapshot>? _userProfileSubscription;
   StreamSubscription<QuerySnapshot>? _tripsSubscription;
   StreamSubscription<QuerySnapshot>? _locationCurrentSubscription;
-
   StreamSubscription<QuerySnapshot>? _placeHistorySubscription;
-
   StreamSubscription<QuerySnapshot>? _userRegionListSubscription;
+
+  List<UserProfile> _users = [];
+  List<UserProfile> get users => _users;
 
   List<PlaceHistory> _placeHistory = [];
   List<PlaceHistory> get placeHistory => _placeHistory;
 
   List<TripHistory> _tripHistory = [];
   List<TripHistory> get tripHistory => _tripHistory;
+
+  UserProfile? _userProfile;
+  UserProfile? get userProfile => _userProfile;
 
   UserTotals _userTotals = UserTotals();
   UserTotals get userTotals => _userTotals;
@@ -116,6 +121,73 @@ class ApplicationState extends ChangeNotifier {
         _loggedIn = true;
         _emailVerified = user.emailVerified;
         log(' User logged in ..');
+
+        _usersSubscription = FirebaseFirestore.instance
+            .collection('users')
+            //.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .orderBy('distancetotal', descending: true)
+            .snapshots()
+            .listen((snapshot) {
+          _users = [];
+
+          for (final document in snapshot.docs) {
+            //  globals.new_latitude = document.data()['latitude'] as double;
+            //  globals.new_longitude = document.data()['longitude'] as double;
+            //int timeInMillis = document.data()['timestamp'] as int;
+            //DateTime current_arrivalDate =
+            //  DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+
+            _users.add(UserProfile(
+              id: document.id,
+              userId: document.data()['userId'] as String,
+              email: document.data()['email'] as String,
+              nickname: document.data()['nickname'] as String,
+              avatar: document.data()['avatar'] as String,
+              // photo: document.data()['photo"'] as String,
+              language: document.data()['language'] as String,
+              //joinData: document.data()['joinDate"'] as String,
+              friend: document.data()['friend'] as int,
+              league: document.data()['league'] as int,
+              countrycount: document.data()['countrycount'] as int,
+              visitcount: document.data()['visitcount'] as int,
+              distancetotal: document.data()['distancetotal'] as int,
+              regioncount: document.data()['regioncount'] as int,
+              placescount: document.data()['placescount'] as int,
+            ));
+          }
+
+          notifyListeners();
+        });
+
+        // var userRef = FirebaseFirestore.instance
+        //     .collection('Collection_name')
+        //     .doc('Document_Id')
+        //     .snapshots();
+        //     //.get();
+
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .snapshots()
+            .listen((event) {
+          developer.log(
+              'In user profile loop ${FirebaseAuth.instance.currentUser!.uid}');
+          _userProfile?.id = FirebaseAuth.instance.currentUser!.uid;
+          _userProfile?.userId = event.get("userId");
+          _userProfile?.email = event.get("email");
+          _userProfile?.nickname = event.get("nickname");
+          _userProfile?.avatar = event.get("avatar");
+          _userProfile?.photo = event.get("photo");
+          _userProfile?.language = event.get("language");
+          _userProfile?.joinData = event.get("joinDate");
+          _userProfile?.friend = event.get("friend");
+          _userProfile?.league = event.get("league");
+          _userProfile?.countrycount = event.get("countrycount");
+          _userProfile?.visitcount = event.get("visitcount");
+          _userProfile?.distancetotal = event.get("distancetotal");
+          _userProfile?.regioncount = event.get("regioncount");
+          _userProfile?.placescount = event.get("placescount");
+        });
 
         StreamSubscription<QuerySnapshot> _userCountryListSubscription =
             FirebaseFirestore.instance
@@ -240,9 +312,9 @@ class ApplicationState extends ChangeNotifier {
             .orderBy('timestamp', descending: false)
             .snapshots()
             .listen((snapshot) {
-          String previous_countryName = 'previous_countryName';
-          String previous_regionCode = 'previous_regionCode';
-          int previous_visitNumber = -1;
+          String previousCountryName = 'previous_countryName';
+          String previousRegionCode = 'previous_regionCode';
+          int previousVisitNumber = -1;
           int loopcounter = 0;
           int countrycounter = 0;
           int visitcounter = 0;
@@ -251,47 +323,55 @@ class ApplicationState extends ChangeNotifier {
           int placescounter = 0;
 
           _tripHistory = [];
-          _userTotals = UserTotals();
+          _userTotals = UserTotals(
+              userId: FirebaseAuth.instance.currentUser!.uid,
+              CountryCount: 0,
+              VisitCount: 0,
+              DistanceTotal: 0,
+              RegionTotal: 0,
+              PlacesCount: 0);
 
           for (final document in snapshot.docs) {
-            String current_countryName =
+            String currentCountryName =
                 document.data()['countryName'] as String;
-            String current_countryCode =
+            String currentCountryCode =
                 document.data()['countryCode'] as String;
-            String current_regionCode = document.data()['regionCode'] as String;
-            double? current_distance =
+            String currentRegionCode = document.data()['regionCode'] as String;
+            double? currentDistance =
                 document.data()['distance'] as double? ?? 0.0;
-            int? current_visitNumber =
+            int? currentVisitNumber =
                 document.data()['visitnumber'] as int? ?? 0;
             int timeInMillis = document.data()['timestamp'];
-            DateTime current_arrivalDate =
+            DateTime currentArrivalDate =
                 DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
-            if (previous_countryName != current_countryName) {
+            if (previousCountryName != currentCountryName) {
               countrycounter++;
             }
-            if (previous_regionCode != current_regionCode) {
+            if (previousRegionCode != currentRegionCode) {
               regioncounter++;
             }
-            if (previous_visitNumber != current_visitNumber) {
+            if (previousVisitNumber != currentVisitNumber) {
               visitcounter++;
             }
 
             placescounter++;
-            distancetotal = distancetotal + current_distance;
+            developer.log(
+                'distancetotal $distancetotal , current_distance, $currentDistance');
+            distancetotal = distancetotal + currentDistance;
 
-            if (previous_countryName != current_countryName) {
+            if (previousCountryName != currentCountryName) {
               _tripHistory.add(TripHistory(
                 userId: FirebaseAuth.instance.currentUser!.uid,
-                countryName: current_countryName,
-                countryCode: current_countryCode,
-                arrivalDate: current_arrivalDate,
-                visitNumber: current_visitNumber,
+                countryName: currentCountryName,
+                countryCode: currentCountryCode,
+                arrivalDate: currentArrivalDate,
+                visitNumber: currentVisitNumber,
               ));
 
               if (loopcounter > 0) {
                 _tripHistory[loopcounter - 1].departureDate =
-                    current_arrivalDate;
+                    currentArrivalDate;
               }
               loopcounter++;
 
@@ -299,16 +379,18 @@ class ApplicationState extends ChangeNotifier {
                   'Creating new trip record ${document.data()['countryName']} , ${document.data()['countryCode']}, ${document.data()['visitnumber']}');
             }
 
-            previous_countryName = current_countryName;
-            previous_regionCode = current_regionCode;
-            previous_visitNumber = current_visitNumber;
-
-            _userTotals.CountryCount = countrycounter;
-            _userTotals.VisitCount = visitcounter;
-            _userTotals.DistanceTotal = (distancetotal / 1000).toInt();
-            _userTotals.RegionTotal = regioncounter;
-            _userTotals.PlacesCount = placescounter;
+            previousCountryName = currentCountryName;
+            previousRegionCode = currentRegionCode;
+            previousVisitNumber = currentVisitNumber;
           }
+
+          developer.log(
+              'countrycounter $countrycounter , $visitcounter, $distancetotal');
+          _userTotals.CountryCount = countrycounter;
+          _userTotals.VisitCount = visitcounter;
+          _userTotals.DistanceTotal = distancetotal ~/ 1000;
+          _userTotals.RegionTotal = regioncounter;
+          _userTotals.PlacesCount = placescounter;
 
           _tripHistory.forEach((trip) {
             developer.log(

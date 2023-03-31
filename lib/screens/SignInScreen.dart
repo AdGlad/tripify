@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -59,7 +60,29 @@ class _SignInState extends State<SignIn> {
               return;
             }
             if (state is UserCreated) {
-              user.updateDisplayName(user.email!.split('@')[0]);
+              // Create profile record
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user!.uid)
+                  .set({
+                // set({
+                'userId': FirebaseAuth.instance.currentUser!.uid,
+                'nickname': user.displayName,
+                'email': user.email,
+                'avatar': user.photoURL,
+                // 'age': int.parse(_ageController.text),
+                'friend': 1,
+                'league': 1,
+                'language': 'en',
+                'joinData': DateTime.now(),
+                'countrycount': 0,
+                'visitcount': 0,
+                'distancetotal': 0,
+                'regioncount': 0,
+                'placescount': 0,
+              });
+
+              // user.updateDisplayName(user.email!.split('@')[0]);
             }
             if (!user.emailVerified) {
               user.sendEmailVerification();

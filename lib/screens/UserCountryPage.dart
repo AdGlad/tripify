@@ -24,13 +24,13 @@ class _UserCountryPageState extends State<UserCountryPage> {
 
 class UserCountrylist extends StatelessWidget {
   UserCountrylist();
-  final CurrentCountryCollectionReference countyRef =
+  final CurrentCountryCollectionReference countryRef =
       currentuserRef.doc(FirebaseAuth.instance.currentUser!.uid).country;
 
   @override
   Widget build(BuildContext context) {
     return FirestoreBuilder<CurrentCountryQuerySnapshot>(
-        ref: countyRef,
+        ref: countryRef,
         builder: (context, AsyncSnapshot<CurrentCountryQuerySnapshot> snapshot,
             Widget? child) {
           if (snapshot.hasError) return Text('Something went wrong!');

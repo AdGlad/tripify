@@ -17,6 +17,7 @@ import 'package:gtk_flutter/src/globals.dart' as globals;
 import 'package:confetti/confetti.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:geolocator/geolocator.dart';
+import '../model/usertotals.dart';
 import '../src/ad_helper.dart';
 import '../state/applicationstate.dart';
 import 'dart:async';
@@ -193,18 +194,35 @@ class _CheckCountryState extends State<CheckCountry> {
     }
   }
 
+  Future<void> updateStats(UserTotals userTotals) async {
+    final user = FirebaseAuth.instance.currentUser;
+    // await user?.updateDisplayName(_nicknameController.text);
+    // await user!.updateDisplayName("you");
+    developer.log(
+        'Update users ${userTotals.CountryCount}, ${userTotals.VisitCount}, ${userTotals.DistanceTotal}, ${userTotals.RegionTotal}, ${userTotals.PlacesCount}');
+    await FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
+      'countrycount': userTotals.CountryCount ?? 0,
+      'visitcount': userTotals.VisitCount ?? 0,
+      'distancetotal': userTotals.DistanceTotal ?? 0,
+      'regiontotal': userTotals.RegionTotal ?? 0,
+      'placescount': userTotals.PlacesCount ?? 0,
+    });
+  }
+
   void SaveLocation(
     PlaceHistory? currentPlace,
+    //  UserTotals? userTotals,
     //  MapboxMapController? locationcontroller
   ) async {
     LocationData? newPlace = await Location().getLocation();
 
     String _userId = FirebaseAuth.instance.currentUser!.uid;
     CurrentUser currentUser = CurrentUser(
-        id: FirebaseAuth.instance.currentUser!.uid,
-        userId: FirebaseAuth.instance.currentUser!.uid,
-        email: FirebaseAuth.instance.currentUser!.email,
-        displayname: FirebaseAuth.instance.currentUser!.email);
+      id: FirebaseAuth.instance.currentUser!.uid,
+      userId: FirebaseAuth.instance.currentUser!.uid,
+      //    email: FirebaseAuth.instance.currentUser!.email,
+      //    displayname: FirebaseAuth.instance.currentUser!.displayName
+    );
 
     FirestoreService firestoreService = FirestoreService();
 
@@ -218,27 +236,27 @@ class _CheckCountryState extends State<CheckCountry> {
 // Beijing","39.9040","116.4075"
 // Jakarta","-6.2146","106.8451"
 
-    double _latitude = newPlace.latitude!;
-    double _longitude = newPlace.longitude!;
+    double? _latitude = newPlace.latitude;
+    double? _longitude = newPlace.longitude;
 
     //double
     //_latitude = 35.6839;
     //double
     //_longitude = 139.7744;
-    // double _latitude = 40.6943;
-    // double _longitude = -73.9249;
+    //_latitude = 40.6943;
+    //_longitude = -73.9249;
 
     // double
     //_latitude = -6.2146;
     // double
     //_longitude = 106.8451;
 
-    // double
-    //_latitude = 19.4333;
-    // double
+    // _latitude = 19.4333;
     //_longitude = -99.1333;
-    // double _latitude = 39.9040;
-    // double _longitude = 116.4075;
+    // double
+    _latitude = 39.9040;
+    // double
+    _longitude = 116.4075;
 
     //double _latitude = -6.2146;
     //double _longitude = 106.8451;
@@ -246,7 +264,8 @@ class _CheckCountryState extends State<CheckCountry> {
     // if (loc.latitude != null && loc.longitude != null) {
 
     await _incrementStreak();
-    await fetchNewPlace(_latitude, _longitude).then((value) {
+
+    await fetchNewPlace(_latitude, _longitude).then((value) async {
       // int currentVisitNumber;
       int newVisitNumber;
 
@@ -254,7 +273,7 @@ class _CheckCountryState extends State<CheckCountry> {
           'Getting location for ${_latitude.toString()} , ${_longitude.toString()}');
 
       newVisitNumber = currentPlace?.visitnumber ?? 0;
-
+      //newVisitNumber = 0;
       if (currentPlace != null) {
         developer.log('newVisitNumber is ${newVisitNumber}');
 
@@ -276,8 +295,8 @@ class _CheckCountryState extends State<CheckCountry> {
                 print("mapController.animateCamera() returned $result"));
       }
 
-      if ((currentPlace == null) ||
-          (currentPlace.countryCode != value.countryCode!)) {
+      if ((currentPlace?.countryCode == null) ||
+          (currentPlace?.countryCode != value.countryCode!)) {
         developer.log('New Country identified');
 
         newVisitNumber++;
@@ -287,8 +306,8 @@ class _CheckCountryState extends State<CheckCountry> {
       }
 
       double distanceInMeters = Geolocator.distanceBetween(
-          currentPlace!.latitude!,
-          currentPlace!.longitude!,
+          currentPlace?.latitude ?? value.latitude!,
+          currentPlace?.longitude ?? value.longitude!,
           value.latitude!,
           value.longitude!);
       developer.log('Discance in meters ${distanceInMeters.toString()}');
@@ -296,8 +315,8 @@ class _CheckCountryState extends State<CheckCountry> {
           countryCode: value.countryCode!,
           countryName: value.countryName!,
           userId: _userId);
-      // Future<String> _messageCountry =
-      //     firestoreService.setCountry(countyRef, newcountry);
+      String _messageCountry =
+          await firestoreService.setCountry(countyRef, newcountry);
       Region region = Region(
           regionCode: value.regionCode!,
           region: value.region!,
@@ -305,8 +324,8 @@ class _CheckCountryState extends State<CheckCountry> {
           userId: _userId);
       RegionCollectionReference regionRef =
           countyRef.doc(newcountry.countryCode).region;
-      // Future<String> _messageRegion =
-      //     firestoreService.setRegion(regionRef, region);
+      String _messageRegion =
+          await firestoreService.setRegion(regionRef, region);
       PlaceHistory newPlace = PlaceHistory(
         userId: value.userId,
         name: value.countryName,
@@ -329,17 +348,18 @@ class _CheckCountryState extends State<CheckCountry> {
       );
       PlaceHistoryCollectionReference placehistoryRef =
           regionRef.doc(region.regionCode).placehistory;
-      Future<String> _messagePlaceHistory =
-          firestoreService.addPlaceHistory(placehistoryRef, newPlace);
+      await firestoreService.addPlaceHistory(placehistoryRef, newPlace);
       developer.log('New Country ${newPlace.countryCode}');
       developer.log(
           'New latitude. longitude ${newPlace.latitude} ${newPlace.longitude}');
     });
     _showShareDialog();
+    //  await _updateStats(userTotals!);
   }
 
-  Future<PlaceHistory> fetchNewPlace(double latitude, double longitude) async {
-    PlaceHistory _placeHistory = PlaceHistory(
+  Future<PlaceHistory> fetchNewPlace(
+      double? latitude, double? longitude) async {
+    PlaceHistory? _placeHistory = PlaceHistory(
         userId: FirebaseAuth.instance.currentUser!.uid,
         city: 'city',
         countryCode: 'countryCode',
@@ -358,7 +378,7 @@ class _CheckCountryState extends State<CheckCountry> {
         arrivaldate: DateTime.now());
 
     var jsonString;
-    String access_token =
+    String accessToken =
         "pk.eyJ1IjoidHJpcGlmeSIsImEiOiJjbGRmaWdkcHgwaGJpM25wZTh0eDAwN2JoIn0.H_QiLx6jgdQXVX4OqzKCVw";
 
     String urlString = "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
@@ -366,7 +386,7 @@ class _CheckCountryState extends State<CheckCountry> {
         "," +
         latitude.toString() +
         ".json?limit=1&access_token=" +
-        access_token;
+        accessToken;
     var res = await http.get(
       Uri.parse(urlString),
     );
@@ -402,6 +422,7 @@ class _CheckCountryState extends State<CheckCountry> {
   }
 
   BannerAd? _bannerAd;
+
   void _showShareDialog() {
     showDialog(
       context: context,
@@ -600,7 +621,10 @@ class _CheckCountryState extends State<CheckCountry> {
                             backgroundColor: Colors.orangeAccent,
                             elevation: 5,
                           ),
-                          onPressed: () => SaveLocation(appState.currentPlace),
+                          onPressed: () => [
+                            SaveLocation(appState.currentPlace),
+                            updateStats(appState.userTotals)
+                          ],
                           child: Text('Check Location'),
                         ),
                       ),

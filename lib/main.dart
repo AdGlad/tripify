@@ -10,6 +10,7 @@ import 'package:gtk_flutter/firebase_options.dart';
 import 'package:gtk_flutter/screens/SignInScreen.dart';
 import 'package:gtk_flutter/screens/firstpage.dart';
 import 'package:gtk_flutter/screens/mainpage.dart';
+import 'package:gtk_flutter/screens/userprofile.dart';
 import 'package:provider/provider.dart';
 import 'state/applicationstate.dart';
 import 'screens/splashscreen.dart';
@@ -63,6 +64,10 @@ final _router = GoRouter(
           builder: (context, state) => const MainPage(),
         ),
         GoRoute(
+          path: 'userprofile',
+          builder: (context, state) => const UserInfoPage(),
+        ),
+        GoRoute(
             path: 'first',
             builder: (context, state) {
               return Consumer<ApplicationState>(
@@ -92,9 +97,17 @@ final _router = GoRouter(
           builder: (context, state) {
             return Consumer<ApplicationState>(
               builder: (context, appState, _) => ProfileScreen(
+                appBar: AppBar(
+                  title: const Text('User Profile'),
+                ),
                 key: ValueKey(appState.emailVerified),
                 //providers: const [],
-                actions: [],
+                actions: [
+                  SignedOutAction((context) {
+                    Navigator.pushReplacementNamed(context, '/sign-in');
+                    //  Navigator.of(context).pop();
+                  })
+                ],
                 children: [
                   Visibility(
                       visible: !appState.emailVerified,

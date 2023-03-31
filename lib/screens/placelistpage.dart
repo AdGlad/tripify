@@ -177,6 +177,13 @@ Widget placescard(PlaceHistory places, BuildContext context) {
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
+                    Text('Distance: ${places.distance}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.w700,
+                        )),
                     Text('Lat : ${places.latitude}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
