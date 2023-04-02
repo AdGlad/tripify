@@ -49,41 +49,77 @@ class UsersList extends StatelessWidget {
                     // Access the User instance
                     UserProfile user = querySnapshot.docs[index].data;
 
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    return Card(
+                      color: Color.fromARGB(255, 49, 52, 59),
+                      elevation: 8.0,
+                      margin: EdgeInsets.all(5.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+
+                      //padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
                           Container(
-                              child: index == 0
-                                  ? Icon(Icons.star_rounded,
-                                      color: Colors.amber)
-                                  : index == 1
-                                      ? Icon(Icons.star_rounded,
-                                          color: Colors.grey)
-                                      : index == 2
-                                          ? Icon(Icons.star_rounded,
-                                              color: Colors.brown)
-                                          : Text('${index + 1}')),
+                            width: 50,
+                            
+                            child: Container(
+                             //   color: Colors.blue,
 
-                          // Icon(Icons.star_rounded,
-                          //     color: index == 0
-                          //         ? Colors.amber
-                          //         : index == 1
-                          //             ? Colors.grey
-                          //             : index == 2
-                          //                 ? Colors.brown
-                          //                 : Colors.white),
-                          CircleAvatar(
-                            radius: 10.0,
-                            backgroundImage: user.avatar == null
-                                ? null //FileImage(_imageFile)
-                                : user.avatar != null
-                                    ? NetworkImage(user.avatar!)
-                                    : null,
+                                //alignment: Alignment.centerLeft,
+                                width: double.infinity,
+                                child: index == 0
+                                    ? Icon(Icons.star_rounded,
+                                        color: Colors.amber)
+                                    : index == 1
+                                        ? Icon(Icons.star_rounded,
+                                            color: Colors.grey)
+                                        : index == 2
+                                            ? Icon(Icons.star_rounded,
+                                                color: Colors.brown)
+                                            : Text('${index + 1}',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w700,
+                                                ))),
                           ),
-                          Center(
-                            child: Text(
-                                ' ${user.nickname?.padRight(15)}  ${user.distancetotal} Kms'),
+                          Container(
+                            color: Colors.white,
+                            //  alignment: Alignment.centerLeft,
+                            child: CircleAvatar(
+                              radius: 10.0,
+                              backgroundImage: user.avatar == null
+                                  ? null //FileImage(_imageFile)
+                                  : user.avatar != null
+                                      ? NetworkImage(user.avatar!)
+                                      : null,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: Text('     ${user.nickname} ',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w700,
+                                  )),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(' ${user.distancetotal} Kms  ',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w700,
+                                    )),
+                              ),
+                            ),
                           ),
                         ],
                       ),
