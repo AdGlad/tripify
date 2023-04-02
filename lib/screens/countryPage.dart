@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/map/countries_world_map.dart';
 import 'package:gtk_flutter/map/data/maps/world_map.dart';
+import 'package:gtk_flutter/screens/placelistpage.dart';
 import 'package:gtk_flutter/screens/regionlistpage.dart';
 import 'package:gtk_flutter/state/applicationstate.dart';
 import 'package:provider/provider.dart';
@@ -74,13 +75,13 @@ class _SupportedCountriesMapState extends State<SupportedCountriesMap> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => 
-        //RegionListPage(countrycode: country)
-        CountryPage(
-           country: country,
-           regionrecords: regionrecords,
-         ),
-       ),
+        builder: (context) =>
+            //RegionListPage(countrycode: country)
+            CountryPage(
+          country: country,
+          regionrecords: regionrecords,
+        ),
+      ),
     );
   }
 }
@@ -104,108 +105,15 @@ class _CountryPageState extends State<CountryPage> {
   late List<Map<String, dynamic>> properties;
 
   late Map<String, Color?> keyValuesPaires;
-  // late Map<String, String> _regionmaps = {
-  //   'New South Wales Australia': 'AU-NSW',
-  //   'Australian Capital Territory Australia': 'AU-ACT',
-  //   'Northern Territory Australia': 'AU-NT',
-  //   'Queensland Australia': 'AU-QLD',
-  //   'South Australia Australia': 'AU-SA',
-  //   'Victoria Australia': 'AU-VIC',
-  //   'Western Australia': 'AU-WA',
-  //   'Tasmania Australia': 'AU-TAS'
-  // };
-  // late String _region;
 
   Map<String, dynamic> fetchRegions(
       String countryCode, Map<String, dynamic> regionrecords) {
-    //Map<String, dynamic> regionrecords = {};
-    // Map<String, dynamic> regionValuesPaires = {};
-    // Map<String, dynamic> keyValuesPaires = {
-    //   "AU-ACT": Colors.green,
-    //   "AU-NSW": Colors.pink,
-    //   "AU-NT": Colors.yellow,
-    //   //    "AU-NSW": returnRegionColor(widget.regionrecords, "AU-NSW"),
-    //   //    "AU-NT": returnRegionColor(widget.regionrecords, "AU-NT"),
-    //   "AU-SA": Colors.green,
-    //   "AU-WA": Colors.green,
-    //   "AU-TAS": Colors.green,
-    //   "AU-QLD": Colors.green,
-    // };
-
     instruction = getInstructions(widget.country);
     properties = getProperties(instruction);
 
-//     StreamSubscription<QuerySnapshot> _userRegionListSubscription =
-//         await FirebaseFirestore.instance
-//             // .collectionGroup('region')
-//             // .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-//             // .orderBy('timestamp', descending: true)
-//             // .snapshots()
-//             // .listen((snapshot) {
-//             .collection('currentuser')
-//             .doc(FirebaseAuth.instance.currentUser!.uid)
-//             .collection('country')
-//             //    .doc(countryCode)
-//             //    .collection('region')
-//             .snapshots()
-//             .listen((snapshot) {
-//       regionrecords = {};
-//       for (final document in snapshot.docs) {
-//         developer.log(document.data()['regionCode'],
-//             name: 'my.app.category.region');
-//         String regionKeyvalue = document.data()['regionCode'];
-//         //Map<String, dynamic> regionKey = {regionKeyvalue: regionKeyvalue};
-//         //_regionrecords[document.id] = document.id;
-//         //regionrecords.addEntries(regionKeyvalue);
-//         regionrecords.addAll({regionKeyvalue: regionKeyvalue});
-//         //regionrecords.addEntries({regionKeyvalue: regionKeyvalue}.entries);
-
-//         //document.data()['regionCode'];
-// //        keyValuesPaires.addAll({"AU-NSW": Colors.lightGreen});
-//         //  _region = _regionmaps[document.id]!;
-//         //    keyValuesPaires.addAll({_region: Colors.lightGreen});
-//         //  keyValuesPaires
-//       }
-//     });
-
-// List<Region> list;
-
-//     Stream<QuerySnapshot> stream =
-//       FirebaseFirestore.instance
-//       .collection('currentuser')
-//       .doc(FirebaseAuth.instance.currentUser!.uid)
-//       .collection('country')
-//       .doc(countryCode)
-//       .collection('region')
-//       .snapshots();
-
-//     stream.listen((snapshot) {
-//       for (final document in snapshot.docs) {
-//            Region regionRec = Region(regionCode: document.id, region: doc.)
-//       })
-//       .documents.forEach((doc) {
-//         UserTask userTask = UserTask(
-//             doc.data['id'],
-//             doc.data['Description'],
-//             etc...);
-
-//         list.add(userTask);
-//       });
-//     });
-
-    // regionrecords.addEntries({"AU-NSW": "AU-NSW"}.entries);
-
-    // regionrecords["AU-NSW"] = "AU-NSW";
-    //_regionrecords["AU-NT"] = "AU-NT";
-
     properties.forEach((element) {
-      //keyValuesPaires[element['id']] =
-      //  returnRegionColor(regionrecords, element['id']);
       keyValuesPaires.addAll(
           {element['id']: returnRegionColor(regionrecords, element['id'])});
-
-      //   {element['id']: returnRegionColor(regionrecords, element['id'])});
-      //     {"color": returnRegionColor(_regionrecords, element['id'])});
     });
 
     return keyValuesPaires;
@@ -215,53 +123,15 @@ class _CountryPageState extends State<CountryPage> {
   void initState() {
     super.initState();
 
-//     StreamSubscription<QuerySnapshot> _userRegionListSubscription =
-//         FirebaseFirestore.instance
-//             .collection('currentuser')
-//             .doc(FirebaseAuth.instance.currentUser!.uid)
-//             .collection('country')
-//             .doc(widget.country)
-//             .collection('region')
-//             .snapshots()
-//             .listen((snapshot) {
-//       //_regionrecords = {};
-//       for (final document in snapshot.docs) {
-//         _regionrecords[document.id] = document.id;
-//         //document.data()['regionCode'];
-// //        keyValuesPaires.addAll({"AU-NSW": Colors.lightGreen});
-//         //  _region = _regionmaps[document.id]!;
-//         //    keyValuesPaires.addAll({_region: Colors.lightGreen});
-//         //  keyValuesPaires
-//       }
-//     });
-    // Fetch Regions for UserID and Country Code
-    //
-    // final QuerySnapshot querySnapshot = FirebaseFirestore.instance
-    //     .collection('currentuser')
-    //     .doc(FirebaseAuth.instance.currentUser!.uid)
-    //     .collection('country')
-    //     .doc(widget.country)
-    //     .collection('region')
-    //     .get
-
-    //    .snapshots()
-    //    .listen((snaphot) {
-    //  _regionrecords = {};
-    //});
-
     instruction = getInstructions(widget.country);
 
     if (instruction != "NOT SUPPORTED") {
       properties = getProperties(instruction);
       properties.sort((a, b) => a['name'].compareTo(b['name']));
-      //  keyValuesPaires = {"AU-NT": Colors.red};
-      //keyValuesPaires = SMapAustraliaColors.fromMap({"AU-NT": Colors.amber});
+
       keyValuesPaires = {};
 
       properties.forEach((element) {
-        //keyValuesPaires.addAll(
-        //   //   {element['id']: returnRegionColor(_regionrecords, element['id'])});
-        // keyValuesPaires.addAll({element['id']: element['color']});
         keyValuesPaires.addAll({element['id']: element['color']});
       });
 
@@ -317,12 +187,22 @@ class _CountryPageState extends State<CountryPage> {
                                   int i = properties.indexWhere(
                                       (element) => element['id'] == id);
 
-                                  properties[i]['color'] =
-                                      properties[i]['color'] == Colors.green
-                                          ? null
-                                          : Colors.green;
-                                  keyValuesPaires[properties[i]['id']] =
-                                      properties[i]['color'];
+                                  // properties[i]['color'] =
+                                  //     properties[i]['color'] == Colors.green
+                                  //         ? null
+                                  //         : Colors.green;
+                                  // keyValuesPaires[properties[i]['id']] =
+                                  //     properties[i]['color'];
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PlaceHistoryListPage(
+                                              countrycode: widget.country,
+                                              regioncode: properties[i]['id']),
+                                    ),
+                                  );
                                 });
                               },
                             ))),
@@ -331,36 +211,73 @@ class _CountryPageState extends State<CountryPage> {
                                   width: 320,
                                   height: MediaQuery.of(context).size.height,
                                   child: Card(
-                                    margin: EdgeInsets.all(16),
-                                    elevation: 8,
+                                   // color: Color.fromARGB(255, 49, 52, 59),
+                                   // margin: EdgeInsets.all(16),
+                                   // elevation: 8,
                                     child: ListView(
                                       children: [
                                         for (int i = 0;
                                             i < properties.length;
                                             i++)
-                                          ListTile(
-                                            title: Text(properties[i]['name']),
-                                            leading: Container(
-                                                margin: EdgeInsets.only(top: 8),
-                                                width: 20,
-                                                height: 20,
-                                                color: properties[i]['color'] ??
-                                                    Colors.orangeAccent
-                                                // Colors.grey.shade300,
-                                                ),
-                                            subtitle: Text(properties[i]['id']),
-                                            onTap: () {
-                                              setState(() {
-                                                properties[i]['color'] =
-                                                    properties[i]['color'] ==
-                                                            Colors.green
-                                                        ? Colors.orangeAccent
-                                                        : Colors.green;
-                                                keyValuesPaires[properties[i]
-                                                        ['id']] =
-                                                    properties[i]['color'];
-                                              });
-                                            },
+                                          Card(
+                                            color:
+                                                Color.fromARGB(255, 49, 52, 59),
+                                            margin: EdgeInsets.all(16),
+                                            elevation: 8,
+                                            child: ListTile(
+                                              title: //Text('Hello'), //
+                                                  Text(properties[i]['name'],
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15.0,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      )),
+                                              leading: Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 8),
+                                                  width: 20,
+                                                  height: 20,
+                                                  color: properties[i]
+                                                          ['color'] ??
+                                                      Colors.orangeAccent
+                                                  // Colors.grey.shade300,
+                                                  ),
+                                              subtitle: Text(
+                                                  properties[i]['id'],
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.w700,
+                                                  )),
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PlaceHistoryListPage(
+                                                            countrycode:
+                                                                widget.country,
+                                                            regioncode:
+                                                                properties[i]
+                                                                    ['id']),
+                                                  ),
+                                                );
+
+                                                // setState(() {
+                                                //   properties[i]['color'] =
+                                                //       properties[i]['color'] ==
+                                                //               Colors.green
+                                                //           ? Colors.orangeAccent
+                                                //           : Colors.green;
+                                                //   keyValuesPaires[properties[i]
+                                                //           ['id']] =
+                                                //       properties[i]['color'];
+                                                // });
+                                              },
+                                            ),
                                           )
                                       ],
                                     ),
@@ -370,34 +287,63 @@ class _CountryPageState extends State<CountryPage> {
                         if (MediaQuery.of(context).size.width < 800)
                           SizedBox(
                               height: MediaQuery.of(context).size.height * 0.5,
-                              child: Card(
-                                margin: EdgeInsets.all(16),
-                                elevation: 8,
+                              child: Container(
                                 child: ListView(
                                   children: [
                                     for (int i = 0; i < properties.length; i++)
-                                      ListTile(
-                                        title: Text(properties[i]['name']),
-                                        leading: Container(
-                                          margin: EdgeInsets.only(top: 8),
-                                          width: 20,
-                                          height: 20,
-                                          color: properties[i]['color'] ??
-                                              Colors.grey.shade300,
+                                      Card(
+                                        color: Color.fromARGB(255, 49, 52, 59),
+                                        margin: EdgeInsets.all(5.0),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        elevation: 8,
+                                        child: ListTile(
+                                          title: Text(properties[i]['name'],
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.w700,
+                                              )),
+                                          leading: Container(
+                                            margin: EdgeInsets.only(top: 8),
+                                            width: 20,
+                                            height: 20,
+                                            color: properties[i]['color'] ??
+                                                Colors.grey.shade300,
+                                          ),
+                                          subtitle: Text(properties[i]['id'],
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w700)),
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PlaceHistoryListPage(
+                                                        countrycode:
+                                                            widget.country,
+                                                        regioncode:
+                                                            properties[i]
+                                                                ['id']),
+                                              ),
+                                            );
+                                            // setState(() {
+                                            //   properties[i]['color'] =
+                                            //       properties[i]['color'] ==
+                                            //               Colors.green
+                                            //           ? null
+                                            //           : Colors.green;
+                                            //   keyValuesPaires[properties[i]
+                                            //           ['id']] =
+                                            //       properties[i]['color'];
+                                            // });
+                                          },
                                         ),
-                                        subtitle: Text(properties[i]['id']),
-                                        onTap: () {
-                                          setState(() {
-                                            properties[i]['color'] =
-                                                properties[i]['color'] ==
-                                                        Colors.green
-                                                    ? null
-                                                    : Colors.green;
-                                            keyValuesPaires[properties[i]
-                                                    ['id']] =
-                                                properties[i]['color'];
-                                          });
-                                        },
                                       )
                                   ],
                                 ),

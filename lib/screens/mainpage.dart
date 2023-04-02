@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gtk_flutter/screens/ActiveCountryPage.dart';
@@ -25,7 +26,7 @@ class _MainPageState extends State<MainPage> {
   List<Widget> pageList = [
     const CheckCountry(),
     const UserCountryPage(),
-    const ActiveCountryPage(),
+   // const ActiveCountryPage(),
     const UsersList(),
   ];
 
@@ -36,6 +37,8 @@ class _MainPageState extends State<MainPage> {
     return Container(
         child: Consumer<ApplicationState>(
             builder: (context, appState, _) => Center(
+
+
                     child: Scaffold(
                   appBar: AppBar(
                     automaticallyImplyLeading: false,
@@ -43,6 +46,8 @@ class _MainPageState extends State<MainPage> {
                     actions: [
                       IconButton(
                           onPressed: () {
+                              FirebaseAuth.instance.signOut();
+
                             context.go("/sign-in");
                           },
                           icon: Icon(Icons.login)),
@@ -82,17 +87,19 @@ class _MainPageState extends State<MainPage> {
                             Icon(Icons.outlined_flag), //flag_circle_outlined),
                         label: 'Countries',
                       ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.map_outlined),
-                        label: 'Maps',
-                      ),
+                      // BottomNavigationBarItem(
+                      //   icon: Icon(Icons.map_outlined),
+                      //   label: 'Maps',
+                      // ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.table_chart_sharp),
                         label: 'League',
                       ),
                     ],
                   ),
-                ))));
+                )
+                
+                )));
   }
 
   @override

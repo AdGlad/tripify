@@ -2,7 +2,7 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/screens/ActiveCountryPage.dart';
-import 'package:gtk_flutter/screens/activecountries.dart';
+import 'package:gtk_flutter/screens/countryPage.dart';
 import 'package:gtk_flutter/screens/regionlistpage.dart' hide CountryFlag;
 import 'package:provider/provider.dart';
 

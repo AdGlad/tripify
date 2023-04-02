@@ -214,6 +214,10 @@ class _CheckCountryState extends State<CheckCountry> {
     //  UserTotals? userTotals,
     //  MapboxMapController? locationcontroller
   ) async {
+
+    developer.log(
+          ' SaveLocation ');
+
     LocationData? newPlace = await Location().getLocation();
 
     String _userId = FirebaseAuth.instance.currentUser!.uid;
@@ -621,10 +625,10 @@ class _CheckCountryState extends State<CheckCountry> {
                             backgroundColor: Colors.orangeAccent,
                             elevation: 5,
                           ),
-                          onPressed: () => [
-                            SaveLocation(appState.currentPlace),
-                            updateStats(appState.userTotals)
-                          ],
+                          onPressed: ()  {
+                            SaveLocation(appState.currentPlace);
+                            updateStats(appState.userTotals);
+                          },
                           child: Text('Check Location'),
                         ),
                       ),
