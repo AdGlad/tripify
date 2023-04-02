@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/map/countries_world_map.dart';
 import 'package:gtk_flutter/map/data/maps/world_map.dart';
+import 'package:gtk_flutter/screens/regionlistpage.dart';
 import 'package:gtk_flutter/state/applicationstate.dart';
 import 'package:provider/provider.dart';
 
@@ -73,11 +74,13 @@ class _SupportedCountriesMapState extends State<SupportedCountriesMap> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CountryPage(
-          country: country,
-          regionrecords: regionrecords,
-        ),
-      ),
+        builder: (context) => 
+        //RegionListPage(countrycode: country)
+        CountryPage(
+           country: country,
+           regionrecords: regionrecords,
+         ),
+       ),
     );
   }
 }

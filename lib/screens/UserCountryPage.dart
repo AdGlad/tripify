@@ -1,9 +1,13 @@
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gtk_flutter/screens/regionlistpage.dart';
+import 'package:gtk_flutter/screens/ActiveCountryPage.dart';
+import 'package:gtk_flutter/screens/activecountries.dart';
+import 'package:gtk_flutter/screens/regionlistpage.dart' hide CountryFlag;
+import 'package:provider/provider.dart';
 
 import '../model/placehistory.dart';
+import '../state/applicationstate.dart';
 
 class UserCountryPage extends StatefulWidget {
   const UserCountryPage({super.key});
@@ -38,26 +42,53 @@ class UserCountrylist extends StatelessWidget {
 
           // Access the UserDocumentSnapshot
           CurrentCountryQuerySnapshot querySnapshot = snapshot.requireData;
-          return ListView.builder(
-            itemCount: querySnapshot.docs.length,
-            itemBuilder: (context, index) {
-              // Access the User instance
-              CurrentCountry currentcountry = querySnapshot.docs[index].data;
+          return 
+          
+          Consumer<ApplicationState>(
+                    builder: (context, appState, _) => 
+          Container(
+            child: 
+              Column(
+                children: [
+                  Container( height: 300,
+                    child: ActiveCountryPage()),
+                  Flexible(
+                    child: ListView.builder(
+                      itemCount: querySnapshot.docs.length,
+                      itemBuilder: (context, index) {
+                        // Access the User instance
+                        CurrentCountry currentcountry = querySnapshot.docs[index].data;
+                  
+                        return GestureDetector(
+                          child: countrycard(currentcountry, context),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => 
+                                        CountryPage(
+                                            country: currentcountry.countryCode,
+                                            regionrecords: appState.regionrecords,
+                                                    ),
+                                
+                                // RegionListPage(
+                                //     countrycode: currentcountry.countryCode!),
 
-              return GestureDetector(
-                child: countrycard(currentcountry, context),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RegionListPage(
-                          countrycode: currentcountry.countryCode!),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
-                  );
-                },
-              );
-            },
-          );
+                  ),
+                ],
+              ),
+            
+          ));
+
+
+
+
         });
   }
 }

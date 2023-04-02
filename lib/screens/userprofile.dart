@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+//import 'package:toggle_switch/toggle_switch.dart';
 import 'dart:developer' as developer;
 
 //import 'package:firebase_storage/firebase_storage.dart';
@@ -171,39 +171,39 @@ class _UserInfoPageState extends State<UserInfoPage> {
             SizedBox(height: 16),
             Text("Appear in the league tables?"),
 
-            ToggleSwitch(
-              initialLabelIndex: _friendable,
-              totalSwitches: 2,
-              labels: ['Yes', 'No'],
-              onToggle: (index) {
-                setState(() {
-                  _friendable = index!;
-                  // if (index == 0) {
-                  //   _Friendable = true;
-                  // } else {
-                  //   _Friendable = false;
-                  // }
-                });
-              },
-            ),
-            SizedBox(height: 16),
-            Text("Allow others to friend you?"),
-            ToggleSwitch(
-              initialLabelIndex: _league,
-              totalSwitches: 2,
-              labels: ['Yes', 'No'],
-              onToggle: (index) {
-                setState(() {
-                  _league = index!;
+            // ToggleSwitch(
+            //   initialLabelIndex: _friendable,
+            //   totalSwitches: 2,
+            //   labels: ['Yes', 'No'],
+            //   onToggle: (index) {
+            //     setState(() {
+            //       _friendable = index!;
+            //       // if (index == 0) {
+            //       //   _Friendable = true;
+            //       // } else {
+            //       //   _Friendable = false;
+            //       // }
+            //     });
+            //   },
+            // ),
+            // SizedBox(height: 16),
+            // Text("Allow others to friend you?"),
+            // ToggleSwitch(
+            //   initialLabelIndex: _league,
+            //   totalSwitches: 2,
+            //   labels: ['Yes', 'No'],
+            //   onToggle: (index) {
+            //     setState(() {
+            //       _league = index!;
 
-                  // if (index == 0) {
-                  //   _League = 0;
-                  // } else {
-                  //   _League = 1;
-                  // }
-                });
-              },
-            ),
+            //       // if (index == 0) {
+            //       //   _League = 0;
+            //       // } else {
+            //       //   _League = 1;
+            //       // }
+            //     });
+            //   },
+            // ),
             //)
             // CheckboxListTile(
             //   title: Text(

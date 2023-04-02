@@ -254,9 +254,9 @@ class _CheckCountryState extends State<CheckCountry> {
     // _latitude = 19.4333;
     //_longitude = -99.1333;
     // double
-    _latitude = 39.9040;
+    //_latitude = 39.9040;
     // double
-    _longitude = 116.4075;
+    //_longitude = 116.4075;
 
     //double _latitude = -6.2146;
     //double _longitude = 106.8451;
