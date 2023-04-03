@@ -214,9 +214,7 @@ class _CheckCountryState extends State<CheckCountry> {
     //  UserTotals? userTotals,
     //  MapboxMapController? locationcontroller
   ) async {
-
-    developer.log(
-          ' SaveLocation ');
+    developer.log(' SaveLocation ');
 
     LocationData? newPlace = await Location().getLocation();
 
@@ -523,100 +521,178 @@ class _CheckCountryState extends State<CheckCountry> {
                           : Text('No Ad'),
                     ),
                     Container(
-                      height: 50,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: appState.tripHistory
-                            .length, // appState.userCountrylist.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Center(
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              margin: EdgeInsets.all(2),
-                              color: Colors.white,
-                              //child: Text('Item $index'),
-                              child: Padding(
-                                padding: const EdgeInsets.all(1.0),
-                                child: Text(
-                                  CountryFlag(
-                                      appState.tripHistory[index].countryCode!),
-                                  style: TextStyle(fontSize: 30),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                      width: MediaQuery.of(context).size.width - 20,
+                      // height: 240,
+                      child: Card(
+                        color: Color.fromARGB(255, 49, 52, 59),
+                        elevation: 8.0,
+                        margin: EdgeInsets.all(5.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('Current streak: $_currentStreak',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w700,
+                                )),
+                          ),
+                        ),
                       ),
-                      // )
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width - 20,
-                      height: 240,
-                      color: Colors.yellow,
-                      child: newPlace != null
-                          ? MapboxMap(
-                              accessToken:
-                                  'pk.eyJ1IjoidHJpcGlmeSIsImEiOiJjbGRmaWdkcHgwaGJpM25wZTh0eDAwN2JoIn0.H_QiLx6jgdQXVX4OqzKCVw',
-                              onMapCreated: _onMapCreated,
-                              onStyleLoadedCallback: _onStyleLoaded,
-                              initialCameraPosition: CameraPosition(
-                                target: LatLng(
-                                  appState.currentPlace?.latitude ??
-                                      newPlace!.latitude!,
-                                  appState.currentPlace?.longitude ??
-                                      newPlace!.longitude!,
+                    Card(
+                          color: Color.fromARGB(255, 49, 52, 59),
+                        elevation: 8.0,
+                        margin: EdgeInsets.all(5.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                       
+                      child: Container(
+                        color: Color.fromARGB(255, 49, 52, 59),
+                        height: 50,
+                    
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: appState.tripHistory
+                              .length, // appState.userCountrylist.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Center(
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                margin: EdgeInsets.all(2),
+                                //   color: Colors.white,
+                                //child: Text('Item $index'),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(1.0),
+                                    child: Text(
+                                      CountryFlag(appState
+                                          .tripHistory[index].countryCode!),
+                                      style: TextStyle(fontSize: 35),
+                                    ),
+                                  ),
                                 ),
-                                zoom: 13.0,
                               ),
-                              myLocationEnabled: true,
-                              myLocationTrackingMode:
-                                  MyLocationTrackingMode.Tracking,
-                              myLocationRenderMode: MyLocationRenderMode.GPS,
-                              minMaxZoomPreference:
-                                  MinMaxZoomPreference(10.0, 18.0),
-                              styleString: 'mapbox://styles/mapbox/streets-v11',
-                              //styleString: 'mapbox://styles/mapbox/dark-v11',
-                              //   styleString: 'mapbox://styles/mapbox/light-v11',
-                              //styleString: 'mapbox://styles/mapbox/satellite-v11',
-                              scrollGesturesEnabled: true,
-                              zoomGesturesEnabled: true,
-                              doubleClickZoomEnabled: true,
-                              rotateGesturesEnabled: true,
-                              tiltGesturesEnabled: true,
-                              dragEnabled: true,
-                            )
-                          : Center(
-                              child: CircularProgressIndicator(),
-                            ),
+                            );
+                          },
+                        ),
+                        // )
+                      ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width - 20,
-                      margin: const EdgeInsets.all(5.0),
-                      color: Colors.greenAccent,
-                      child: Row(
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 20,
+                        height: 240,
+                        color: Colors.yellow,
+                        child: newPlace != null
+                            ? MapboxMap(
+                                accessToken:
+                                    'pk.eyJ1IjoidHJpcGlmeSIsImEiOiJjbGRmaWdkcHgwaGJpM25wZTh0eDAwN2JoIn0.H_QiLx6jgdQXVX4OqzKCVw',
+                                onMapCreated: _onMapCreated,
+                                onStyleLoadedCallback: _onStyleLoaded,
+                                initialCameraPosition: CameraPosition(
+                                  target: LatLng(
+                                    appState.currentPlace?.latitude ??
+                                        newPlace!.latitude!,
+                                    appState.currentPlace?.longitude ??
+                                        newPlace!.longitude!,
+                                  ),
+                                  zoom: 13.0,
+                                ),
+                                myLocationEnabled: true,
+                                myLocationTrackingMode:
+                                    MyLocationTrackingMode.Tracking,
+                                myLocationRenderMode: MyLocationRenderMode.GPS,
+                                minMaxZoomPreference:
+                                    MinMaxZoomPreference(10.0, 18.0),
+                                styleString: 'mapbox://styles/mapbox/streets-v11',
+                                //styleString: 'mapbox://styles/mapbox/dark-v11',
+                                //   styleString: 'mapbox://styles/mapbox/light-v11',
+                                //styleString: 'mapbox://styles/mapbox/satellite-v11',
+                                scrollGesturesEnabled: true,
+                                zoomGesturesEnabled: true,
+                                doubleClickZoomEnabled: true,
+                                rotateGesturesEnabled: true,
+                                tiltGesturesEnabled: true,
+                                dragEnabled: true,
+                              )
+                            : Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                      ),
+                    ),
+                    Card(
+                      color: Color.fromARGB(255, 49, 52, 59),
+                      elevation: 8.0,
+                      margin: EdgeInsets.all(5.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+
+                      //  width: MediaQuery.of(context).size.width - 20,
+                      //margin: const EdgeInsets.all(5.0),
+                      //color: Colors.greenAccent,
+                      child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: (appState.currentPlace != null)
-                                ? Text(CountryFlag(
-                                    appState.currentPlace!.countryCode!))
-                                : Text(''),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: (appState.currentPlace != null)
+                                    ? Text(
+                                        CountryFlag(appState
+                                            .currentPlace!.countryCode!),
+                                        style: TextStyle(fontSize: 30),
+                                      )
+                                    : Text(''),
+                              ),
+                              (appState.currentPlace != null)
+                                  ? Text(appState.currentPlace!.countryName!,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w700,
+                                      ))
+                                  : Text(''),
+                              Text(': '),
+                              (appState.currentPlace != null)
+                                  ? Text(appState.currentPlace!.region!,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w700,
+                                      ))
+                                  : Text(''),
+                            ],
                           ),
                           (appState.currentPlace != null)
-                              ? Text(appState.currentPlace!.countryName!)
+                              ? Text(appState.currentPlace!.streetAddress!,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.w700,
+                                  ))
                               : Text(''),
                           Text(': '),
-                          (appState.currentPlace != null)
-                              ? Text(appState.currentPlace!.region!)
-                              : Text(''),
                         ],
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width - 20,
-                      margin: const EdgeInsets.all(5.0),
-                      color: Colors.blueAccent,
+                    Card(
+                      color: Color.fromARGB(255, 49, 52, 59),
+                      elevation: 8.0,
+                      margin: EdgeInsets.all(5.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+
+                      //  width: MediaQuery.of(context).size.width - 20,
+                      //    margin: const EdgeInsets.all(5.0),
+                      //   color: Colors.blueAccent,
                       child: Center(
                         // child: Row(
                         //   children: [
@@ -625,17 +701,18 @@ class _CheckCountryState extends State<CheckCountry> {
                             backgroundColor: Colors.orangeAccent,
                             elevation: 5,
                           ),
-                          onPressed: ()  {
+                          onPressed: () {
                             SaveLocation(appState.currentPlace);
                             updateStats(appState.userTotals);
                           },
-                          child: Text('Check Location'),
+                          child: Text('Check Location',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
+                              )),
                         ),
                       ),
-                    ),
-                    Text(
-                      'Current streak: $_currentStreak',
-                      style: TextStyle(fontSize: 15),
                     ),
                     Spacer(),
                     Align(

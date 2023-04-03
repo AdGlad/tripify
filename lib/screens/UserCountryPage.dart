@@ -104,11 +104,11 @@ Widget countrycard(CurrentCountry country, BuildContext context) {
     color: Color.fromARGB(255, 49, 52, 59),
     elevation: 8.0,
     margin: EdgeInsets.all(5.0),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     child: Column(
       children: [
         Container(
-          margin: EdgeInsets.all(4),
+          margin: EdgeInsets.all(5),
           child: Row(
             children: [
               Text(
@@ -116,7 +116,7 @@ Widget countrycard(CurrentCountry country, BuildContext context) {
                 style: TextStyle(fontSize: 30),
               ),
               Container(
-                margin: EdgeInsets.all(5),
+                margin: EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -124,7 +124,7 @@ Widget countrycard(CurrentCountry country, BuildContext context) {
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 15.0,
+                          fontSize: 20.0,
                           fontWeight: FontWeight.w700,
                         )),
                   ],

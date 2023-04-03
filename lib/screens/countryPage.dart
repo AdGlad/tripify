@@ -186,14 +186,6 @@ class _CountryPageState extends State<CountryPage> {
 
                                   int i = properties.indexWhere(
                                       (element) => element['id'] == id);
-
-                                  // properties[i]['color'] =
-                                  //     properties[i]['color'] == Colors.green
-                                  //         ? null
-                                  //         : Colors.green;
-                                  // keyValuesPaires[properties[i]['id']] =
-                                  //     properties[i]['color'];
-
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -222,7 +214,7 @@ class _CountryPageState extends State<CountryPage> {
                                           Card(
                                             color:
                                                 Color.fromARGB(255, 49, 52, 59),
-                                            margin: EdgeInsets.all(16),
+                                            margin: EdgeInsets.all(10),
                                             elevation: 8,
                                             child: ListTile(
                                               title: //Text('Hello'), //
@@ -230,7 +222,7 @@ class _CountryPageState extends State<CountryPage> {
                                                       textAlign: TextAlign.left,
                                                       style: TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 15.0,
+                                                        fontSize: 20.0,
                                                         fontWeight:
                                                             FontWeight.w700,
                                                       )),

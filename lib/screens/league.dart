@@ -6,8 +6,30 @@ import 'package:gtk_flutter/model/placehistory.dart';
 
 // import '../model/placehistory.dart';
 
-class UsersList extends StatelessWidget {
+class UsersList extends StatefulWidget {
   const UsersList({super.key});
+
+  @override
+  State<UsersList> createState() => _UsersListState();
+}
+
+class _UsersListState extends State<UsersList> {
+  String MembershipLength(DateTime joindate) {
+    final currentDate = DateTime.now();
+    // final joinDate = joinDate;
+    final duration = currentDate.difference(joindate);
+
+    final months = duration.inDays ~/ 30;
+    final years = duration.inDays ~/ 365;
+
+    final durationString = years > 0 ? '$years+ years' : '$months+ months';
+
+    return '$durationString';
+
+    // return durationString ;
+  }
+
+ bool _isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -15,20 +37,27 @@ class UsersList extends StatelessWidget {
       children: [
         ///  Container(
         //   child:
-        Center(
-          child: Container(
-            margin: new EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-            color: Color.fromARGB(255, 66, 165, 245),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Center(
-              child: Row(children: [
-                Text("League Table",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                    textAlign: TextAlign.center),
-                // color: Colors.white,
-              ]),
+        Container(
+          //             color: Color.fromARGB(255, 49, 52, 59),
+          //  elevation: 8.0,
+          margin: EdgeInsets.all(5.0),
+          //  shape: RoundedRectangleBorder(
+          //      borderRadius: BorderRadius.circular(15)),
+          child: Card(
+            // width:
+            color: Color.fromARGB(255, 49, 52, 59),
+            elevation: 8.0,
+            margin: EdgeInsets.all(5.0),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("League Table",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  textAlign: TextAlign.center),
             ),
           ),
+          // color: Colors.white,
         ),
 //)
         Expanded(
@@ -57,69 +86,122 @@ class UsersList extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15)),
 
                       //padding: const EdgeInsets.all(8.0),
-                      child: Row(
+                      child: Column(
                         children: [
-                          Container(
-                            width: 50,
-                            
-                            child: Container(
-                             //   color: Colors.blue,
+                          Row(
+                            children: [
+                              Container(
+                                width: 50,
+                                child: Container(
+                                    //   color: Colors.blue,
 
-                                //alignment: Alignment.centerLeft,
-                                width: double.infinity,
-                                child: index == 0
-                                    ? Icon(Icons.star_rounded,
-                                        color: Colors.amber)
-                                    : index == 1
+                                    //alignment: Alignment.centerLeft,
+                                    width: double.infinity,
+                                    child: index == 0
                                         ? Icon(Icons.star_rounded,
-                                            color: Colors.grey)
-                                        : index == 2
+                                            color: Colors.amber)
+                                        : index == 1
                                             ? Icon(Icons.star_rounded,
-                                                color: Colors.brown)
-                                            : Text('${index + 1}',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.w700,
-                                                ))),
+                                                color: Colors.grey)
+                                            : index == 2
+                                                ? Icon(Icons.star_rounded,
+                                                    color: Colors.brown)
+                                                : Text('${index + 1}',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ))),
+                              ),
+                              Container(
+                                // color: Colors.white,
+                                //  alignment: Alignment.centerLeft,
+                                child: CircleAvatar(
+                                  radius: 10.0,
+                                  backgroundImage: user.avatar == null
+                                      ? null //FileImage(_imageFile)
+                                      : user.avatar != null
+                                          ? NetworkImage(user.avatar!)
+                                          : null,
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  child: Text('     ${user.nickname} ',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w700,
+                                      )),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(' ${user.distancetotal} Kms  ',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w700,
+                                        )),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          Container(
-                            color: Colors.white,
-                            //  alignment: Alignment.centerLeft,
-                            child: CircleAvatar(
-                              radius: 10.0,
-                              backgroundImage: user.avatar == null
-                                  ? null //FileImage(_imageFile)
-                                  : user.avatar != null
-                                      ? NetworkImage(user.avatar!)
-                                      : null,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: Text('     ${user.nickname} ',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w700,
-                                  )),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(' ${user.distancetotal} Kms  ',
-                                    textAlign: TextAlign.right,
+                          Row(
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    child: Text(
+                                        ' ${user.countrycount} Countries  ',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w700,
+                                        )),
+                                  ),
+                                                                Container(
+                                child: Text(MembershipLength(user.joinData!),
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.w700,
                                     )),
                               ),
-                            ),
+                                ],
+                              ),
+                              Expanded(
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(icon: _isFavorite
+              ? ColorFiltered(
+                  child: Icon(Icons.favorite),
+                  colorFilter: ColorFilter.mode(
+                    Colors.red,
+                    BlendMode.srcIn,
+                  ),
+                )
+              : Icon(Icons.favorite_border),
+                                  
+                                  
+                                //  Icon(Icons.favorite_border),
+                                  onPressed: () {
+                                    setState(() {
+              _isFavorite = !_isFavorite;
+            });
+                                  },),
+                              )
+                              )
+                            ],
                           ),
                         ],
                       ),
