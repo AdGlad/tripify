@@ -140,6 +140,15 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       title: 'Tripify',
       theme: ThemeData(
+
+        
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  primary: Color.fromARGB(255, 49, 52, 59),
+                  // secondary will be the textColor, when the textTheme is set to accent
+                  secondary: Colors.white,
+                ),
+          //),
+
           // buttonTheme: ButtonThemeData(
           //   textTheme: ButtonTextTheme.accent,
           //   colorScheme: Theme.of(context).colorScheme.copyWith(

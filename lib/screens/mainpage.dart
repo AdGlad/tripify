@@ -41,6 +41,7 @@ class _MainPageState extends State<MainPage> {
 
                     child: Scaffold(
                   appBar: AppBar(
+                    
                     automaticallyImplyLeading: false,
                     title: const Text('Tripify'),
                     actions: [
