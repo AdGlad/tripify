@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gtk_flutter/model/users.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
@@ -12,50 +13,7 @@ import 'package:http/http.dart' as http;
 // This doesn't exist yet...! See "Next Steps"
 part 'placehistory.g.dart';
 
-@firestoreSerializable
-class UserProfile {
-  UserProfile({
-    required this.id,
-    this.userId,
-    this.email,
-    this.nickname,
-    this.avatar,
-    this.photo,
-    this.language,
-    this.joinData,
-    this.friend,
-    this.league,
-    this.countrycount,
-    this.visitcount,
-    this.distancetotal,
-    this.regioncount,
-    this.placescount,
-  });
 
-  factory UserProfile.fromJson(Map<String, Object?> json) =>
-      _$UserProfileFromJson(json);
-
-  @Id()
-  late final String id;
-  String? userId;
-  String? email;
-  String? nickname;
-  String? avatar;
-
-  String? photo;
-  String? language;
-  DateTime? joinData;
-  int? friend;
-  int? league;
-
-  int? countrycount;
-  int? visitcount;
-  int? distancetotal;
-  int? regioncount;
-  int? placescount;
-
-  Map<String, Object?> toJson() => _$UserProfileToJson(this);
-}
 
 @firestoreSerializable
 class CurrentUser {
@@ -77,6 +35,10 @@ class CurrentUser {
 
   Map<String, Object?> toJson() => _$CurrentUserToJson(this);
 }
+
+
+
+
 
 @firestoreSerializable
 class CurrentCountry {
@@ -137,6 +99,8 @@ class CurrentCountry {
 
   Map<String, Object?> toJson() => _$CurrentCountryToJson(this);
 }
+
+
 
 //@Collection<PlaceHistory>('placehistory')
 @firestoreSerializable
@@ -230,12 +194,11 @@ class PlaceHistory {
   Map<String, Object?> toJson() => _$PlaceHistoryToJson(this);
 }
 
-@Collection<UserProfile>('users')
+
 @Collection<CurrentUser>('currentuser')
 @Collection<CurrentCountry>('currentuser/*/country')
 @Collection<Region>('currentuser/*/country/*/region')
 @Collection<PlaceHistory>('currentuser/*/country/*/region/*/placehistory')
-final userRef = UserProfileCollectionReference();
 final currentuserRef = CurrentUserCollectionReference();
 //final UsersCollectionReference = UserCollectionReference();
 CurrentCountryCollectionReference countryRef =
