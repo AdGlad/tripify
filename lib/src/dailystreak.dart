@@ -18,7 +18,7 @@ class _DailyStreakTrackerState extends State<DailyStreakTracker> {
 
   Future<void> _loadStreakFromFirestore() async {
     final docSnapshot = await FirebaseFirestore.instance
-        .collection('streaks')
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     if (docSnapshot.exists) {
@@ -32,7 +32,7 @@ class _DailyStreakTrackerState extends State<DailyStreakTracker> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final docRef = FirebaseFirestore.instance
-        .collection('streaks')
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid);
     final docSnapshot = await docRef.get();
 

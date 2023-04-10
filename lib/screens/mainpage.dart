@@ -8,6 +8,7 @@ import 'package:gtk_flutter/screens/UserCountryPage.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:gtk_flutter/screens/league.dart';
+import 'package:gtk_flutter/screens/userprofile.dart';
 import 'package:gtk_flutter/screens/userstats.dart';
 import 'package:provider/provider.dart';
 
@@ -26,8 +27,9 @@ class _MainPageState extends State<MainPage> {
   List<Widget> pageList = [
     const CheckCountry(),
     const UserCountryPage(),
-   // const ActiveCountryPage(),
-    const UsersList(),
+    // const ActiveCountryPage(),
+    const League(),
+    const UserInfoPage(),
   ];
 
   BannerAd? _bannerAd;
@@ -37,36 +39,34 @@ class _MainPageState extends State<MainPage> {
     return Container(
         child: Consumer<ApplicationState>(
             builder: (context, appState, _) => Center(
-
-
                     child: Scaffold(
+                  resizeToAvoidBottomInset: false,
                   appBar: AppBar(
-                    
-                    automaticallyImplyLeading: false,
+                    //    automaticallyImplyLeading: false,
                     title: const Text('Tripify'),
                     actions: [
                       IconButton(
                           onPressed: () {
-                              FirebaseAuth.instance.signOut();
+                            FirebaseAuth.instance.signOut();
 
                             context.go("/sign-in");
                           },
                           icon: Icon(Icons.login)),
-                      IconButton(
-                          onPressed: () {
-                            //    context.go("/profile");
-                            //    Navigator.pushNamed(context, "/userprofile");
-                            //context.go("/userprofile");
-                            context.push("/userprofile");
-                          },
-                          icon: Icon(Icons.person)),
+                      // IconButton(
+                      //     onPressed: () {
+                      //       //    context.go("/profile");
+                      //       //    Navigator.pushNamed(context, "/userprofile");
+                      //       //context.go("/userprofile");
+                      //       context.push("/userprofile");
+                      //     },
+                      //     icon: Icon(Icons.person)),
                     ],
                   ),
                   body: SafeArea(
                     child: Stack(
                       children: <Widget>[
                         Container(
-                          // margin: const EdgeInsets.all(5.0),
+                          // margin: const EdgeInsets.all(5.0),x`
                           child: pageList.elementAt(_selectedIndex),
                         ),
                         // TODO: Display a banner when ready
@@ -88,19 +88,22 @@ class _MainPageState extends State<MainPage> {
                             Icon(Icons.outlined_flag), //flag_circle_outlined),
                         label: 'Countries',
                       ),
+
                       // BottomNavigationBarItem(
                       //   icon: Icon(Icons.map_outlined),
                       //   label: 'Maps',
                       // ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.table_chart_sharp),
-                        label: 'League',
+                        label: 'league',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.group), //flag_circle_outlined),
+                        label: 'Friends',
                       ),
                     ],
                   ),
-                )
-                
-                )));
+                ))));
   }
 
   @override

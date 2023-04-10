@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart'
 //        EmailAuthProvider,
 //        PhoneAuthProvider; // new
 import 'package:gtk_flutter/model/placehistory.dart';
+import 'package:gtk_flutter/model/users.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // new
@@ -39,7 +40,7 @@ class ApplicationState extends ChangeNotifier {
   //bool Location = true;
   StreamSubscription<QuerySnapshot>? _usersSubscription;
 
-  StreamSubscription<QuerySnapshot>? _userProfileSubscription;
+  StreamSubscription<DocumentSnapshot>? _userProfileSubscription;
   StreamSubscription<QuerySnapshot>? _tripsSubscription;
   StreamSubscription<QuerySnapshot>? _locationCurrentSubscription;
   StreamSubscription<QuerySnapshot>? _placeHistorySubscription;
@@ -121,7 +122,7 @@ class ApplicationState extends ChangeNotifier {
         _loggedIn = true;
         _emailVerified = user.emailVerified;
         log(' User logged in ..');
-
+        developer.log('Fire applicationstate');
         _usersSubscription = FirebaseFirestore.instance
             .collection('users')
             //.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -136,6 +137,9 @@ class ApplicationState extends ChangeNotifier {
             //int timeInMillis = document.data()['timestamp'] as int;
             //DateTime current_arrivalDate =
             //  DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+
+            //final data =  document.data();
+            // _users.add( UserProfile.fromJson(data));
 
             _users.add(UserProfile(
               id: document.id,
@@ -154,6 +158,8 @@ class ApplicationState extends ChangeNotifier {
               regioncount: document.data()['regioncount'] as int,
               placescount: document.data()['placescount'] as int,
             ));
+
+            // );
           }
 
           notifyListeners();
@@ -165,29 +171,91 @@ class ApplicationState extends ChangeNotifier {
         //     .snapshots();
         //     //.get();
 
-        FirebaseFirestore.instance
-            .collection("users")
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .snapshots()
-            .listen((event) {
-          developer.log(
-              'In user profile loop ${FirebaseAuth.instance.currentUser!.uid}');
-          _userProfile?.id = FirebaseAuth.instance.currentUser!.uid;
-          _userProfile?.userId = event.get("userId");
-          _userProfile?.email = event.get("email");
-          _userProfile?.nickname = event.get("nickname");
-          _userProfile?.avatar = event.get("avatar");
-          _userProfile?.photo = event.get("photo");
-          _userProfile?.language = event.get("language");
-          _userProfile?.joinData = event.get("joinDate");
-          _userProfile?.friend = event.get("friend");
-          _userProfile?.league = event.get("league");
-          _userProfile?.countrycount = event.get("countrycount");
-          _userProfile?.visitcount = event.get("visitcount");
-          _userProfile?.distancetotal = event.get("distancetotal");
-          _userProfile?.regioncount = event.get("regioncount");
-          _userProfile?.placescount = event.get("placescount");
-        });
+        final CollectionReference _usersProfileCollection =
+            FirebaseFirestore.instance.collection('users');
+
+        final docRef =
+            _usersProfileCollection.doc(FirebaseAuth.instance.currentUser!.uid);
+
+        // final docRef = db.collection("cities").doc("SF");
+
+        docRef.get().then(
+          (DocumentSnapshot doc) {
+            if (doc.exists) {
+            Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
+            // _userProfile?.userId = data['userId'];
+
+            //  _userProfile = UserProfile.fromJson(data);
+            developer.log(' userId ${data['userId']}');
+            developer.log(' currentstreak ${data['currentstreak']}');
+            _userProfile = UserProfile(id: user.uid);
+
+            _userProfile?.userId = data['userId'] ?? 'userId';
+            _userProfile?.email = data['email'] ?? 'email';
+            _userProfile?.nickname = data['nickname'] ?? 'nickname';
+            _userProfile?.avatar = data['avatar'] ?? 'avatar';
+            _userProfile?.photo = data['photo'] ?? 'photo';
+            _userProfile?.language = data['language'] ?? 'language';
+            _userProfile?.joinData = data['joinDate'] ?? DateTime.now();
+            _userProfile?.friend = data['friend'] ?? 'userId';
+            _userProfile?.league = data['league'] ?? 'userId';
+            _userProfile?.countrycount = data['countrycount'] ?? 0;
+            _userProfile?.visitcount = data['visitcount'] ?? 0;
+            _userProfile?.distancetotal = data['distancetotal'] ?? 0;
+            _userProfile?.regioncount = data['regioncount'] ?? 0;
+            _userProfile?.placescount = data['placescount'] ?? 0;
+            _userProfile?.currentstreak = data['currentstreak'] ?? 0;
+            // _userProfile?.currentstreak= event.get("currentstreak") !=null ?  event.get("currentstreak") : 0;
+            developer.log(
+                ' _userProfile?.currentstreak= ${_userProfile?.currentstreak}');
+            notifyListeners();
+            }
+            
+          },
+          onError: (e) => print("Error getting document: $e"),
+        );
+        developer.log(
+            ' _userProfile?.currentstreak= ${_userProfile?.currentstreak}');
+        notifyListeners();
+
+        //   final doc =  _usersCollection.doc(user.uid).get();
+        //   final data = doc.data;
+        //     UserProfile.fromJson(data);
+
+        //  Future<DocumentSnapshot<Map<String, dynamic>>> _usersCollection= FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+
+        // UserProfile user = _usersCollection.data;
+        // UserProfile.fromJson(_usersCollection)
+
+        //    _userProfileSubscription = FirebaseFirestore.instance
+        //       .collection("users")
+        //       .doc(FirebaseAuth.instance.currentUser!.uid)
+        //      .snapshots()
+        //       .listen((event) {
+        //     developer.log(
+        //         'In user profile loop ${FirebaseAuth.instance.currentUser!.uid}');
+        //     _userProfile?.id = FirebaseAuth.instance.currentUser!.uid;
+        //     _userProfile?.userId = event.get("userId");
+        //     _userProfile?.email = event.get("email");
+        //     _userProfile?.nickname = event.get("nickname");
+        //     _userProfile?.avatar = event.get("avatar");
+        //     _userProfile?.photo = event.get("photo");
+        //     _userProfile?.language = event.get("language");
+        //     _userProfile?.joinData = event.get("joinDate");
+        //     _userProfile?.friend = event.get("friend");
+        //     _userProfile?.league = event.get("league");
+        //     _userProfile?.countrycount = event.get("countrycount")  ??  0;
+        //     _userProfile?.visitcount = event.get("visitcount")  ??  0;
+        //     _userProfile?.distancetotal = event.get("distancetotal")  ??  0;
+        //     _userProfile?.regioncount = event.get("regioncount")  ??  0;
+        //     _userProfile?.placescount = event.get("placescount")  ??  0;
+        //     _userProfile?.currentstreak= event.get("currentstreak") ??  0;
+        //  // _userProfile?.currentstreak= event.get("currentstreak") !=null ?  event.get("currentstreak") : 0;
+        //  developer.log(
+        //         ' _userProfile?.currentstreak= ${ _userProfile?.currentstreak}');
+        //            notifyListeners();
+
+        //   });
 
         StreamSubscription<QuerySnapshot> _userCountryListSubscription =
             FirebaseFirestore.instance

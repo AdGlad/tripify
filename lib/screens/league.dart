@@ -2,18 +2,20 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/model/placehistory.dart';
+
+import '../model/users.dart';
 // import 'package:gtk_flutter/screens/regionlistpage.dart';
 
 // import '../model/placehistory.dart';
 
-class UsersList extends StatefulWidget {
-  const UsersList({super.key});
+class League extends StatefulWidget {
+  const League({super.key});
 
   @override
-  State<UsersList> createState() => _UsersListState();
+  State<League> createState() => _LeagueState();
 }
 
-class _UsersListState extends State<UsersList> {
+class _LeagueState extends State<League> {
   String MembershipLength(DateTime joindate) {
     final currentDate = DateTime.now();
     // final joinDate = joinDate;
@@ -62,7 +64,7 @@ class _UsersListState extends State<UsersList> {
 //)
         Expanded(
           child: FirestoreBuilder<UserProfileQuerySnapshot>(
-              ref: userRef.orderByDistancetotal(descending: true),
+              ref: usersRef.orderByDistancetotal(descending: true),
               builder: (context,
                   AsyncSnapshot<UserProfileQuerySnapshot> snapshot,
                   Widget? child) {
@@ -227,13 +229,13 @@ class _UsersListState extends State<UsersList> {
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //         body: Center(
-//       child: Userslist(),
+//       child: League(),
 //     ));
 //   }
 // }
 
-// class Userslist extends StatelessWidget {
-//   Userslist();
+// class League extends StatelessWidget {
+//   League();
 //   final UsersCollectionReference countyRef =
 //       currentuserRef.doc(FirebaseAuth.instance.currentUser!.uid).country;
 

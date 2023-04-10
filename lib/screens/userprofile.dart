@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gtk_flutter/model/users.dart';
+import 'package:gtk_flutter/screens/findfriendpage.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 //import 'package:toggle_switch/toggle_switch.dart';
 import 'dart:developer' as developer;
+
+import '../src/acceptfriendrequests.dart';
+import '../src/listfriends.dart';
+import '../state/applicationstate.dart';
 
 //import 'package:firebase_storage/firebase_storage.dart';
 
@@ -111,131 +119,393 @@ class _UserInfoPageState extends State<UserInfoPage> {
     }
   }
 
+  Widget buildCard(
+      int? amount, String unitofmeasure, IconData icon, String description) {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Icon(icon, size: 40.0),
+            SizedBox(height: 8.0),
+            Text(description),
+            Text('$amount $unitofmeasure'),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('User Info'),
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: EdgeInsets.all(16),
-          children: [
-            Center(
-              child: CircleAvatar(
-                radius: 80.0,
-                backgroundImage: _avatar == null
-                    ? null //FileImage(_imageFile)
-                    : _avatar != null
-                        ? NetworkImage(_avatar!)
-                        : null,
+    return Container(
+      child: Consumer<ApplicationState>(
+        builder: (context, appState, _) => Center(
+          child: Scaffold(
+           // appBar: AppBar(
+           //   title: Text('User Info'),
+           // ),  
+            body: Form(
+              key: _formKey,
+              child: ListView(
+                padding: EdgeInsets.all(16),
+                children: [
+                  Center(
+                    child: CircleAvatar(
+                      radius: 40.0,
+                      backgroundImage: _avatar == null
+                          ? null //FileImage(_imageFile)
+                          : _avatar != null
+                              ? NetworkImage(_avatar!)
+                              : null,
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: _nicknameController,
+                    decoration: InputDecoration(labelText: 'Nickname'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter a nickname';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 8),
+                  if (_errorMessage.isNotEmpty)
+                    Text(
+                      _errorMessage,
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  //  SizedBox(height: 16),
+                  // TextFormField(
+                  //   controller: _ageController,
+                  //   decoration: InputDecoration(labelText: 'Age'),
+                  //   validator: (value) {
+                  //     if (value!.isEmpty) {
+                  //       return 'Please enter an age';
+                  //     }
+                  //     final age = int.tryParse(value!);
+                  //     if (age == null || age <= 0) {
+                  //       return 'Please enter a valid age';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
+                  // SizedBox(height: 16),
+                  // Text("Email: $_email"),
+                  //SizedBox(height: 16),
+                  //Text("Appear in the league tables?"),
+
+                  // ToggleSwitch(
+                  //   initialLabelIndex: _friendable,
+                  //   totalSwitches: 2,
+                  //   labels: ['Yes', 'No'],
+                  //   onToggle: (index) {
+                  //     setState(() {
+                  //       _friendable = index!;
+                  //       // if (index == 0) {
+                  //       //   _Friendable = true;
+                  //       // } else {
+                  //       //   _Friendable = false;
+                  //       // }
+                  //     });
+                  //   },
+                  // ),
+                  // SizedBox(height: 16),
+                  // Text("Allow others to friend you?"),
+                  // ToggleSwitch(
+                  //   initialLabelIndex: _league,
+                  //   totalSwitches: 2,
+                  //   labels: ['Yes', 'No'],
+                  //   onToggle: (index) {
+                  //     setState(() {
+                  //       _league = index!;
+
+                  //       // if (index == 0) {
+                  //       //   _League = 0;
+                  //       // } else {
+                  //       //   _League = 1;
+                  //       // }
+                  //     });
+                  //   },
+                  // ),
+                  //)
+                  // CheckboxListTile(
+                  //   title: Text(
+                  //       'Tick if you would like others to be able to friend you'),
+                  //   value: _Friendable,
+                  //   onChanged: (value) {
+                  //     setState(() {
+                  //       _Friendable = value!;
+                  //     });
+                  //   },
+                  // ),
+                  // CheckboxListTile(
+                  //   title: Text(
+                  //       'Public Profile. Tick if you would like your stats to appear in the league tables'),
+                  //   value: _League,
+                  //   onChanged: (value) {
+                  //     setState(() {
+                  //       _League = value!;
+                  //     });
+                  //   },
+                  // ),
+                  //SizedBox(height: 16),
+
+                  Container(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(
+                            Size(200, 48)), // Set the desired width and height
+                      ),
+                      // style: ButtonStyle.lerp(a, b, t),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _saveUserInfo();
+                          //     Navigator.pop(context);
+                        }
+                      },
+                      child: Text('Save'),
+                    ),
+                  ),
+
+                  Container(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Statistics',
+                          style: TextStyle(
+                              fontSize: 24.0, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Join Date: ${DateFormat('dd MMMM yyyy').format(appState.userProfile!.joinData!)}',
+                          style: TextStyle(
+                              fontSize: 12.0, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 16.0),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: buildCard(
+                                    appState.userProfile?.currentstreak,
+                                    'Days',
+                                    Icons.local_fire_department,
+                                    'Current Streak')),
+                            SizedBox(width: 16.0),
+                            Expanded(
+                                child: buildCard(
+                                    appState.userProfile?.distancetotal,
+                                    'Kms',
+                                    Icons.run_circle,
+                                    'Distance Travelled')),
+                          ],
+                        ),
+                        SizedBox(height: 16.0),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: buildCard(
+                                    appState.userProfile?.countrycount,
+                                    '',
+                                    Icons.map_outlined,
+                                    'Countries Visted')),
+                            SizedBox(width: 16.0),
+                            Expanded(
+                                child: buildCard(
+                                    appState.userProfile?.placescount,
+                                    '',
+                                    Icons.place,
+                                    'Check-ins')),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(
+                            Size(200, 48)), // Set the desired width and height
+                      ),
+                      // style: ButtonStyle.lerp(a, b, t),
+                      onPressed: () {
+
+                       Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FindFriendsPage(
+                                                            ),
+                                                  ),
+                                                );
+
+
+                     //   Navigator.of(context)
+                     //       .pushReplacementNamed('/findfriends');
+                        // Navigator.of(context).pushReplacementNamed('/findfriends');
+                     //   Navigator.pushNamed(context, 'findfriends');
+                        //  Navigator.push(context, '/findfriends');
+                      },
+                      child: Text('Find Friends'),
+                      
+                    ),
+                  ),
+                        SizedBox(height: 16.0),
+
+
+                   Container(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(
+                            Size(200, 48)), // Set the desired width and height
+                      ),
+                      // style: ButtonStyle.lerp(a, b, t),
+                      onPressed: () {
+
+                       Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AcceptFriendRequests(
+                                                            ),
+                                                  ),
+                                                );
+
+
+                     //   Navigator.of(context)
+                     //       .pushReplacementNamed('/findfriends');
+                        // Navigator.of(context).pushReplacementNamed('/findfriends');
+                     //   Navigator.pushNamed(context, 'findfriends');
+                        //  Navigator.push(context, '/findfriends');
+                      },
+                      child: Text('Accept Requests'),
+                      
+                    ),
+                  ),
+                                          SizedBox(height: 16.0),
+
+                                     Container(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(
+                            Size(200, 48)), // Set the desired width and height
+                      ),
+                      // style: ButtonStyle.lerp(a, b, t),
+                      onPressed: () {
+
+                       Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ListFriends(
+                                                            ),
+                                                  ),
+                                                );
+
+
+                     //   Navigator.of(context)
+                     //       .pushReplacementNamed('/findfriends');
+                        // Navigator.of(context).pushReplacementNamed('/findfriends');
+                     //   Navigator.pushNamed(context, 'findfriends');
+                        //  Navigator.push(context, '/findfriends');
+                      },
+                      child: Text('Friends'),
+                      
+                    ),
+                  ),
+                  // Container(
+                  //   padding: EdgeInsets.all(16.0),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //     children: [
+                  //       Text(
+                  //         'Title',
+                  //         style:
+                  //             TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  //       ),
+                  //       SizedBox(height: 16.0),
+                  //       Row(
+                  //         children: [
+                  //           Expanded(
+                  //             child: Container(
+                  //               color: Colors.blue,
+                  //               height: 100.0,
+                  //               child: Center(
+                  //                 child: Text(
+                  //                   'Sub Container 1',
+                  //                   style: TextStyle(
+                  //                     fontSize: 16.0,
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           SizedBox(width: 16.0),
+                  //           Expanded(
+                  //             child: Container(
+                  //               color: Colors.green,
+                  //               height: 100.0,
+                  //               child: Center(
+                  //                 child: Text(
+                  //                   'Sub Container 2',
+                  //                   style: TextStyle(
+                  //                     fontSize: 16.0,
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       SizedBox(height: 16.0),
+                  //       Row(
+                  //         children: [
+                  //           Expanded(
+                  //             child: Container(
+                  //               color: Colors.yellow,
+                  //               height: 100.0,
+                  //               child: Center(
+                  //                 child: Text(
+                  //                   'Sub Container 3',
+                  //                   style: TextStyle(
+                  //                     fontSize: 16.0,
+                  //                     color: Colors.black,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           SizedBox(width: 16.0),
+                  //           Expanded(
+                  //             child: Container(
+                  //               color: Colors.orange,
+                  //               height: 100.0,
+                  //               child: Center(
+                  //                 child: Text(
+                  //                   'Sub Container 4',
+                  //                   style: TextStyle(
+                  //                     fontSize: 16.0,
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                  // )
+                ],
               ),
             ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              controller: _nicknameController,
-              decoration: InputDecoration(labelText: 'Nickname'),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter a nickname';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 8),
-            if (_errorMessage.isNotEmpty)
-              Text(
-                _errorMessage,
-                style: TextStyle(
-                  color: Colors.red,
-                ),
-              ),
-            SizedBox(height: 16),
-            // TextFormField(
-            //   controller: _ageController,
-            //   decoration: InputDecoration(labelText: 'Age'),
-            //   validator: (value) {
-            //     if (value!.isEmpty) {
-            //       return 'Please enter an age';
-            //     }
-            //     final age = int.tryParse(value!);
-            //     if (age == null || age <= 0) {
-            //       return 'Please enter a valid age';
-            //     }
-            //     return null;
-            //   },
-            // ),
-            // SizedBox(height: 16),
-            // Text("Email: $_email"),
-            SizedBox(height: 16),
-            Text("Appear in the league tables?"),
-
-            // ToggleSwitch(
-            //   initialLabelIndex: _friendable,
-            //   totalSwitches: 2,
-            //   labels: ['Yes', 'No'],
-            //   onToggle: (index) {
-            //     setState(() {
-            //       _friendable = index!;
-            //       // if (index == 0) {
-            //       //   _Friendable = true;
-            //       // } else {
-            //       //   _Friendable = false;
-            //       // }
-            //     });
-            //   },
-            // ),
-            // SizedBox(height: 16),
-            // Text("Allow others to friend you?"),
-            // ToggleSwitch(
-            //   initialLabelIndex: _league,
-            //   totalSwitches: 2,
-            //   labels: ['Yes', 'No'],
-            //   onToggle: (index) {
-            //     setState(() {
-            //       _league = index!;
-
-            //       // if (index == 0) {
-            //       //   _League = 0;
-            //       // } else {
-            //       //   _League = 1;
-            //       // }
-            //     });
-            //   },
-            // ),
-            //)
-            // CheckboxListTile(
-            //   title: Text(
-            //       'Tick if you would like others to be able to friend you'),
-            //   value: _Friendable,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       _Friendable = value!;
-            //     });
-            //   },
-            // ),
-            // CheckboxListTile(
-            //   title: Text(
-            //       'Public Profile. Tick if you would like your stats to appear in the league tables'),
-            //   value: _League,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       _League = value!;
-            //     });
-            //   },
-            // ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _saveUserInfo();
-                  //     Navigator.pop(context);
-                }
-              },
-              child: Text('Save'),
-            ),
-          ],
+          ),
         ),
       ),
     );

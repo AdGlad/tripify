@@ -89,12 +89,12 @@ class _CheckCountryState extends State<CheckCountry> {
 
   Future<void> _loadStreakFromFirestore() async {
     final docSnapshot = await FirebaseFirestore.instance
-        .collection('streaks')
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     if (docSnapshot.exists) {
       setState(() {
-        _currentStreak = docSnapshot.data()!['currentStreak'];
+        _currentStreak = docSnapshot.data()!['currentStreak']??0;
       });
     }
   }
@@ -237,33 +237,45 @@ class _CheckCountryState extends State<CheckCountry> {
     //"Mexico City","19.4333","-99.1333"
 // Beijing","39.9040","116.4075"
 // Jakarta","-6.2146","106.8451"
-
-    double? _latitude = newPlace.latitude;
+double? _latitude = newPlace.latitude;
     double? _longitude = newPlace.longitude;
-
+    
     //double
     //_latitude = 35.6839;
     //double
     //_longitude = 139.7744;
-    //_latitude = 40.6943;
-    //_longitude = -73.9249;
+    
+  
+
+     _latitude = 19.4333; // Mexico
+    _longitude = -99.1333; // Mexico
+    
 
     // double
     //_latitude = -6.2146;
     // double
     //_longitude = 106.8451;
 
-    // _latitude = 19.4333;
-    //_longitude = -99.1333;
-    // double
-    //_latitude = 39.9040;
-    // double
-    //_longitude = 116.4075;
+
+    _latitude = 39.9040; //Beijing
+    _longitude = 116.4075; //Beijing
+      _latitude = 40.6943; //New York"
+    _longitude = -73.9249;//New York"
+
+          _latitude = 51.50853; //London
+    _longitude = -0.12574;//London
+
+            _latitude = 55.95206; //Edinburgh
+    _longitude = -3.19648;//Edinburgh
+
 
     //double _latitude = -6.2146;
     //double _longitude = 106.8451;
 
     // if (loc.latitude != null && loc.longitude != null) {
+
+
+
 
     await _incrementStreak();
 
@@ -397,6 +409,11 @@ class _CheckCountryState extends State<CheckCountry> {
     developer.log(res.body, name: 'my.app.category');
     jsonString = jsonDecode(res.body);
 
+    developer.log(jsonString.toString(), name: 'my.app.jsonString');
+
+    
+
+
     var features = jsonString['features'];
     for (var feature in features) {
       _placeHistory.streetAddress = feature['place_name'];
@@ -416,7 +433,18 @@ class _CheckCountryState extends State<CheckCountry> {
           _placeHistory.regionCode = item['short_code'];
           _placeHistory.name = item['short_code'];
         } else if (id.startsWith('place')) {
+              if ((_placeHistory.regionCode == 'regionCode') & (item['short_code'] !=null))
+              {
+                  _placeHistory.regionCode = item['short_code'];
+              }
+
+              if ((_placeHistory.region == 'region') & (item['text'] !=null))
+              {
+                  _placeHistory.region = item['text'];
+              }
+
           _placeHistory.city = item['text'];
+
         }
       }
     }
@@ -531,11 +559,11 @@ class _CheckCountryState extends State<CheckCountry> {
                             borderRadius: BorderRadius.circular(10)),
                         child: Center(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(5.0),
                             child: Text('Current streak: $_currentStreak',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20.0,
+                                  fontSize: 10.0,
                                   fontWeight: FontWeight.w700,
                                 )),
                           ),
@@ -545,36 +573,30 @@ class _CheckCountryState extends State<CheckCountry> {
                     Card(
                           color: Color.fromARGB(255, 49, 52, 59),
                         elevation: 8.0,
-                        margin: EdgeInsets.all(5.0),
+                        margin: EdgeInsets.all(2.0),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                        
                       child: Container(
+                       // margin: EdgeInsets.all(1),
+
                         color: Color.fromARGB(255, 49, 52, 59),
-                        height: 50,
+                        height: 40,
                     
                         child: ListView.builder(
+                       // padding: EdgeInsetsGeometry.lerp(1, , 1.0)
+                         // shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: appState.tripHistory
                               .length, // appState.userCountrylist.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Center(
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                margin: EdgeInsets.all(2),
-                                //   color: Colors.white,
-                                //child: Text('Item $index'),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(1.0),
-                                    child: Text(
-                                      CountryFlag(appState
-                                          .tripHistory[index].countryCode!),
-                                      style: TextStyle(fontSize: 35),
-                                    ),
-                                  ),
-                                ),
+                            return Padding(
+                              padding: const EdgeInsets.all(0.0),
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                CountryFlag(appState
+                                    .tripHistory[index].countryCode!),
+                                style: TextStyle(fontSize: 25),
                               ),
                             );
                           },
@@ -583,7 +605,7 @@ class _CheckCountryState extends State<CheckCountry> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(2.0),
                       child: Container(
                         width: MediaQuery.of(context).size.width - 20,
                         height: 240,
@@ -625,62 +647,68 @@ class _CheckCountryState extends State<CheckCountry> {
                               ),
                       ),
                     ),
-                    Card(
-                      color: Color.fromARGB(255, 49, 52, 59),
-                      elevation: 8.0,
-                      margin: EdgeInsets.all(5.0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-
-                      //  width: MediaQuery.of(context).size.width - 20,
-                      //margin: const EdgeInsets.all(5.0),
-                      //color: Colors.greenAccent,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: (appState.currentPlace != null)
-                                    ? Text(
-                                        CountryFlag(appState
-                                            .currentPlace!.countryCode!),
-                                        style: TextStyle(fontSize: 30),
-                                      )
-                                    : Text(''),
-                              ),
-                              (appState.currentPlace != null)
-                                  ? Text(appState.currentPlace!.countryName!,
+                    Container(
+                      height: 70,
+                     child: 
+                     Card(
+                       color: Color.fromARGB(255, 49, 52, 59),
+                       elevation: 8.0,
+                       margin: EdgeInsets.all(2.0),
+                       shape: RoundedRectangleBorder(
+                           borderRadius: BorderRadius.circular(10)),
+                    
+                        //  width: MediaQuery.of(context).size.width - 20,
+                        // margin: const EdgeInsets.all(5.0),
+                        // color: Colors.greenAccent,
+                        child: Column(
+                          children: [
+                            Row(
+                               children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: (appState.currentPlace != null)
+                                      ? Text(
+                                          CountryFlag(appState
+                                              .currentPlace!.countryCode!),
+                                          style: TextStyle(fontSize: 15),
+                                        )
+                                      : Text('',style: TextStyle(fontSize: 10)),
+                                ),
+                                (appState.currentPlace != null)
+                                    ? Text(appState.currentPlace!.countryName!,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10.0,
+                                          fontWeight: FontWeight.w700,
+                                        ))
+                                    : Text('',style: TextStyle(fontSize: 10)),
+                                Text(': ',style: TextStyle(fontSize: 10)),
+                                (appState.currentPlace != null)
+                                    ? Text(appState.currentPlace!.region!,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10.0,
+                                          fontWeight: FontWeight.w700,
+                                        ))
+                                    : Text('',style: TextStyle(fontSize: 10)),
+                              ],
+                            ),
+                            (appState.currentPlace != null)
+                                ? Center(
+                                  child: Text(appState.currentPlace!.streetAddress!,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 20.0,
+                                        fontSize: 8.0,
                                         fontWeight: FontWeight.w700,
-                                      ))
-                                  : Text(''),
-                              Text(': '),
-                              (appState.currentPlace != null)
-                                  ? Text(appState.currentPlace!.region!,
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w700,
-                                      ))
-                                  : Text(''),
-                            ],
-                          ),
-                          (appState.currentPlace != null)
-                              ? Text(appState.currentPlace!.streetAddress!,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.w700,
-                                  ))
-                              : Text(''),
-                          Text(': '),
-                        ],
+                                      )),
+                                )
+                                : Text('',style: TextStyle(fontSize: 10)),
+                           // Text(': ',style: TextStyle(fontSize: 10)),
+                          ],
+                        ),
                       ),
                     ),
                     Card(
@@ -705,16 +733,16 @@ class _CheckCountryState extends State<CheckCountry> {
                             SaveLocation(appState.currentPlace);
                             updateStats(appState.userTotals);
                           },
-                          child: Text('Check Location',
+                          child: Text('Check-in',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20.0,
+                                fontSize: 15.0,
                                 fontWeight: FontWeight.w700,
                               )),
                         ),
                       ),
                     ),
-                    Spacer(),
+                   // Spacer(),
                     Align(
                       alignment: Alignment.topCenter,
                       child: ConfettiWidget(

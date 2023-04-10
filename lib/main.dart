@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gtk_flutter/firebase_options.dart';
 import 'package:gtk_flutter/screens/SignInScreen.dart';
+import 'package:gtk_flutter/screens/findfriendpage.dart';
 import 'package:gtk_flutter/screens/firstpage.dart';
 import 'package:gtk_flutter/screens/mainpage.dart';
 import 'package:gtk_flutter/screens/userprofile.dart';
@@ -74,6 +75,11 @@ final _router = GoRouter(
                   builder: (context, appState, _) =>
                       FirstPage(loggedIn: appState.loggedIn));
             }),
+        GoRoute(
+          path: 'findfriends',
+          builder: (context, state) => const FindFriendsPage(),
+        ),
+
         GoRoute(
           path: 'sign-in',
           builder: (context, state) {
