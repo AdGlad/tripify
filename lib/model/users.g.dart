@@ -121,6 +121,10 @@ abstract class UserProfileDocumentReference extends FirestoreDocumentReference<
     reference,
   );
 
+  late final FriendCollectionReference friends = _$FriendCollectionReference(
+    reference,
+  );
+
   @override
   Stream<UserProfileDocumentSnapshot> snapshots();
 
@@ -220,6 +224,10 @@ class _$UserProfileDocumentReference
 
   late final FriendRequestCollectionReference friendRequests =
       _$FriendRequestCollectionReference(
+    reference,
+  );
+
+  late final FriendCollectionReference friends = _$FriendCollectionReference(
     reference,
   );
 
@@ -4414,6 +4422,1526 @@ class FriendRequestQueryDocumentSnapshot
   }
 }
 
+/// A collection reference object can be used for adding documents,
+/// getting document references, and querying for documents
+/// (using the methods inherited from Query).
+abstract class FriendCollectionReference
+    implements
+        FriendQuery,
+        FirestoreCollectionReference<Friend, FriendQuerySnapshot> {
+  factory FriendCollectionReference(
+    DocumentReference<UserProfile> parent,
+  ) = _$FriendCollectionReference;
+
+  static Friend fromFirestore(
+    DocumentSnapshot<Map<String, Object?>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    return Friend.fromJson({'id': snapshot.id, ...?snapshot.data()});
+  }
+
+  static Map<String, Object?> toFirestore(
+    Friend value,
+    SetOptions? options,
+  ) {
+    return {...value.toJson()}..remove('id');
+  }
+
+  @override
+  CollectionReference<Friend> get reference;
+
+  /// A reference to the containing [UserProfileDocumentReference] if this is a subcollection.
+  UserProfileDocumentReference get parent;
+
+  @override
+  FriendDocumentReference doc([String? id]);
+
+  /// Add a new document to this collection with the specified data,
+  /// assigning it a document ID automatically.
+  Future<FriendDocumentReference> add(Friend value);
+}
+
+class _$FriendCollectionReference extends _$FriendQuery
+    implements FriendCollectionReference {
+  factory _$FriendCollectionReference(
+    DocumentReference<UserProfile> parent,
+  ) {
+    return _$FriendCollectionReference._(
+      UserProfileDocumentReference(parent),
+      parent.collection('friends').withConverter(
+            fromFirestore: FriendCollectionReference.fromFirestore,
+            toFirestore: FriendCollectionReference.toFirestore,
+          ),
+    );
+  }
+
+  _$FriendCollectionReference._(
+    this.parent,
+    CollectionReference<Friend> reference,
+  ) : super(reference, $referenceWithoutCursor: reference);
+
+  @override
+  final UserProfileDocumentReference parent;
+
+  String get path => reference.path;
+
+  @override
+  CollectionReference<Friend> get reference =>
+      super.reference as CollectionReference<Friend>;
+
+  @override
+  FriendDocumentReference doc([String? id]) {
+    assert(
+      id == null || id.split('/').length == 1,
+      'The document ID cannot be from a different collection',
+    );
+    return FriendDocumentReference(
+      reference.doc(id),
+    );
+  }
+
+  @override
+  Future<FriendDocumentReference> add(Friend value) {
+    return reference.add(value).then((ref) => FriendDocumentReference(ref));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$FriendCollectionReference &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+abstract class FriendDocumentReference
+    extends FirestoreDocumentReference<Friend, FriendDocumentSnapshot> {
+  factory FriendDocumentReference(DocumentReference<Friend> reference) =
+      _$FriendDocumentReference;
+
+  DocumentReference<Friend> get reference;
+
+  /// A reference to the [FriendCollectionReference] containing this document.
+  FriendCollectionReference get parent {
+    return _$FriendCollectionReference(
+      reference.parent.parent!.withConverter<UserProfile>(
+        fromFirestore: UserProfileCollectionReference.fromFirestore,
+        toFirestore: UserProfileCollectionReference.toFirestore,
+      ),
+    );
+  }
+
+  @override
+  Stream<FriendDocumentSnapshot> snapshots();
+
+  @override
+  Future<FriendDocumentSnapshot> get([GetOptions? options]);
+
+  @override
+  Future<void> delete();
+
+  /// Updates data on the document. Data will be merged with any existing
+  /// document data.
+  ///
+  /// If no document exists yet, the update will fail.
+  Future<void> update({
+    String? userId,
+    FieldValue userIdFieldValue,
+    String? friendId,
+    FieldValue friendIdFieldValue,
+    String? friendNickname,
+    FieldValue friendNicknameFieldValue,
+    String? friendEmail,
+    FieldValue friendEmailFieldValue,
+    String? friendAvatar,
+    FieldValue friendAvatarFieldValue,
+    String? status,
+    FieldValue statusFieldValue,
+  });
+
+  /// Updates fields in the current document using the transaction API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void transactionUpdate(
+    Transaction transaction, {
+    String? userId,
+    FieldValue userIdFieldValue,
+    String? friendId,
+    FieldValue friendIdFieldValue,
+    String? friendNickname,
+    FieldValue friendNicknameFieldValue,
+    String? friendEmail,
+    FieldValue friendEmailFieldValue,
+    String? friendAvatar,
+    FieldValue friendAvatarFieldValue,
+    String? status,
+    FieldValue statusFieldValue,
+  });
+}
+
+class _$FriendDocumentReference
+    extends FirestoreDocumentReference<Friend, FriendDocumentSnapshot>
+    implements FriendDocumentReference {
+  _$FriendDocumentReference(this.reference);
+
+  @override
+  final DocumentReference<Friend> reference;
+
+  /// A reference to the [FriendCollectionReference] containing this document.
+  FriendCollectionReference get parent {
+    return _$FriendCollectionReference(
+      reference.parent.parent!.withConverter<UserProfile>(
+        fromFirestore: UserProfileCollectionReference.fromFirestore,
+        toFirestore: UserProfileCollectionReference.toFirestore,
+      ),
+    );
+  }
+
+  @override
+  Stream<FriendDocumentSnapshot> snapshots() {
+    return reference.snapshots().map(FriendDocumentSnapshot._);
+  }
+
+  @override
+  Future<FriendDocumentSnapshot> get([GetOptions? options]) {
+    return reference.get(options).then(FriendDocumentSnapshot._);
+  }
+
+  @override
+  Future<FriendDocumentSnapshot> transactionGet(Transaction transaction) {
+    return transaction.get(reference).then(FriendDocumentSnapshot._);
+  }
+
+  Future<void> update({
+    Object? userId = _sentinel,
+    FieldValue? userIdFieldValue,
+    Object? friendId = _sentinel,
+    FieldValue? friendIdFieldValue,
+    Object? friendNickname = _sentinel,
+    FieldValue? friendNicknameFieldValue,
+    Object? friendEmail = _sentinel,
+    FieldValue? friendEmailFieldValue,
+    Object? friendAvatar = _sentinel,
+    FieldValue? friendAvatarFieldValue,
+    Object? status = _sentinel,
+    FieldValue? statusFieldValue,
+  }) async {
+    assert(
+      userId == _sentinel || userIdFieldValue == null,
+      "Cannot specify both userId and userIdFieldValue",
+    );
+    assert(
+      friendId == _sentinel || friendIdFieldValue == null,
+      "Cannot specify both friendId and friendIdFieldValue",
+    );
+    assert(
+      friendNickname == _sentinel || friendNicknameFieldValue == null,
+      "Cannot specify both friendNickname and friendNicknameFieldValue",
+    );
+    assert(
+      friendEmail == _sentinel || friendEmailFieldValue == null,
+      "Cannot specify both friendEmail and friendEmailFieldValue",
+    );
+    assert(
+      friendAvatar == _sentinel || friendAvatarFieldValue == null,
+      "Cannot specify both friendAvatar and friendAvatarFieldValue",
+    );
+    assert(
+      status == _sentinel || statusFieldValue == null,
+      "Cannot specify both status and statusFieldValue",
+    );
+    final json = {
+      if (userId != _sentinel) _$FriendFieldMap['userId']!: userId as String?,
+      if (userIdFieldValue != null)
+        _$FriendFieldMap['userId']!: userIdFieldValue,
+      if (friendId != _sentinel)
+        _$FriendFieldMap['friendId']!: friendId as String?,
+      if (friendIdFieldValue != null)
+        _$FriendFieldMap['friendId']!: friendIdFieldValue,
+      if (friendNickname != _sentinel)
+        _$FriendFieldMap['friendNickname']!: friendNickname as String?,
+      if (friendNicknameFieldValue != null)
+        _$FriendFieldMap['friendNickname']!: friendNicknameFieldValue,
+      if (friendEmail != _sentinel)
+        _$FriendFieldMap['friendEmail']!: friendEmail as String?,
+      if (friendEmailFieldValue != null)
+        _$FriendFieldMap['friendEmail']!: friendEmailFieldValue,
+      if (friendAvatar != _sentinel)
+        _$FriendFieldMap['friendAvatar']!: friendAvatar as String?,
+      if (friendAvatarFieldValue != null)
+        _$FriendFieldMap['friendAvatar']!: friendAvatarFieldValue,
+      if (status != _sentinel) _$FriendFieldMap['status']!: status as String?,
+      if (statusFieldValue != null)
+        _$FriendFieldMap['status']!: statusFieldValue,
+    };
+
+    return reference.update(json);
+  }
+
+  void transactionUpdate(
+    Transaction transaction, {
+    Object? userId = _sentinel,
+    FieldValue? userIdFieldValue,
+    Object? friendId = _sentinel,
+    FieldValue? friendIdFieldValue,
+    Object? friendNickname = _sentinel,
+    FieldValue? friendNicknameFieldValue,
+    Object? friendEmail = _sentinel,
+    FieldValue? friendEmailFieldValue,
+    Object? friendAvatar = _sentinel,
+    FieldValue? friendAvatarFieldValue,
+    Object? status = _sentinel,
+    FieldValue? statusFieldValue,
+  }) {
+    assert(
+      userId == _sentinel || userIdFieldValue == null,
+      "Cannot specify both userId and userIdFieldValue",
+    );
+    assert(
+      friendId == _sentinel || friendIdFieldValue == null,
+      "Cannot specify both friendId and friendIdFieldValue",
+    );
+    assert(
+      friendNickname == _sentinel || friendNicknameFieldValue == null,
+      "Cannot specify both friendNickname and friendNicknameFieldValue",
+    );
+    assert(
+      friendEmail == _sentinel || friendEmailFieldValue == null,
+      "Cannot specify both friendEmail and friendEmailFieldValue",
+    );
+    assert(
+      friendAvatar == _sentinel || friendAvatarFieldValue == null,
+      "Cannot specify both friendAvatar and friendAvatarFieldValue",
+    );
+    assert(
+      status == _sentinel || statusFieldValue == null,
+      "Cannot specify both status and statusFieldValue",
+    );
+    final json = {
+      if (userId != _sentinel) _$FriendFieldMap['userId']!: userId as String?,
+      if (userIdFieldValue != null)
+        _$FriendFieldMap['userId']!: userIdFieldValue,
+      if (friendId != _sentinel)
+        _$FriendFieldMap['friendId']!: friendId as String?,
+      if (friendIdFieldValue != null)
+        _$FriendFieldMap['friendId']!: friendIdFieldValue,
+      if (friendNickname != _sentinel)
+        _$FriendFieldMap['friendNickname']!: friendNickname as String?,
+      if (friendNicknameFieldValue != null)
+        _$FriendFieldMap['friendNickname']!: friendNicknameFieldValue,
+      if (friendEmail != _sentinel)
+        _$FriendFieldMap['friendEmail']!: friendEmail as String?,
+      if (friendEmailFieldValue != null)
+        _$FriendFieldMap['friendEmail']!: friendEmailFieldValue,
+      if (friendAvatar != _sentinel)
+        _$FriendFieldMap['friendAvatar']!: friendAvatar as String?,
+      if (friendAvatarFieldValue != null)
+        _$FriendFieldMap['friendAvatar']!: friendAvatarFieldValue,
+      if (status != _sentinel) _$FriendFieldMap['status']!: status as String?,
+      if (statusFieldValue != null)
+        _$FriendFieldMap['status']!: statusFieldValue,
+    };
+
+    transaction.update(reference, json);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FriendDocumentReference &&
+        other.runtimeType == runtimeType &&
+        other.parent == parent &&
+        other.id == id;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, parent, id);
+}
+
+abstract class FriendQuery
+    implements QueryReference<Friend, FriendQuerySnapshot> {
+  @override
+  FriendQuery limit(int limit);
+
+  @override
+  FriendQuery limitToLast(int limit);
+
+  /// Perform an order query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of order queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.orderByFieldPath(
+  ///   FieldPath.fromString('title'),
+  ///   startAt: 'title',
+  /// );
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.orderByTitle(startAt: 'title');
+  /// ```
+  FriendQuery orderByFieldPath(
+    FieldPath fieldPath, {
+    bool descending = false,
+    Object? startAt,
+    Object? startAfter,
+    Object? endAt,
+    Object? endBefore,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  });
+
+  /// Perform a where query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of where queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.whereFieldPath(FieldPath.fromString('title'), isEqualTo: 'title');
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.whereTitle(isEqualTo: 'title');
+  /// ```
+  FriendQuery whereFieldPath(
+    FieldPath fieldPath, {
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  });
+
+  FriendQuery whereDocumentId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  FriendQuery whereUserId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  FriendQuery whereFriendId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  FriendQuery whereFriendNickname({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  FriendQuery whereFriendEmail({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  FriendQuery whereFriendAvatar({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  FriendQuery whereStatus({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+
+  FriendQuery orderByDocumentId({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  });
+
+  FriendQuery orderByUserId({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  });
+
+  FriendQuery orderByFriendId({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  });
+
+  FriendQuery orderByFriendNickname({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  });
+
+  FriendQuery orderByFriendEmail({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  });
+
+  FriendQuery orderByFriendAvatar({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  });
+
+  FriendQuery orderByStatus({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  });
+}
+
+class _$FriendQuery extends QueryReference<Friend, FriendQuerySnapshot>
+    implements FriendQuery {
+  _$FriendQuery(
+    this._collection, {
+    required Query<Friend> $referenceWithoutCursor,
+    $QueryCursor $queryCursor = const $QueryCursor(),
+  }) : super(
+          $referenceWithoutCursor: $referenceWithoutCursor,
+          $queryCursor: $queryCursor,
+        );
+
+  final CollectionReference<Object?> _collection;
+
+  @override
+  Stream<FriendQuerySnapshot> snapshots([SnapshotOptions? options]) {
+    return reference.snapshots().map(FriendQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  Future<FriendQuerySnapshot> get([GetOptions? options]) {
+    return reference.get(options).then(FriendQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  FriendQuery limit(int limit) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limit(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  @override
+  FriendQuery limitToLast(int limit) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limitToLast(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  FriendQuery orderByFieldPath(
+    FieldPath fieldPath, {
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  }) {
+    final query =
+        $referenceWithoutCursor.orderBy(fieldPath, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  FriendQuery whereFieldPath(
+    FieldPath fieldPath, {
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  }) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        fieldPath,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+        isNull: isNull,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  FriendQuery whereDocumentId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        FieldPath.documentId,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  FriendQuery whereUserId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$FriendFieldMap['userId']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  FriendQuery whereFriendId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$FriendFieldMap['friendId']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  FriendQuery whereFriendNickname({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$FriendFieldMap['friendNickname']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  FriendQuery whereFriendEmail({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$FriendFieldMap['friendEmail']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  FriendQuery whereFriendAvatar({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$FriendFieldMap['friendAvatar']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  FriendQuery whereStatus({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$FriendFieldMap['status']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  FriendQuery orderByDocumentId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(FieldPath.documentId,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  FriendQuery orderByUserId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$FriendFieldMap['userId']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  FriendQuery orderByFriendId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$FriendFieldMap['friendId']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  FriendQuery orderByFriendNickname({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$FriendFieldMap['friendNickname']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  FriendQuery orderByFriendEmail({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$FriendFieldMap['friendEmail']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  FriendQuery orderByFriendAvatar({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$FriendFieldMap['friendAvatar']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  FriendQuery orderByStatus({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    FriendDocumentSnapshot? startAtDocument,
+    FriendDocumentSnapshot? endAtDocument,
+    FriendDocumentSnapshot? endBeforeDocument,
+    FriendDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$FriendFieldMap['status']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$FriendQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$FriendQuery &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+class FriendDocumentSnapshot extends FirestoreDocumentSnapshot<Friend> {
+  FriendDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final DocumentSnapshot<Friend> snapshot;
+
+  @override
+  FriendDocumentReference get reference {
+    return FriendDocumentReference(
+      snapshot.reference,
+    );
+  }
+
+  @override
+  final Friend? data;
+}
+
+class FriendQuerySnapshot
+    extends FirestoreQuerySnapshot<Friend, FriendQueryDocumentSnapshot> {
+  FriendQuerySnapshot._(
+    this.snapshot,
+    this.docs,
+    this.docChanges,
+  );
+
+  factory FriendQuerySnapshot._fromQuerySnapshot(
+    QuerySnapshot<Friend> snapshot,
+  ) {
+    final docs = snapshot.docs.map(FriendQueryDocumentSnapshot._).toList();
+
+    final docChanges = snapshot.docChanges.map((change) {
+      return _decodeDocumentChange(
+        change,
+        FriendDocumentSnapshot._,
+      );
+    }).toList();
+
+    return FriendQuerySnapshot._(
+      snapshot,
+      docs,
+      docChanges,
+    );
+  }
+
+  static FirestoreDocumentChange<FriendDocumentSnapshot>
+      _decodeDocumentChange<T>(
+    DocumentChange<T> docChange,
+    FriendDocumentSnapshot Function(DocumentSnapshot<T> doc) decodeDoc,
+  ) {
+    return FirestoreDocumentChange<FriendDocumentSnapshot>(
+      type: docChange.type,
+      oldIndex: docChange.oldIndex,
+      newIndex: docChange.newIndex,
+      doc: decodeDoc(docChange.doc),
+    );
+  }
+
+  final QuerySnapshot<Friend> snapshot;
+
+  @override
+  final List<FriendQueryDocumentSnapshot> docs;
+
+  @override
+  final List<FirestoreDocumentChange<FriendDocumentSnapshot>> docChanges;
+}
+
+class FriendQueryDocumentSnapshot extends FirestoreQueryDocumentSnapshot<Friend>
+    implements FriendDocumentSnapshot {
+  FriendQueryDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final QueryDocumentSnapshot<Friend> snapshot;
+
+  @override
+  final Friend data;
+
+  @override
+  FriendDocumentReference get reference {
+    return FriendDocumentReference(snapshot.reference);
+  }
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -4489,6 +6017,36 @@ Json? _$JsonConverterToJson<Json, Value>(
   Json? Function(Value value) toJson,
 ) =>
     value == null ? null : toJson(value);
+
+Friend _$FriendFromJson(Map<String, dynamic> json) => Friend(
+      id: json['id'] as String,
+      userId: json['userId'] as String?,
+      friendId: json['friendId'] as String?,
+      friendNickname: json['friendNickname'] as String?,
+      friendEmail: json['friendEmail'] as String?,
+      friendAvatar: json['friendAvatar'] as String?,
+      status: json['status'] as String?,
+    );
+
+const _$FriendFieldMap = <String, String>{
+  'id': 'id',
+  'userId': 'userId',
+  'friendId': 'friendId',
+  'friendNickname': 'friendNickname',
+  'friendEmail': 'friendEmail',
+  'friendAvatar': 'friendAvatar',
+  'status': 'status',
+};
+
+Map<String, dynamic> _$FriendToJson(Friend instance) => <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'friendId': instance.friendId,
+      'friendNickname': instance.friendNickname,
+      'friendEmail': instance.friendEmail,
+      'friendAvatar': instance.friendAvatar,
+      'status': instance.status,
+    };
 
 FriendRequest _$FriendRequestFromJson(Map<String, dynamic> json) =>
     FriendRequest(
