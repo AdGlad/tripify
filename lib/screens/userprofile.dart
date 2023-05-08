@@ -282,7 +282,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                               fontSize: 24.0, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'Join Date: ${DateFormat('dd MMMM yyyy').format(appState.userProfile!.joinData!)}',
+                          'Join Date: ${DateFormat('dd MMMM yyyy').format(appState.userProfile!.joinDate!)}',
                           style: TextStyle(
                               fontSize: 12.0, fontWeight: FontWeight.bold),
                         ),

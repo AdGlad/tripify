@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:gtk_flutter/model/placehistory.dart';
+import 'package:gtk_flutter/model/users.dart';
 import 'package:gtk_flutter/src/confetti.dart';
 import 'dart:developer' as developer;
 import 'dart:convert';
@@ -46,7 +47,7 @@ class _CheckCountryState extends State<CheckCountry> {
 
     getLocation();
 
-    _loadStreakFromFirestore();
+   // _loadStreakFromFirestore();
 
     BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
@@ -64,6 +65,13 @@ class _CheckCountryState extends State<CheckCountry> {
         },
       ),
     ).load();
+  }
+    bool _isLoading = false;
+
+    void _toggleLoading() {
+    setState(() {
+      _isLoading = !_isLoading;
+    });
   }
 
   void initController() {
@@ -85,48 +93,50 @@ class _CheckCountryState extends State<CheckCountry> {
   LocationData? newPlace;
   Location _location = Location();
   LatLng? _newLatLng;
-  int _currentStreak = 0;
+  //int _currentStreak = 0;
 
-  Future<void> _loadStreakFromFirestore() async {
-    final docSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    if (docSnapshot.exists) {
-      setState(() {
-        _currentStreak = docSnapshot.data()!['currentStreak']??0;
-      });
-    }
-  }
+  // Future<void> _loadStreakFromFirestore() async {
+  //   final docSnapshot = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .get();
+  //   if (docSnapshot.exists) {
+  //     setState(() {
+  //       _currentStreak = docSnapshot.data()!['currentStreak']??0;
+  //     });
+  //   }
+  // }
 
-  Future<void> _incrementStreak() async {
+  Future<void> _incrementStreak(int currentStreak) async {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final docRef = FirebaseFirestore.instance
-        .collection('streaks')
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid);
     final docSnapshot = await docRef.get();
 
     if (docSnapshot.exists) {
       final lastRecordedDate = docSnapshot.data()!['lastRecordedDate'].toDate();
       if (lastRecordedDate.isBefore(today)) {
-        final newStreak = _currentStreak + 1;
+       // final newStreak = _currentStreak + 1; 
+         final newStreak = currentStreak + 1; 
+
         await docRef.update({
           'lastRecordedDate': today,
           'currentStreak': newStreak,
         });
-        setState(() {
-          _currentStreak = newStreak;
-        });
+       // setState(() {
+       //   _currentStreak = newStreak;
+       // });
       }
     } else {
       await docRef.set({
         'lastRecordedDate': today,
         'currentStreak': 1,
       });
-      setState(() {
-        _currentStreak = 1;
-      });
+   //   setState(() {
+   //     _currentStreak = 1;
+   //   });
     }
   }
 
@@ -209,8 +219,9 @@ class _CheckCountryState extends State<CheckCountry> {
     });
   }
 
-  void SaveLocation(
+  Future SaveLocation(
     PlaceHistory? currentPlace,
+    UserProfile? userProfile,
     //  UserTotals? userTotals,
     //  MapboxMapController? locationcontroller
   ) async {
@@ -247,8 +258,8 @@ double? _latitude = newPlace.latitude;
     
   
 
-     _latitude = 19.4333; // Mexico
-    _longitude = -99.1333; // Mexico
+    //  _latitude = 19.4333; // Mexico
+    // _longitude = -99.1333; // Mexico
     
 
     // double
@@ -257,16 +268,16 @@ double? _latitude = newPlace.latitude;
     //_longitude = 106.8451;
 
 
-    _latitude = 39.9040; //Beijing
-    _longitude = 116.4075; //Beijing
-      _latitude = 40.6943; //New York"
-    _longitude = -73.9249;//New York"
+    // _latitude = 39.9040; //Beijing
+    // _longitude = 116.4075; //Beijing
+    //   _latitude = 40.6943; //New York"
+    // _longitude = -73.9249;//New York"
 
-          _latitude = 51.50853; //London
-    _longitude = -0.12574;//London
+    //       _latitude = 51.50853; //London
+    // _longitude = -0.12574;//London
 
-            _latitude = 55.95206; //Edinburgh
-    _longitude = -3.19648;//Edinburgh
+    //         _latitude = 55.95206; //Edinburgh
+    // _longitude = -3.19648;//Edinburgh
 
 
     //double _latitude = -6.2146;
@@ -277,7 +288,7 @@ double? _latitude = newPlace.latitude;
 
 
 
-    await _incrementStreak();
+    await _incrementStreak(userProfile!.currentstreak!);
 
     await fetchNewPlace(_latitude, _longitude).then((value) async {
       // int currentVisitNumber;
@@ -464,7 +475,8 @@ double? _latitude = newPlace.latitude;
                           style: TextStyle(fontSize: 20), 'Share your streak?'),
                       content: Text(
                           style: TextStyle(fontSize: 20),
-                          'Do you want to share your streak of $_currentStreak days?'),
+                      //    'Do you want to share your streak of $_currentStreak days?'),
+                          'Do you want to share your streak of ${appState.userProfile?.currentstreak} days?'),
                       actions: <Widget>[
                         TextButton(
                           child: Text('CANCEL'),
@@ -482,7 +494,8 @@ double? _latitude = newPlace.latitude;
                             FlutterShare.share(
                               title: 'My Streak',
                               text:
-                                  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
+                                //  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
+                                  'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
                               chooserTitle: 'Share on social media',
                             );
                             // TODO: Implement share functionality
@@ -560,7 +573,7 @@ double? _latitude = newPlace.latitude;
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text('Current streak: $_currentStreak',
+                            child: Text('V1 ${appState.userProfile?.nickname} streak : ${appState.userProfile?.currentstreak}', // _currentStreak', 
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10.0,
@@ -729,11 +742,16 @@ double? _latitude = newPlace.latitude;
                             backgroundColor: Colors.orangeAccent,
                             elevation: 5,
                           ),
-                          onPressed: () {
-                            SaveLocation(appState.currentPlace);
-                            updateStats(appState.userTotals);
+                          onPressed: () async {
+                                    _toggleLoading();
+                           await SaveLocation(appState.currentPlace,
+                                         appState.userProfile);
+                           updateStats(appState.userTotals);
+                                    _toggleLoading();
+
                           },
-                          child: Text('Check-in',
+                          child:  _isLoading ? CircularProgressIndicator() :
+Text('Check-in',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15.0,
@@ -767,3 +785,4 @@ double? _latitude = newPlace.latitude;
     );
   }
 }
+

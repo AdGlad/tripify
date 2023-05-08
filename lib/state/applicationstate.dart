@@ -117,15 +117,62 @@ class ApplicationState extends ChangeNotifier {
       //),
     ]);
 
+UserProfile listenForUserChanges(String userId) {
+  UserProfile _userProfile = UserProfile(id: userId );
+
+  // Get a reference to the user's document in Firestore
+  DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+
+  // Listen for changes to the user document
+  userRef.snapshots().listen((userSnapshot) {
+    // Check if the document exists
+    if (userSnapshot.exists) {
+      // Get the user's data as a Map
+      Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+            DateTime joinDate = (userData['joinDate'] as Timestamp).toDate();
+            DateTime lastRecordedDate = (userData['lastRecordedDate'] as Timestamp).toDate();
+      // Extract the user's age and address from the data
+            _userProfile.userId =   userData  ['userId'] ?? 'userId'; // event.get("userId") ?? "userId";
+            _userProfile.email = userData['email'] ?? 'email';
+            _userProfile.nickname = userData['nickname'] ?? 'nickname';
+            _userProfile.avatar = userData['avatar'] ?? 'avatar';
+           // _userProfile.photo = userData['photo'] ?? 'photo';
+            _userProfile.language = userData['language'] ?? 'language';
+            _userProfile.joinDate = joinDate;
+          //  _userProfile.joinDate = userData['joinDate'].toDate() as DateTime? ;//?? DateTime.now() as DateTime? ;
+            _userProfile.friend = userData['friend'] ?? 0;
+            _userProfile.league = userData['league'] ?? 0;
+            _userProfile.countrycount = userData['countrycount']  ??  0;
+            _userProfile.visitcount = userData['visitcount']  ??  0;
+            _userProfile.distancetotal = userData['distancetotal']  ??  0;
+            _userProfile.regioncount = userData['regioncount']  ??  0;
+            _userProfile.placescount = userData['placescount']  ??  0;
+            _userProfile.currentstreak= userData['currentStreak']??  0;
+                        _userProfile.lastRecordedDate = lastRecordedDate;
+
+         //   _userProfile.lastRecordedDate = userData['lastRecordedDate'].toDate() as DateTime?; //  ?? DateTime.now();
+
+
+      // Print the user's ID, age, and address to the console
+      print('User $_userProfile.userId');
+    } else {
+      print('User document for $userId does not exist.');
+    }
+  });
+  return _userProfile;
+}
+
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _loggedIn = true;
         _emailVerified = user.emailVerified;
         log(' User logged in ..');
         developer.log('Fire applicationstate');
+        _userProfile = listenForUserChanges(FirebaseAuth.instance.currentUser!.uid);
+
         _usersSubscription = FirebaseFirestore.instance
             .collection('users')
-            //.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+           // .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
             .orderBy('distancetotal', descending: true)
             .snapshots()
             .listen((snapshot) {
@@ -138,25 +185,43 @@ class ApplicationState extends ChangeNotifier {
             //DateTime current_arrivalDate =
             //  DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
-            //final data =  document.data();
-            // _users.add( UserProfile.fromJson(data));
+          //  int joinDateInMillis = document.data()['joinDate'] as int;
+          //  int lastRecordedDateInMillis = document.data()['lastRecordedDate'] as int;
+
+          //  DateTime joinDate =
+          //    DateTime.fromMillisecondsSinceEpoch(joinDateInMillis);
+          //  DateTime lastRecordedDate =
+            //  DateTime.fromMillisecondsSinceEpoch(lastRecordedDateInMillis);
+            DateTime joinDate = (document.data()['joinDate'] as Timestamp).toDate();
+            DateTime lastRecordedDate = (document.data()['lastRecordedDate'] as Timestamp).toDate();
+
+          //  final data =  document.data();
+           //  _users.add( UserProfile.fromJson(data));
 
             _users.add(UserProfile(
               id: document.id,
-              userId: document.data()['userId'] as String,
+              userId: document.data()['userId']  ?? 'userId',
               email: document.data()['email'] as String,
               nickname: document.data()['nickname'] as String,
               avatar: document.data()['avatar'] as String,
               // photo: document.data()['photo"'] as String,
               language: document.data()['language'] as String,
-              //joinData: document.data()['joinDate"'] as String,
-              friend: document.data()['friend'] as int,
-              league: document.data()['league'] as int,
-              countrycount: document.data()['countrycount'] as int,
-              visitcount: document.data()['visitcount'] as int,
-              distancetotal: document.data()['distancetotal'] as int,
-              regioncount: document.data()['regioncount'] as int,
-              placescount: document.data()['placescount'] as int,
+              joinDate: joinDate,
+          //    joinDate: document.data()['joinDate']?.toDate ?? DateTime.now(),
+            //  joinDate: DateTime.tryParse(document.data()['joinDate']),
+              friend: document.data()['friend'] as int?,
+              league: document.data()['league'] as int?,
+              countrycount: document.data()['countrycount'] as int?,
+              visitcount: document.data()['visitcount'] as int?,
+              distancetotal: document.data()['distancetotal'] as int?,
+              regioncount: document.data()['regioncount'] as int?,
+              placescount: document.data()['placescount'] as int?,
+              currentstreak: document.data()['currentStreak'] as int?,
+              lastRecordedDate: lastRecordedDate,
+          //    lastRecordedDate: document.data()['lastRecordedDate']?.toDate ?? DateTime.now(),
+             // lastRecordedDate: document.data()['lastRecordedDate'].toDate as DateTime?,
+              //              lastRecordedDate: DateTime.tryParse(document.data()['lastRecordedDate']),
+
             ));
 
             // );
@@ -171,91 +236,130 @@ class ApplicationState extends ChangeNotifier {
         //     .snapshots();
         //     //.get();
 
-        final CollectionReference _usersProfileCollection =
-            FirebaseFirestore.instance.collection('users');
+        // final CollectionReference _usersProfileCollection =
+        //     FirebaseFirestore.instance.collection('users');
 
-        final docRef =
-            _usersProfileCollection.doc(FirebaseAuth.instance.currentUser!.uid);
+        // final docRef =
+        //     _usersProfileCollection.doc(FirebaseAuth.instance.currentUser!.uid);
 
-        // final docRef = db.collection("cities").doc("SF");
+        // // final docRef = db.collection("cities").doc("SF");
 
-        docRef.get().then(
-          (DocumentSnapshot doc) {
-            if (doc.exists) {
-            Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
-            // _userProfile?.userId = data['userId'];
+        // docRef.get().then(
+        //   (DocumentSnapshot doc) {
+        //     if (doc.exists) {
+        //     Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
+        //     // _userProfile?.userId = data['userId'];
 
-            //  _userProfile = UserProfile.fromJson(data);
-            developer.log(' userId ${data['userId']}');
-            developer.log(' currentstreak ${data['currentstreak']}');
-            _userProfile = UserProfile(id: user.uid);
+        //     //  _userProfile = UserProfile.fromJson(data);
+        //     developer.log(' userId ${data['userId']}');
+        //     developer.log(' currentstreak ${data['currentstreak']}');
+        //     _userProfile = UserProfile(id: user.uid);
 
-            _userProfile?.userId = data['userId'] ?? 'userId';
-            _userProfile?.email = data['email'] ?? 'email';
-            _userProfile?.nickname = data['nickname'] ?? 'nickname';
-            _userProfile?.avatar = data['avatar'] ?? 'avatar';
-            _userProfile?.photo = data['photo'] ?? 'photo';
-            _userProfile?.language = data['language'] ?? 'language';
-            _userProfile?.joinData = data['joinDate'] ?? DateTime.now();
-            _userProfile?.friend = data['friend'] ?? 'userId';
-            _userProfile?.league = data['league'] ?? 'userId';
-            _userProfile?.countrycount = data['countrycount'] ?? 0;
-            _userProfile?.visitcount = data['visitcount'] ?? 0;
-            _userProfile?.distancetotal = data['distancetotal'] ?? 0;
-            _userProfile?.regioncount = data['regioncount'] ?? 0;
-            _userProfile?.placescount = data['placescount'] ?? 0;
-            _userProfile?.currentstreak = data['currentstreak'] ?? 0;
-            // _userProfile?.currentstreak= event.get("currentstreak") !=null ?  event.get("currentstreak") : 0;
-            developer.log(
-                ' _userProfile?.currentstreak= ${_userProfile?.currentstreak}');
-            notifyListeners();
-            }
-            
-          },
-          onError: (e) => print("Error getting document: $e"),
-        );
-        developer.log(
-            ' _userProfile?.currentstreak= ${_userProfile?.currentstreak}');
-        notifyListeners();
-
-        //   final doc =  _usersCollection.doc(user.uid).get();
+        //     _userProfile?.userId = data['userId'] ?? 'userId';
+        //     _userProfile?.email = data['email'] ?? 'email';
+        //     _userProfile?.nickname = data['nickname'] ?? 'nickname';
+        //     _userProfile?.avatar = data['avatar'] ?? 'avatar';
+        //     _userProfile?.photo = data['photo'] ?? 'photo';
+        //     _userProfile?.language = data['language'] ?? 'language';
+        //     _userProfile?.joinDate = data['joinDate'] ?? DateTime.now();
+        //     _userProfile?.friend = data['friend'] ?? 'userId';
+        //     _userProfile?.league = data['league'] ?? 'userId';
+        //     _userProfile?.countrycount = data['countrycount'] ?? 0;
+        //     _userProfile?.visitcount = data['visitcount'] ?? 0;
+        //     _userProfile?.distancetotal = data['distancetotal'] ?? 0;
+        //     _userProfile?.regioncount = data['regioncount'] ?? 0;
+        //     _userProfile?.placescount = data['placescount'] ?? 0;
+        //     _userProfile?.currentstreak = data['currentStreak'] ?? 0;
+        //     // _userProfile?.currentstreak= event.get("currentstreak") !=null ?  event.get("currentstreak") : 0;
+        //     developer.log(
+        //         ' _userProfile?.currentstreak= ${_userProfile?.currentstreak}');
+        //     notifyListeners();
+        //     }
+        //   },
+        //   onError: (e) => print("Error getting document: $e"),
+        // );
+        // developer.log(
+        //     ' _userProfile?.currentstreak= ${_userProfile?.currentstreak}');
+        // notifyListeners();
+        // //   final doc =  _usersCollection.doc(user.uid).get();
         //   final data = doc.data;
         //     UserProfile.fromJson(data);
-
         //  Future<DocumentSnapshot<Map<String, dynamic>>> _usersCollection= FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-
         // UserProfile user = _usersCollection.data;
-        // UserProfile.fromJson(_usersCollection)
+        // UserProfile.fromJson(_usersColle ction)
+//         final docRef = FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid);
 
-        //    _userProfileSubscription = FirebaseFirestore.instance
-        //       .collection("users")
-        //       .doc(FirebaseAuth.instance.currentUser!.uid)
-        //      .snapshots()
-        //       .listen((event) {
-        //     developer.log(
-        //         'In user profile loop ${FirebaseAuth.instance.currentUser!.uid}');
-        //     _userProfile?.id = FirebaseAuth.instance.currentUser!.uid;
-        //     _userProfile?.userId = event.get("userId");
-        //     _userProfile?.email = event.get("email");
-        //     _userProfile?.nickname = event.get("nickname");
-        //     _userProfile?.avatar = event.get("avatar");
-        //     _userProfile?.photo = event.get("photo");
-        //     _userProfile?.language = event.get("language");
-        //     _userProfile?.joinData = event.get("joinDate");
-        //     _userProfile?.friend = event.get("friend");
-        //     _userProfile?.league = event.get("league");
-        //     _userProfile?.countrycount = event.get("countrycount")  ??  0;
-        //     _userProfile?.visitcount = event.get("visitcount")  ??  0;
-        //     _userProfile?.distancetotal = event.get("distancetotal")  ??  0;
-        //     _userProfile?.regioncount = event.get("regioncount")  ??  0;
-        //     _userProfile?.placescount = event.get("placescount")  ??  0;
-        //     _userProfile?.currentstreak= event.get("currentstreak") ??  0;
-        //  // _userProfile?.currentstreak= event.get("currentstreak") !=null ?  event.get("currentstreak") : 0;
-        //  developer.log(
-        //         ' _userProfile?.currentstreak= ${ _userProfile?.currentstreak}');
-        //            notifyListeners();
 
-        //   });
+
+
+
+
+//           docRef.snapshots().listen(
+//             (event) {
+//               final source = (event.metadata.hasPendingWrites) ? "Local" : "Server";
+//               print("$source data: ${event.data()}");
+//               developer.log("$source data: ${event.data()}");
+
+//               final data = event.data() as Map<String, dynamic>;
+//             // var doc = event;
+
+//           //  _userProfileSubscription = FirebaseFirestore.instance
+//           //     .collection("users")
+//           //     .doc(FirebaseAuth.instance.currentUser!.uid);
+              
+//           //     .then((value) => null)
+//           //    .snapshots()
+//           //     .listen((event) {
+
+//              developer.log(
+//                  'In user profile loop ${FirebaseAuth.instance.currentUser!.uid}');
+//           //       for (var doc in event.data()) {
+
+//           //       }
+//             // _userProfile?.id = FirebaseAuth.instance.currentUser!.uid;
+//             // _userProfile?.userId = event.get("userId") ?? "userId";
+//             // _userProfile?.email = event.get("email") ?? "email";
+//             // _userProfile?.nickname = event.get("nickname") ?? "nickname";
+//             // _userProfile?.avatar = event.get("avatar") ?? "avatar";
+//             // _userProfile?.photo = event.get("photo") ?? "photo";
+//             // _userProfile?.language = event.get("language") ?? "language";
+//             // _userProfile?.joinDate = event.get("joinDate") ?? "joinDate";
+//             // _userProfile?.friend = event.get("friend") ?? "friend";
+//             // _userProfile?.league = event.get("league") ?? "league";
+//             // _userProfile?.countrycount = event.get("countrycount")  ??  0;
+//             // _userProfile?.visitcount = event.get("visitcount")  ??  0;
+//             // _userProfile?.distancetotal = event.get("distancetotal")  ??  0;
+//             // _userProfile?.regioncount = event.get("regioncount")  ??  0;
+//             // _userProfile?.placescount = event.get("placescount")  ??  0;
+//             // _userProfile?.currentstreak= event.get("currentStreak") ??  0;
+//           //_userProfile = UserProfile()?;
+
+//             _userProfile?.id = FirebaseAuth.instance.currentUser!.uid;
+//             _userProfile?.userId =   data['userId'] ?? 'userId'; // event.get("userId") ?? "userId";
+//             _userProfile?.email = event.get("email") ?? "email";
+//             _userProfile?.nickname = event.get("nickname") ?? "nickname";
+//             _userProfile?.avatar = event.get("avatar") ?? "avatar";
+//             _userProfile?.photo = event.get("photo") ?? "photo";
+//             _userProfile?.language = event.get("language") ?? "language";
+//             _userProfile?.joinDate = event.get("joinDate") ?? "joinDate";
+//             _userProfile?.friend = event.get("friend") ?? "friend";
+//             _userProfile?.league = event.get("league") ?? "league";
+//             _userProfile?.countrycount = event.get("countrycount")  ??  0;
+//             _userProfile?.visitcount = event.get("visitcount")  ??  0;
+//             _userProfile?.distancetotal = event.get("distancetotal")  ??  0;
+//             _userProfile?.regioncount = event.get("regioncount")  ??  0;
+//             _userProfile?.placescount = event.get("placescount")  ??  0;
+//             //_userProfile?.currentstreak= event.get("currentStreak") ??  0;
+//             _userProfile?.currentstreak= data['currentStreak']??  0;
+
+//          // _userProfile?.currentstreak= event.get("currentstreak") !=null ?  event.get("currentstreak") : 0;
+//          developer.log(
+//                 ' _userProfile?.currentstreak= ${ _userProfile?.currentstreak}');
+//                    notifyListeners();
+//          },
+//             onError: (error) => print("Listen failed: $error"),
+//           );
+// //          });
 
         StreamSubscription<QuerySnapshot> _userCountryListSubscription =
             FirebaseFirestore.instance
@@ -487,3 +591,4 @@ class ApplicationState extends ChangeNotifier {
     await currentUser.reload();
   }
 }
+

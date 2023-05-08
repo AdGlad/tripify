@@ -67,19 +67,22 @@ class _SignInState extends State<SignIn> {
                   .set({
                 // set({
                 'userId': FirebaseAuth.instance.currentUser!.uid,
-                'nickname': user.displayName,
-                'email': user.email,
-                'avatar': user.photoURL,
+                'nickname': user.displayName ?? 'nickname',
+                'email': user.email ?? 'email',
+                'avatar': user.photoURL ?? 'https://s.gravatar.com/avatar/7f6e6555feaeb5966808376abd27e93b?s=80',
                 // 'age': int.parse(_ageController.text),
-                'friend': 1,
-                'league': 1,
+                'friend': 0,
+                'league': 0,
                 'language': 'en',
-                'joinData': DateTime.now(),
+                'joinDate': DateTime.now(),
                 'countrycount': 0,
                 'visitcount': 0,
                 'distancetotal': 0,
                 'regioncount': 0,
                 'placescount': 0,
+                'currentStreak': 1,
+                'lastRecordedDate': DateTime.now(),
+
               });
 
               // user.updateDisplayName(user.email!.split('@')[0]);

@@ -106,7 +106,7 @@ final _router = GoRouter(
                 appBar: AppBar(
                   title: const Text('User Profile'),
                 ),
-                key: ValueKey(appState.emailVerified),
+               // key: xalueKey(appState.emailVerified),
                 //providers: const [],
                 actions: [
                   SignedOutAction((context) {

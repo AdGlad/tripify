@@ -20,7 +20,7 @@ class UserProfile {
     this.avatar,
     this.photo,
     this.language,
-    this.joinData,
+    this.joinDate,
     this.friend,
     this.league,
     this.countrycount,
@@ -29,6 +29,7 @@ class UserProfile {
     this.regioncount,
     this.placescount,
     this.currentstreak,
+    this.lastRecordedDate
   });
 
   factory UserProfile.fromJson(Map<String, Object?> json) =>
@@ -43,7 +44,7 @@ class UserProfile {
 
   String? photo;
   String? language;
-  DateTime? joinData;
+  DateTime? joinDate;
   int? friend;
   int? league;
 
@@ -53,7 +54,8 @@ class UserProfile {
   int? regioncount;
   int? placescount;
   int? currentstreak;
-  
+  DateTime? lastRecordedDate;
+
 
   Map<String, Object?> toJson() => _$UserProfileToJson(this);
 }

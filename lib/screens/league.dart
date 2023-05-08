@@ -171,7 +171,7 @@ class _LeagueState extends State<League> {
                                         )),
                                   ),
                                                                 Container(
-                                child: Text(MembershipLength(user.joinData!),
+                                child: Text(MembershipLength(user.joinDate!),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.white,

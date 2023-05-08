@@ -7,7 +7,7 @@
 //     this.avatar,
 //     this.photo,
 //     this.language,
-//     this.joinData,
+//     this.joinDate,
 //     this.friend,
 //     this.league,
 //     this.countrycount,
@@ -25,7 +25,7 @@
 
 //   String? photo;
 //   String? language;
-//   DateTime? joinData;
+//   DateTime? joinDate;
 //   int? friend;
 //   int? league;
 

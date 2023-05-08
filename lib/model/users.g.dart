@@ -151,8 +151,8 @@ abstract class UserProfileDocumentReference extends FirestoreDocumentReference<
     FieldValue photoFieldValue,
     String? language,
     FieldValue languageFieldValue,
-    DateTime? joinData,
-    FieldValue joinDataFieldValue,
+    DateTime? joinDate,
+    FieldValue joinDateFieldValue,
     int? friend,
     FieldValue friendFieldValue,
     int? league,
@@ -169,6 +169,8 @@ abstract class UserProfileDocumentReference extends FirestoreDocumentReference<
     FieldValue placescountFieldValue,
     int? currentstreak,
     FieldValue currentstreakFieldValue,
+    DateTime? lastRecordedDate,
+    FieldValue lastRecordedDateFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -188,8 +190,8 @@ abstract class UserProfileDocumentReference extends FirestoreDocumentReference<
     FieldValue photoFieldValue,
     String? language,
     FieldValue languageFieldValue,
-    DateTime? joinData,
-    FieldValue joinDataFieldValue,
+    DateTime? joinDate,
+    FieldValue joinDateFieldValue,
     int? friend,
     FieldValue friendFieldValue,
     int? league,
@@ -206,6 +208,8 @@ abstract class UserProfileDocumentReference extends FirestoreDocumentReference<
     FieldValue placescountFieldValue,
     int? currentstreak,
     FieldValue currentstreakFieldValue,
+    DateTime? lastRecordedDate,
+    FieldValue lastRecordedDateFieldValue,
   });
 }
 
@@ -259,8 +263,8 @@ class _$UserProfileDocumentReference
     FieldValue? photoFieldValue,
     Object? language = _sentinel,
     FieldValue? languageFieldValue,
-    Object? joinData = _sentinel,
-    FieldValue? joinDataFieldValue,
+    Object? joinDate = _sentinel,
+    FieldValue? joinDateFieldValue,
     Object? friend = _sentinel,
     FieldValue? friendFieldValue,
     Object? league = _sentinel,
@@ -277,6 +281,8 @@ class _$UserProfileDocumentReference
     FieldValue? placescountFieldValue,
     Object? currentstreak = _sentinel,
     FieldValue? currentstreakFieldValue,
+    Object? lastRecordedDate = _sentinel,
+    FieldValue? lastRecordedDateFieldValue,
   }) async {
     assert(
       userId == _sentinel || userIdFieldValue == null,
@@ -303,8 +309,8 @@ class _$UserProfileDocumentReference
       "Cannot specify both language and languageFieldValue",
     );
     assert(
-      joinData == _sentinel || joinDataFieldValue == null,
-      "Cannot specify both joinData and joinDataFieldValue",
+      joinDate == _sentinel || joinDateFieldValue == null,
+      "Cannot specify both joinDate and joinDateFieldValue",
     );
     assert(
       friend == _sentinel || friendFieldValue == null,
@@ -338,6 +344,10 @@ class _$UserProfileDocumentReference
       currentstreak == _sentinel || currentstreakFieldValue == null,
       "Cannot specify both currentstreak and currentstreakFieldValue",
     );
+    assert(
+      lastRecordedDate == _sentinel || lastRecordedDateFieldValue == null,
+      "Cannot specify both lastRecordedDate and lastRecordedDateFieldValue",
+    );
     final json = {
       if (userId != _sentinel)
         _$UserProfileFieldMap['userId']!: userId as String?,
@@ -361,10 +371,10 @@ class _$UserProfileDocumentReference
         _$UserProfileFieldMap['language']!: language as String?,
       if (languageFieldValue != null)
         _$UserProfileFieldMap['language']!: languageFieldValue,
-      if (joinData != _sentinel)
-        _$UserProfileFieldMap['joinData']!: joinData as DateTime?,
-      if (joinDataFieldValue != null)
-        _$UserProfileFieldMap['joinData']!: joinDataFieldValue,
+      if (joinDate != _sentinel)
+        _$UserProfileFieldMap['joinDate']!: joinDate as DateTime?,
+      if (joinDateFieldValue != null)
+        _$UserProfileFieldMap['joinDate']!: joinDateFieldValue,
       if (friend != _sentinel) _$UserProfileFieldMap['friend']!: friend as int?,
       if (friendFieldValue != null)
         _$UserProfileFieldMap['friend']!: friendFieldValue,
@@ -395,6 +405,11 @@ class _$UserProfileDocumentReference
         _$UserProfileFieldMap['currentstreak']!: currentstreak as int?,
       if (currentstreakFieldValue != null)
         _$UserProfileFieldMap['currentstreak']!: currentstreakFieldValue,
+      if (lastRecordedDate != _sentinel)
+        _$UserProfileFieldMap['lastRecordedDate']!:
+            lastRecordedDate as DateTime?,
+      if (lastRecordedDateFieldValue != null)
+        _$UserProfileFieldMap['lastRecordedDate']!: lastRecordedDateFieldValue,
     };
 
     return reference.update(json);
@@ -414,8 +429,8 @@ class _$UserProfileDocumentReference
     FieldValue? photoFieldValue,
     Object? language = _sentinel,
     FieldValue? languageFieldValue,
-    Object? joinData = _sentinel,
-    FieldValue? joinDataFieldValue,
+    Object? joinDate = _sentinel,
+    FieldValue? joinDateFieldValue,
     Object? friend = _sentinel,
     FieldValue? friendFieldValue,
     Object? league = _sentinel,
@@ -432,6 +447,8 @@ class _$UserProfileDocumentReference
     FieldValue? placescountFieldValue,
     Object? currentstreak = _sentinel,
     FieldValue? currentstreakFieldValue,
+    Object? lastRecordedDate = _sentinel,
+    FieldValue? lastRecordedDateFieldValue,
   }) {
     assert(
       userId == _sentinel || userIdFieldValue == null,
@@ -458,8 +475,8 @@ class _$UserProfileDocumentReference
       "Cannot specify both language and languageFieldValue",
     );
     assert(
-      joinData == _sentinel || joinDataFieldValue == null,
-      "Cannot specify both joinData and joinDataFieldValue",
+      joinDate == _sentinel || joinDateFieldValue == null,
+      "Cannot specify both joinDate and joinDateFieldValue",
     );
     assert(
       friend == _sentinel || friendFieldValue == null,
@@ -493,6 +510,10 @@ class _$UserProfileDocumentReference
       currentstreak == _sentinel || currentstreakFieldValue == null,
       "Cannot specify both currentstreak and currentstreakFieldValue",
     );
+    assert(
+      lastRecordedDate == _sentinel || lastRecordedDateFieldValue == null,
+      "Cannot specify both lastRecordedDate and lastRecordedDateFieldValue",
+    );
     final json = {
       if (userId != _sentinel)
         _$UserProfileFieldMap['userId']!: userId as String?,
@@ -516,10 +537,10 @@ class _$UserProfileDocumentReference
         _$UserProfileFieldMap['language']!: language as String?,
       if (languageFieldValue != null)
         _$UserProfileFieldMap['language']!: languageFieldValue,
-      if (joinData != _sentinel)
-        _$UserProfileFieldMap['joinData']!: joinData as DateTime?,
-      if (joinDataFieldValue != null)
-        _$UserProfileFieldMap['joinData']!: joinDataFieldValue,
+      if (joinDate != _sentinel)
+        _$UserProfileFieldMap['joinDate']!: joinDate as DateTime?,
+      if (joinDateFieldValue != null)
+        _$UserProfileFieldMap['joinDate']!: joinDateFieldValue,
       if (friend != _sentinel) _$UserProfileFieldMap['friend']!: friend as int?,
       if (friendFieldValue != null)
         _$UserProfileFieldMap['friend']!: friendFieldValue,
@@ -550,6 +571,11 @@ class _$UserProfileDocumentReference
         _$UserProfileFieldMap['currentstreak']!: currentstreak as int?,
       if (currentstreakFieldValue != null)
         _$UserProfileFieldMap['currentstreak']!: currentstreakFieldValue,
+      if (lastRecordedDate != _sentinel)
+        _$UserProfileFieldMap['lastRecordedDate']!:
+            lastRecordedDate as DateTime?,
+      if (lastRecordedDateFieldValue != null)
+        _$UserProfileFieldMap['lastRecordedDate']!: lastRecordedDateFieldValue,
     };
 
     transaction.update(reference, json);
@@ -717,7 +743,7 @@ abstract class UserProfileQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
-  UserProfileQuery whereJoinData({
+  UserProfileQuery whereJoinDate({
     DateTime? isEqualTo,
     DateTime? isNotEqualTo,
     DateTime? isLessThan,
@@ -816,6 +842,17 @@ abstract class UserProfileQuery
     List<int?>? whereIn,
     List<int?>? whereNotIn,
   });
+  UserProfileQuery whereLastRecordedDate({
+    DateTime? isEqualTo,
+    DateTime? isNotEqualTo,
+    DateTime? isLessThan,
+    DateTime? isLessThanOrEqualTo,
+    DateTime? isGreaterThan,
+    DateTime? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<DateTime?>? whereIn,
+    List<DateTime?>? whereNotIn,
+  });
 
   UserProfileQuery orderByDocumentId({
     bool descending = false,
@@ -901,7 +938,7 @@ abstract class UserProfileQuery
     UserProfileDocumentSnapshot? startAfterDocument,
   });
 
-  UserProfileQuery orderByJoinData({
+  UserProfileQuery orderByJoinDate({
     bool descending = false,
     DateTime? startAt,
     DateTime? startAfter,
@@ -1003,6 +1040,18 @@ abstract class UserProfileQuery
     int? startAfter,
     int? endAt,
     int? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLastRecordedDate({
+    bool descending = false,
+    DateTime? startAt,
+    DateTime? startAfter,
+    DateTime? endAt,
+    DateTime? endBefore,
     UserProfileDocumentSnapshot? startAtDocument,
     UserProfileDocumentSnapshot? endAtDocument,
     UserProfileDocumentSnapshot? endBeforeDocument,
@@ -1365,7 +1414,7 @@ class _$UserProfileQuery
     );
   }
 
-  UserProfileQuery whereJoinData({
+  UserProfileQuery whereJoinDate({
     DateTime? isEqualTo,
     DateTime? isNotEqualTo,
     DateTime? isLessThan,
@@ -1379,7 +1428,7 @@ class _$UserProfileQuery
     return _$UserProfileQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$UserProfileFieldMap['joinData']!,
+        _$UserProfileFieldMap['joinDate']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -1612,6 +1661,35 @@ class _$UserProfileQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$UserProfileFieldMap['currentstreak']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLastRecordedDate({
+    DateTime? isEqualTo,
+    DateTime? isNotEqualTo,
+    DateTime? isLessThan,
+    DateTime? isLessThanOrEqualTo,
+    DateTime? isGreaterThan,
+    DateTime? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<DateTime?>? whereIn,
+    List<DateTime?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['lastRecordedDate']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -2130,7 +2208,7 @@ class _$UserProfileQuery
     );
   }
 
-  UserProfileQuery orderByJoinData({
+  UserProfileQuery orderByJoinDate({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -2142,7 +2220,7 @@ class _$UserProfileQuery
     UserProfileDocumentSnapshot? startAfterDocument,
   }) {
     final query = $referenceWithoutCursor
-        .orderBy(_$UserProfileFieldMap['joinData']!, descending: descending);
+        .orderBy(_$UserProfileFieldMap['joinDate']!, descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -2721,6 +2799,79 @@ class _$UserProfileQuery
   }) {
     final query = $referenceWithoutCursor.orderBy(
         _$UserProfileFieldMap['currentstreak']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLastRecordedDate({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['lastRecordedDate']!,
         descending: descending);
     var queryCursor = $queryCursor;
 
@@ -5954,8 +6105,8 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
       avatar: json['avatar'] as String?,
       photo: json['photo'] as String?,
       language: json['language'] as String?,
-      joinData: _$JsonConverterFromJson<Timestamp, DateTime>(
-          json['joinData'], const FirestoreDateTimeConverter().fromJson),
+      joinDate: _$JsonConverterFromJson<Timestamp, DateTime>(
+          json['joinDate'], const FirestoreDateTimeConverter().fromJson),
       friend: json['friend'] as int?,
       league: json['league'] as int?,
       countrycount: json['countrycount'] as int?,
@@ -5964,6 +6115,9 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
       regioncount: json['regioncount'] as int?,
       placescount: json['placescount'] as int?,
       currentstreak: json['currentstreak'] as int?,
+      lastRecordedDate: _$JsonConverterFromJson<Timestamp, DateTime>(
+          json['lastRecordedDate'],
+          const FirestoreDateTimeConverter().fromJson),
     );
 
 const _$UserProfileFieldMap = <String, String>{
@@ -5974,7 +6128,7 @@ const _$UserProfileFieldMap = <String, String>{
   'avatar': 'avatar',
   'photo': 'photo',
   'language': 'language',
-  'joinData': 'joinData',
+  'joinDate': 'joinDate',
   'friend': 'friend',
   'league': 'league',
   'countrycount': 'countrycount',
@@ -5983,6 +6137,7 @@ const _$UserProfileFieldMap = <String, String>{
   'regioncount': 'regioncount',
   'placescount': 'placescount',
   'currentstreak': 'currentstreak',
+  'lastRecordedDate': 'lastRecordedDate',
 };
 
 Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
@@ -5994,8 +6149,8 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
       'avatar': instance.avatar,
       'photo': instance.photo,
       'language': instance.language,
-      'joinData': _$JsonConverterToJson<Timestamp, DateTime>(
-          instance.joinData, const FirestoreDateTimeConverter().toJson),
+      'joinDate': _$JsonConverterToJson<Timestamp, DateTime>(
+          instance.joinDate, const FirestoreDateTimeConverter().toJson),
       'friend': instance.friend,
       'league': instance.league,
       'countrycount': instance.countrycount,
@@ -6004,6 +6159,8 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
       'regioncount': instance.regioncount,
       'placescount': instance.placescount,
       'currentstreak': instance.currentstreak,
+      'lastRecordedDate': _$JsonConverterToJson<Timestamp, DateTime>(
+          instance.lastRecordedDate, const FirestoreDateTimeConverter().toJson),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(
