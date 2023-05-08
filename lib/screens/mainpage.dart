@@ -43,7 +43,7 @@ class _MainPageState extends State<MainPage> {
                   resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     //    automaticallyImplyLeading: false,
-                    title: const Text('Tripify'),
+                    title: const Text('Tripify [V2]'),
                     actions: [
                       IconButton(
                           onPressed: () {

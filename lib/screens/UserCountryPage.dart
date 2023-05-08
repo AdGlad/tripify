@@ -113,10 +113,10 @@ Widget countrycard(CurrentCountry country, BuildContext context) {
             children: [
               Text(
                 CountryFlag(country.countryCode),
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 20),
               ),
               Container(
-                margin: EdgeInsets.all(10),
+                margin: EdgeInsets.all(5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -124,7 +124,7 @@ Widget countrycard(CurrentCountry country, BuildContext context) {
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20.0,
+                          fontSize: 15.0,
                           fontWeight: FontWeight.w700,
                         )),
                   ],

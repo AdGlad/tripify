@@ -10,6 +10,7 @@ import 'package:gtk_flutter/src/confetti.dart';
 import 'dart:developer' as developer;
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -472,30 +473,38 @@ double? _latitude = newPlace.latitude;
             child: Consumer<ApplicationState>(
                 builder: (context, appState, _) => AlertDialog(
                       title: Text(
-                          style: TextStyle(fontSize: 20), 'Share your streak?'),
+                          style: TextStyle(fontSize: 12), 'Share your new location with friends?'),
                       content: Text(
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 12),
+                        
+                        //  'Region: ${appState.currentPlace?.region} \n Country: ${CountryFlag(appState.currentPlace!.location!)}   ${CountryFlag(appState.currentPlace!.countryCode!)}'),
+
                       //    'Do you want to share your streak of $_currentStreak days?'),
-                          'Do you want to share your streak of ${appState.userProfile?.currentstreak} days?'),
+                          'Share location with friends?'),
+                      //    'Share location with friends? ${appState.currentPlace?.location} ?'),
+                       //   'Share location with friends? of ${appState.userProfile?.currentstreak} days?'),
                       actions: <Widget>[
                         TextButton(
-                          child: Text('CANCEL'),
+                          child: Text('CANCEL',style: TextStyle(fontSize: 12)),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
                         TextButton(
-                          child: Text('SHARE'),
+                          child: Text('SHARE',style: TextStyle(fontSize: 12)),
                           onPressed: () {
                             String flags = '';
                             for (var item in appState.tripHistory) {
                               flags = flags + CountryFlag(item.countryCode!);
                             }
                             FlutterShare.share(
-                              title: 'My Streak',
+                            //  title: 'My Streak',
+                              title: 'My Location',
                               text:
                                 //  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
-                                  'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
+                                 // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
+                                 // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
+                                  'Tripify: Hi, I am visiting ${appState.currentPlace?.region} in ${appState.currentPlace?.name} ${CountryFlag(appState.currentPlace!.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
                               chooserTitle: 'Share on social media',
                             );
                             // TODO: Implement share functionality
@@ -573,7 +582,7 @@ double? _latitude = newPlace.latitude;
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text('V1 ${appState.userProfile?.nickname} streak : ${appState.userProfile?.currentstreak}', // _currentStreak', 
+                            child: Text('${appState.userProfile?.nickname} streak: ${appState.userProfile?.currentstreak} [${appState.userProfile?.placescount}]', // _currentStreak', 
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10.0,
@@ -676,36 +685,40 @@ double? _latitude = newPlace.latitude;
                         child: Column(
                           children: [
                             Row(
-                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: (appState.currentPlace != null)
-                                      ? Text(
-                                          CountryFlag(appState
-                                              .currentPlace!.countryCode!),
-                                          style: TextStyle(fontSize: 15),
-                                        )
-                                      : Text('',style: TextStyle(fontSize: 10)),
+                              children: [
+                                                      Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: (appState.currentPlace != null)
+                                          ? Text(
+                                              CountryFlag(appState
+                                                  .currentPlace!.countryCode!),
+                                              style: TextStyle(fontSize: 25),
+                                            )
+                                          : Text('',style: TextStyle(fontSize: 10)),
+                                    ),
+                                Row(
+                                   children: [
+                                    (appState.currentPlace != null)
+                                        ? Text(appState.currentPlace!.countryName!,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w700,
+                                            ))
+                                        : Text('',style: TextStyle(fontSize: 10)),
+                                    Text(': ',style: TextStyle(fontSize: 10)),
+                                    (appState.currentPlace != null)
+                                        ? Text(appState.currentPlace!.region!,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w700,
+                                            ))
+                                        : Text('',style: TextStyle(fontSize: 10)),
+                                  ],
                                 ),
-                                (appState.currentPlace != null)
-                                    ? Text(appState.currentPlace!.countryName!,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.w700,
-                                        ))
-                                    : Text('',style: TextStyle(fontSize: 10)),
-                                Text(': ',style: TextStyle(fontSize: 10)),
-                                (appState.currentPlace != null)
-                                    ? Text(appState.currentPlace!.region!,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.w700,
-                                        ))
-                                    : Text('',style: TextStyle(fontSize: 10)),
                               ],
                             ),
                             (appState.currentPlace != null)
