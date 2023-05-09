@@ -79,7 +79,6 @@ final _router = GoRouter(
           path: 'findfriends',
           builder: (context, state) => const FindFriendsPage(),
         ),
-
         GoRoute(
           path: 'sign-in',
           builder: (context, state) {
@@ -106,7 +105,7 @@ final _router = GoRouter(
                 appBar: AppBar(
                   title: const Text('User Profile'),
                 ),
-               // key: xalueKey(appState.emailVerified),
+                // key: xalueKey(appState.emailVerified),
                 //providers: const [],
                 actions: [
                   SignedOutAction((context) {
@@ -146,13 +145,11 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       title: 'Tripify',
       theme: ThemeData(
-
-        
-            colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: Color.fromARGB(255, 49, 52, 59),
-                  // secondary will be the textColor, when the textTheme is set to accent
-                  secondary: Colors.white,
-                ),
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+                primary: Color.fromARGB(255, 49, 52, 59),
+                // secondary will be the textColor, when the textTheme is set to accent
+                secondary: Colors.white,
+              ),
           //),
 
           // buttonTheme: ButtonThemeData(

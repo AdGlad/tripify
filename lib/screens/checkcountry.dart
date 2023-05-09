@@ -48,7 +48,7 @@ class _CheckCountryState extends State<CheckCountry> {
 
     getLocation();
 
-   // _loadStreakFromFirestore();
+    // _loadStreakFromFirestore();
 
     BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
@@ -67,9 +67,10 @@ class _CheckCountryState extends State<CheckCountry> {
       ),
     ).load();
   }
-    bool _isLoading = false;
 
-    void _toggleLoading() {
+  bool _isLoading = false;
+
+  void _toggleLoading() {
     setState(() {
       _isLoading = !_isLoading;
     });
@@ -119,25 +120,25 @@ class _CheckCountryState extends State<CheckCountry> {
     if (docSnapshot.exists) {
       final lastRecordedDate = docSnapshot.data()!['lastRecordedDate'].toDate();
       if (lastRecordedDate.isBefore(today)) {
-       // final newStreak = _currentStreak + 1; 
-         final newStreak = currentStreak + 1; 
+        // final newStreak = _currentStreak + 1;
+        final newStreak = currentStreak + 1;
 
         await docRef.update({
           'lastRecordedDate': today,
           'currentStreak': newStreak,
         });
-       // setState(() {
-       //   _currentStreak = newStreak;
-       // });
+        // setState(() {
+        //   _currentStreak = newStreak;
+        // });
       }
     } else {
       await docRef.set({
         'lastRecordedDate': today,
         'currentStreak': 1,
       });
-   //   setState(() {
-   //     _currentStreak = 1;
-   //   });
+      //   setState(() {
+      //     _currentStreak = 1;
+      //   });
     }
   }
 
@@ -249,25 +250,21 @@ class _CheckCountryState extends State<CheckCountry> {
     //"Mexico City","19.4333","-99.1333"
 // Beijing","39.9040","116.4075"
 // Jakarta","-6.2146","106.8451"
-double? _latitude = newPlace.latitude;
+    double? _latitude = newPlace.latitude;
     double? _longitude = newPlace.longitude;
-    
+
     //double
     //_latitude = 35.6839;
     //double
     //_longitude = 139.7744;
-    
-  
 
     //  _latitude = 19.4333; // Mexico
     // _longitude = -99.1333; // Mexico
-    
 
     // double
     //_latitude = -6.2146;
     // double
     //_longitude = 106.8451;
-
 
     // _latitude = 39.9040; //Beijing
     // _longitude = 116.4075; //Beijing
@@ -280,14 +277,10 @@ double? _latitude = newPlace.latitude;
     //         _latitude = 55.95206; //Edinburgh
     // _longitude = -3.19648;//Edinburgh
 
-
     //double _latitude = -6.2146;
     //double _longitude = 106.8451;
 
     // if (loc.latitude != null && loc.longitude != null) {
-
-
-
 
     await _incrementStreak(userProfile!.currentstreak!);
 
@@ -423,9 +416,6 @@ double? _latitude = newPlace.latitude;
 
     developer.log(jsonString.toString(), name: 'my.app.jsonString');
 
-    
-
-
     var features = jsonString['features'];
     for (var feature in features) {
       _placeHistory.streetAddress = feature['place_name'];
@@ -445,18 +435,16 @@ double? _latitude = newPlace.latitude;
           _placeHistory.regionCode = item['short_code'];
           _placeHistory.name = item['short_code'];
         } else if (id.startsWith('place')) {
-              if ((_placeHistory.regionCode == 'regionCode') & (item['short_code'] !=null))
-              {
-                  _placeHistory.regionCode = item['short_code'];
-              }
+          if ((_placeHistory.regionCode == 'regionCode') &
+              (item['short_code'] != null)) {
+            _placeHistory.regionCode = item['short_code'];
+          }
 
-              if ((_placeHistory.region == 'region') & (item['text'] !=null))
-              {
-                  _placeHistory.region = item['text'];
-              }
+          if ((_placeHistory.region == 'region') & (item['text'] != null)) {
+            _placeHistory.region = item['text'];
+          }
 
           _placeHistory.city = item['text'];
-
         }
       }
     }
@@ -473,37 +461,38 @@ double? _latitude = newPlace.latitude;
             child: Consumer<ApplicationState>(
                 builder: (context, appState, _) => AlertDialog(
                       title: Text(
-                          style: TextStyle(fontSize: 12), 'Share your new location with friends?'),
+                          style: TextStyle(fontSize: 12),
+                          'Share your new location with friends?'),
                       content: Text(
                           style: TextStyle(fontSize: 12),
-                        
-                        //  'Region: ${appState.currentPlace?.region} \n Country: ${CountryFlag(appState.currentPlace!.location!)}   ${CountryFlag(appState.currentPlace!.countryCode!)}'),
 
-                      //    'Do you want to share your streak of $_currentStreak days?'),
+                          //  'Region: ${appState.currentPlace?.region} \n Country: ${CountryFlag(appState.currentPlace!.location!)}   ${CountryFlag(appState.currentPlace!.countryCode!)}'),
+
+                          //    'Do you want to share your streak of $_currentStreak days?'),
                           'Share location with friends?'),
                       //    'Share location with friends? ${appState.currentPlace?.location} ?'),
-                       //   'Share location with friends? of ${appState.userProfile?.currentstreak} days?'),
+                      //   'Share location with friends? of ${appState.userProfile?.currentstreak} days?'),
                       actions: <Widget>[
                         TextButton(
-                          child: Text('CANCEL',style: TextStyle(fontSize: 12)),
+                          child: Text('CANCEL', style: TextStyle(fontSize: 12)),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
                         TextButton(
-                          child: Text('SHARE',style: TextStyle(fontSize: 12)),
+                          child: Text('SHARE', style: TextStyle(fontSize: 12)),
                           onPressed: () {
                             String flags = '';
                             for (var item in appState.tripHistory) {
                               flags = flags + CountryFlag(item.countryCode!);
                             }
                             FlutterShare.share(
-                            //  title: 'My Streak',
+                              //  title: 'My Streak',
                               title: 'My Location',
                               text:
-                                //  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
-                                 // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
-                                 // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
+                                  //  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
+                                  // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
+                                  // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
                                   'Tripify: Hi, I am visiting ${appState.currentPlace?.region} in ${appState.currentPlace?.name} ${CountryFlag(appState.currentPlace!.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
                               chooserTitle: 'Share on social media',
                             );
@@ -582,7 +571,8 @@ double? _latitude = newPlace.latitude;
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text('${appState.userProfile?.nickname} streak: ${appState.userProfile?.currentstreak} [${appState.userProfile?.placescount}]', // _currentStreak', 
+                            child: Text(
+                                '${appState.userProfile?.nickname} streak: ${appState.userProfile?.currentstreak} [${appState.userProfile?.placescount}]', // _currentStreak',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10.0,
@@ -593,21 +583,20 @@ double? _latitude = newPlace.latitude;
                       ),
                     ),
                     Card(
-                          color: Color.fromARGB(255, 49, 52, 59),
-                        elevation: 8.0,
-                        margin: EdgeInsets.all(2.0),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                       
+                      color: Color.fromARGB(255, 49, 52, 59),
+                      elevation: 8.0,
+                      margin: EdgeInsets.all(2.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       child: Container(
-                       // margin: EdgeInsets.all(1),
+                        // margin: EdgeInsets.all(1),
 
                         color: Color.fromARGB(255, 49, 52, 59),
                         height: 40,
-                    
+
                         child: ListView.builder(
-                       // padding: EdgeInsetsGeometry.lerp(1, , 1.0)
-                         // shrinkWrap: true,
+                          // padding: EdgeInsetsGeometry.lerp(1, , 1.0)
+                          // shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: appState.tripHistory
                               .length, // appState.userCountrylist.length,
@@ -616,8 +605,8 @@ double? _latitude = newPlace.latitude;
                               padding: const EdgeInsets.all(0.0),
                               child: Text(
                                 textAlign: TextAlign.center,
-                                CountryFlag(appState
-                                    .tripHistory[index].countryCode!),
+                                CountryFlag(
+                                    appState.tripHistory[index].countryCode!),
                                 style: TextStyle(fontSize: 25),
                               ),
                             );
@@ -653,7 +642,8 @@ double? _latitude = newPlace.latitude;
                                 myLocationRenderMode: MyLocationRenderMode.GPS,
                                 minMaxZoomPreference:
                                     MinMaxZoomPreference(10.0, 18.0),
-                                styleString: 'mapbox://styles/mapbox/streets-v11',
+                                styleString:
+                                    'mapbox://styles/mapbox/streets-v11',
                                 //styleString: 'mapbox://styles/mapbox/dark-v11',
                                 //   styleString: 'mapbox://styles/mapbox/light-v11',
                                 //styleString: 'mapbox://styles/mapbox/satellite-v11',
@@ -671,14 +661,13 @@ double? _latitude = newPlace.latitude;
                     ),
                     Container(
                       height: 70,
-                     child: 
-                     Card(
-                       color: Color.fromARGB(255, 49, 52, 59),
-                       elevation: 8.0,
-                       margin: EdgeInsets.all(2.0),
-                       shape: RoundedRectangleBorder(
-                           borderRadius: BorderRadius.circular(10)),
-                    
+                      child: Card(
+                        color: Color.fromARGB(255, 49, 52, 59),
+                        elevation: 8.0,
+                        margin: EdgeInsets.all(2.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+
                         //  width: MediaQuery.of(context).size.width - 20,
                         // margin: const EdgeInsets.all(5.0),
                         // color: Colors.greenAccent,
@@ -686,28 +675,31 @@ double? _latitude = newPlace.latitude;
                           children: [
                             Row(
                               children: [
-                                                      Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: (appState.currentPlace != null)
-                                          ? Text(
-                                              CountryFlag(appState
-                                                  .currentPlace!.countryCode!),
-                                              style: TextStyle(fontSize: 25),
-                                            )
-                                          : Text('',style: TextStyle(fontSize: 10)),
-                                    ),
+                                Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: (appState.currentPlace != null)
+                                      ? Text(
+                                          CountryFlag(appState
+                                              .currentPlace!.countryCode!),
+                                          style: TextStyle(fontSize: 25),
+                                        )
+                                      : Text('',
+                                          style: TextStyle(fontSize: 10)),
+                                ),
                                 Row(
-                                   children: [
+                                  children: [
                                     (appState.currentPlace != null)
-                                        ? Text(appState.currentPlace!.countryName!,
+                                        ? Text(
+                                            appState.currentPlace!.countryName!,
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.w700,
                                             ))
-                                        : Text('',style: TextStyle(fontSize: 10)),
-                                    Text(': ',style: TextStyle(fontSize: 10)),
+                                        : Text('',
+                                            style: TextStyle(fontSize: 10)),
+                                    Text(': ', style: TextStyle(fontSize: 10)),
                                     (appState.currentPlace != null)
                                         ? Text(appState.currentPlace!.region!,
                                             textAlign: TextAlign.left,
@@ -716,23 +708,25 @@ double? _latitude = newPlace.latitude;
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.w700,
                                             ))
-                                        : Text('',style: TextStyle(fontSize: 10)),
+                                        : Text('',
+                                            style: TextStyle(fontSize: 10)),
                                   ],
                                 ),
                               ],
                             ),
                             (appState.currentPlace != null)
                                 ? Center(
-                                  child: Text(appState.currentPlace!.streetAddress!,
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 8.0,
-                                        fontWeight: FontWeight.w700,
-                                      )),
-                                )
-                                : Text('',style: TextStyle(fontSize: 10)),
-                           // Text(': ',style: TextStyle(fontSize: 10)),
+                                    child: Text(
+                                        appState.currentPlace!.streetAddress!,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.w700,
+                                        )),
+                                  )
+                                : Text('', style: TextStyle(fontSize: 10)),
+                            // Text(': ',style: TextStyle(fontSize: 10)),
                           ],
                         ),
                       ),
@@ -756,24 +750,24 @@ double? _latitude = newPlace.latitude;
                             elevation: 5,
                           ),
                           onPressed: () async {
-                                    _toggleLoading();
-                           await SaveLocation(appState.currentPlace,
-                                         appState.userProfile);
-                           updateStats(appState.userTotals);
-                                    _toggleLoading();
-
+                            _toggleLoading();
+                            await SaveLocation(
+                                appState.currentPlace, appState.userProfile);
+                            updateStats(appState.userTotals);
+                            _toggleLoading();
                           },
-                          child:  _isLoading ? CircularProgressIndicator() :
-Text('Check-in',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w700,
-                              )),
+                          child: _isLoading
+                              ? CircularProgressIndicator()
+                              : Text('Check-in',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w700,
+                                  )),
                         ),
                       ),
                     ),
-                   // Spacer(),
+                    // Spacer(),
                     Align(
                       alignment: Alignment.topCenter,
                       child: ConfettiWidget(
@@ -798,4 +792,3 @@ Text('Check-in',
     );
   }
 }
-
