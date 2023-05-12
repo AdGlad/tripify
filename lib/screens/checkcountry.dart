@@ -8,6 +8,7 @@ import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:gtk_flutter/model/users.dart';
 import 'package:gtk_flutter/screens/checkIn/UserCheckInContainer.dart';
 import 'package:gtk_flutter/screens/checkIn/userCntryContainer.dart';
+import 'package:gtk_flutter/screens/checkIn/userLocation.dart';
 import 'package:gtk_flutter/screens/checkIn/userStreakContainer.dart';
 import 'package:gtk_flutter/src/confetti.dart';
 import 'dart:developer' as developer;
@@ -569,6 +570,8 @@ class _CheckCountryState extends State<CheckCountry> {
                         context, appState.userProfile!, appState),
                     UserMapContainer(
                         context, appState.userProfile!, appState, newPlace),
+                    UserLocationContainer( context, appState.userProfile! , appState    ),
+
                     UserCheckInContainer( context, appState.userProfile!, appState  ),
 
 
