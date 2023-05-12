@@ -15,6 +15,7 @@ import '../state/applicationstate.dart';
 //import 'package:firebase_storage/firebase_storage.dart';
 
 class UserInfoPage extends StatefulWidget {
+  
   const UserInfoPage({super.key});
 
   @override

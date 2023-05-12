@@ -80,7 +80,7 @@ final _router = GoRouter(
           builder: (context, state) => const FindFriendsPage(),
         ),
         GoRoute(
-          path: 'sign-in',
+          path: ' ',
           builder: (context, state) {
             return SignIn();
           },

@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>GADApplicationIdentifier</key>
-<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBvRKU3On_YiZ7b4t3VGJq4zgbXZ2Uxa8A</string>
 	<key>BUNDLE_ID</key>
@@ -30,14 +28,14 @@
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
 	<array>
-	<dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-            <string>com.tripify.tripify-first</string>
-        </array>
-    </dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.tripify.tripify-first</string>
+			</array>
+		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -45,21 +43,21 @@
 			<array>
 				<string>com.googleusercontent.apps.90817750920-9307of40hl4eg62dabtvcd403s6pg5a8</string>
 				<string>fb1262164921379103</string>
-
 			</array>
 		</dict>
 	</array>
-	<key>FacebookAppID</key>
-<string>1262164921379103</string>
-<key>FacebookClientToken</key>
-<string>1dae917812269b6ffe95a586db98aca8</string>
-<key>FacebookDisplayName</key>
-<string>Tripify</string>
-
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>CLIENT_ID</key>
 	<string>90817750920-9307of40hl4eg62dabtvcd403s6pg5a8.apps.googleusercontent.com</string>
+	<key>FacebookAppID</key>
+	<string>1262164921379103</string>
+	<key>FacebookClientToken</key>
+	<string>1dae917812269b6ffe95a586db98aca8</string>
+	<key>FacebookDisplayName</key>
+	<string>Tripify</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>GCM_SENDER_ID</key>
 	<string>90817750920</string>
 	<key>GOOGLE_APP_ID</key>
@@ -82,10 +80,18 @@
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
+
+        <key>NSPhotoLibraryUsageDescription</key>
+	<string>Sharing of location details via social media requires access to your photos. </string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Looking for local tcp Bonjour service</string>
+	<string>Your location is required in order to record your travel details including countries you have visted.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs to access your location</string>
+	<string>Your location is required in order to record your travel details including countries you have visted.</string>
+
+
+
+
+
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>PROJECT_ID</key>

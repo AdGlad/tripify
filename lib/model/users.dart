@@ -358,7 +358,14 @@ class FriendList extends StatelessWidget {
                                 color: Colors.white,
                                 fontSize: 8.0,
                                 fontWeight: FontWeight.w700,
-                              )), //Text('email'), //Text(userData['email']),
+                              )),
+    //                               this.countrycount,
+    // this.visitcount,
+    // this.distancetotal,
+    // this.regioncount,
+    // this.placescount,
+    // this.currentstreak,
+                               //Text('email'), //Text(userData['email']),
                     // trailing: ElevatedButton(
                     //                             style: ElevatedButton.styleFrom(
                     //         backgroundColor: Colors.orangeAccent,
