@@ -117,366 +117,23 @@ class ApplicationState extends ChangeNotifier {
       //),
     ]);
 
-UserProfile listenForUserChanges(String userId) {
-  UserProfile _userProfile = UserProfile(id: userId );
-
-  // Get a reference to the user's document in Firestore
-  DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc(userId);
-
-  // Listen for changes to the user document
-  userRef.snapshots().listen((userSnapshot) {
-    // Check if the document exists
-    if (userSnapshot.exists) {
-      // Get the user's data as a Map
-      Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
-            DateTime joinDate = (userData['joinDate'] as Timestamp).toDate();
-            DateTime lastRecordedDate = (userData['lastRecordedDate'] as Timestamp).toDate();
-      // Extract the user's age and address from the data
-            _userProfile.userId =   userData  ['userId'] ?? 'userId'; // event.get("userId") ?? "userId";
-            _userProfile.email = userData['email'] ?? 'email';
-            _userProfile.nickname = userData['nickname'] ?? 'nickname';
-            _userProfile.avatar = userData['avatar'] ?? 'avatar';
-           // _userProfile.photo = userData['photo'] ?? 'photo';
-            _userProfile.language = userData['language'] ?? 'language';
-            _userProfile.joinDate = joinDate;
-          //  _userProfile.joinDate = userData['joinDate'].toDate() as DateTime? ;//?? DateTime.now() as DateTime? ;
-            _userProfile.friend = userData['friend'] ?? 0;
-            _userProfile.league = userData['league'] ?? 0;
-            _userProfile.countrycount = userData['countrycount']  ??  0;
-            _userProfile.visitcount = userData['visitcount']  ??  0;
-            _userProfile.distancetotal = userData['distancetotal']  ??  0;
-            _userProfile.regioncount = userData['regioncount']  ??  0;
-            _userProfile.placescount = userData['placescount']  ??  0;
-            _userProfile.currentstreak= userData['currentStreak']??  0;
-                        _userProfile.lastRecordedDate = lastRecordedDate;
-
-         //   _userProfile.lastRecordedDate = userData['lastRecordedDate'].toDate() as DateTime?; //  ?? DateTime.now();
-
-
-      // Print the user's ID, age, and address to the console
-      print('User $_userProfile.userId');
-    } else {
-      print('User document for $userId does not exist.');
-    }
-  });
-  return _userProfile;
-}
-
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _loggedIn = true;
         _emailVerified = user.emailVerified;
         log(' User logged in ..');
         developer.log('Fire applicationstate');
-        _userProfile = listenForUserChanges(FirebaseAuth.instance.currentUser!.uid);
 
-        _usersSubscription = FirebaseFirestore.instance
-            .collection('users')
-           // .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            .orderBy('distancetotal', descending: true)
-            .snapshots()
-            .listen((snapshot) {
-          _users = [];
+        _userProfile =
+            listenForUserChanges(FirebaseAuth.instance.currentUser!.uid);
+        _users = listenForAllUsersChanges();
+        _userRegionList =
+            listenForRegionChanges(FirebaseAuth.instance.currentUser!.uid);
 
-          for (final document in snapshot.docs) {
-            //  globals.new_latitude = document.data()['latitude'] as double;
-            //  globals.new_longitude = document.data()['longitude'] as double;
-            //int timeInMillis = document.data()['timestamp'] as int;
-            //DateTime current_arrivalDate =
-            //  DateTime.fromMillisecondsSinceEpoch(timeInMillis);
-
-          //  int joinDateInMillis = document.data()['joinDate'] as int;
-          //  int lastRecordedDateInMillis = document.data()['lastRecordedDate'] as int;
-
-          //  DateTime joinDate =
-          //    DateTime.fromMillisecondsSinceEpoch(joinDateInMillis);
-          //  DateTime lastRecordedDate =
-            //  DateTime.fromMillisecondsSinceEpoch(lastRecordedDateInMillis);
-            DateTime joinDate = (document.data()['joinDate'] as Timestamp).toDate();
-            DateTime lastRecordedDate = (document.data()['lastRecordedDate'] as Timestamp).toDate();
-
-          //  final data =  document.data();
-           //  _users.add( UserProfile.fromJson(data));
-
-            _users.add(UserProfile(
-              id: document.id,
-              userId: document.data()['userId']  ?? 'userId',
-              email: document.data()['email'] as String,
-              nickname: document.data()['nickname'] as String,
-              avatar: document.data()['avatar'] as String,
-              // photo: document.data()['photo"'] as String,
-              language: document.data()['language'] as String,
-              joinDate: joinDate,
-          //    joinDate: document.data()['joinDate']?.toDate ?? DateTime.now(),
-            //  joinDate: DateTime.tryParse(document.data()['joinDate']),
-              friend: document.data()['friend'] as int?,
-              league: document.data()['league'] as int?,
-              countrycount: document.data()['countrycount'] as int?,
-              visitcount: document.data()['visitcount'] as int?,
-              distancetotal: document.data()['distancetotal'] as int?,
-              regioncount: document.data()['regioncount'] as int?,
-              placescount: document.data()['placescount'] as int?,
-              currentstreak: document.data()['currentStreak'] as int?,
-              lastRecordedDate: lastRecordedDate,
-          //    lastRecordedDate: document.data()['lastRecordedDate']?.toDate ?? DateTime.now(),
-             // lastRecordedDate: document.data()['lastRecordedDate'].toDate as DateTime?,
-              //              lastRecordedDate: DateTime.tryParse(document.data()['lastRecordedDate']),
-
-            ));
-
-            // );
-          }
-
-          notifyListeners();
-        });
-
-        // var userRef = FirebaseFirestore.instance
-        //     .collection('Collection_name')
-        //     .doc('Document_Id')
-        //     .snapshots();
-        //     //.get();
-
-        // final CollectionReference _usersProfileCollection =
-        //     FirebaseFirestore.instance.collection('users');
-
-        // final docRef =
-        //     _usersProfileCollection.doc(FirebaseAuth.instance.currentUser!.uid);
-
-        // // final docRef = db.collection("cities").doc("SF");
-
-        // docRef.get().then(
-        //   (DocumentSnapshot doc) {
-        //     if (doc.exists) {
-        //     Map<String, dynamic>? data = doc.data() as Map<String, dynamic>;
-        //     // _userProfile?.userId = data['userId'];
-
-        //     //  _userProfile = UserProfile.fromJson(data);
-        //     developer.log(' userId ${data['userId']}');
-        //     developer.log(' currentstreak ${data['currentstreak']}');
-        //     _userProfile = UserProfile(id: user.uid);
-
-        //     _userProfile?.userId = data['userId'] ?? 'userId';
-        //     _userProfile?.email = data['email'] ?? 'email';
-        //     _userProfile?.nickname = data['nickname'] ?? 'nickname';
-        //     _userProfile?.avatar = data['avatar'] ?? 'avatar';
-        //     _userProfile?.photo = data['photo'] ?? 'photo';
-        //     _userProfile?.language = data['language'] ?? 'language';
-        //     _userProfile?.joinDate = data['joinDate'] ?? DateTime.now();
-        //     _userProfile?.friend = data['friend'] ?? 'userId';
-        //     _userProfile?.league = data['league'] ?? 'userId';
-        //     _userProfile?.countrycount = data['countrycount'] ?? 0;
-        //     _userProfile?.visitcount = data['visitcount'] ?? 0;
-        //     _userProfile?.distancetotal = data['distancetotal'] ?? 0;
-        //     _userProfile?.regioncount = data['regioncount'] ?? 0;
-        //     _userProfile?.placescount = data['placescount'] ?? 0;
-        //     _userProfile?.currentstreak = data['currentStreak'] ?? 0;
-        //     // _userProfile?.currentstreak= event.get("currentstreak") !=null ?  event.get("currentstreak") : 0;
-        //     developer.log(
-        //         ' _userProfile?.currentstreak= ${_userProfile?.currentstreak}');
-        //     notifyListeners();
-        //     }
-        //   },
-        //   onError: (e) => print("Error getting document: $e"),
-        // );
-        // developer.log(
-        //     ' _userProfile?.currentstreak= ${_userProfile?.currentstreak}');
-        // notifyListeners();
-        // //   final doc =  _usersCollection.doc(user.uid).get();
-        //   final data = doc.data;
-        //     UserProfile.fromJson(data);
-        //  Future<DocumentSnapshot<Map<String, dynamic>>> _usersCollection= FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-        // UserProfile user = _usersCollection.data;
-        // UserProfile.fromJson(_usersColle ction)
-//         final docRef = FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid);
-
-
-
-
-
-
-//           docRef.snapshots().listen(
-//             (event) {
-//               final source = (event.metadata.hasPendingWrites) ? "Local" : "Server";
-//               print("$source data: ${event.data()}");
-//               developer.log("$source data: ${event.data()}");
-
-//               final data = event.data() as Map<String, dynamic>;
-//             // var doc = event;
-
-//           //  _userProfileSubscription = FirebaseFirestore.instance
-//           //     .collection("users")
-//           //     .doc(FirebaseAuth.instance.currentUser!.uid);
-              
-//           //     .then((value) => null)
-//           //    .snapshots()
-//           //     .listen((event) {
-
-//              developer.log(
-//                  'In user profile loop ${FirebaseAuth.instance.currentUser!.uid}');
-//           //       for (var doc in event.data()) {
-
-//           //       }
-//             // _userProfile?.id = FirebaseAuth.instance.currentUser!.uid;
-//             // _userProfile?.userId = event.get("userId") ?? "userId";
-//             // _userProfile?.email = event.get("email") ?? "email";
-//             // _userProfile?.nickname = event.get("nickname") ?? "nickname";
-//             // _userProfile?.avatar = event.get("avatar") ?? "avatar";
-//             // _userProfile?.photo = event.get("photo") ?? "photo";
-//             // _userProfile?.language = event.get("language") ?? "language";
-//             // _userProfile?.joinDate = event.get("joinDate") ?? "joinDate";
-//             // _userProfile?.friend = event.get("friend") ?? "friend";
-//             // _userProfile?.league = event.get("league") ?? "league";
-//             // _userProfile?.countrycount = event.get("countrycount")  ??  0;
-//             // _userProfile?.visitcount = event.get("visitcount")  ??  0;
-//             // _userProfile?.distancetotal = event.get("distancetotal")  ??  0;
-//             // _userProfile?.regioncount = event.get("regioncount")  ??  0;
-//             // _userProfile?.placescount = event.get("placescount")  ??  0;
-//             // _userProfile?.currentstreak= event.get("currentStreak") ??  0;
-//           //_userProfile = UserProfile()?;
-
-//             _userProfile?.id = FirebaseAuth.instance.currentUser!.uid;
-//             _userProfile?.userId =   data['userId'] ?? 'userId'; // event.get("userId") ?? "userId";
-//             _userProfile?.email = event.get("email") ?? "email";
-//             _userProfile?.nickname = event.get("nickname") ?? "nickname";
-//             _userProfile?.avatar = event.get("avatar") ?? "avatar";
-//             _userProfile?.photo = event.get("photo") ?? "photo";
-//             _userProfile?.language = event.get("language") ?? "language";
-//             _userProfile?.joinDate = event.get("joinDate") ?? "joinDate";
-//             _userProfile?.friend = event.get("friend") ?? "friend";
-//             _userProfile?.league = event.get("league") ?? "league";
-//             _userProfile?.countrycount = event.get("countrycount")  ??  0;
-//             _userProfile?.visitcount = event.get("visitcount")  ??  0;
-//             _userProfile?.distancetotal = event.get("distancetotal")  ??  0;
-//             _userProfile?.regioncount = event.get("regioncount")  ??  0;
-//             _userProfile?.placescount = event.get("placescount")  ??  0;
-//             //_userProfile?.currentstreak= event.get("currentStreak") ??  0;
-//             _userProfile?.currentstreak= data['currentStreak']??  0;
-
-//          // _userProfile?.currentstreak= event.get("currentstreak") !=null ?  event.get("currentstreak") : 0;
-//          developer.log(
-//                 ' _userProfile?.currentstreak= ${ _userProfile?.currentstreak}');
-//                    notifyListeners();
-//          },
-//             onError: (error) => print("Listen failed: $error"),
-//           );
-// //          });
-
-        StreamSubscription<QuerySnapshot> _userCountryListSubscription =
-            FirebaseFirestore.instance
-                .collection('currentuser')
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .collection('country')
-                .snapshots()
-                .listen((snapshot) {
-          _userCountryList = [];
-          for (final document in snapshot.docs) {
-            _countryrecords[document.id] = document.data()['countryName'];
-
-            _userCountryList.add(CurrentCountry(
-              countryCode: document.id,
-              countryName: document.data()['countryName'] as String,
-              userId: document.data()['userId'] as String,
-            ));
-          }
-          notifyListeners();
-        });
-
-        _userRegionListSubscription = FirebaseFirestore.instance
-            .collectionGroup('region')
-            //.collectionGroup('currentuser/*/country/*/region')
-            .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            //.orderBy('timestamp', descending: true)
-            .snapshots()
-            .listen((snapshot) {
-          _userRegionList = [];
-          for (final document in snapshot.docs) {
-            _regionrecords[document.id] = document.id;
-
-            _userRegionList.add(
-              Region(
-                userId: FirebaseAuth.instance.currentUser!.uid,
-                regionCode: document.id,
-                region: document.data()['region'] as String,
-                countryCode: document.data()['countryCode'] as String,
-              ),
-            );
-          }
-          notifyListeners();
-        });
-
-        _locationCurrentSubscription = FirebaseFirestore.instance
-            .collectionGroup('placehistory')
-            .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            .orderBy('timestamp', descending: true)
-            .limit(1)
-            .snapshots()
-            .listen((snapshot) {
-          //_currentPlace = [];
-
-          for (final document in snapshot.docs) {
-            globals.new_latitude = document.data()['latitude'] as double;
-            globals.new_longitude = document.data()['longitude'] as double;
-            int timeInMillis = document.data()['timestamp'] as int;
-            DateTime current_arrivalDate =
-                DateTime.fromMillisecondsSinceEpoch(timeInMillis);
-
-            // _currentPlace.add(
-            _currentPlace = PlaceHistory(
-                userId: FirebaseAuth.instance.currentUser!.uid,
-                name: document.data()['name'] as String,
-                latitude: document.data()['latitude'] as double,
-                longitude: document.data()['longitude'] as double,
-                streetAddress: document.data()['streetAddress'] as String,
-                city: document.data()['city'] as String,
-                countryName: document.data()['countryName'] as String,
-                countryCode: document.data()['countryCode'] as String,
-                postal: document.data()['postal'] as String,
-                region: document.data()['region'] as String,
-                regionCode: document.data()['regionCode'] as String,
-                timezone: document.data()['timezone'] as String,
-                elevation: document.data()['elevation'] as int,
-                visitnumber: document.data()['visitnumber'] as int,
-                arrivaldate: current_arrivalDate);
-          }
-
-          notifyListeners();
-        });
-
-        _placeHistorySubscription = FirebaseFirestore.instance
-            .collectionGroup('placehistory')
-            .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            .orderBy('timestamp', descending: true)
-            .snapshots()
-            .listen((snapshot) {
-          _placeHistory = [];
-
-          for (final document in snapshot.docs) {
-            //  globals.new_latitude = document.data()['latitude'] as double;
-            //  globals.new_longitude = document.data()['longitude'] as double;
-            int timeInMillis = document.data()['timestamp'] as int;
-            DateTime current_arrivalDate =
-                DateTime.fromMillisecondsSinceEpoch(timeInMillis);
-
-            _placeHistory.add(PlaceHistory(
-                userId: FirebaseAuth.instance.currentUser!.uid,
-                name: document.data()['name'] as String,
-                latitude: document.data()['latitude'] as double,
-                longitude: document.data()['longitude'] as double,
-                streetAddress: document.data()['streetAddress'] as String,
-                city: document.data()['city'] as String,
-                countryName: document.data()['countryName'] as String,
-                countryCode: document.data()['countryCode'] as String,
-                postal: document.data()['postal'] as String,
-                region: document.data()['region'] as String,
-                regionCode: document.data()['regionCode'] as String,
-                timezone: document.data()['timezone'] as String,
-                elevation: document.data()['elevation'] as int,
-                visitnumber: document.data()['visitnumber'] as int,
-                arrivaldate: current_arrivalDate));
-          }
-
-          notifyListeners();
-        });
+        _currentPlace =
+            listenForCurrrentPlace(FirebaseAuth.instance.currentUser!.uid);
+        _placeHistory =
+            listenForPlaceHistory(FirebaseAuth.instance.currentUser!.uid);
 
         _tripsSubscription = FirebaseFirestore.instance
             .collectionGroup('placehistory')
@@ -590,5 +247,210 @@ UserProfile listenForUserChanges(String userId) {
 
     await currentUser.reload();
   }
-}
 
+  UserProfile listenForUserChanges(String userId) {
+    UserProfile _userProfile = UserProfile(id: userId);
+
+    // Get a reference to the user's document in Firestore
+    DocumentReference userRef =
+        FirebaseFirestore.instance.collection('users').doc(userId);
+
+    // Listen for changes to the user document
+    userRef.snapshots().listen((userSnapshot) {
+      // Check if the document exists
+      if (userSnapshot.exists) {
+        // Get the user's data as a Map
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        DateTime joinDate = (userData['joinDate'] as Timestamp).toDate();
+        DateTime lastRecordedDate =
+            (userData['lastRecordedDate'] as Timestamp).toDate();
+        // Extract the user's age and address from the data
+        _userProfile.userId =
+            userData['userId'] ?? 'userId'; // event.get("userId") ?? "userId";
+        _userProfile.email = userData['email'] ?? 'email';
+        _userProfile.nickname = userData['nickname'] ?? 'nickname';
+        _userProfile.avatar = userData['avatar'] ?? 'avatar';
+        // _userProfile.photo = userData['photo'] ?? 'photo';
+        _userProfile.language = userData['language'] ?? 'language';
+        _userProfile.joinDate = joinDate;
+        //  _userProfile.joinDate = userData['joinDate'].toDate() as DateTime? ;//?? DateTime.now() as DateTime? ;
+        _userProfile.friend = userData['friend'] ?? 0;
+        _userProfile.league = userData['league'] ?? 0;
+        _userProfile.countrycount = userData['countrycount'] ?? 0;
+        _userProfile.visitcount = userData['visitcount'] ?? 0;
+        _userProfile.distancetotal = userData['distancetotal'] ?? 0;
+        _userProfile.regioncount = userData['regioncount'] ?? 0;
+        _userProfile.placescount = userData['placescount'] ?? 0;
+        _userProfile.currentstreak = userData['currentStreak'] ?? 0;
+        _userProfile.lastRecordedDate = lastRecordedDate;
+
+        //   _userProfile.lastRecordedDate = userData['lastRecordedDate'].toDate() as DateTime?; //  ?? DateTime.now();
+
+        // Print the user's ID, age, and address to the console
+        print('User $_userProfile.userId');
+      } else {
+        print('User document for $userId does not exist.');
+      }
+    });
+    return _userProfile;
+  }
+
+  List<UserProfile> listenForAllUsersChanges() {
+    _usersSubscription = FirebaseFirestore.instance
+        .collection('users')
+        // .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy('distancetotal', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      _users = [];
+
+      for (final document in snapshot.docs) {
+        DateTime joinDate = (document.data()['joinDate'] as Timestamp).toDate();
+        DateTime lastRecordedDate =
+            (document.data()['lastRecordedDate'] as Timestamp).toDate();
+
+        //  final data =  document.data();
+        //  _users.add( UserProfile.fromJson(data));
+
+        _users.add(UserProfile(
+          id: document.id,
+          userId: document.data()['userId'] ?? 'userId',
+          email: document.data()['email'] as String,
+          nickname: document.data()['nickname'] as String,
+          avatar: document.data()['avatar'] as String,
+          // photo: document.data()['photo"'] as String,
+          language: document.data()['language'] as String,
+          joinDate: joinDate,
+          //    joinDate: document.data()['joinDate']?.toDate ?? DateTime.now(),
+          //  joinDate: DateTime.tryParse(document.data()['joinDate']),
+          friend: document.data()['friend'] as int?,
+          league: document.data()['league'] as int?,
+          countrycount: document.data()['countrycount'] as int?,
+          visitcount: document.data()['visitcount'] as int?,
+          distancetotal: document.data()['distancetotal'] as int?,
+          regioncount: document.data()['regioncount'] as int?,
+          placescount: document.data()['placescount'] as int?,
+          currentstreak: document.data()['currentStreak'] as int?,
+          lastRecordedDate: lastRecordedDate,
+          //    lastRecordedDate: document.data()['lastRecordedDate']?.toDate ?? DateTime.now(),
+          // lastRecordedDate: document.data()['lastRecordedDate'].toDate as DateTime?,
+          //              lastRecordedDate: DateTime.tryParse(document.data()['lastRecordedDate']),
+        ));
+
+        // );
+      }
+
+      notifyListeners();
+    });
+    return _users;
+  }
+
+  List<Region> listenForRegionChanges(String userId) {
+    _userRegionListSubscription = FirebaseFirestore.instance
+        .collectionGroup('region')
+        //.collectionGroup('currentuser/*/country/*/region')
+        .where('userId',
+            isEqualTo: userId) //FirebaseAuth.instance.currentUser!.uid)
+        //.orderBy('timestamp', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      _userRegionList = [];
+      for (final document in snapshot.docs) {
+        _regionrecords[document.id] = document.id;
+
+        _userRegionList.add(
+          Region(
+            userId: userId, // FirebaseAuth.instance.currentUser!.uid,
+            regionCode: document.id,
+            region: document.data()['region'] as String,
+            countryCode: document.data()['countryCode'] as String,
+          ),
+        );
+      }
+      notifyListeners();
+    });
+
+    return _userRegionList;
+  }
+
+  PlaceHistory? listenForCurrrentPlace(String userId) {
+    _locationCurrentSubscription = FirebaseFirestore.instance
+        .collectionGroup('placehistory')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .snapshots()
+        .listen((snapshot) {
+      //_currentPlace = [];
+
+      for (final document in snapshot.docs) {
+        globals.new_latitude = document.data()['latitude'] as double;
+        globals.new_longitude = document.data()['longitude'] as double;
+        int timeInMillis = document.data()['timestamp'] as int;
+        DateTime current_arrivalDate =
+            DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+
+        // _currentPlace.add(
+        _currentPlace = PlaceHistory(
+            userId: FirebaseAuth.instance.currentUser!.uid,
+            name: document.data()['name'] as String,
+            latitude: document.data()['latitude'] as double,
+            longitude: document.data()['longitude'] as double,
+            streetAddress: document.data()['streetAddress'] as String,
+            city: document.data()['city'] as String,
+            countryName: document.data()['countryName'] as String,
+            countryCode: document.data()['countryCode'] as String,
+            postal: document.data()['postal'] as String,
+            region: document.data()['region'] as String,
+            regionCode: document.data()['regionCode'] as String,
+            timezone: document.data()['timezone'] as String,
+            elevation: document.data()['elevation'] as int,
+            visitnumber: document.data()['visitnumber'] as int,
+            arrivaldate: current_arrivalDate);
+      }
+
+      notifyListeners();
+    });
+    return _currentPlace;
+  }
+
+  List<PlaceHistory> listenForPlaceHistory(String userId) {
+    _placeHistorySubscription = FirebaseFirestore.instance
+        .collectionGroup('placehistory')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      _placeHistory = [];
+
+      for (final document in snapshot.docs) {
+        //  globals.new_latitude = document.data()['latitude'] as double;
+        //  globals.new_longitude = document.data()['longitude'] as double;
+        int timeInMillis = document.data()['timestamp'] as int;
+        DateTime current_arrivalDate =
+            DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+
+        _placeHistory.add(PlaceHistory(
+            userId: FirebaseAuth.instance.currentUser!.uid,
+            name: document.data()['name'] as String,
+            latitude: document.data()['latitude'] as double,
+            longitude: document.data()['longitude'] as double,
+            streetAddress: document.data()['streetAddress'] as String,
+            city: document.data()['city'] as String,
+            countryName: document.data()['countryName'] as String,
+            countryCode: document.data()['countryCode'] as String,
+            postal: document.data()['postal'] as String,
+            region: document.data()['region'] as String,
+            regionCode: document.data()['regionCode'] as String,
+            timezone: document.data()['timezone'] as String,
+            elevation: document.data()['elevation'] as int,
+            visitnumber: document.data()['visitnumber'] as int,
+            arrivaldate: current_arrivalDate));
+      }
+
+      notifyListeners();
+    });
+    return _placeHistory;
+  }
+}

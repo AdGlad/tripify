@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gtk_flutter/screens/ActiveCountryPage.dart';
 import 'package:gtk_flutter/screens/checkcountry.dart';
-import 'package:gtk_flutter/screens/UserCountryPage.dart';
+import 'package:gtk_flutter/screens/country/UserCountryPage.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:gtk_flutter/screens/league.dart';
+import 'package:gtk_flutter/screens/league/league.dart';
 import 'package:gtk_flutter/screens/userprofile.dart';
 import 'package:gtk_flutter/screens/userstats.dart';
 import 'package:provider/provider.dart';
