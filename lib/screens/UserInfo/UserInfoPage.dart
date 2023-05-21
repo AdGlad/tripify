@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gtk_flutter/model/users.dart';
+import 'package:gtk_flutter/screens/UserInfo/getUserInfo.dart';
+import 'package:gtk_flutter/screens/UserInfo/saveUserInfo.dart';
 import 'package:gtk_flutter/screens/findfriendpage.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 //import 'package:toggle_switch/toggle_switch.dart';
 import 'dart:developer' as developer;
 
-import '../src/acceptfriendrequests.dart';
-import '../src/listfriends.dart';
-import '../state/applicationstate.dart';
+import '../../src/acceptfriendrequests.dart';
+import '../../src/listfriends.dart';
+import '../../state/applicationstate.dart';
 
 //import 'package:firebase_storage/firebase_storage.dart';
 
@@ -35,53 +37,53 @@ class _UserInfoPageState extends State<UserInfoPage> {
   @override
   void initState() {
     super.initState();
-    _getUserInfo();
+    getUserInfo();
   }
 
-  Future<void> _getUserInfo() async {
-    final user = FirebaseAuth.instance.currentUser;
-    _email = user?.email;
+  // Future<void> getUserInfo() async {
+  //   final user = FirebaseAuth.instance.currentUser;
+  //   _email = user?.email;
 
-    final userData = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user!.uid)
-        .get();
+  //   final userData = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(user!.uid)
+  //       .get();
 
-    if (userData.exists) {
-      setState(() {
-        if (userData.data()!.containsKey('nickname')) {
-          _nicknameController.text = userData['nickname'] ?? user.displayName;
-        }
-        if (userData.data()!.containsKey('email')) {
-          _email = userData['email'];
-        } else {
-          _email = user.email;
-        }
+  //   if (userData.exists) {
+  //     setState(() {
+  //       if (userData.data()!.containsKey('nickname')) {
+  //         _nicknameController.text = userData['nickname'] ?? user.displayName;
+  //       }
+  //       if (userData.data()!.containsKey('email')) {
+  //         _email = userData['email'];
+  //       } else {
+  //         _email = user.email;
+  //       }
 
-        if (userData.data()!.containsKey('friend')) {
-          _friendable = userData['friend'];
-        } else {
-          _friendable = 1;
-        }
+  //       if (userData.data()!.containsKey('friend')) {
+  //         _friendable = userData['friend'];
+  //       } else {
+  //         _friendable = 1;
+  //       }
 
-        if (userData.data()!.containsKey('league')) {
-          _league = userData['league'];
-        } else {
-          _league = 1;
-        }
+  //       if (userData.data()!.containsKey('league')) {
+  //         _league = userData['league'];
+  //       } else {
+  //         _league = 1;
+  //       }
 
-        if (userData.data()!.containsKey('avatar')) {
-          _avatar = userData['avatar'];
-        } else {
-          _avatar = "";
-        }
+  //       if (userData.data()!.containsKey('avatar')) {
+  //         _avatar = userData['avatar'];
+  //       } else {
+  //         _avatar = "";
+  //       }
 
-        //  _ageController.text = userData['age'].toString();
-        // _friendable = userData['friend'] ?? 1;
-        // _league = userData['league'] ?? 1;
-      });
-    }
-  }
+  //       //  _ageController.text = userData['age'].toString();
+  //       // _friendable = userData['friend'] ?? 1;
+  //       // _league = userData['league'] ?? 1;
+  //     });
+  //   }
+  // }
 
   Future<void> _saveUserInfo() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
