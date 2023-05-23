@@ -6,6 +6,7 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/UserInfo/UserStatsPage.dart';
 import '../state/applicationstate.dart';
 
 part 'users.g.dart';
@@ -334,56 +335,70 @@ class FriendList extends StatelessWidget {
             Friend friend = querySnapshot.docs[index].data;
 
             return 
-            Card(
-                   color: Color.fromARGB(255, 49, 52, 59),
-                      elevation: 8.0,
-                      margin: EdgeInsets.all(5.0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                  child: ListTile(
-                    leading: Container(
-                            // color: Colors.white,
-                            //  alignment: Alignment.centerLeft,
-                            child: CircleAvatar(
-                              radius: 10.0,
-                              backgroundImage: NetworkImage(friend.friendAvatar!)
-                            ),),
-                          
-                   title: Text(friend.friendNickname!,style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10.0,
-                                fontWeight: FontWeight.w700,
-                              )), //Text('title'), //Text(userData['nickname']),
-                    subtitle: Text( friend.friendEmail!,style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 8.0,
-                                fontWeight: FontWeight.w700,
-                              )),
-    //                               this.countrycount,
-    // this.visitcount,
-    // this.distancetotal,
-    // this.regioncount,
-    // this.placescount,
-    // this.currentstreak,
-                               //Text('email'), //Text(userData['email']),
-                    // trailing: ElevatedButton(
-                    //                             style: ElevatedButton.styleFrom(
-                    //         backgroundColor: Colors.orangeAccent,
-                    //         elevation: 5,),
-                      
-                    //   child: Text('Accept \nFriend',
-                    //   style: TextStyle(
-                    //             color: Colors.white,
-                    //             fontSize: 8.0,
-                    //             fontWeight: FontWeight.w700,
-
-                    //   )),
-                    //   onPressed: () {
-                    //     _acceptFriendRequest(friendrequest.id);
-                    //   },
-                    // ),
+            GestureDetector(
+                                        onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => 
+                                        UserProfileScreen(
+                                            userId: friend.id
+                                                    ),
+                                
+                              ),
+                            );
+                          },
+              child: Card(
+                     color: Color.fromARGB(255, 49, 52, 59),
+                        elevation: 8.0,
+                        margin: EdgeInsets.all(5.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                    child: ListTile(
+                      leading: Container(
+                              // color: Colors.white,
+                              //  alignment: Alignment.centerLeft,
+                              child: CircleAvatar(
+                                radius: 10.0,
+                                backgroundImage: NetworkImage(friend.friendAvatar!)
+                              ),),
+                            
+                     title: Text(friend.friendNickname!,style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.w700,
+                                )), //Text('title'), //Text(userData['nickname']),
+                      subtitle: Text( friend.friendEmail!,style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8.0,
+                                  fontWeight: FontWeight.w700,
+                                )),
+                //                               this.countrycount,
+                // this.visitcount,
+                // this.distancetotal,
+                // this.regioncount,
+                // this.placescount,
+                // this.currentstreak,
+                                 //Text('email'), //Text(userData['email']),
+                      // trailing: ElevatedButton(
+                      //                             style: ElevatedButton.styleFrom(
+                      //         backgroundColor: Colors.orangeAccent,
+                      //         elevation: 5,),
+                        
+                      //   child: Text('Accept \nFriend',
+                      //   style: TextStyle(
+                      //             color: Colors.white,
+                      //             fontSize: 8.0,
+                      //             fontWeight: FontWeight.w700,
+            
+                      //   )),
+                      //   onPressed: () {
+                      //     _acceptFriendRequest(friendrequest.id);
+                      //   },
+                      // ),
+                    ),
                   ),
-                );
+            );
             
             //Text('User name: ${friendrequest.requesterNickname}, Status ${friendrequest.status}');
           

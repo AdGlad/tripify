@@ -8,7 +8,7 @@ import 'package:gtk_flutter/screens/country/UserCountryPage.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:gtk_flutter/screens/league/league.dart';
-import 'package:gtk_flutter/screens/userprofile.dart';
+import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:gtk_flutter/screens/userstats.dart';
 import 'package:provider/provider.dart';
 

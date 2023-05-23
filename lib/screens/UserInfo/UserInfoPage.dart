@@ -2,19 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gtk_flutter/model/users.dart';
-import 'package:gtk_flutter/screens/UserInfo/getUserInfo.dart';
-import 'package:gtk_flutter/screens/UserInfo/saveUserInfo.dart';
+import 'package:gtk_flutter/model/users.dart';
+import 'package:gtk_flutter/screens/UserInfo/UserStatsContainer.dart';
 import 'package:gtk_flutter/screens/findfriendpage.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 //import 'package:toggle_switch/toggle_switch.dart';
 import 'dart:developer' as developer;
 
+import '../../model/users.dart';
 import '../../src/acceptfriendrequests.dart';
 import '../../src/listfriends.dart';
 import '../../state/applicationstate.dart';
 
 //import 'package:firebase_storage/firebase_storage.dart';
+  Widget buildCard(
+      int? amount, String unitofmeasure, IconData icon, String description) {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Icon(icon, size: 40.0),
+            SizedBox(height: 8.0),
+            Text(description),
+            Text('$amount $unitofmeasure'),
+          ],
+        ),
+      ),
+    );
+  }
 
 class UserInfoPage extends StatefulWidget {
   
@@ -26,18 +43,24 @@ class UserInfoPage extends StatefulWidget {
 
 class _UserInfoPageState extends State<UserInfoPage> {
   final _formKey = GlobalKey<FormState>();
+
   final _nicknameController = TextEditingController();
   //final _ageController = TextEditingController();
-  int _friendable = 0;
-  int _league = 0;
+  //int _friendable = 0;
+ // int _league = 0;
   String _errorMessage = '';
-  String? _email;
+  //String? _email;
   String? _avatar;
 
   @override
   void initState() {
     super.initState();
-    getUserInfo();
+   // getUserInfo();
+  // _nicknameController.text = "Adam";
+final applicationState = Provider.of<ApplicationState>(context,listen: false);
+
+_nicknameController.text = applicationState.userProfile!.nickname!;  
+
   }
 
   // Future<void> getUserInfo() async {
@@ -112,32 +135,17 @@ class _UserInfoPageState extends State<UserInfoPage> {
           .doc(user!.uid)
           .update({
         // set({
-        'userId': FirebaseAuth.instance.currentUser!.uid,
+       // 'userId': FirebaseAuth.instance.currentUser!.uid,
         'nickname': _nicknameController.text,
-        'email': _email,
+     //   'email': _email,
         // 'age': int.parse(_ageController.text),
-        'friend': _friendable,
-        'league': _league,
+     //   'friend': _friendable,
+     //   'league': _league,
       });
     }
   }
 
-  Widget buildCard(
-      int? amount, String unitofmeasure, IconData icon, String description) {
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Icon(icon, size: 40.0),
-            SizedBox(height: 8.0),
-            Text(description),
-            Text('$amount $unitofmeasure'),
-          ],
-        ),
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +173,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   ),
                   SizedBox(height: 16.0),
                   TextFormField(
+                 //   initialValue: "adam",
+                  //  initialValue: appState.userProfile?.nickname,
                     controller: _nicknameController,
                     decoration: InputDecoration(labelText: 'Nickname'),
                     validator: (value) {
@@ -274,7 +284,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       child: Text('Save'),
                     ),
                   ),
-
+                 // UserStatsContainer(userId: appState.userProfile!.id, context: context),
                   Container(
                     padding: EdgeInsets.all(16.0),
                     child: Column(

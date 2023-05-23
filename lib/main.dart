@@ -11,7 +11,7 @@ import 'package:gtk_flutter/screens/SignInScreen.dart';
 import 'package:gtk_flutter/screens/findfriendpage.dart';
 import 'package:gtk_flutter/screens/firstpage.dart';
 import 'package:gtk_flutter/screens/mainpage.dart';
-import 'package:gtk_flutter/screens/userprofile.dart';
+import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:provider/provider.dart';
 import 'state/applicationstate.dart';
 import 'screens/splashscreen.dart';
