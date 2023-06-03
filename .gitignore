@@ -12,6 +12,15 @@
 migrate_working_dir/
 /build/
 
+#ios specific
+ios/.generated/
+ios/Podfile*
+ios/Flutter/Debug.xcconfig
+ios/Flutter/Release.xcconfig
+ios/Runner.xcworkspace/contents.xcworkspacedata
+ios/Runner\ 2023-04-16\ 10-29-48/gtk_flutter.ipa
+
+
 # IntelliJ related
 *.iml
 *.ipr
