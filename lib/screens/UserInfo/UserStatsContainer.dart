@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gtk_flutter/screens/ActiveCountryPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:intl/intl.dart';

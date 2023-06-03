@@ -26,6 +26,9 @@ import '../model/usertotals.dart';
 import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 
 import '../screens/UserInfo/UserProfileScreen.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
+
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
@@ -67,6 +70,9 @@ class ApplicationState extends ChangeNotifier {
   // List<PlaceHistory> get currentPlace => _currentPlace;
   PlaceHistory? _currentPlace; // = PlaceHistory();
   PlaceHistory? get currentPlace => _currentPlace;
+  PackageInfo? _packageInfo;
+  PackageInfo? get packageInfo => _packageInfo;
+
 
   LatLng _newLatLng = LatLng(0, 0);
   LatLng get newLatLng => _newLatLng;
@@ -93,6 +99,13 @@ class ApplicationState extends ChangeNotifier {
 
   Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+
+   _packageInfo = await PackageInfo.fromPlatform();
+    developer.log('PackageInfo.version ${_packageInfo?.version}');
+    developer.log('PackageInfo.buildNumber ${_packageInfo?.buildNumber}');
+    developer.log('PackageInfo ${_packageInfo?.appName}');
+
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
 

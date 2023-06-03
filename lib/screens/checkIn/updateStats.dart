@@ -7,8 +7,8 @@ import 'package:gtk_flutter/screens/checkIn/userSaveLocation.dart';
 
 import '../../model/usertotals.dart';
 import '../../state/applicationstate.dart';
-import '../ActiveCountryPage.dart';
-import '../checkcountry.dart';
+//import '../ActiveCountryPage.dart';
+import 'checkcountry.dart';
 import 'dart:developer' as developer;
 
 Future<void> updateStats(UserTotals userTotals) async {

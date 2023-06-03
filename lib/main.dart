@@ -24,6 +24,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -50,10 +51,10 @@ void main() async {
 }
 
 final _router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/SplashScreen',
   routes: [
     GoRoute(
-      path: '/',
+      path: '/SplashScreen',
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(

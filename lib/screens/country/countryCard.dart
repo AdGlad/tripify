@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gtk_flutter/screens/ActiveCountryPage.dart';
+import 'package:gtk_flutter/screens/country/ActiveCountryPage.dart';
 
 import '../../model/placehistory.dart';
 

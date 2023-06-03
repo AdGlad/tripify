@@ -76,13 +76,13 @@ class UserProfileScreen extends StatelessWidget {
             // _userProfile.currentstreak = userProfile['currentStreak'] ?? 0;
             // _userProfile.lastRecordedDate = lastRecordedDate;
     
-            return ListView(
+            return Column(
               children: [
-               // Expanded(child: userStatsContainer(_userProfile, context)),
-                userStatsContainer(_userProfile, context),
+                Expanded(child: userStatsContainer(_userProfile, context)),
+               // userStatsContainer(_userProfile, context),
               //  UserMapContainer( context, _userProfile!, null)
-                UserMapContainer( context, _userProfile!)
-              //  Expanded(child: UserMapContainer( context, _userProfile!, null)) 
+                //Container(child: UserMapContainer( context, _userProfile!))
+              Expanded(child: UserMapContainer( context, _userProfile!)) 
     
               ],
             );

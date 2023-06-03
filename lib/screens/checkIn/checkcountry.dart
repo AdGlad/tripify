@@ -23,9 +23,9 @@ import 'package:gtk_flutter/src/globals.dart' as globals;
 import 'package:confetti/confetti.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:geolocator/geolocator.dart';
-import '../model/usertotals.dart';
-import '../src/ad_helper.dart';
-import '../state/applicationstate.dart';
+import '../../model/usertotals.dart';
+import '../../src/ad_helper.dart';
+import '../../state/applicationstate.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -34,7 +34,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 
-import 'checkIn/userMapContainer.dart';
+import 'userMapContainer.dart';
 
 class CheckCountry extends StatefulWidget {
   const CheckCountry({super.key});

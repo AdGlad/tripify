@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:gtk_flutter/model/users.dart';
-import 'package:gtk_flutter/screens/ActiveCountryPage.dart';
+import 'package:gtk_flutter/screens/country/ActiveCountryPage.dart';
 import 'package:intl/intl.dart';
 
 import '../../state/applicationstate.dart';

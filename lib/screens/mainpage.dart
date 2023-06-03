@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gtk_flutter/screens/ActiveCountryPage.dart';
-import 'package:gtk_flutter/screens/checkcountry.dart';
+import 'package:gtk_flutter/screens/country/ActiveCountryPage.dart';
+import 'package:gtk_flutter/screens/checkIn/checkcountry.dart';
 import 'package:gtk_flutter/screens/country/UserCountryPage.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 
@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 //import '../src/ad_helper.dart';
 import '../state/applicationstate.dart';
+
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -36,6 +37,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
         child: Consumer<ApplicationState>(
             builder: (context, appState, _) => Center(
@@ -43,7 +45,8 @@ class _MainPageState extends State<MainPage> {
                   resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     //    automaticallyImplyLeading: false,
-                    title: const Text('Tripify [V2]'),
+                  //  title: const Text('Tripify [V2]'),
+                    title:  Text('Tripify ${appState.packageInfo?.version} [${appState.packageInfo?.buildNumber}]'),
                     actions: [
                       IconButton(
                           onPressed: () {
@@ -105,6 +108,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ))));
   }
+  
 
   @override
   void dispose() {

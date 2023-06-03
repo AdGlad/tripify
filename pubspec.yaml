@@ -72,6 +72,8 @@ dependencies:
   firebase_ui_oauth: ^1.1.17
   firebase_ui_oauth_google: ^1.0.21
   firebase_ui_oauth_facebook: ^1.0.24
+  package_info: ^2.0.2
+  package_info_plus: ^3.1.2
   #google_sign_in: ^6.0.2
   #firebase_ui_oauth_google: ^1.0.22
   #flutter_map: ^3.1.0

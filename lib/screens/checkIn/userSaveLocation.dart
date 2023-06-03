@@ -17,8 +17,9 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
 
 import '../../state/applicationstate.dart';
-import '../ActiveCountryPage.dart';
-import '../checkcountry.dart';
+//import '../ActiveCountryPage.dart';
+import 'checkcountry.dart';
+import '../country/ActiveCountryPage.dart';
 
 Future saveLocation(
   BuildContext context,

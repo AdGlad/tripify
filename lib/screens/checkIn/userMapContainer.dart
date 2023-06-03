@@ -7,7 +7,6 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:gtk_flutter/src/globals.dart' as globals;
 
 import '../../state/applicationstate.dart';
-import '../ActiveCountryPage.dart';
 
 MapboxMapController? mapController;
 

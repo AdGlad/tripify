@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
 //import 'package:file_picker/file_picker.dart';
-import '../state/applicationstate.dart';
+import '../../state/applicationstate.dart';
 import 'dart:developer' as developer;
 
 class LocationMapPage extends StatefulWidget {
@@ -36,73 +36,16 @@ class _LocationMapPageState extends State<LocationMapPage> {
 
   void _onMapCreated(
       List<PlaceHistory> placeHistory, MapboxMapController controller) async {
-    // List<Map<String, dynamic>> locations = [
-    //   {
-    //     'id': '1',
-    //     'latitude': 37.7749,
-    //     'longitude': -122.4194,
-    //   },
-    //   {
-    //     'id': '2',
-    //     'latitude': 37.7894,
-    //     'longitude': -122.4142,
-    //   },
-    //   {
-    //     'id': '3',
-    //     'latitude': 37.7833,
-    //     'longitude': -122.4167,
-    //   },
-    // ];
 
     var markerImage = await loadMarkerImage();
     controller.addImage('QuokkaMarker', markerImage);
     List<Symbol> symbols = [];
     developer.log('Icon locations of the map ');
 
-    // await controller.addSymbol(SymbolOptions(
-    //   geometry: LatLng(40.7484, -73.9857),
-    //   iconImage: 'QuokkaMarker',
-    //   iconSize: 0.5,
-    //   textField: 'Empire State Building',
-    //   textSize: 12,
-    //   textOffset: Offset(0, 1),
-    // ));
-
-    // // Add a symbol at Times Square
-    // await controller.addSymbol(SymbolOptions(
-    //   geometry: LatLng(40.7580, -73.9855),
-    //   iconImage: 'QuokkaMarker',
-    //   iconSize: 0.5,
-    //   textField: 'Times Square',
-    //   textSize: 12,
-    //   textOffset: Offset(0, 1),
-    // ));
 
     for (var location in placeHistory) {
       developer.log(
           '${location.latitude.toString()} ,${location.latitude.toString()}');
-
-      // var symbol = SymbolOptions(
-      //   // geometry: LatLng(location['latitude'], location['longitude']),
-      //   geometry: LatLng(location.latitude!, location.longitude!),
-      //   iconImage: 'QuokkaMarker',
-      //   iconSize: 0.5,
-      //   iconAnchor: 'bottom',
-      //   iconOffset: const Offset(0, 0),
-      //   textField:
-      //       'You were here \n ${DateFormat('hh:mm a dd MMM yy').format(location.arrivaldate!)}',
-      //   textOffset: Offset(0, 2.5),
-      //   // textColor: '#ffffff',
-      //   textColor: '#000000',
-      //   //textHaloBlur: 1,
-      //   //textHaloColor: '#ffffff',
-      //   //textHaloWidth: 0.8,
-      //   textSize: 18,
-      // );
-      // //  symbols.add(Symbol( symbols
-      // //    symbolOptions: symbol, data: location, ));
-
-      // await controller.addSymbol(symbol);
 
       await controller.addSymbol(SymbolOptions(
         // geometry: LatLng(location['latitude'], location['longitude']),
@@ -114,35 +57,11 @@ class _LocationMapPageState extends State<LocationMapPage> {
         textField:
             'You were here \n ${DateFormat('hh:mm a dd MMM yy').format(location.arrivaldate!)}',
         textOffset: Offset(0, 2.5),
-        // textColor: '#ffffff',
         textColor: '#000000',
-        //textHaloBlur: 1,
-        //textHaloColor: '#ffffff',
-        //textHaloWidth: 0.8,
         textSize: 18,
       ));
     }
 
-//     await controller.addSymbol(SymbolOptions(
-//       iconSize: 0.4,
-//       iconImage: "QuokkaMarker",
-//       // geometry: LatLng(-33.760181, 151.284136),
-//       geometry:
-//           //LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
-//           LatLng(widget.placeHistory.latitude!, widget.placeHistory.longitude!),
-
-// //          LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
-//       iconOffset: const Offset(0, 0),
-//       textField:
-//           'You were here \n ${DateFormat('hh:mm a dd MMM yy').format(widget.placeHistory.arrivaldate!)}',
-//       textOffset: Offset(0, 2.5),
-//       // textColor: '#ffffff',
-//       textColor: '#000000',
-//       //textHaloBlur: 1,
-//       //textHaloColor: '#ffffff',
-//       //textHaloWidth: 0.8,
-//       textSize: 18,
-//     ));
 
     _mapController = controller;
   }
@@ -200,8 +119,6 @@ class _LocationMapPageState extends State<LocationMapPage> {
                       Positioned(
                         bottom: 16.0,
                         right: 16.0,
-                        //child: Screenshot(
-                        //  controller: _controller,
                         child: FloatingActionButton(
                             child: Text(
                                 style: TextStyle(fontSize: 10),
@@ -244,8 +161,6 @@ class _LocationMapPageState extends State<LocationMapPage> {
                   ),
                 )));
   }
-
-  // final _controller = ScreenshotController();
 
   void printscreen() async {
     developer.log("Print Screen", name: 'tripify.scheenshot.directory');

@@ -8,9 +8,11 @@ import 'package:gtk_flutter/screens/countryPage.dart';
 import 'package:gtk_flutter/screens/regionlistpage.dart';
 import 'package:provider/provider.dart';
 
-import '../map/data/maps/world_map.dart';
-import '../model/placehistory.dart';
-import '../state/applicationstate.dart';
+import '../../map/data/maps/world_map.dart';
+import '../../state/applicationstate.dart';
+import '../../map/data/maps/world_map.dart';
+import '../../model/placehistory.dart';
+import '../../state/applicationstate.dart';
 
 class ActiveCountryPage extends StatefulWidget {
   const ActiveCountryPage({super.key});

@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen>
         onLoaded: (composition) {
           _controller
             ..duration = composition.duration
-            ..forward().whenComplete(() => context.go("/first"));
+            ..forward().whenComplete(() => context.go("/home"));
         },
       ),
     );
