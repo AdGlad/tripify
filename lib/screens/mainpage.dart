@@ -45,7 +45,7 @@ class _MainPageState extends State<MainPage> {
                   resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     //    automaticallyImplyLeading: false,
-                  //  title: const Text('Tripify [V2]'),
+                  // title: const Text('Tripify [V2]'),
                     title:  Text('Tripify ${appState.packageInfo?.version} [${appState.packageInfo?.buildNumber}]'),
                     actions: [
                       IconButton(

@@ -91,16 +91,16 @@ Widget leaguePosition(int index) {
         //alignment: Alignment.centerLeft,
         width: double.infinity,
         child: index == 0
-            ? Icon(Icons.star_rounded, color: Colors.amber, size: 40,)
+            ? Icon(Icons.star_rounded, color: Colors.amber, size: 25,)
             : index == 1
-                ? Icon(Icons.star_rounded, color: Colors.grey,size: 40,)
+                ? Icon(Icons.star_rounded, color: Colors.grey,size: 25,)
                 : index == 2
-                    ? Icon(Icons.star_rounded, color: Colors.brown,size: 40,)
+                    ? Icon(Icons.star_rounded, color: Colors.brown,size: 25,)
                     : Text('${index + 1}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20.0,
+                          fontSize: 15.0,
                           fontWeight: FontWeight.w700,
                         ))),
   );
@@ -128,7 +128,7 @@ Widget leagueDistance(UserProfile user) {
           textAlign: TextAlign.right,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20.0,
+            fontSize: 15.0,
             fontWeight: FontWeight.w700,
           )),
     ),
@@ -143,7 +143,7 @@ Widget leagueNickname(UserProfile user) {
         textAlign: TextAlign.left,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 20.0,
+          fontSize: 15.0,
           fontWeight: FontWeight.w700,
         )),
   );

@@ -162,7 +162,7 @@ class _CheckCountryState extends State<CheckCountry> {
               Center(
                 child: Column(
                   children: [ 
-                    Expanded(
+                    Expanded(flex: 2,
                       child: Container(
                         child: (_bannerAd != null)
                             ? Align(
@@ -176,12 +176,12 @@ class _CheckCountryState extends State<CheckCountry> {
                             : Text('No Ad'),
                       ),
                     ),
-                    Expanded(  child: UserStreakContainer(context, appState.  userProfile)),
-                    Expanded(flex: 1,child: UserCntryContainer(context, appState.userProfile, appState)),
+                    Expanded(flex: 1,  child: UserStreakContainer(context, appState.  userProfile)),
+                    Expanded(flex: 2,child: UserCntryContainer(context, appState.userProfile, appState)),
                    // Expanded(flex: 6,child: UserMapContainer(context, appState.userProfile!, newPlace)),
-                    Expanded(flex: 6,child: UserMapContainer(context, appState.userProfile!)),
-                    Expanded(flex: 1,child: UserLocationContainer( context, appState.userProfile! , appState )),
-                    Expanded(child: CheckInContainer(context: context, appState: appState , user: appState.userProfile!)),
+                    Expanded(flex: 12,child: UserMapContainer(context, appState.userProfile!)),
+                    Expanded(flex: 2,child: UserLocationContainer( context, appState.userProfile! , appState )),
+                    Expanded(flex: 2,child: CheckInContainer(context: context, appState: appState , user: appState.userProfile!)),
                           // Spacer(),
                      Container(
                       child: Align(

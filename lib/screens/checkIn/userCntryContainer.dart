@@ -38,6 +38,7 @@ Container UserCntryContainer(
                 width: MediaQuery.of(context).size.width - 20,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
+                  reverse: true,
                   itemCount: appState.tripHistory.length,
                   itemBuilder: (BuildContext context, int index) {
                     return FittedBox(
