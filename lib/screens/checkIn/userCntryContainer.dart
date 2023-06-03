@@ -6,7 +6,7 @@ import '../../state/applicationstate.dart';
 import '../ActiveCountryPage.dart';
 
 Container UserCntryContainer(
-    BuildContext context, UserProfile user, ApplicationState appState) {
+    BuildContext context, UserProfile? user, ApplicationState appState) {
   return Container(
       width: MediaQuery.of(context).size.width,
       child: GestureDetector(
@@ -19,7 +19,7 @@ Container UserCntryContainer(
           FlutterShare.share(
             title: 'My Location',
             text:
-                'Tripify: I have a ${user.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags ',
+                'Tripify: I have a ${user?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags ',
             chooserTitle: 'Share on social media',
           );
         },

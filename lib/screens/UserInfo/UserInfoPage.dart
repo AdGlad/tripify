@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gtk_flutter/model/users.dart';
-import 'package:gtk_flutter/model/users.dart';
 import 'package:gtk_flutter/screens/UserInfo/UserStatsContainer.dart';
 import 'package:gtk_flutter/screens/findfriendpage.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 //import 'package:toggle_switch/toggle_switch.dart';
 import 'dart:developer' as developer;
-
-import '../../model/users.dart';
 import '../../src/acceptfriendrequests.dart';
-import '../../src/listfriends.dart';
+import 'listfriends.dart';
 import '../../state/applicationstate.dart';
 
 //import 'package:firebase_storage/firebase_storage.dart';
@@ -284,61 +280,8 @@ _nicknameController.text = applicationState.userProfile!.nickname!;
                       child: Text('Save'),
                     ),
                   ),
-                 // UserStatsContainer(userId: appState.userProfile!.id, context: context),
-                  Container(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Statistics',
-                          style: TextStyle(
-                              fontSize: 24.0, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Join Date: ${DateFormat('dd MMMM yyyy').format(appState.userProfile!.joinDate!)}',
-                          style: TextStyle(
-                              fontSize: 12.0, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 16.0),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: buildCard(
-                                    appState.userProfile?.currentstreak,
-                                    'Days',
-                                    Icons.local_fire_department,
-                                    'Current Streak')),
-                            SizedBox(width: 16.0),
-                            Expanded(
-                                child: buildCard(
-                                    appState.userProfile?.distancetotal,
-                                    'Kms',
-                                    Icons.run_circle,
-                                    'Distance Travelled')),
-                          ],
-                        ),
-                        SizedBox(height: 16.0),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: buildCard(
-                                    appState.userProfile?.countrycount,
-                                    '',
-                                    Icons.map_outlined,
-                                    'Countries Visted')),
-                            SizedBox(width: 16.0),
-                            Expanded(
-                                child: buildCard(
-                                    appState.userProfile?.placescount,
-                                    '',
-                                    Icons.place,
-                                    'Check-ins')),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
+                            userStatsContainer( appState.userProfile,  context) ,
+                     Container(
                     child: ElevatedButton(
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(

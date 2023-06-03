@@ -1,96 +1,66 @@
- 
 import 'package:flutter/material.dart';
+import 'package:gtk_flutter/screens/ActiveCountryPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:intl/intl.dart';
 
-import '../../function/UserRecord.dart';
+import '../../model/placehistory.dart';
 import '../../model/users.dart';
-import '../../state/applicationstate.dart';
 
+//Widget userStatsContainer(Map<String, dynamic>? userProfile, BuildContext context) {
+Widget userStatsContainer(UserProfile? userProfile, BuildContext context) {
 
-class UserStatsContainer extends StatefulWidget {
-    final BuildContext context;
-    final String userId;
-
-  const UserStatsContainer({required this.context, required this.userId });
-
-  @override
-  State<UserStatsContainer> createState() => _UserStatsContainerState();
-}
-
-class _UserStatsContainerState extends State<UserStatsContainer> {
-  late UserProfile userrecord;
-  void asyncMethod(UserProfile userrecord) async {
-     userrecord = await userRecord(widget.userId);
-  }
-   @override
-  void initState() {
-//    UserProfile userrecord =  userRecord(widget.userId) ;
-   // Future<UserProfile> userrecord =  userRecord(widget.userId) ;
-   // UserProfile userrecord =  userRecord(widget.userId) as UserProfile ;
-
-    super.initState();
-asyncMethod(userrecord);    
-    //userRecord(widget.userId).then((value) => {
-    //  userrecord = value
-    //}
-    //);
-  }
-
-  Widget build(BuildContext context) {
-   // Future<UserProfile> userrecord =  userRecord(widget.userId) ;
-   // UserProfile userrecord =  userRecord(widget.userId) as UserProfile ;
-
-    return  Container(
+  return          Container(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       children: [
                         Text(
-                          'Statistics',
-                          style: TextStyle(
-                              fontSize: 24.0, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                        //  'Join Date: ${DateFormat('dd MMMM yyyy').format(appState.userProfile!.joinDate!)}',
-                          'Join Date: ${DateFormat('dd MMMM yyyy').format(userrecord.joinDate!)}',
+                          'Statistics for ${userProfile!.nickname}',
                           style: TextStyle(
                               fontSize: 12.0, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 16.0),
+                       // Text( 'joinDate',
+                        Text('Join Date: ${DateFormat('dd MMMM yyyy').format(userProfile!.joinDate!)}',
+                        //  Text('Join Date: ${DateFormat('dd MMMM yyyy').format((userProfile?['joinDate'] as Timestamp ).toDate())}',
+
+                          style: TextStyle(
+                              fontSize: 12.0, fontWeight: FontWeight.bold),
+                        ),
+                      //  SizedBox(height: 12.0),
                         Row(
                           children: [
                             Expanded(
                                 child: buildCard(
-                                   // appState.userProfile?.currentstreak,
-                                    userrecord.currentstreak,
+                                    userProfile?.currentstreak,
+                                  //  userProfile?['currentStreak'],
                                     'Days',
                                     Icons.local_fire_department,
-                                    'Current Streak')),
-                            SizedBox(width: 16.0),
+                                    'Streak')),
+                           // SizedBox(width: 12.0),
                             Expanded(
                                 child: buildCard(
-                                  //  appState.userProfile?.distancetotal,
-                                    userrecord.distancetotal,
+                                  userProfile.distancetotal,
+                                   // userProfile?['distancetotal'],
                                     'Kms',
                                     Icons.run_circle,
-                                    'Distance Travelled')),
+                                    'Distance')),
                           ],
                         ),
-                        SizedBox(height: 16.0),
+                        //SizedBox(height: 16.0),
                         Row(
                           children: [
                             Expanded(
                                 child: buildCard(
-                                   // appState.userProfile?.countrycount,
-                                    userrecord.countrycount,
+                                   userProfile.countrycount,
+                                   // userProfile?['countrycount'],
                                     '',
                                     Icons.map_outlined,
-                                    'Countries Visted')),
-                            SizedBox(width: 16.0),
+                                    'Countries')),
+                           // SizedBox(width: 16.0),
                             Expanded(
                                 child: buildCard(
-                                   // appState.userProfile?.placescount,
-                                    userrecord.placescount,
+                                   userProfile.placescount,
+                                  //  userProfile?['placescount'],
                                     '',
                                     Icons.place,
                                     'Check-ins')),
@@ -99,5 +69,5 @@ asyncMethod(userrecord);
                       ],
                     ),
                   );
-    }
+        
 }

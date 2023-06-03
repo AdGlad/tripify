@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/model/users.dart';
 
-Container UserStreakContainer(BuildContext context, UserProfile user   )
+Container UserStreakContainer(BuildContext context, UserProfile? user   )
    {
     return Container(
                       width: MediaQuery.of(context).size.width, // - 20,
@@ -20,7 +20,7 @@ Container UserStreakContainer(BuildContext context, UserProfile user   )
 
                               //fit: BoxFit.scaleDown,
                               child: Text(
-                                  '${user.nickname} streak: ${user.currentstreak} [${user.placescount}]', // _currentStreak',
+                                  '${user?.nickname} streak: ${user?.currentstreak} [${user?.placescount}]', // _currentStreak',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 20.0,

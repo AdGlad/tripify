@@ -6,7 +6,7 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/UserInfo/UserStatsPage.dart';
+import '../screens/UserInfo/UserProfileScreen.dart';
 import '../state/applicationstate.dart';
 
 part 'users.g.dart';
@@ -30,7 +30,16 @@ class UserProfile {
     this.regioncount,
     this.placescount,
     this.currentstreak,
-    this.lastRecordedDate
+    this.lastRecordedDate,
+    this.latestlatitude,
+    this.latestlongitude,
+    this.lateststreetAddress,
+    this.latestcity,
+    this.latestcountryName,
+    this.latestcountryCode,
+    this.latestpostal,
+    this.latestregion,
+    this.latestregionCode,
   });
 
   factory UserProfile.fromJson(Map<String, Object?> json) =>
@@ -55,6 +64,15 @@ class UserProfile {
   int? regioncount;
   int? placescount;
   int? currentstreak;
+  double? latestlongitude;
+  double? latestlatitude;
+  String? lateststreetAddress;
+  String? latestcity;
+  String? latestcountryName;
+  String? latestcountryCode;
+  String? latestpostal;
+  String? latestregion;
+  String? latestregionCode;
   DateTime? lastRecordedDate;
 
 

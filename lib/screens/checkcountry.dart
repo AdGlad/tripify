@@ -8,7 +8,7 @@ import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:gtk_flutter/model/users.dart';
 import 'package:gtk_flutter/screens/checkIn/UserCheckInContainer.dart';
 import 'package:gtk_flutter/screens/checkIn/userCntryContainer.dart';
-import 'package:gtk_flutter/screens/checkIn/userLocation.dart';
+import 'package:gtk_flutter/screens/checkIn/userLocationContainer.dart';
 import 'package:gtk_flutter/screens/checkIn/userStreakContainer.dart';
 import 'package:gtk_flutter/src/confetti.dart';
 import 'dart:developer' as developer;
@@ -34,7 +34,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 
-import 'checkIn/usermap.dart';
+import 'checkIn/userMapContainer.dart';
 
 class CheckCountry extends StatefulWidget {
   const CheckCountry({super.key});
@@ -176,9 +176,10 @@ class _CheckCountryState extends State<CheckCountry> {
                             : Text('No Ad'),
                       ),
                     ),
-                    Expanded(  child: UserStreakContainer(context, appState.userProfile!)),
-                    Expanded(flex: 1,child: UserCntryContainer(context, appState.userProfile!, appState)),
-                    Expanded(flex: 6,child: UserMapContainer(context, appState.userProfile!, appState, newPlace)),
+                    Expanded(  child: UserStreakContainer(context, appState.  userProfile)),
+                    Expanded(flex: 1,child: UserCntryContainer(context, appState.userProfile, appState)),
+                   // Expanded(flex: 6,child: UserMapContainer(context, appState.userProfile!, newPlace)),
+                    Expanded(flex: 6,child: UserMapContainer(context, appState.userProfile!)),
                     Expanded(flex: 1,child: UserLocationContainer( context, appState.userProfile! , appState )),
                     Expanded(child: CheckInContainer(context: context, appState: appState , user: appState.userProfile!)),
                           // Spacer(),

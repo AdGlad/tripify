@@ -11,8 +11,53 @@ import '../ActiveCountryPage.dart';
 
 MapboxMapController? mapController;
 
-Container UserMapContainer(BuildContext context, UserProfile user,
-    ApplicationState appState, LocationData? newPlace) {
+Container UserMapContainer(BuildContext context, UserProfile user
+//,  LocationData? newPlace
+     ) {
+
+void _onMapCreated(MapboxMapController controller) async {
+  Future<Uint8List> loadMarkerImage() async {
+  var byteData = await rootBundle.load("assets/Quokka-PNG-Pic.png");
+  return byteData.buffer.asUint8List();
+}
+  var markerImage = await loadMarkerImage();
+
+  controller.addImage('QuokkaMarker', markerImage);
+
+  await controller.addSymbol(SymbolOptions(
+    iconSize: 0.2,
+    iconImage: "QuokkaMarker",
+    // geometry: LatLng(-33.760181, 151.284136),
+    geometry:
+        //LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
+       // LatLng(globals.new_latitude!, globals.new_longitude!),
+        LatLng(user.latestlatitude!, user.latestlongitude!),
+
+//          LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
+    iconOffset: const Offset(0, 0),
+    textField: 'You were here',
+    textOffset: Offset(0, 0.8),
+    // textColor: '#ffffff',
+    textColor: '#000000',
+    textHaloBlur: 1,
+    textHaloColor: '#ffffff',
+    textHaloWidth: 0.8,
+    textSize: 12.5,
+  ));
+
+  mapController = controller;
+}
+
+
+
+void _onStyleLoaded() {
+  //addImageFromAsset("assetImage", "assets/symbols/custom-icon.png");
+  // addImageFromUrl(
+  //     "networkImage", Uri.parse("https://via.placeholder.com/50"));
+}
+
+
+
   return Container(
       width: MediaQuery.of(context).size.width,
     child: Card(
@@ -26,16 +71,22 @@ Container UserMapContainer(BuildContext context, UserProfile user,
          // width: MediaQuery.of(context).size.width - 20,
           height: 240,
           color: Colors.yellow,
-          child: newPlace != null
-              ? MapboxMap(
+          child: 
+          //newPlace != null
+           //   ? 
+              MapboxMap(
                   accessToken:
                       'pk.eyJ1IjoidHJpcGlmeSIsImEiOiJjbGRmaWdkcHgwaGJpM25wZTh0eDAwN2JoIn0.H_QiLx6jgdQXVX4OqzKCVw',
                   onMapCreated: _onMapCreated,
                   onStyleLoadedCallback: _onStyleLoaded,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(
-                      appState.currentPlace?.latitude ?? newPlace!.latitude!,
-                      appState.currentPlace?.longitude ?? newPlace!.longitude!,
+                    //  19.4333, // Mexico
+                    // -99.1333, // Mexico
+                   //   appState.currentPlace?.latitude ?? newPlace!.latitude!,
+                   //   appState.currentPlace?.longitude ?? newPlace!.longitude!, 
+                      user.latestlatitude!,
+                      user.latestlongitude!,
                     ),
                     zoom: 13.0,
                   ),
@@ -54,51 +105,14 @@ Container UserMapContainer(BuildContext context, UserProfile user,
                   rotateGesturesEnabled: true,
                   tiltGesturesEnabled: true,
                   dragEnabled: true,
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
                 ),
+             // : Center(
+             //     child: CircularProgressIndicator(),
+              //  ),
         ),
       ),
-    ),
+    )
   );
 }
 
-void _onMapCreated(MapboxMapController controller) async {
-  var markerImage = await loadMarkerImage();
 
-  controller.addImage('QuokkaMarker', markerImage);
-
-  await controller.addSymbol(SymbolOptions(
-    iconSize: 0.2,
-    iconImage: "QuokkaMarker",
-    // geometry: LatLng(-33.760181, 151.284136),
-    geometry:
-        //LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
-        LatLng(globals.new_latitude!, globals.new_longitude!),
-
-//          LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
-    iconOffset: const Offset(0, 0),
-    textField: 'You were here',
-    textOffset: Offset(0, 0.8),
-    // textColor: '#ffffff',
-    textColor: '#000000',
-    textHaloBlur: 1,
-    textHaloColor: '#ffffff',
-    textHaloWidth: 0.8,
-    textSize: 12.5,
-  ));
-
-  mapController = controller;
-}
-
-Future<Uint8List> loadMarkerImage() async {
-  var byteData = await rootBundle.load("assets/Quokka-PNG-Pic.png");
-  return byteData.buffer.asUint8List();
-}
-
-void _onStyleLoaded() {
-  //addImageFromAsset("assetImage", "assets/symbols/custom-icon.png");
-  // addImageFromUrl(
-  //     "networkImage", Uri.parse("https://via.placeholder.com/50"));
-}

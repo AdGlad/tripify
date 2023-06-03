@@ -25,6 +25,8 @@ import '../model/triphistory.dart';
 import '../model/usertotals.dart';
 import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 
+import '../screens/UserInfo/UserProfileScreen.dart';
+
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
     init();
@@ -122,6 +124,27 @@ class ApplicationState extends ChangeNotifier {
         _loggedIn = true;
         _emailVerified = user.emailVerified;
         log(' User logged in ..');
+
+           StreamSubscription<QuerySnapshot> _userCountryListSubscription =
+            FirebaseFirestore.instance
+                .collection('currentuser')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .collection('country')
+                .snapshots()
+                .listen((snapshot) {
+          _userCountryList = [];
+          for (final document in snapshot.docs) {
+            _countryrecords[document.id] = document.data()['countryName'];
+
+            _userCountryList.add(CurrentCountry(
+              countryCode: document.id,
+              countryName: document.data()['countryName'] as String,
+              userId: document.data()['userId'] as String,
+          ));
+          }
+          notifyListeners();
+        });
+
         developer.log('Fire applicationstate');
 
         _userProfile =
@@ -129,7 +152,6 @@ class ApplicationState extends ChangeNotifier {
         _users = listenForAllUsersChanges();
         _userRegionList =
             listenForRegionChanges(FirebaseAuth.instance.currentUser!.uid);
-
         _currentPlace =
             listenForCurrrentPlace(FirebaseAuth.instance.currentUser!.uid);
         _placeHistory =
@@ -248,7 +270,8 @@ class ApplicationState extends ChangeNotifier {
     await currentUser.reload();
   }
 
-  UserProfile listenForUserChanges(String userId) {
+  UserProfile? listenForUserChanges(String userId) {
+    
     UserProfile _userProfile = UserProfile(id: userId);
 
     // Get a reference to the user's document in Firestore
@@ -260,8 +283,10 @@ class ApplicationState extends ChangeNotifier {
       // Check if the document exists
       if (userSnapshot.exists) {
         // Get the user's data as a Map
-        Map<String, dynamic> userData =
+        Map<String, dynamic>? userData =
             userSnapshot.data() as Map<String, dynamic>;
+   // UserProfile? _userProfile = userProfilefunc(userData,  userId );
+
         DateTime joinDate = (userData['joinDate'] as Timestamp).toDate();
         DateTime lastRecordedDate =
             (userData['lastRecordedDate'] as Timestamp).toDate();
@@ -283,9 +308,23 @@ class ApplicationState extends ChangeNotifier {
         _userProfile.regioncount = userData['regioncount'] ?? 0;
         _userProfile.placescount = userData['placescount'] ?? 0;
         _userProfile.currentstreak = userData['currentStreak'] ?? 0;
+
+      //  _userProfile.currentstreak = userData['lastRecordedDate'] ?? 0;
+        _userProfile.latestlatitude = userData['latestlatitude'] ?? 0.0;
+        _userProfile.latestlongitude = userData['latestlongitude'] ?? 0.0;
+        _userProfile.lateststreetAddress = userData['lateststreetAddress'] ?? 'lateststreetAddress';
+        _userProfile.latestcity = userData['latestcity'] ?? 'latestcity';
+        _userProfile.latestcountryName = userData['latestcountryName'] ?? 'latestcountryName';
+        _userProfile.latestcountryCode = userData['latestcountryCode'] ?? 'latestcountryCode';
+        _userProfile.latestpostal = userData['latestpostal'] ?? 'latestpostal';
+        _userProfile.latestregion = userData['latestregion'] ?? 'latestregion';
+        _userProfile.latestregionCode = userData['latestregionCode'] ?? 'latestregionCode';
+
+
         _userProfile.lastRecordedDate = lastRecordedDate;
 
-        //   _userProfile.lastRecordedDate = userData['lastRecordedDate'].toDate() as DateTime?; //  ?? DateTime.now();
+
+          _userProfile.lastRecordedDate = userData['lastRecordedDate'].toDate() as DateTime?; //  ?? DateTime.now();
 
         // Print the user's ID, age, and address to the console
         print('User $_userProfile.userId');

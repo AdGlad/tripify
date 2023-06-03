@@ -58,7 +58,7 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/',
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) => const MainPage(),
       routes: [
         GoRoute(
           path: 'home',
@@ -78,6 +78,10 @@ final _router = GoRouter(
         GoRoute(
           path: 'findfriends',
           builder: (context, state) => const FindFriendsPage(),
+        ),
+        GoRoute(
+          path: 'sign-in',
+          builder: (context, state) => const SignIn(),
         ),
         GoRoute(
           path: ' ',
