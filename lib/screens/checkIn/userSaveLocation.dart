@@ -10,6 +10,7 @@ import 'dart:developer' as developer;
 import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:gtk_flutter/model/users.dart';
 import 'package:gtk_flutter/screens/checkIn/userMapContainer.dart';
+import 'package:gtk_flutter/screens/checkIn/userSelectPhotos.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
@@ -54,6 +55,9 @@ Future saveLocation(
 
   double? _latitude = newPlace.latitude;
   double? _longitude = newPlace.longitude;
+//Madrid
+//_latitude = 40.416775;
+//_longitude= -3.703790;
 
   //double
   //_latitude = 35.6839;
@@ -95,7 +99,8 @@ Future saveLocation(
 
     newVisitNumber = currentPlace?.visitnumber ?? 0;
     //newVisitNumber = 0;
-    if (currentPlace != null) {
+
+    if (value.latitude != null && value.longitude != null) {
       developer.log('newVisitNumber is ${newVisitNumber}');
 
       mapController
@@ -116,16 +121,6 @@ Future saveLocation(
               print("mapController.animateCamera() returned $result"));
     }
 
-    if ((currentPlace?.countryCode == null) ||
-        (currentPlace?.countryCode != value.countryCode!)) {
-      developer.log('New Country identified');
-
-      newVisitNumber++;
-
-      controllerConfetti.play();
-      playsound();
-    }
-
     double distanceInMeters = Geolocator.distanceBetween(
         currentPlace?.latitude ?? value.latitude!,
         currentPlace?.longitude ?? value.longitude!,
@@ -140,8 +135,21 @@ Future saveLocation(
         userId: _userId);
     developer.log('setCountry');
 
- //   String _messageCountry =
- //       await firestoreService.setCountry(countyRef, newcountry);
+    if ((currentPlace?.countryCode == null) ||
+        (currentPlace?.countryCode != value.countryCode!)) {
+      developer.log('New Country identified');
+
+      newVisitNumber++;
+
+      controllerConfetti.play();
+      playsound();
+    }
+
+    developer.log('setCountry before');
+    String _messageCountry =
+        await firestoreService.setCountry(countyRef, newcountry);
+    developer.log('setCountry after');
+
     developer.log('Region');
 
     Region region = Region(
@@ -157,6 +165,11 @@ Future saveLocation(
 
     String _messageRegion = await firestoreService.setRegion(regionRef, region);
     developer.log('PlaceHistory');
+    developer.log('showPopupForm before');
+
+    //showPopupForm(context);
+
+    developer.log('showPopupForm after2');
 
     PlaceHistory newPlace = PlaceHistory(
       userId: value.userId,
@@ -178,34 +191,47 @@ Future saveLocation(
       arrivaldate: value.arrivaldate, // DateTime.now()
       visitnumber: newVisitNumber,
     );
-        developer.log('PlaceHistoryCollectionReference');
+    developer.log('PlaceHistoryCollectionReference');
 
     PlaceHistoryCollectionReference placehistoryRef =
         regionRef.doc(region.regionCode).placehistory;
-                developer.log('addPlaceHistory');
+    developer.log('addPlaceHistory');
 
-    await firestoreService.addPlaceHistory(placehistoryRef, newPlace);
+    //String? addref;
+    String placehistoryId =
+        await firestoreService.addPlaceHistory(placehistoryRef, newPlace);
+    developer.log('placehistoryId $placehistoryId');
+    // newPlace.id=placehistoryId;
     developer.log('New Country ${newPlace.countryCode}');
     developer.log(
         'New latitude. longitude ${newPlace.latitude} ${newPlace.longitude}');
+
+    //   _showShareDialog(context, newPlace);
+    showPopupForm(context, newPlace, placehistoryId);
   });
-  _showShareDialog(context);
-  //  await _updateStats(userTotals!);
+
+  //await _updateStats(userTotals!);
 }
 
 Future<void> _incrementStreak(UserProfile user, PlaceHistory place) async {
+  developer.log('_incrementStreak ${place.countryCode}');
+  int newStreak = 1;
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   final docRef = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid);
   final docSnapshot = await docRef.get();
+  developer.log('docSnapshot }');
 
   if (docSnapshot.exists) {
+    developer.log('docSnapshot exists}');
+
     final lastRecordedDate = docSnapshot.data()!['lastRecordedDate'].toDate();
+
     if (lastRecordedDate.isBefore(today)) {
-      // final newStreak = _currentStreak + 1;
-      final newStreak = user.currentstreak! + 1;
+     newStreak = user.currentstreak! + 1;
+    }
 
       await docRef.update({
         'lastRecordedDate': today,
@@ -219,19 +245,6 @@ Future<void> _incrementStreak(UserProfile user, PlaceHistory place) async {
         'latestregion': place.region,
         'latestregionCode': place.regionCode
       });
-
-      // setState(() {
-      //   _currentStreak = newStreak;
-      // });
-    }
-  } else {
-    await docRef.set({
-      'lastRecordedDate': today,
-      'currentStreak': 1,
-    });
-    //   setState(() {
-    //     _currentStreak = 1;
-    //   });
   }
 }
 
@@ -317,9 +330,7 @@ Future<PlaceHistory> fetchNewPlace(double? latitude, double? longitude) async {
   return _placeHistory;
 }
 
-void _showShareDialog(
-  BuildContext context,
-) {
+void _showShareDialog(BuildContext context, PlaceHistory placeHistory) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -327,15 +338,21 @@ void _showShareDialog(
           child: Consumer<ApplicationState>(
               builder: (context, appState, _) => AlertDialog(
                     title: Text(
-                        style: TextStyle(fontSize: 12),
-                        'Share your new location with friends?'),
-                    content: Text(
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(fontSize: 12), 'Location Details'),
+                    content: Column(
+                      children: [
+                        Text(
+                            style: TextStyle(fontSize: 12),
+                            placeHistory.streetAddress!),
+                        Text(
+                            style: TextStyle(fontSize: 12),
 
-                        //  'Region: ${appState.currentPlace?.region} \n Country: ${CountryFlag(appState.currentPlace!.location!)}   ${CountryFlag(appState.currentPlace!.countryCode!)}'),
+                            //  'Region: ${appState.currentPlace?.region} \n Country: ${CountryFlag(appState.currentPlace!.location!)}   ${CountryFlag(appState.currentPlace!.countryCode!)}'),
 
-                        //    'Do you want to share your streak of $_currentStreak days?'),
-                        'Share location with friends?'),
+                            //    'Do you want to share your streak of $_currentStreak days?'),
+                            'Share location with friends?'),
+                      ],
+                    ),
                     //    'Share location with friends? ${appState.currentPlace?.location} ?'),
                     //   'Share location with friends? of ${appState.userProfile?.currentstreak} days?'),
                     actions: <Widget>[

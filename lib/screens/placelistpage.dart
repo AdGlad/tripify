@@ -2,6 +2,7 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/screens/country/LocationMapPage.dart';
+import 'package:gtk_flutter/screens/photoGallery.dart';
 import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../model/placehistory.dart';
@@ -55,10 +56,11 @@ class _PlaceHistorylistState extends State<PlaceHistorylist> {
             .doc(widget.countrycode)
             .region
             .doc(widget.regioncode)
-            .placehistory,
+            .placehistory
+            .orderByTimestamp(descending: true),
         builder: (context, AsyncSnapshot<PlaceHistoryQuerySnapshot> snapshot,
             Widget? child) {
-          if (snapshot.hasError) return Text('Something went wrong!');
+          if (snapshot.hasError) return Text('Something went wrong ${snapshot.error}!');
           if (!snapshot.hasData) return Text('Loading user...');
 
           // Access the UserDocumentSnapshot
@@ -104,7 +106,7 @@ class _PlaceHistorylistState extends State<PlaceHistorylist> {
   }
 }
 
-Widget placescard(PlaceHistory places, BuildContext context) {
+Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
   return Card(
     color: Color.fromARGB(255, 49, 52, 59),
     //shadowColor: Colors.blueAccent,
@@ -121,14 +123,14 @@ Widget placescard(PlaceHistory places, BuildContext context) {
             // alignment: Alignment.center,
             children: [
               Text(
-                places.region!,
+                currentPlaceHistory.region!,
                 style: TextStyle(
                   color: Color.fromARGB(255, 26, 173, 182),
                   fontSize: 15.0,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Text(places.city!,
+              Text(currentPlaceHistory.city!,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Colors.white,
@@ -154,7 +156,7 @@ Widget placescard(PlaceHistory places, BuildContext context) {
                 child: Column(
                   //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(places.streetAddress!,
+                    Text(currentPlaceHistory.streetAddress!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -163,35 +165,36 @@ Widget placescard(PlaceHistory places, BuildContext context) {
                         )),
                     Text(
                         (DateFormat('hh:mm a dd MMM yy')
-                            .format(places.arrivaldate!)),
+                            .format(currentPlaceHistory.arrivaldate!)),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text('Country vist number : ${places.visitnumber}',
+                    Text(
+                        'Country vist number : ${currentPlaceHistory.visitnumber}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text('Distance: ${places.distance}',
+                    Text('Distance: ${currentPlaceHistory.distance}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text('Lat : ${places.latitude}',
+                    Text('Lat : ${currentPlaceHistory.latitude}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text('Lng : ${places.longitude}',
+                    Text('Lng : ${currentPlaceHistory.longitude}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -220,7 +223,7 @@ Widget placescard(PlaceHistory places, BuildContext context) {
                     context,
                     MaterialPageRoute(
                         builder: (context) => LocationMapPage(
-                            placeHistory: places
+                            placeHistory: currentPlaceHistory
                             //latlng: LatLng(currentPlaceHistory.l//atitude!,
                             //currentPlaceHistory.longitude!
                             )),
@@ -229,7 +232,31 @@ Widget placescard(PlaceHistory places, BuildContext context) {
                 },
                 child: Text(
                     style: TextStyle(color: Color.fromARGB(255, 26, 173, 182)),
-                    'Show on map'))
+                    'Show on map')),
+
+            TextButton(
+                onPressed: () {
+                  if (currentPlaceHistory!.imagePaths!.isNotEmpty ) { 
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+
+                        builder: (context) =>  ImageGallery(
+                            imagePaths: currentPlaceHistory.imagePaths!)
+                        //ImageGallery( places: places
+                        //documentId: 'Y9yviPMmXlk8eFfNRld3'
+                        ,
+                      )
+
+                      //  countrycode: currentcountry.countryCode!),
+                      //);
+                      );
+                  }
+                },
+                child: Text(
+                    style: TextStyle(color: Color.fromARGB(255, 26, 173, 182)),
+                    'Show Images'))
           ],
         )
       ],

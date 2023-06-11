@@ -64,6 +64,8 @@ class CurrentCountry {
     this.langname,
     this.arrivaldate,
     this.departuredate,
+
+
   });
   //{
   //   _$assertPlaceHistory(this);
@@ -96,6 +98,7 @@ class CurrentCountry {
   String? langname;
   DateTime? arrivaldate;
   DateTime? departuredate;
+
 
   Map<String, Object?> toJson() => _$CurrentCountryToJson(this);
 }
@@ -142,7 +145,7 @@ const firestoreSerializable = JsonSerializable(
 class PlaceHistory {
   PlaceHistory(
       {
-      //required this.id,
+      this.id,
       this.name,
       this.location,
       this.latitude,
@@ -160,7 +163,12 @@ class PlaceHistory {
       this.timestamp,
       this.arrivaldate,
       this.visitnumber,
-      this.userId});
+      this.userId,
+          this.description,
+    this.rating,
+    this.poi,
+    this.imagePaths,
+      });
   //{
   //   _$assertPlaceHistory(this);
   // }
@@ -170,8 +178,8 @@ class PlaceHistory {
 
   //String get id => FirebaseAuth.instance.currentUser!.uid;
 
-  // @Id()
-  // final String id;
+   @Id()
+  late final String? id;
   String? name;
   String? location;
   double? latitude;
@@ -190,6 +198,10 @@ class PlaceHistory {
   DateTime? arrivaldate;
   int? visitnumber;
   String? userId;
+  String? description;
+  String? rating;
+  String? poi;
+  List<String>? imagePaths;
 
   Map<String, Object?> toJson() => _$PlaceHistoryToJson(this);
 }
@@ -383,9 +395,9 @@ class FirestoreService {
     //adicionar o objecto em forma de json para a coleção de placehistory
     return placehistoryref
         .add(place)
-        .then((value) => "Mais um placehistory adicionado à família")
+        .then((value) => value.id )
         .catchError((error) =>
-            "Parece que teve problemas com o último placehistory:\n $error");
+            "Error with placehistory:\n $error");
   }
 
   Future<PlaceHistoryQuerySnapshot> queryCollection(queryString) async {

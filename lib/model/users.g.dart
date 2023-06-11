@@ -169,6 +169,24 @@ abstract class UserProfileDocumentReference extends FirestoreDocumentReference<
     FieldValue placescountFieldValue,
     int? currentstreak,
     FieldValue currentstreakFieldValue,
+    double? latestlongitude,
+    FieldValue latestlongitudeFieldValue,
+    double? latestlatitude,
+    FieldValue latestlatitudeFieldValue,
+    String? lateststreetAddress,
+    FieldValue lateststreetAddressFieldValue,
+    String? latestcity,
+    FieldValue latestcityFieldValue,
+    String? latestcountryName,
+    FieldValue latestcountryNameFieldValue,
+    String? latestcountryCode,
+    FieldValue latestcountryCodeFieldValue,
+    String? latestpostal,
+    FieldValue latestpostalFieldValue,
+    String? latestregion,
+    FieldValue latestregionFieldValue,
+    String? latestregionCode,
+    FieldValue latestregionCodeFieldValue,
     DateTime? lastRecordedDate,
     FieldValue lastRecordedDateFieldValue,
   });
@@ -208,6 +226,24 @@ abstract class UserProfileDocumentReference extends FirestoreDocumentReference<
     FieldValue placescountFieldValue,
     int? currentstreak,
     FieldValue currentstreakFieldValue,
+    double? latestlongitude,
+    FieldValue latestlongitudeFieldValue,
+    double? latestlatitude,
+    FieldValue latestlatitudeFieldValue,
+    String? lateststreetAddress,
+    FieldValue lateststreetAddressFieldValue,
+    String? latestcity,
+    FieldValue latestcityFieldValue,
+    String? latestcountryName,
+    FieldValue latestcountryNameFieldValue,
+    String? latestcountryCode,
+    FieldValue latestcountryCodeFieldValue,
+    String? latestpostal,
+    FieldValue latestpostalFieldValue,
+    String? latestregion,
+    FieldValue latestregionFieldValue,
+    String? latestregionCode,
+    FieldValue latestregionCodeFieldValue,
     DateTime? lastRecordedDate,
     FieldValue lastRecordedDateFieldValue,
   });
@@ -281,6 +317,24 @@ class _$UserProfileDocumentReference
     FieldValue? placescountFieldValue,
     Object? currentstreak = _sentinel,
     FieldValue? currentstreakFieldValue,
+    Object? latestlongitude = _sentinel,
+    FieldValue? latestlongitudeFieldValue,
+    Object? latestlatitude = _sentinel,
+    FieldValue? latestlatitudeFieldValue,
+    Object? lateststreetAddress = _sentinel,
+    FieldValue? lateststreetAddressFieldValue,
+    Object? latestcity = _sentinel,
+    FieldValue? latestcityFieldValue,
+    Object? latestcountryName = _sentinel,
+    FieldValue? latestcountryNameFieldValue,
+    Object? latestcountryCode = _sentinel,
+    FieldValue? latestcountryCodeFieldValue,
+    Object? latestpostal = _sentinel,
+    FieldValue? latestpostalFieldValue,
+    Object? latestregion = _sentinel,
+    FieldValue? latestregionFieldValue,
+    Object? latestregionCode = _sentinel,
+    FieldValue? latestregionCodeFieldValue,
     Object? lastRecordedDate = _sentinel,
     FieldValue? lastRecordedDateFieldValue,
   }) async {
@@ -345,6 +399,42 @@ class _$UserProfileDocumentReference
       "Cannot specify both currentstreak and currentstreakFieldValue",
     );
     assert(
+      latestlongitude == _sentinel || latestlongitudeFieldValue == null,
+      "Cannot specify both latestlongitude and latestlongitudeFieldValue",
+    );
+    assert(
+      latestlatitude == _sentinel || latestlatitudeFieldValue == null,
+      "Cannot specify both latestlatitude and latestlatitudeFieldValue",
+    );
+    assert(
+      lateststreetAddress == _sentinel || lateststreetAddressFieldValue == null,
+      "Cannot specify both lateststreetAddress and lateststreetAddressFieldValue",
+    );
+    assert(
+      latestcity == _sentinel || latestcityFieldValue == null,
+      "Cannot specify both latestcity and latestcityFieldValue",
+    );
+    assert(
+      latestcountryName == _sentinel || latestcountryNameFieldValue == null,
+      "Cannot specify both latestcountryName and latestcountryNameFieldValue",
+    );
+    assert(
+      latestcountryCode == _sentinel || latestcountryCodeFieldValue == null,
+      "Cannot specify both latestcountryCode and latestcountryCodeFieldValue",
+    );
+    assert(
+      latestpostal == _sentinel || latestpostalFieldValue == null,
+      "Cannot specify both latestpostal and latestpostalFieldValue",
+    );
+    assert(
+      latestregion == _sentinel || latestregionFieldValue == null,
+      "Cannot specify both latestregion and latestregionFieldValue",
+    );
+    assert(
+      latestregionCode == _sentinel || latestregionCodeFieldValue == null,
+      "Cannot specify both latestregionCode and latestregionCodeFieldValue",
+    );
+    assert(
       lastRecordedDate == _sentinel || lastRecordedDateFieldValue == null,
       "Cannot specify both lastRecordedDate and lastRecordedDateFieldValue",
     );
@@ -405,6 +495,48 @@ class _$UserProfileDocumentReference
         _$UserProfileFieldMap['currentstreak']!: currentstreak as int?,
       if (currentstreakFieldValue != null)
         _$UserProfileFieldMap['currentstreak']!: currentstreakFieldValue,
+      if (latestlongitude != _sentinel)
+        _$UserProfileFieldMap['latestlongitude']!: latestlongitude as double?,
+      if (latestlongitudeFieldValue != null)
+        _$UserProfileFieldMap['latestlongitude']!: latestlongitudeFieldValue,
+      if (latestlatitude != _sentinel)
+        _$UserProfileFieldMap['latestlatitude']!: latestlatitude as double?,
+      if (latestlatitudeFieldValue != null)
+        _$UserProfileFieldMap['latestlatitude']!: latestlatitudeFieldValue,
+      if (lateststreetAddress != _sentinel)
+        _$UserProfileFieldMap['lateststreetAddress']!:
+            lateststreetAddress as String?,
+      if (lateststreetAddressFieldValue != null)
+        _$UserProfileFieldMap['lateststreetAddress']!:
+            lateststreetAddressFieldValue,
+      if (latestcity != _sentinel)
+        _$UserProfileFieldMap['latestcity']!: latestcity as String?,
+      if (latestcityFieldValue != null)
+        _$UserProfileFieldMap['latestcity']!: latestcityFieldValue,
+      if (latestcountryName != _sentinel)
+        _$UserProfileFieldMap['latestcountryName']!:
+            latestcountryName as String?,
+      if (latestcountryNameFieldValue != null)
+        _$UserProfileFieldMap['latestcountryName']!:
+            latestcountryNameFieldValue,
+      if (latestcountryCode != _sentinel)
+        _$UserProfileFieldMap['latestcountryCode']!:
+            latestcountryCode as String?,
+      if (latestcountryCodeFieldValue != null)
+        _$UserProfileFieldMap['latestcountryCode']!:
+            latestcountryCodeFieldValue,
+      if (latestpostal != _sentinel)
+        _$UserProfileFieldMap['latestpostal']!: latestpostal as String?,
+      if (latestpostalFieldValue != null)
+        _$UserProfileFieldMap['latestpostal']!: latestpostalFieldValue,
+      if (latestregion != _sentinel)
+        _$UserProfileFieldMap['latestregion']!: latestregion as String?,
+      if (latestregionFieldValue != null)
+        _$UserProfileFieldMap['latestregion']!: latestregionFieldValue,
+      if (latestregionCode != _sentinel)
+        _$UserProfileFieldMap['latestregionCode']!: latestregionCode as String?,
+      if (latestregionCodeFieldValue != null)
+        _$UserProfileFieldMap['latestregionCode']!: latestregionCodeFieldValue,
       if (lastRecordedDate != _sentinel)
         _$UserProfileFieldMap['lastRecordedDate']!:
             lastRecordedDate as DateTime?,
@@ -447,6 +579,24 @@ class _$UserProfileDocumentReference
     FieldValue? placescountFieldValue,
     Object? currentstreak = _sentinel,
     FieldValue? currentstreakFieldValue,
+    Object? latestlongitude = _sentinel,
+    FieldValue? latestlongitudeFieldValue,
+    Object? latestlatitude = _sentinel,
+    FieldValue? latestlatitudeFieldValue,
+    Object? lateststreetAddress = _sentinel,
+    FieldValue? lateststreetAddressFieldValue,
+    Object? latestcity = _sentinel,
+    FieldValue? latestcityFieldValue,
+    Object? latestcountryName = _sentinel,
+    FieldValue? latestcountryNameFieldValue,
+    Object? latestcountryCode = _sentinel,
+    FieldValue? latestcountryCodeFieldValue,
+    Object? latestpostal = _sentinel,
+    FieldValue? latestpostalFieldValue,
+    Object? latestregion = _sentinel,
+    FieldValue? latestregionFieldValue,
+    Object? latestregionCode = _sentinel,
+    FieldValue? latestregionCodeFieldValue,
     Object? lastRecordedDate = _sentinel,
     FieldValue? lastRecordedDateFieldValue,
   }) {
@@ -511,6 +661,42 @@ class _$UserProfileDocumentReference
       "Cannot specify both currentstreak and currentstreakFieldValue",
     );
     assert(
+      latestlongitude == _sentinel || latestlongitudeFieldValue == null,
+      "Cannot specify both latestlongitude and latestlongitudeFieldValue",
+    );
+    assert(
+      latestlatitude == _sentinel || latestlatitudeFieldValue == null,
+      "Cannot specify both latestlatitude and latestlatitudeFieldValue",
+    );
+    assert(
+      lateststreetAddress == _sentinel || lateststreetAddressFieldValue == null,
+      "Cannot specify both lateststreetAddress and lateststreetAddressFieldValue",
+    );
+    assert(
+      latestcity == _sentinel || latestcityFieldValue == null,
+      "Cannot specify both latestcity and latestcityFieldValue",
+    );
+    assert(
+      latestcountryName == _sentinel || latestcountryNameFieldValue == null,
+      "Cannot specify both latestcountryName and latestcountryNameFieldValue",
+    );
+    assert(
+      latestcountryCode == _sentinel || latestcountryCodeFieldValue == null,
+      "Cannot specify both latestcountryCode and latestcountryCodeFieldValue",
+    );
+    assert(
+      latestpostal == _sentinel || latestpostalFieldValue == null,
+      "Cannot specify both latestpostal and latestpostalFieldValue",
+    );
+    assert(
+      latestregion == _sentinel || latestregionFieldValue == null,
+      "Cannot specify both latestregion and latestregionFieldValue",
+    );
+    assert(
+      latestregionCode == _sentinel || latestregionCodeFieldValue == null,
+      "Cannot specify both latestregionCode and latestregionCodeFieldValue",
+    );
+    assert(
       lastRecordedDate == _sentinel || lastRecordedDateFieldValue == null,
       "Cannot specify both lastRecordedDate and lastRecordedDateFieldValue",
     );
@@ -571,6 +757,48 @@ class _$UserProfileDocumentReference
         _$UserProfileFieldMap['currentstreak']!: currentstreak as int?,
       if (currentstreakFieldValue != null)
         _$UserProfileFieldMap['currentstreak']!: currentstreakFieldValue,
+      if (latestlongitude != _sentinel)
+        _$UserProfileFieldMap['latestlongitude']!: latestlongitude as double?,
+      if (latestlongitudeFieldValue != null)
+        _$UserProfileFieldMap['latestlongitude']!: latestlongitudeFieldValue,
+      if (latestlatitude != _sentinel)
+        _$UserProfileFieldMap['latestlatitude']!: latestlatitude as double?,
+      if (latestlatitudeFieldValue != null)
+        _$UserProfileFieldMap['latestlatitude']!: latestlatitudeFieldValue,
+      if (lateststreetAddress != _sentinel)
+        _$UserProfileFieldMap['lateststreetAddress']!:
+            lateststreetAddress as String?,
+      if (lateststreetAddressFieldValue != null)
+        _$UserProfileFieldMap['lateststreetAddress']!:
+            lateststreetAddressFieldValue,
+      if (latestcity != _sentinel)
+        _$UserProfileFieldMap['latestcity']!: latestcity as String?,
+      if (latestcityFieldValue != null)
+        _$UserProfileFieldMap['latestcity']!: latestcityFieldValue,
+      if (latestcountryName != _sentinel)
+        _$UserProfileFieldMap['latestcountryName']!:
+            latestcountryName as String?,
+      if (latestcountryNameFieldValue != null)
+        _$UserProfileFieldMap['latestcountryName']!:
+            latestcountryNameFieldValue,
+      if (latestcountryCode != _sentinel)
+        _$UserProfileFieldMap['latestcountryCode']!:
+            latestcountryCode as String?,
+      if (latestcountryCodeFieldValue != null)
+        _$UserProfileFieldMap['latestcountryCode']!:
+            latestcountryCodeFieldValue,
+      if (latestpostal != _sentinel)
+        _$UserProfileFieldMap['latestpostal']!: latestpostal as String?,
+      if (latestpostalFieldValue != null)
+        _$UserProfileFieldMap['latestpostal']!: latestpostalFieldValue,
+      if (latestregion != _sentinel)
+        _$UserProfileFieldMap['latestregion']!: latestregion as String?,
+      if (latestregionFieldValue != null)
+        _$UserProfileFieldMap['latestregion']!: latestregionFieldValue,
+      if (latestregionCode != _sentinel)
+        _$UserProfileFieldMap['latestregionCode']!: latestregionCode as String?,
+      if (latestregionCodeFieldValue != null)
+        _$UserProfileFieldMap['latestregionCode']!: latestregionCodeFieldValue,
       if (lastRecordedDate != _sentinel)
         _$UserProfileFieldMap['lastRecordedDate']!:
             lastRecordedDate as DateTime?,
@@ -842,6 +1070,105 @@ abstract class UserProfileQuery
     List<int?>? whereIn,
     List<int?>? whereNotIn,
   });
+  UserProfileQuery whereLatestlongitude({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double?>? whereIn,
+    List<double?>? whereNotIn,
+  });
+  UserProfileQuery whereLatestlatitude({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double?>? whereIn,
+    List<double?>? whereNotIn,
+  });
+  UserProfileQuery whereLateststreetAddress({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  UserProfileQuery whereLatestcity({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  UserProfileQuery whereLatestcountryName({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  UserProfileQuery whereLatestcountryCode({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  UserProfileQuery whereLatestpostal({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  UserProfileQuery whereLatestregion({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  UserProfileQuery whereLatestregionCode({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
   UserProfileQuery whereLastRecordedDate({
     DateTime? isEqualTo,
     DateTime? isNotEqualTo,
@@ -1040,6 +1367,114 @@ abstract class UserProfileQuery
     int? startAfter,
     int? endAt,
     int? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLatestlongitude({
+    bool descending = false,
+    double? startAt,
+    double? startAfter,
+    double? endAt,
+    double? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLatestlatitude({
+    bool descending = false,
+    double? startAt,
+    double? startAfter,
+    double? endAt,
+    double? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLateststreetAddress({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLatestcity({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLatestcountryName({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLatestcountryCode({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLatestpostal({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLatestregion({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByLatestregionCode({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
     UserProfileDocumentSnapshot? startAtDocument,
     UserProfileDocumentSnapshot? endAtDocument,
     UserProfileDocumentSnapshot? endBeforeDocument,
@@ -1661,6 +2096,267 @@ class _$UserProfileQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$UserProfileFieldMap['currentstreak']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLatestlongitude({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double?>? whereIn,
+    List<double?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['latestlongitude']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLatestlatitude({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double?>? whereIn,
+    List<double?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['latestlatitude']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLateststreetAddress({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['lateststreetAddress']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLatestcity({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['latestcity']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLatestcountryName({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['latestcountryName']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLatestcountryCode({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['latestcountryCode']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLatestpostal({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['latestpostal']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLatestregion({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['latestregion']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereLatestregionCode({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['latestregionCode']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -2799,6 +3495,662 @@ class _$UserProfileQuery
   }) {
     final query = $referenceWithoutCursor.orderBy(
         _$UserProfileFieldMap['currentstreak']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLatestlongitude({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['latestlongitude']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLatestlatitude({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['latestlatitude']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLateststreetAddress({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['lateststreetAddress']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLatestcity({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$UserProfileFieldMap['latestcity']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLatestcountryName({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['latestcountryName']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLatestcountryCode({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['latestcountryCode']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLatestpostal({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['latestpostal']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLatestregion({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['latestregion']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByLatestregionCode({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['latestregionCode']!,
         descending: descending);
     var queryCursor = $queryCursor;
 
@@ -6118,6 +7470,15 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
       lastRecordedDate: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['lastRecordedDate'],
           const FirestoreDateTimeConverter().fromJson),
+      latestlatitude: (json['latestlatitude'] as num?)?.toDouble(),
+      latestlongitude: (json['latestlongitude'] as num?)?.toDouble(),
+      lateststreetAddress: json['lateststreetAddress'] as String?,
+      latestcity: json['latestcity'] as String?,
+      latestcountryName: json['latestcountryName'] as String?,
+      latestcountryCode: json['latestcountryCode'] as String?,
+      latestpostal: json['latestpostal'] as String?,
+      latestregion: json['latestregion'] as String?,
+      latestregionCode: json['latestregionCode'] as String?,
     );
 
 const _$UserProfileFieldMap = <String, String>{
@@ -6137,6 +7498,15 @@ const _$UserProfileFieldMap = <String, String>{
   'regioncount': 'regioncount',
   'placescount': 'placescount',
   'currentstreak': 'currentstreak',
+  'latestlongitude': 'latestlongitude',
+  'latestlatitude': 'latestlatitude',
+  'lateststreetAddress': 'lateststreetAddress',
+  'latestcity': 'latestcity',
+  'latestcountryName': 'latestcountryName',
+  'latestcountryCode': 'latestcountryCode',
+  'latestpostal': 'latestpostal',
+  'latestregion': 'latestregion',
+  'latestregionCode': 'latestregionCode',
   'lastRecordedDate': 'lastRecordedDate',
 };
 
@@ -6159,6 +7529,15 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
       'regioncount': instance.regioncount,
       'placescount': instance.placescount,
       'currentstreak': instance.currentstreak,
+      'latestlongitude': instance.latestlongitude,
+      'latestlatitude': instance.latestlatitude,
+      'lateststreetAddress': instance.lateststreetAddress,
+      'latestcity': instance.latestcity,
+      'latestcountryName': instance.latestcountryName,
+      'latestcountryCode': instance.latestcountryCode,
+      'latestpostal': instance.latestpostal,
+      'latestregion': instance.latestregion,
+      'latestregionCode': instance.latestregionCode,
       'lastRecordedDate': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.lastRecordedDate, const FirestoreDateTimeConverter().toJson),
     };

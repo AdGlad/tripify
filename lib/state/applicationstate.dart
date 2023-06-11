@@ -459,7 +459,13 @@ class ApplicationState extends ChangeNotifier {
             timezone: document.data()['timezone'] as String,
             elevation: document.data()['elevation'] as int,
             visitnumber: document.data()['visitnumber'] as int,
+            description:  document.data()['description'] as String,
+            rating: document.data()['rating'] as String,
+            poi: document.data()['poi'] as String,
+            imagePaths: document.data()['imagePaths'] as List<String>,
             arrivaldate: current_arrivalDate);
+
+
       }
 
       notifyListeners();
@@ -498,7 +504,13 @@ class ApplicationState extends ChangeNotifier {
             timezone: document.data()['timezone'] as String,
             elevation: document.data()['elevation'] as int,
             visitnumber: document.data()['visitnumber'] as int,
+            description:  document.data()['description'] as String,
+            rating: document.data()['rating'] as String,
+            poi: document.data()['poi'] as String,
+            imagePaths: document.data()['imagePaths'] as List<String>,
             arrivaldate: current_arrivalDate));
+
+
       }
 
       notifyListeners();

@@ -5828,14 +5828,14 @@ abstract class PlaceHistoryCollectionReference
     DocumentSnapshot<Map<String, Object?>> snapshot,
     SnapshotOptions? options,
   ) {
-    return PlaceHistory.fromJson(snapshot.data()!);
+    return PlaceHistory.fromJson({'id': snapshot.id, ...?snapshot.data()});
   }
 
   static Map<String, Object?> toFirestore(
     PlaceHistory value,
     SetOptions? options,
   ) {
-    return value.toJson();
+    return {...value.toJson()}..remove('id');
   }
 
   @override
@@ -5977,6 +5977,14 @@ abstract class PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue visitnumberFieldValue,
     String? userId,
     FieldValue userIdFieldValue,
+    String? description,
+    FieldValue descriptionFieldValue,
+    String? rating,
+    FieldValue ratingFieldValue,
+    String? poi,
+    FieldValue poiFieldValue,
+    List<String>? imagePaths,
+    FieldValue imagePathsFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -6020,6 +6028,14 @@ abstract class PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue visitnumberFieldValue,
     String? userId,
     FieldValue userIdFieldValue,
+    String? description,
+    FieldValue descriptionFieldValue,
+    String? rating,
+    FieldValue ratingFieldValue,
+    String? poi,
+    FieldValue poiFieldValue,
+    List<String>? imagePaths,
+    FieldValue imagePathsFieldValue,
   });
 }
 
@@ -6093,6 +6109,14 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue? visitnumberFieldValue,
     Object? userId = _sentinel,
     FieldValue? userIdFieldValue,
+    Object? description = _sentinel,
+    FieldValue? descriptionFieldValue,
+    Object? rating = _sentinel,
+    FieldValue? ratingFieldValue,
+    Object? poi = _sentinel,
+    FieldValue? poiFieldValue,
+    Object? imagePaths = _sentinel,
+    FieldValue? imagePathsFieldValue,
   }) async {
     assert(
       name == _sentinel || nameFieldValue == null,
@@ -6166,6 +6190,22 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
       userId == _sentinel || userIdFieldValue == null,
       "Cannot specify both userId and userIdFieldValue",
     );
+    assert(
+      description == _sentinel || descriptionFieldValue == null,
+      "Cannot specify both description and descriptionFieldValue",
+    );
+    assert(
+      rating == _sentinel || ratingFieldValue == null,
+      "Cannot specify both rating and ratingFieldValue",
+    );
+    assert(
+      poi == _sentinel || poiFieldValue == null,
+      "Cannot specify both poi and poiFieldValue",
+    );
+    assert(
+      imagePaths == _sentinel || imagePathsFieldValue == null,
+      "Cannot specify both imagePaths and imagePathsFieldValue",
+    );
     final json = {
       if (name != _sentinel) _$PlaceHistoryFieldMap['name']!: name as String?,
       if (nameFieldValue != null)
@@ -6237,6 +6277,20 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
         _$PlaceHistoryFieldMap['userId']!: userId as String?,
       if (userIdFieldValue != null)
         _$PlaceHistoryFieldMap['userId']!: userIdFieldValue,
+      if (description != _sentinel)
+        _$PlaceHistoryFieldMap['description']!: description as String?,
+      if (descriptionFieldValue != null)
+        _$PlaceHistoryFieldMap['description']!: descriptionFieldValue,
+      if (rating != _sentinel)
+        _$PlaceHistoryFieldMap['rating']!: rating as String?,
+      if (ratingFieldValue != null)
+        _$PlaceHistoryFieldMap['rating']!: ratingFieldValue,
+      if (poi != _sentinel) _$PlaceHistoryFieldMap['poi']!: poi as String?,
+      if (poiFieldValue != null) _$PlaceHistoryFieldMap['poi']!: poiFieldValue,
+      if (imagePaths != _sentinel)
+        _$PlaceHistoryFieldMap['imagePaths']!: imagePaths as List<String>?,
+      if (imagePathsFieldValue != null)
+        _$PlaceHistoryFieldMap['imagePaths']!: imagePathsFieldValue,
     };
 
     return reference.update(json);
@@ -6280,6 +6334,14 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue? visitnumberFieldValue,
     Object? userId = _sentinel,
     FieldValue? userIdFieldValue,
+    Object? description = _sentinel,
+    FieldValue? descriptionFieldValue,
+    Object? rating = _sentinel,
+    FieldValue? ratingFieldValue,
+    Object? poi = _sentinel,
+    FieldValue? poiFieldValue,
+    Object? imagePaths = _sentinel,
+    FieldValue? imagePathsFieldValue,
   }) {
     assert(
       name == _sentinel || nameFieldValue == null,
@@ -6353,6 +6415,22 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
       userId == _sentinel || userIdFieldValue == null,
       "Cannot specify both userId and userIdFieldValue",
     );
+    assert(
+      description == _sentinel || descriptionFieldValue == null,
+      "Cannot specify both description and descriptionFieldValue",
+    );
+    assert(
+      rating == _sentinel || ratingFieldValue == null,
+      "Cannot specify both rating and ratingFieldValue",
+    );
+    assert(
+      poi == _sentinel || poiFieldValue == null,
+      "Cannot specify both poi and poiFieldValue",
+    );
+    assert(
+      imagePaths == _sentinel || imagePathsFieldValue == null,
+      "Cannot specify both imagePaths and imagePathsFieldValue",
+    );
     final json = {
       if (name != _sentinel) _$PlaceHistoryFieldMap['name']!: name as String?,
       if (nameFieldValue != null)
@@ -6424,6 +6502,20 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
         _$PlaceHistoryFieldMap['userId']!: userId as String?,
       if (userIdFieldValue != null)
         _$PlaceHistoryFieldMap['userId']!: userIdFieldValue,
+      if (description != _sentinel)
+        _$PlaceHistoryFieldMap['description']!: description as String?,
+      if (descriptionFieldValue != null)
+        _$PlaceHistoryFieldMap['description']!: descriptionFieldValue,
+      if (rating != _sentinel)
+        _$PlaceHistoryFieldMap['rating']!: rating as String?,
+      if (ratingFieldValue != null)
+        _$PlaceHistoryFieldMap['rating']!: ratingFieldValue,
+      if (poi != _sentinel) _$PlaceHistoryFieldMap['poi']!: poi as String?,
+      if (poiFieldValue != null) _$PlaceHistoryFieldMap['poi']!: poiFieldValue,
+      if (imagePaths != _sentinel)
+        _$PlaceHistoryFieldMap['imagePaths']!: imagePaths as List<String>?,
+      if (imagePathsFieldValue != null)
+        _$PlaceHistoryFieldMap['imagePaths']!: imagePathsFieldValue,
     };
 
     transaction.update(reference, json);
@@ -6723,6 +6815,50 @@ abstract class PlaceHistoryQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
+  PlaceHistoryQuery whereDescription({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  PlaceHistoryQuery whereRating({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  PlaceHistoryQuery wherePoi({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  PlaceHistoryQuery whereImagePaths({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  });
 
   PlaceHistoryQuery orderByDocumentId({
     bool descending = false,
@@ -6946,6 +7082,54 @@ abstract class PlaceHistoryQuery
     String? startAfter,
     String? endAt,
     String? endBefore,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  });
+
+  PlaceHistoryQuery orderByDescription({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  });
+
+  PlaceHistoryQuery orderByRating({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  });
+
+  PlaceHistoryQuery orderByPoi({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  });
+
+  PlaceHistoryQuery orderByImagePaths({
+    bool descending = false,
+    List<String>? startAt,
+    List<String>? startAfter,
+    List<String>? endAt,
+    List<String>? endBefore,
     PlaceHistoryDocumentSnapshot? startAtDocument,
     PlaceHistoryDocumentSnapshot? endAtDocument,
     PlaceHistoryDocumentSnapshot? endBeforeDocument,
@@ -7651,6 +7835,122 @@ class _$PlaceHistoryQuery
         isNull: isNull,
         whereIn: whereIn,
         whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery whereDescription({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PlaceHistoryFieldMap['description']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery whereRating({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PlaceHistoryFieldMap['rating']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery wherePoi({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PlaceHistoryFieldMap['poi']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery whereImagePaths({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  }) {
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PlaceHistoryFieldMap['imagePaths']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
       ),
       $queryCursor: $queryCursor,
     );
@@ -9029,6 +9329,295 @@ class _$PlaceHistoryQuery
     );
   }
 
+  PlaceHistoryQuery orderByDescription({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$PlaceHistoryFieldMap['description']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery orderByRating({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$PlaceHistoryFieldMap['rating']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery orderByPoi({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$PlaceHistoryFieldMap['poi']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery orderByImagePaths({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$PlaceHistoryFieldMap['imagePaths']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
   @override
   bool operator ==(Object other) {
     return other is _$PlaceHistoryQuery &&
@@ -9263,6 +9852,7 @@ Map<String, dynamic> _$RegionToJson(Region instance) => <String, dynamic>{
     };
 
 PlaceHistory _$PlaceHistoryFromJson(Map<String, dynamic> json) => PlaceHistory(
+      id: json['id'] as String?,
       name: json['name'] as String?,
       location: json['location'] as String?,
       latitude: (json['latitude'] as num?)?.toDouble(),
@@ -9282,9 +9872,16 @@ PlaceHistory _$PlaceHistoryFromJson(Map<String, dynamic> json) => PlaceHistory(
           json['arrivaldate'], const FirestoreDateTimeConverter().fromJson),
       visitnumber: json['visitnumber'] as int?,
       userId: json['userId'] as String?,
+      description: json['description'] as String?,
+      rating: json['rating'] as String?,
+      poi: json['poi'] as String?,
+      imagePaths: (json['imagePaths'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 const _$PlaceHistoryFieldMap = <String, String>{
+  'id': 'id',
   'name': 'name',
   'location': 'location',
   'latitude': 'latitude',
@@ -9303,10 +9900,15 @@ const _$PlaceHistoryFieldMap = <String, String>{
   'arrivaldate': 'arrivaldate',
   'visitnumber': 'visitnumber',
   'userId': 'userId',
+  'description': 'description',
+  'rating': 'rating',
+  'poi': 'poi',
+  'imagePaths': 'imagePaths',
 };
 
 Map<String, dynamic> _$PlaceHistoryToJson(PlaceHistory instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'location': instance.location,
       'latitude': instance.latitude,
@@ -9326,4 +9928,8 @@ Map<String, dynamic> _$PlaceHistoryToJson(PlaceHistory instance) =>
           instance.arrivaldate, const FirestoreDateTimeConverter().toJson),
       'visitnumber': instance.visitnumber,
       'userId': instance.userId,
+      'description': instance.description,
+      'rating': instance.rating,
+      'poi': instance.poi,
+      'imagePaths': instance.imagePaths,
     };
