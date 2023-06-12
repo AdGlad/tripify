@@ -27,6 +27,7 @@ import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 
 import '../screens/UserInfo/UserProfileScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'dart:developer' as developer;
 
 
 
@@ -138,7 +139,7 @@ class ApplicationState extends ChangeNotifier {
         _emailVerified = user.emailVerified;
         log(' User logged in ..');
 
-           StreamSubscription<QuerySnapshot> _userCountryListSubscription =
+          // StreamSubscription<QuerySnapshot> _userCountryListSubscription =
             FirebaseFirestore.instance
                 .collection('currentuser')
                 .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -146,6 +147,7 @@ class ApplicationState extends ChangeNotifier {
                 .snapshots()
                 .listen((snapshot) {
           _userCountryList = [];
+
           for (final document in snapshot.docs) {
             _countryrecords[document.id] = document.data()['countryName'];
 
@@ -160,13 +162,21 @@ class ApplicationState extends ChangeNotifier {
 
         developer.log('Fire applicationstate');
 
+        developer.log('Before listenForUserChanges');
+
         _userProfile =
             listenForUserChanges(FirebaseAuth.instance.currentUser!.uid);
+                    developer.log('Before listenForUserChanges');
+
         _users = listenForAllUsersChanges();
+                developer.log('Before listenForUserChanges');
+
         _userRegionList =
             listenForRegionChanges(FirebaseAuth.instance.currentUser!.uid);
+            
         _currentPlace =
             listenForCurrrentPlace(FirebaseAuth.instance.currentUser!.uid);
+
         _placeHistory =
             listenForPlaceHistory(FirebaseAuth.instance.currentUser!.uid);
 
@@ -187,6 +197,7 @@ class ApplicationState extends ChangeNotifier {
           int placescounter = 0;
 
           _tripHistory = [];
+          
           _userTotals = UserTotals(
               userId: FirebaseAuth.instance.currentUser!.uid,
               CountryCount: 0,
@@ -426,6 +437,7 @@ class ApplicationState extends ChangeNotifier {
     return _userRegionList;
   }
 
+
   PlaceHistory? listenForCurrrentPlace(String userId) {
     _locationCurrentSubscription = FirebaseFirestore.instance
         .collectionGroup('placehistory')
@@ -435,6 +447,9 @@ class ApplicationState extends ChangeNotifier {
         .snapshots()
         .listen((snapshot) {
       //_currentPlace = [];
+
+
+  developer.log('listenForCurrrentPlace In ');
 
       for (final document in snapshot.docs) {
         globals.new_latitude = document.data()['latitude'] as double;
@@ -446,23 +461,23 @@ class ApplicationState extends ChangeNotifier {
         // _currentPlace.add(
         _currentPlace = PlaceHistory(
             userId: FirebaseAuth.instance.currentUser!.uid,
-            name: document.data()['name'] as String,
-            latitude: document.data()['latitude'] as double,
-            longitude: document.data()['longitude'] as double,
-            streetAddress: document.data()['streetAddress'] as String,
-            city: document.data()['city'] as String,
-            countryName: document.data()['countryName'] as String,
-            countryCode: document.data()['countryCode'] as String,
-            postal: document.data()['postal'] as String,
-            region: document.data()['region'] as String,
-            regionCode: document.data()['regionCode'] as String,
-            timezone: document.data()['timezone'] as String,
-            elevation: document.data()['elevation'] as int,
-            visitnumber: document.data()['visitnumber'] as int,
-            description:  document.data()['description'] as String,
-            rating: document.data()['rating'] as String,
-            poi: document.data()['poi'] as String,
-            imagePaths: document.data()['imagePaths'] as List<String>,
+            name: document.data()['name'] as String?,
+            latitude: document.data()['latitude'] as double?,
+            longitude: document.data()['longitude'] as double?,
+            streetAddress: document.data()['streetAddress'] as String?,
+            city: document.data()['city'] as String?,
+            countryName: document.data()['countryName'] as String?,
+            countryCode: document.data()['countryCode'] as String?,
+            postal: document.data()['postal'] as String?,
+            region: document.data()['region'] as String?,
+            regionCode: document.data()['regionCode'] as String?,
+            timezone: document.data()['timezone'] as String?,
+            elevation: document.data()['elevation'] as int?,
+            visitnumber: document.data()['visitnumber'] as int?,
+            description:  document.data()['description'] as String?,
+            rating: document.data()['rating'] as String?,
+            poi: document.data()['poi'] as String?,
+            imagePaths: document.data()['imagePaths'] as List<String>?,
             arrivaldate: current_arrivalDate);
 
 
@@ -498,16 +513,16 @@ class ApplicationState extends ChangeNotifier {
             city: document.data()['city'] as String,
             countryName: document.data()['countryName'] as String,
             countryCode: document.data()['countryCode'] as String,
-            postal: document.data()['postal'] as String,
-            region: document.data()['region'] as String,
-            regionCode: document.data()['regionCode'] as String,
-            timezone: document.data()['timezone'] as String,
-            elevation: document.data()['elevation'] as int,
-            visitnumber: document.data()['visitnumber'] as int,
-            description:  document.data()['description'] as String,
-            rating: document.data()['rating'] as String,
-            poi: document.data()['poi'] as String,
-            imagePaths: document.data()['imagePaths'] as List<String>,
+            postal: document.data()['postal'] as String?,
+            region: document.data()['region'] as String?,
+            regionCode: document.data()['regionCode'] as String?,
+            timezone: document.data()['timezone'] as String?,
+            elevation: document.data()['elevation'] as int?,
+            visitnumber: document.data()['visitnumber'] as int?,
+            description:  document.data()['description'] as String?,
+            rating: document.data()['rating'] as String?,
+            poi: document.data()['poi'] as String?,
+            imagePaths: document.data()['imagePaths'] as List<String>?,
             arrivaldate: current_arrivalDate));
 
 

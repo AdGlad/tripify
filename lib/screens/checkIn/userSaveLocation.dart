@@ -29,9 +29,16 @@ Future saveLocation(
   //  UserTotals? userTotals,
   //  MapboxMapController? locationcontroller
 ) async {
+
   developer.log(' SaveLocation ');
 
+  developer.log(' ************* currentPlace ${currentPlace!.id} ************* ');
+
   LocationData? newPlace = await Location().getLocation();
+   double? _latitude = newPlace.latitude;
+  double? _longitude = newPlace.longitude;
+
+
 
   String _userId = FirebaseAuth.instance.currentUser!.uid;
   CurrentUser currentUser = CurrentUser(
@@ -53,11 +60,10 @@ Future saveLocation(
 // Beijing","39.9040","116.4075"
 // Jakarta","-6.2146","106.8451"
 
-  double? _latitude = newPlace.latitude;
-  double? _longitude = newPlace.longitude;
+
 //Madrid
-//_latitude = 40.416775;
-//_longitude= -3.703790;
+//double? _latitude = 40.416775;
+//double? _longitude= -3.703790;
 
   //double
   //_latitude = 35.6839;
@@ -137,7 +143,7 @@ Future saveLocation(
 
     if ((currentPlace?.countryCode == null) ||
         (currentPlace?.countryCode != value.countryCode!)) {
-      developer.log('New Country identified');
+      developer.log('New Country identified. CurrentPlace ${currentPlace?.countryCode} NewPlace ${value.countryCode} ');
 
       newVisitNumber++;
 
