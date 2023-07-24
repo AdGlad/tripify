@@ -20,7 +20,7 @@ Container UserCntryContainer(
           FlutterShare.share(
             title: 'My Location',
             text:
-                'Tripify: I have a ${user?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags ',
+                'Tripify: I have a ${user?.currentstreak} day streak! \n Travelled ${appState.userProfile!.distancetotal} Kms\n visited ${appState.userProfile!.countrycount} countries \n $flags ',
             chooserTitle: 'Share on social media',
           );
         },
@@ -70,7 +70,7 @@ Container UserCntryContainer(
               //         FlutterShare.share(
               //           title: 'My Location',
               //           text:
-              //               'Tripify: I have a ${user.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags ',
+              //               'Tripify: I have a ${user.currentstreak} day streak! \n Travelled ${appState.user.distancetotal} Kms\n visited ${appState.user.countrycount} countries \n $flags ',
               //           chooserTitle: 'Share on social media',
               //         );
               //       },

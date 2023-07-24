@@ -10,7 +10,7 @@ import '../../state/applicationstate.dart';
 
 MapboxMapController? mapController;
 
-Container UserMapContainer(BuildContext context, UserProfile user
+Container UserMapContainer(BuildContext context, UserProfile? user
 //,  LocationData? newPlace
      ) {
 
@@ -30,7 +30,7 @@ void _onMapCreated(MapboxMapController controller) async {
     geometry:
         //LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
        // LatLng(globals.new_latitude!, globals.new_longitude!),
-        LatLng(user.latestlatitude!, user.latestlongitude!),
+        LatLng(user?.latestlatitude??0.0, user?.latestlongitude??0.0),
 
 //          LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
     iconOffset: const Offset(0, 0),
@@ -80,12 +80,14 @@ void _onStyleLoaded() {
                   onStyleLoadedCallback: _onStyleLoaded,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(
-                    //  19.4333, // Mexico
-                    // -99.1333, // Mexico
+                   //   19.4333, // Mexico
+                   //  -99.1333, // Mexico
                    //   appState.currentPlace?.latitude ?? newPlace!.latitude!,
                    //   appState.currentPlace?.longitude ?? newPlace!.longitude!, 
-                      user.latestlatitude!,
-                      user.latestlongitude!,
+                      //user?.latestlatitude??0.0,
+                      //user?.latestlongitude??0.0,
+                      user!.latestlatitude!,
+                      user!.latestlongitude!,
                     ),
                     zoom: 13.0,
                   ),

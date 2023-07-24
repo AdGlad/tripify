@@ -73,9 +73,9 @@ Future showPopupForm(BuildContext context, PlaceHistory placeHistory,
                       //       //  title: 'My Streak',
                       //       title: 'My Location',
                       //       text:
-                      //           //  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
-                      //           // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
-                      //           // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
+                      //           //  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.user.DistanceTotal} Kms\n visited ${appState.user.countrycount} countries \n $flags',
+                      //           // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.user.distancetotal} Kms\n visited ${appState.user.countrycount} countries \n $flags',
+                      //           // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.user.distancetotal} Kms\n visited ${appState.user.countrycount} countries \n $flags',
                       //           'Tripify: Hi, I am visiting ${placeHistory.region} in ${placeHistory.countryName} ${CountryFlag(placeHistory.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
                       //       chooserTitle: 'Share on social media',
                       //     );

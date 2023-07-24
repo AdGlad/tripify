@@ -16,6 +16,7 @@ import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../state/applicationstate.dart';
 //import '../ActiveCountryPage.dart';
@@ -29,16 +30,19 @@ Future saveLocation(
   //  UserTotals? userTotals,
   //  MapboxMapController? locationcontroller
 ) async {
+  int _newCountryCount = 0;
+  String? _newCountryCode = '';
 
   developer.log(' SaveLocation ');
 
-  developer.log(' ************* currentPlace ${currentPlace!.id} ************* ');
+  developer
+      .log(' ************* currentPlace ${currentPlace!.id} ************* ');
+
+  //final PermissionStatus status = await Permission.location.request();
 
   LocationData? newPlace = await Location().getLocation();
-   double? _latitude = newPlace.latitude;
+  double? _latitude = newPlace.latitude;
   double? _longitude = newPlace.longitude;
-
-
 
   String _userId = FirebaseAuth.instance.currentUser!.uid;
   CurrentUser currentUser = CurrentUser(
@@ -50,8 +54,8 @@ Future saveLocation(
 
   FirestoreService firestoreService = FirestoreService();
 
-  Future<String> _messageCurrentUser =
-      firestoreService.setCurrentUser(currentUser);
+  // Future<String> _messageCurrentUser =
+  //     firestoreService.setCurrentUser(currentUser);
   CurrentCountryCollectionReference countyRef =
       currentuserRef.doc(currentUser.userId).country;
   //"Tokyo","35.6839","139.7744"
@@ -59,7 +63,6 @@ Future saveLocation(
   //"Mexico City","19.4333","-99.1333"
 // Beijing","39.9040","116.4075"
 // Jakarta","-6.2146","106.8451"
-
 
 //Madrid
 //double? _latitude = 40.416775;
@@ -70,8 +73,8 @@ Future saveLocation(
   //double
   //_longitude = 139.7744;
 
-  //  _latitude = 19.4333; // Mexico
-  // _longitude = -99.1333; // Mexico
+  //_latitude = 19.4333; // Mexico
+  //_longitude = -99.1333; // Mexico
 
   // double
   //_latitude = -6.2146;
@@ -95,8 +98,6 @@ Future saveLocation(
   // if (loc.latitude != null && loc.longitude != null) {
 
   await fetchNewPlace(_latitude, _longitude).then((value) async {
-    await _incrementStreak(userProfile!, value);
-
     // int currentVisitNumber;
     int newVisitNumber;
 
@@ -141,20 +142,21 @@ Future saveLocation(
         userId: _userId);
     developer.log('setCountry');
 
-    if ((currentPlace?.countryCode == null) ||
-        (currentPlace?.countryCode != value.countryCode!)) {
-      developer.log('New Country identified. CurrentPlace ${currentPlace?.countryCode} NewPlace ${value.countryCode} ');
+    if ((currentPlace.countryCode == null) ||
+        (currentPlace.countryCode != value.countryCode!)) {
+      _newCountryCount = 1;
+      _newCountryCode = value.countryCode;
+      developer.log(
+          'New Country identified. CurrentPlace ${currentPlace?.countryCode} NewPlace ${value.countryCode} ');
 
       newVisitNumber++;
 
       controllerConfetti.play();
       playsound();
+    } else {
+      _newCountryCount = 0;
+      _newCountryCode = '';
     }
-
-    developer.log('setCountry before');
-    String _messageCountry =
-        await firestoreService.setCountry(countyRef, newcountry);
-    developer.log('setCountry after');
 
     developer.log('Region');
 
@@ -167,9 +169,7 @@ Future saveLocation(
 
     RegionCollectionReference regionRef =
         countyRef.doc(newcountry.countryCode).region;
-    developer.log('setRegion');
 
-    String _messageRegion = await firestoreService.setRegion(regionRef, region);
     developer.log('PlaceHistory');
     developer.log('showPopupForm before');
 
@@ -196,38 +196,62 @@ Future saveLocation(
       timestamp: value.timestamp, // DateTime.now().millisecondsSinceEpoch,
       arrivaldate: value.arrivaldate, // DateTime.now()
       visitnumber: newVisitNumber,
+      imagePaths: value.imagePaths,
     );
     developer.log('PlaceHistoryCollectionReference');
 
     PlaceHistoryCollectionReference placehistoryRef =
         regionRef.doc(region.regionCode).placehistory;
     developer.log('addPlaceHistory');
+    final batch = FirebaseFirestore.instance.batch();
+//final WriteBatch batch = firestore.batch();
 
-    //String? addref;
-    String placehistoryId =
-        await firestoreService.addPlaceHistory(placehistoryRef, newPlace);
-    developer.log('placehistoryId $placehistoryId');
-    // newPlace.id=placehistoryId;
-    developer.log('New Country ${newPlace.countryCode}');
-    developer.log(
-        'New latitude. longitude ${newPlace.latitude} ${newPlace.longitude}');
+    await setCountry(batch, countyRef, newcountry);
+    await setRegion(batch, value.countryCode, regionRef, region);
+    DocumentReference placehistoryDocRef =
+        await addPlaceHistory(batch, placehistoryRef, newPlace);
 
-    //   _showShareDialog(context, newPlace);
-    showPopupForm(context, newPlace, placehistoryId);
+    developer.log('addPlaceHistory batch done');
+
+    await _incrementStreak(batch, _newCountryCount, _newCountryCode,
+        newVisitNumber, distanceInMeters, value);
+
+    Future<dynamic> cancelyesno =
+        showPopupForm(context, newPlace, placehistoryDocRef.id);
+    developer.log('showPopupForm after results [$cancelyesno]');
+
+    try {
+      // Commit the batch
+      await batch.commit();
+      print('Batch write successful');
+    } catch (e) {
+      print('Error AG performing batch write: $e');
+    }
+    developer.log('commit batch done');
+
+    // showPopupForm(context, newPlace, placehistoryDocRef.id);
   });
 
   //await _updateStats(userTotals!);
 }
 
-Future<void> _incrementStreak(UserProfile user, PlaceHistory place) async {
+Future<void> _incrementStreak(
+    WriteBatch batch,
+    int? newCountryCount,
+    String? newCountryCode,
+    int newVisitNumber,
+    double? distanceInMeters,
+    PlaceHistory place) async {
+//Future<void> _incrementStreak(UserProfile user, PlaceHistory place) async {
   developer.log('_incrementStreak ${place.countryCode}');
-  int newStreak = 1;
+  int newStreak = 0;
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
-  final docRef = FirebaseFirestore.instance
+  final userdocRef = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid);
-  final docSnapshot = await docRef.get();
+
+  final docSnapshot = await userdocRef.get();
   developer.log('docSnapshot }');
 
   if (docSnapshot.exists) {
@@ -236,12 +260,14 @@ Future<void> _incrementStreak(UserProfile user, PlaceHistory place) async {
     final lastRecordedDate = docSnapshot.data()!['lastRecordedDate'].toDate();
 
     if (lastRecordedDate.isBefore(today)) {
-     newStreak = user.currentstreak! + 1;
+      newStreak = 1;
     }
 
-      await docRef.update({
+    batch.update(
+      userdocRef,
+      {
         'lastRecordedDate': today,
-        'currentStreak': newStreak,
+        'currentStreak': FieldValue.increment(newStreak),
         'latestlongitude': place.longitude,
         'latestlatitude': place.latitude,
         'lateststreetAddress': place.streetAddress,
@@ -249,8 +275,26 @@ Future<void> _incrementStreak(UserProfile user, PlaceHistory place) async {
         'latestcountryCode': place.countryCode,
         'latestpostal': place.postal,
         'latestregion': place.region,
-        'latestregionCode': place.regionCode
-      });
+        'latestregionCode': place.regionCode,
+        'countrycount': FieldValue.increment(newCountryCount as num),
+        'visitcount': newVisitNumber,
+        'distancetotal': FieldValue.increment(distanceInMeters as num),
+        'regioncount': FieldValue.increment(1),
+        'placescount': FieldValue.increment(1),
+        'countryvistlist': FieldValue.arrayUnion([place.countryCode! + '-' + newVisitNumber.toString()]),
+      },
+    );
+
+    if (newCountryCode != null && newCountryCode.isNotEmpty) {
+      batch.update(
+        userdocRef,
+        {
+          'countrycodelist': FieldValue.arrayUnion([newCountryCode]),
+        },
+      );
+
+
+    }
   }
 }
 
@@ -393,4 +437,103 @@ void _showShareDialog(BuildContext context, PlaceHistory placeHistory) {
                   )));
     },
   );
+}
+
+Future<void> setCountry(
+    WriteBatch batch,
+    CurrentCountryCollectionReference countryref,
+    CurrentCountry currentcountry) async {
+  String urlString =
+      "https://restcountries.com/v3.1/alpha/" + currentcountry.countryCode;
+  var res = await http.get(
+    Uri.parse(urlString),
+  );
+  var jsonString;
+  jsonString = jsonDecode(res.body);
+  developer.log(res.body, name: 'my.app.category');
+  String capital = jsonString[0]['capital'][0];
+  String subregion = jsonString[0]['subregion'];
+  String region = jsonString[0]['region'];
+  int population = jsonString[0]['population'];
+  List<double> latlng = List<double>.from(jsonString[0]['latlng']);
+  String timezones = jsonString[0]['timezones'].toString();
+  String numericCode = jsonString[0]['ccn3'];
+  Map<String, String> flags = Map<String, String>.from(jsonString[0]['flags']);
+  Map currencies = jsonString[0]['currencies'];
+
+  String flag = jsonString[0]['flag'];
+  double longitude = jsonString[0]['latlng'][0];
+  double latitude = jsonString[0]['latlng'][1];
+  String currencycode = 'CO';
+  String currencyname = currencies.values.first['name'];
+  String currencysymbol = currencies.values.first['symbol'];
+
+  for (var code in currencies.keys) {
+    Map currency = currencies[code];
+    currencycode = code;
+    String name = currency['name'];
+    String symbol = currency['symbol'];
+    currentcountry.capital = capital;
+    currentcountry.subregion = subregion;
+    currentcountry.region = region;
+    currentcountry.population = population;
+    currentcountry.timezones = timezones;
+    currentcountry.numericCode = numericCode;
+    currentcountry.flag = flag;
+    currentcountry.longitude = longitude;
+    currentcountry.latitude = latitude;
+    currentcountry.currencycode = currencycode;
+    currentcountry.currencyname = currencyname;
+    currentcountry.currencysymbol = currencysymbol;
+
+    /// DocumentReference docRef =
+    //    countryref.doc(currentcountry.countryCode) as DocumentReference;
+
+//  final DocumentReference doccRef  =
+    //    currentuserRef.doc(FirebaseAuth.instance.currentUser!.uid).country.doc(currentcountry.countryCode);
+
+    DocumentReference docRef = FirebaseFirestore.instance
+        .collection('currentuser')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('country')
+        .doc(currentcountry.countryCode);
+
+    batch.set(docRef, currentcountry.toJson());
+    developer.log('batch set currentcountry');
+  }
+}
+
+Future<void> setRegion(WriteBatch batch, String? countrycode,
+    RegionCollectionReference regionref, Region currentregion) async {
+//    DocumentReference docRef =
+//        regionref.doc(currentregion.regionCode) as DocumentReference;
+
+  DocumentReference docRef = FirebaseFirestore.instance
+      .collection('currentuser')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('country')
+      .doc(countrycode)
+      .collection('region')
+      .doc(currentregion.regionCode);
+
+  batch.set(docRef, currentregion.toJson());
+  developer.log('batch set region');
+}
+
+Future<DocumentReference> addPlaceHistory(WriteBatch batch,
+    PlaceHistoryCollectionReference placehistoryref, PlaceHistory place) async {
+  //      DocumentReference docRef =
+  //  placehistoryref as DocumentReference;
+
+  DocumentReference docRef = FirebaseFirestore.instance
+      .collection('currentuser')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('country')
+      .doc(place.countryCode)
+      .collection('region')
+      .doc(place.regionCode)
+      .collection('placehistory')
+      .doc();
+  batch.set(docRef, place.toJson());
+  return docRef;
 }

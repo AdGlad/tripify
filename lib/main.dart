@@ -23,11 +23,15 @@ import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   
+  try {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
     // emailLinkProviderConfig,
@@ -48,6 +52,11 @@ void main() async {
     create: (context) => ApplicationState(),
     builder: ((context, child) => const App()),
   ));
+    }
+  catch (e) {
+    print('Error initializing Firebase: $e');
+  }
+
 }
 
 final _router = GoRouter(

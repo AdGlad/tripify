@@ -74,6 +74,10 @@ dependencies:
   firebase_ui_oauth_facebook: ^1.0.24
   package_info: ^2.0.2
   package_info_plus: ^3.1.2
+  image_picker: ^0.8.7+5
+  photo_view: ^0.14.0
+  cached_network_image: ^3.2.3
+  permission_handler: ^10.4.3
   #google_sign_in: ^6.0.2
   #firebase_ui_oauth_google: ^1.0.22
   #flutter_map: ^3.1.0

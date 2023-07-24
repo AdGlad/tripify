@@ -12,25 +12,24 @@ import 'listfriends.dart';
 import '../../state/applicationstate.dart';
 
 //import 'package:firebase_storage/firebase_storage.dart';
-  Widget buildCard(
-      int? amount, String unitofmeasure, IconData icon, String description) {
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Icon(icon, size: 40.0),
-            SizedBox(height: 8.0),
-            Text(description),
-            Text('$amount $unitofmeasure'),
-          ],
-        ),
+Widget buildCard(
+    int? amount, String unitofmeasure, IconData icon, String description) {
+  return Card(
+    child: Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Icon(icon, size: 40.0),
+          SizedBox(height: 8.0),
+          Text(description),
+          Text('$amount $unitofmeasure'),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
 class UserInfoPage extends StatefulWidget {
-  
   const UserInfoPage({super.key});
 
   @override
@@ -39,11 +38,10 @@ class UserInfoPage extends StatefulWidget {
 
 class _UserInfoPageState extends State<UserInfoPage> {
   final _formKey = GlobalKey<FormState>();
-
   final _nicknameController = TextEditingController();
   //final _ageController = TextEditingController();
   //int _friendable = 0;
- // int _league = 0;
+  // int _league = 0;
   String _errorMessage = '';
   //String? _email;
   String? _avatar;
@@ -51,12 +49,12 @@ class _UserInfoPageState extends State<UserInfoPage> {
   @override
   void initState() {
     super.initState();
-   // getUserInfo();
-  // _nicknameController.text = "Adam";
-final applicationState = Provider.of<ApplicationState>(context,listen: false);
-
-_nicknameController.text = applicationState.userProfile!.nickname!;  
-
+    // getUserInfo();
+    // _nicknameController.text = "Adam";
+    //final applicationState =
+    //    Provider.of<ApplicationState>(context, listen: true);
+//
+  //  _nicknameController.text = applicationState.userProfile!.nickname!;
   }
 
   // Future<void> getUserInfo() async {
@@ -131,17 +129,15 @@ _nicknameController.text = applicationState.userProfile!.nickname!;
           .doc(user!.uid)
           .update({
         // set({
-       // 'userId': FirebaseAuth.instance.currentUser!.uid,
+        // 'userId': FirebaseAuth.instance.currentUser!.uid,
         'nickname': _nicknameController.text,
-     //   'email': _email,
+        //   'email': _email,
         // 'age': int.parse(_ageController.text),
-     //   'friend': _friendable,
-     //   'league': _league,
+        //   'friend': _friendable,
+        //   'league': _league,
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +145,9 @@ _nicknameController.text = applicationState.userProfile!.nickname!;
       child: Consumer<ApplicationState>(
         builder: (context, appState, _) => Center(
           child: Scaffold(
-           // appBar: AppBar(
-           //   title: Text('User Info'),
-           // ),  
+            // appBar: AppBar(
+            //   title: Text('User Info'),
+            // ),
             body: Form(
               key: _formKey,
               child: ListView(
@@ -169,8 +165,8 @@ _nicknameController.text = applicationState.userProfile!.nickname!;
                   ),
                   SizedBox(height: 16.0),
                   TextFormField(
-                 //   initialValue: "adam",
-                  //  initialValue: appState.userProfile?.nickname,
+                    //   initialValue: "adam",
+                    //  initialValue: appState.userProfile?.nickname,
                     controller: _nicknameController,
                     decoration: InputDecoration(labelText: 'Nickname'),
                     validator: (value) {
@@ -280,8 +276,19 @@ _nicknameController.text = applicationState.userProfile!.nickname!;
                       child: Text('Save'),
                     ),
                   ),
-                            userStatsContainer( appState.userProfile,  context) ,
-                     Container(
+                  // Expanded(
+                  //                 child: buildCard(
+                  //                   appState.userProfile!.countrycount,
+                  //                    // userProfile?['countrycount'],
+                  //                     '',
+                  //                     Icons.map_outlined,
+                  //                     'Countries')),
+                  Center(
+                      child: Consumer<ApplicationState>(
+                          builder: (context, appState, _) => Container(
+                              child: userStatsContainer(
+                                  appState.userProfile, context)))),
+                  Container(
                     child: ElevatedButton(
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(
@@ -289,31 +296,25 @@ _nicknameController.text = applicationState.userProfile!.nickname!;
                       ),
                       // style: ButtonStyle.lerp(a, b, t),
                       onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FindFriendsPage(),
+                          ),
+                        );
 
-                       Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        FindFriendsPage(
-                                                            ),
-                                                  ),
-                                                );
-
-
-                     //   Navigator.of(context)
-                     //       .pushReplacementNamed('/findfriends');
+                        //   Navigator.of(context)
+                        //       .pushReplacementNamed('/findfriends');
                         // Navigator.of(context).pushReplacementNamed('/findfriends');
-                     //   Navigator.pushNamed(context, 'findfriends');
+                        //   Navigator.pushNamed(context, 'findfriends');
                         //  Navigator.push(context, '/findfriends');
                       },
                       child: Text('Find Friends'),
-                      
                     ),
                   ),
-                        SizedBox(height: 16.0),
+                  SizedBox(height: 16.0),
 
-
-                   Container(
+                  Container(
                     child: ElevatedButton(
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(
@@ -321,30 +322,25 @@ _nicknameController.text = applicationState.userProfile!.nickname!;
                       ),
                       // style: ButtonStyle.lerp(a, b, t),
                       onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AcceptFriendRequests(),
+                          ),
+                        );
 
-                       Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        AcceptFriendRequests(
-                                                            ),
-                                                  ),
-                                                );
-
-
-                     //   Navigator.of(context)
-                     //       .pushReplacementNamed('/findfriends');
+                        //   Navigator.of(context)
+                        //       .pushReplacementNamed('/findfriends');
                         // Navigator.of(context).pushReplacementNamed('/findfriends');
-                     //   Navigator.pushNamed(context, 'findfriends');
+                        //   Navigator.pushNamed(context, 'findfriends');
                         //  Navigator.push(context, '/findfriends');
                       },
                       child: Text('Accept Requests'),
-                      
                     ),
                   ),
-                                          SizedBox(height: 16.0),
+                  SizedBox(height: 16.0),
 
-                                     Container(
+                  Container(
                     child: ElevatedButton(
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(
@@ -352,25 +348,20 @@ _nicknameController.text = applicationState.userProfile!.nickname!;
                       ),
                       // style: ButtonStyle.lerp(a, b, t),
                       onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ListFriends(),
+                          ),
+                        );
 
-                       Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ListFriends(
-                                                            ),
-                                                  ),
-                                                );
-
-
-                     //   Navigator.of(context)
-                     //       .pushReplacementNamed('/findfriends');
+                        //   Navigator.of(context)
+                        //       .pushReplacementNamed('/findfriends');
                         // Navigator.of(context).pushReplacementNamed('/findfriends');
-                     //   Navigator.pushNamed(context, 'findfriends');
+                        //   Navigator.pushNamed(context, 'findfriends');
                         //  Navigator.push(context, '/findfriends');
                       },
                       child: Text('Friends'),
-                      
                     ),
                   ),
                   // Container(

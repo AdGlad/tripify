@@ -40,6 +40,8 @@ class UserProfile {
     this.latestpostal,
     this.latestregion,
     this.latestregionCode,
+    this.countrycodelist,
+    this.countryvisitlist,
   });
 
   factory UserProfile.fromJson(Map<String, Object?> json) =>
@@ -74,6 +76,9 @@ class UserProfile {
   String? latestregion;
   String? latestregionCode;
   DateTime? lastRecordedDate;
+  List<String>? countrycodelist;
+  List<String>? countryvisitlist;
+
 
 
   Map<String, Object?> toJson() => _$UserProfileToJson(this);

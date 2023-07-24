@@ -80,18 +80,12 @@
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
-
-        <key>NSPhotoLibraryUsageDescription</key>
-	<string>Sharing of location details via social media requires access to your photos. </string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Your location is required in order to record your travel details including countries you have visted.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is required in order to record your travel details including countries you have visted.</string>
-
-
-
-
-
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Sharing of location details via social media requires access to your photos. </string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>PROJECT_ID</key>
@@ -100,8 +94,21 @@
 	<string>com.googleusercontent.apps.90817750920-9307of40hl4eg62dabtvcd403s6pg5a8</string>
 	<key>STORAGE_BUCKET</key>
 	<string>tripify-first.appspot.com</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict/>
+	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

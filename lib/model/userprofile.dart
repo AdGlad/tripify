@@ -15,6 +15,7 @@
 //     this.distancetotal,
 //     this.regioncount,
 //     this.placescount,
+
 //   });
 
 //   String? id;

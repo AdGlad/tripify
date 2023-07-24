@@ -29,8 +29,6 @@ import '../screens/UserInfo/UserProfileScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'dart:developer' as developer;
 
-
-
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
     init();
@@ -64,8 +62,8 @@ class ApplicationState extends ChangeNotifier {
   UserProfile? _userProfile;
   UserProfile? get userProfile => _userProfile;
 
-  UserTotals _userTotals = UserTotals();
-  UserTotals get userTotals => _userTotals;
+//  UserTotals _userTotals = UserTotals();
+//  UserTotals get userTotals => _userTotals;
 
   // List<PlaceHistory> _currentPlace = [];
   // List<PlaceHistory> get currentPlace => _currentPlace;
@@ -73,7 +71,6 @@ class ApplicationState extends ChangeNotifier {
   PlaceHistory? get currentPlace => _currentPlace;
   PackageInfo? _packageInfo;
   PackageInfo? get packageInfo => _packageInfo;
-
 
   LatLng _newLatLng = LatLng(0, 0);
   LatLng get newLatLng => _newLatLng;
@@ -101,8 +98,7 @@ class ApplicationState extends ChangeNotifier {
   Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-
-   _packageInfo = await PackageInfo.fromPlatform();
+    _packageInfo = await PackageInfo.fromPlatform();
     developer.log('PackageInfo.version ${_packageInfo?.version}');
     developer.log('PackageInfo.buildNumber ${_packageInfo?.buildNumber}');
     developer.log('PackageInfo ${_packageInfo?.appName}');
@@ -110,13 +106,6 @@ class ApplicationState extends ChangeNotifier {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
 
-    // FirebaseUIAuth.configureProviders([
-    //   EmailAuthProvider(),
-    //   //EmailAuthProvider(),
-    //   // EmailAuthProvider(),
-
-    //   // EmailProvider(),
-    // ]);
     FirebaseUIAuth.configureProviders([
       EmailAuthProvider(),
       // emailLinkProviderConfig,
@@ -133,19 +122,22 @@ class ApplicationState extends ChangeNotifier {
       //),
     ]);
 
-    FirebaseAuth.instance.userChanges().listen((user) {
+    FirebaseAuth.instance.userChanges().listen((user) async {
       if (user != null) {
         _loggedIn = true;
         _emailVerified = user.emailVerified;
         log(' User logged in ..');
+        developer
+            .log('User logged in .. ${FirebaseAuth.instance.currentUser!.uid}');
+        _userProfile = UserProfile(id: FirebaseAuth.instance.currentUser!.uid);
 
-          // StreamSubscription<QuerySnapshot> _userCountryListSubscription =
-            FirebaseFirestore.instance
-                .collection('currentuser')
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .collection('country')
-                .snapshots()
-                .listen((snapshot) {
+        // StreamSubscription<QuerySnapshot> _userCountryListSubscription =
+        FirebaseFirestore.instance
+            .collection('currentuser')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection('country')
+            .snapshots()
+            .listen((snapshot) {
           _userCountryList = [];
 
           for (final document in snapshot.docs) {
@@ -155,30 +147,19 @@ class ApplicationState extends ChangeNotifier {
               countryCode: document.id,
               countryName: document.data()['countryName'] as String,
               userId: document.data()['userId'] as String,
-          ));
+            ));
           }
           notifyListeners();
         });
 
-        developer.log('Fire applicationstate');
+        developer.log('currentUser ${FirebaseAuth.instance.currentUser!.uid}');
 
-        developer.log('Before listenForUserChanges');
-
-        _userProfile =
-            listenForUserChanges(FirebaseAuth.instance.currentUser!.uid);
-                    developer.log('Before listenForUserChanges');
-
-        _users = listenForAllUsersChanges();
-                developer.log('Before listenForUserChanges');
-
-        _userRegionList =
-            listenForRegionChanges(FirebaseAuth.instance.currentUser!.uid);
-            
-        _currentPlace =
-            listenForCurrrentPlace(FirebaseAuth.instance.currentUser!.uid);
-
-        _placeHistory =
-            listenForPlaceHistory(FirebaseAuth.instance.currentUser!.uid);
+        listenForUserChanges(FirebaseAuth.instance.currentUser!.uid);
+        listenForAllUsersChanges();
+        listenForRegionChanges(FirebaseAuth.instance.currentUser!.uid);
+        listenForCurrrentPlace(FirebaseAuth.instance.currentUser!.uid);
+        listenForPlaceHistory(FirebaseAuth.instance.currentUser!.uid);
+        notifyListeners();
 
         _tripsSubscription = FirebaseFirestore.instance
             .collectionGroup('placehistory')
@@ -197,14 +178,14 @@ class ApplicationState extends ChangeNotifier {
           int placescounter = 0;
 
           _tripHistory = [];
-          
-          _userTotals = UserTotals(
-              userId: FirebaseAuth.instance.currentUser!.uid,
-              CountryCount: 0,
-              VisitCount: 0,
-              DistanceTotal: 0,
-              RegionTotal: 0,
-              PlacesCount: 0);
+
+          // _userTotals = UserTotals(
+          //     userId: FirebaseAuth.instance.currentUser!.uid,
+          //     CountryCount: 0,
+          //     VisitCount: 0,
+          //     DistanceTotal: 0,
+          //     RegionTotal: 0,
+          //     PlacesCount: 0);
 
           for (final document in snapshot.docs) {
             String currentCountryName =
@@ -261,27 +242,31 @@ class ApplicationState extends ChangeNotifier {
 
           developer.log(
               'countrycounter $countrycounter , $visitcounter, $distancetotal');
-          _userTotals.CountryCount = countrycounter;
-          _userTotals.VisitCount = visitcounter;
-          _userTotals.DistanceTotal = distancetotal ~/ 1000;
-          _userTotals.RegionTotal = regioncounter;
-          _userTotals.PlacesCount = placescounter;
+          // _userTotals.CountryCount = countrycounter;
+          // _userTotals.VisitCount = visitcounter;
+          // _userTotals.DistanceTotal = distancetotal ~/ 1000;
+          // _userTotals.RegionTotal = regioncounter;
+          // _userTotals.PlacesCount = placescounter;
 
-          _tripHistory.forEach((trip) {
-            developer.log(
-                'trip list ${trip.countryName} , ${trip.countryCode}, ${trip.visitNumber}');
-          });
-
-          notifyListeners();
+          // _tripHistory.forEach((trip) {
+          //   developer.log(
+          //       'trip list ${trip.countryName} , ${trip.countryCode}, ${trip.visitNumber}');
         });
-      } else {
+
+        notifyListeners();
+        //}
+        // );
+      } else
         _loggedIn = false;
-        _emailVerified = false;
-        //    _placeHistory = [];
-        //    _placeHistorySubscription?.cancel();
-      }
+      _emailVerified = false;
+      //    _placeHistory = [];
+      //    _placeHistorySubscription?.cancel();
       notifyListeners();
-    });
+    }
+
+        // notifyListeners();
+        //}
+        );
   }
 
   Future<void> refreshLoggedInUser() async {
@@ -294,72 +279,108 @@ class ApplicationState extends ChangeNotifier {
     await currentUser.reload();
   }
 
-  UserProfile? listenForUserChanges(String userId) {
-    
-    UserProfile _userProfile = UserProfile(id: userId);
+  //UserProfile?
+  listenForUserChanges(String userId) {
+    // UserProfile userProfile = UserProfile(id: userId);
 
     // Get a reference to the user's document in Firestore
     DocumentReference userRef =
         FirebaseFirestore.instance.collection('users').doc(userId);
 
+    developer.log('listenForUserChanges in ');
+
     // Listen for changes to the user document
-    userRef.snapshots().listen((userSnapshot) {
-      // Check if the document exists
+
+    userRef.snapshots().listen(
+        onError: (error) => print("Listen failed: $error"), (userSnapshot) {
+      developer.log('listenForUserChanges in ');
+
+      //Check if the document exists
       if (userSnapshot.exists) {
         // Get the user's data as a Map
         Map<String, dynamic>? userData =
             userSnapshot.data() as Map<String, dynamic>;
-   // UserProfile? _userProfile = userProfilefunc(userData,  userId );
+        // UserProfile? userProfile = userProfilefunc(userData,  userId );
 
-        DateTime joinDate = (userData['joinDate'] as Timestamp).toDate();
+        Timestamp? joinDateTimestamp = userData['joinDate'];
+        DateTime joinDate = joinDateTimestamp?.toDate() ?? DateTime.now();
+
+        Timestamp? lastRecordedTimestamp = userData['lastRecordedDate'];
         DateTime lastRecordedDate =
-            (userData['lastRecordedDate'] as Timestamp).toDate();
+            lastRecordedTimestamp?.toDate() ?? DateTime.now();
+
+        //DateTime joinDate = ((userData['joinDate'] as Timestamp?.toDate()?? DateTime.now() ;
+        //  DateTime lastRecordedDate =
+        //      ((userData['lastRecordedDate'] as Timestamp).toDate())?? DateTime.now();
         // Extract the user's age and address from the data
-        _userProfile.userId =
+        _userProfile?.userId =
             userData['userId'] ?? 'userId'; // event.get("userId") ?? "userId";
-        _userProfile.email = userData['email'] ?? 'email';
-        _userProfile.nickname = userData['nickname'] ?? 'nickname';
-        _userProfile.avatar = userData['avatar'] ?? 'avatar';
-        // _userProfile.photo = userData['photo'] ?? 'photo';
-        _userProfile.language = userData['language'] ?? 'language';
-        _userProfile.joinDate = joinDate;
-        //  _userProfile.joinDate = userData['joinDate'].toDate() as DateTime? ;//?? DateTime.now() as DateTime? ;
-        _userProfile.friend = userData['friend'] ?? 0;
-        _userProfile.league = userData['league'] ?? 0;
-        _userProfile.countrycount = userData['countrycount'] ?? 0;
-        _userProfile.visitcount = userData['visitcount'] ?? 0;
-        _userProfile.distancetotal = userData['distancetotal'] ?? 0;
-        _userProfile.regioncount = userData['regioncount'] ?? 0;
-        _userProfile.placescount = userData['placescount'] ?? 0;
-        _userProfile.currentstreak = userData['currentStreak'] ?? 0;
+        _userProfile?.email = userData['email'] as String? ?? 'email';
 
-      //  _userProfile.currentstreak = userData['lastRecordedDate'] ?? 0;
-        _userProfile.latestlatitude = userData['latestlatitude'] ?? 0.0;
-        _userProfile.latestlongitude = userData['latestlongitude'] ?? 0.0;
-        _userProfile.lateststreetAddress = userData['lateststreetAddress'] ?? 'lateststreetAddress';
-        _userProfile.latestcity = userData['latestcity'] ?? 'latestcity';
-        _userProfile.latestcountryName = userData['latestcountryName'] ?? 'latestcountryName';
-        _userProfile.latestcountryCode = userData['latestcountryCode'] ?? 'latestcountryCode';
-        _userProfile.latestpostal = userData['latestpostal'] ?? 'latestpostal';
-        _userProfile.latestregion = userData['latestregion'] ?? 'latestregion';
-        _userProfile.latestregionCode = userData['latestregionCode'] ?? 'latestregionCode';
+        _userProfile?.nickname = userData['nickname'] as String? ?? 'nickname';
+        _userProfile?.avatar = userData['avatar'] as String? ?? 'avatar';
+        // _userProfile?.photo = userData['photo'] as String? ?? 'photo';
+        _userProfile?.language = userData['language'] as String? ?? 'language';
+        _userProfile?.joinDate = joinDate;
+        //  _userProfile?.joinDate = userData['joinDate'].toDate() as DateTime? ;//?? DateTime.now() as DateTime? ;
+        _userProfile?.friend = userData['friend'] as int? ?? 0;
+        _userProfile?.league = userData['league'] as int? ?? 0;
+        _userProfile?.countrycount = userData['countrycount'] as int? ?? 0;
+        _userProfile?.visitcount = userData['visitcount'] as int? ?? 0;
+        _userProfile?.distancetotal =
+            (userData['distancetotal'] as double? ?? 0.0).toInt();
+        _userProfile?.regioncount = userData['regioncount'] as int? ?? 0;
+        _userProfile?.placescount = userData['placescount'] as int? ?? 0;
+        _userProfile?.currentstreak = userData['currentStreak'] as int? ?? 0;
 
+        //  _userProfile?.currentstreak = userData['lastRecordedDate'] ?? 0;
+        _userProfile?.latestlatitude =
+            (userData['latestlatitude'] as double?) ?? 0.0;
+        _userProfile?.latestlongitude =
+            (userData['latestlongitude'] as double?) ?? 0.0;
+        _userProfile?.lateststreetAddress =
+            userData['lateststreetAddress'] as String? ?? 'lateststreetAddress';
+        _userProfile?.latestcity =
+            userData['latestcity'] as String? ?? 'latestcity';
+        _userProfile?.latestcountryName =
+            userData['latestcountryName'] as String? ?? 'latestcountryName';
+        _userProfile?.latestcountryCode =
+            userData['latestcountryCode'] as String? ?? 'latestcountryCode';
+        _userProfile?.latestpostal =
+            userData['latestpostal'] as String? ?? 'latestpostal';
+        _userProfile?.latestregion =
+            userData['latestregion'] as String? ?? 'latestregion';
+        _userProfile?.latestregionCode =
+            userData['latestregionCode'] as String? ?? 'latestregionCode';
 
-        _userProfile.lastRecordedDate = lastRecordedDate;
+        List<dynamic> _countryListData = userData['countrycodelist'];
+        _userProfile?.countrycodelist =
+            _countryListData.map((e) => e.toString()).toList();
 
+        List<dynamic> _countryvisitlist = userData['countryvisitlist'];
+        _userProfile?.countryvisitlist =
+            _countryvisitlist.map((e) => e.toString()).toList();
 
-          _userProfile.lastRecordedDate = userData['lastRecordedDate'].toDate() as DateTime?; //  ?? DateTime.now();
+        // _userProfile?.lastRecordedDate = userData['lastRecordedDate'].toDate()
+        //     as DateTime?; //  ?? DateTime.now();
 
         // Print the user's ID, age, and address to the console
-        print('User $_userProfile.userId');
+        print('User ${_userProfile?.userId}');
+        notifyListeners();
       } else {
         print('User document for $userId does not exist.');
       }
     });
-    return _userProfile;
+    notifyListeners();
+
+//    return userProfile;
   }
 
-  List<UserProfile> listenForAllUsersChanges() {
+  //List<UserProfile>
+  listenForAllUsersChanges() {
+    // List<UserProfile> users = [];
+    developer.log('listenForAllUsersChanges start ');
+
     _usersSubscription = FirebaseFirestore.instance
         .collection('users')
         // .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -369,32 +390,60 @@ class ApplicationState extends ChangeNotifier {
       _users = [];
 
       for (final document in snapshot.docs) {
-        DateTime joinDate = (document.data()['joinDate'] as Timestamp).toDate();
-        DateTime lastRecordedDate =
-            (document.data()['lastRecordedDate'] as Timestamp).toDate();
+        //   DateTime joinDate =
+        //       (document.data()['joinDate'] ?? DateTime.now()) as DateTime;
+
+        dynamic joinDateData = document.data()['joinDate'];
+        DateTime joinDate;
+
+        if (joinDateData is Timestamp) {
+          joinDate = joinDateData.toDate();
+        } else if (joinDateData is DateTime) {
+          joinDate = joinDateData;
+        } else {
+          // Handle the case where joinDateData is null or has an unsupported type.
+          // For example, you can assign a default value:
+          joinDate = DateTime.now();
+        }
+
+        //   DateTime lastRecordedDate =
+        //       (document.data()['lastRecordedDate'] ?? DateTime.now()) as DateTime;
+
+        dynamic lastRecordedDateData = document.data()['joinDate'];
+        DateTime lastRecordedDate;
+
+        if (lastRecordedDateData is Timestamp) {
+          lastRecordedDate = lastRecordedDateData.toDate();
+        } else if (lastRecordedDateData is DateTime) {
+          lastRecordedDate = lastRecordedDateData;
+        } else {
+          // Handle the case where joinDateData is null or has an unsupported type.
+          // For example, you can assign a default value:
+          lastRecordedDate = DateTime.now();
+        }
 
         //  final data =  document.data();
-        //  _users.add( UserProfile.fromJson(data));
+        //  users.add( UserProfile.fromJson(data));
 
         _users.add(UserProfile(
           id: document.id,
           userId: document.data()['userId'] ?? 'userId',
-          email: document.data()['email'] as String,
-          nickname: document.data()['nickname'] as String,
-          avatar: document.data()['avatar'] as String,
-          // photo: document.data()['photo"'] as String,
-          language: document.data()['language'] as String,
+          email: document.data()['email'] ?? 'email' as String,
+          nickname: document.data()['nickname'] ?? 'nickname' as String,
+          avatar: document.data()['avatar'] ?? 'avatar' as String,
+          // photo: document.data()['photo"']  ?? 'photo' as String,
+          language: document.data()['language'] ?? 'language' as String,
           joinDate: joinDate,
           //    joinDate: document.data()['joinDate']?.toDate ?? DateTime.now(),
           //  joinDate: DateTime.tryParse(document.data()['joinDate']),
-          friend: document.data()['friend'] as int?,
-          league: document.data()['league'] as int?,
-          countrycount: document.data()['countrycount'] as int?,
-          visitcount: document.data()['visitcount'] as int?,
-          distancetotal: document.data()['distancetotal'] as int?,
-          regioncount: document.data()['regioncount'] as int?,
-          placescount: document.data()['placescount'] as int?,
-          currentstreak: document.data()['currentStreak'] as int?,
+          friend: document.data()['friend'] as int? ?? 0,
+          league: document.data()['league'] as int? ?? 0,
+          countrycount: document.data()['countrycount'] as int? ?? 0,
+          visitcount: document.data()['visitcount'] as int? ?? 0,
+          distancetotal: (document.data()['distancetotal'] ?? 0.0).toInt(),
+          regioncount: document.data()['regioncount'] as int? ?? 0,
+          placescount: document.data()['placescount'] as int? ?? 0,
+          currentstreak: document.data()['currentStreak'] as int? ?? 0,
           lastRecordedDate: lastRecordedDate,
           //    lastRecordedDate: document.data()['lastRecordedDate']?.toDate ?? DateTime.now(),
           // lastRecordedDate: document.data()['lastRecordedDate'].toDate as DateTime?,
@@ -404,12 +453,17 @@ class ApplicationState extends ChangeNotifier {
         // );
       }
 
-      notifyListeners();
+      developer.log('listenForAllUsersChanges end ');
     });
-    return _users;
+    notifyListeners();
+
+    // return users;
   }
 
-  List<Region> listenForRegionChanges(String userId) {
+  //List<Region>
+  listenForRegionChanges(String userId) {
+    //  List<Region> userRegionList = [];
+
     _userRegionListSubscription = FirebaseFirestore.instance
         .collectionGroup('region')
         //.collectionGroup('currentuser/*/country/*/region')
@@ -419,6 +473,7 @@ class ApplicationState extends ChangeNotifier {
         .snapshots()
         .listen((snapshot) {
       _userRegionList = [];
+
       for (final document in snapshot.docs) {
         _regionrecords[document.id] = document.id;
 
@@ -431,25 +486,29 @@ class ApplicationState extends ChangeNotifier {
           ),
         );
       }
-      notifyListeners();
     });
+    notifyListeners();
 
-    return _userRegionList;
+    //  return userRegionList;
   }
 
+  //PlaceHistory?
+  listenForCurrrentPlace(String userId) {
+    // PlaceHistory? currentPlace;
 
-  PlaceHistory? listenForCurrrentPlace(String userId) {
-    _locationCurrentSubscription = FirebaseFirestore.instance
+    developer.log('listenForCurrrentPlace start ');
+
+    //_locationCurrentSubscription =
+    FirebaseFirestore.instance
         .collectionGroup('placehistory')
         .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .orderBy('timestamp', descending: true)
         .limit(1)
         .snapshots()
-        .listen((snapshot) {
-      //_currentPlace = [];
+        .listen(onError: (error) => print("Listen failed: $error"), (snapshot) {
+      _currentPlace = null;
 
-
-  developer.log('listenForCurrrentPlace In ');
+      developer.log('listenForCurrrentPlace In ');
 
       for (final document in snapshot.docs) {
         globals.new_latitude = document.data()['latitude'] as double;
@@ -458,7 +517,9 @@ class ApplicationState extends ChangeNotifier {
         DateTime current_arrivalDate =
             DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
-        // _currentPlace.add(
+        final List<dynamic> imagePathList =
+            document.data()['imagePaths'] ?? <dynamic>[];
+        final List<String> imagePath = imagePathList.cast<String>().toList();
         _currentPlace = PlaceHistory(
             userId: FirebaseAuth.instance.currentUser!.uid,
             name: document.data()['name'] as String?,
@@ -474,21 +535,27 @@ class ApplicationState extends ChangeNotifier {
             timezone: document.data()['timezone'] as String?,
             elevation: document.data()['elevation'] as int?,
             visitnumber: document.data()['visitnumber'] as int?,
-            description:  document.data()['description'] as String?,
+            description: document.data()['description'] as String?,
             rating: document.data()['rating'] as String?,
             poi: document.data()['poi'] as String?,
-            imagePaths: document.data()['imagePaths'] as List<String>?,
+            //imagePaths: document.data()['imagePaths'] as List<String>?,
+            imagePaths: imagePath,
             arrivaldate: current_arrivalDate);
 
-
+        developer.log('listenForCurrrentPlace out ');
       }
+      developer.log('listenForCurrrentPlace notifyListeners before');
 
-      notifyListeners();
+      //   notifyListeners();
+      developer.log('listenForCurrrentPlace notifyListeners after 1');
     });
-    return _currentPlace;
+    developer.log('return currentPlace ');
+
+    // return currentPlace;
   }
 
-  List<PlaceHistory> listenForPlaceHistory(String userId) {
+  //List<PlaceHistory>
+  listenForPlaceHistory(String userId) {
     _placeHistorySubscription = FirebaseFirestore.instance
         .collectionGroup('placehistory')
         .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -519,17 +586,19 @@ class ApplicationState extends ChangeNotifier {
             timezone: document.data()['timezone'] as String?,
             elevation: document.data()['elevation'] as int?,
             visitnumber: document.data()['visitnumber'] as int?,
-            description:  document.data()['description'] as String?,
+            description: document.data()['description'] as String?,
             rating: document.data()['rating'] as String?,
             poi: document.data()['poi'] as String?,
-            imagePaths: document.data()['imagePaths'] as List<String>?,
+            // imagePaths: document.data()['imagePaths'] as List<String>?,
+            imagePaths: (document.data()['imagePaths'] as List<dynamic>?)
+                ?.cast<String>(),
             arrivaldate: current_arrivalDate));
 
-
+        developer.log('_placeHistory.add  in ');
       }
 
       notifyListeners();
     });
-    return _placeHistory;
+//    return _placeHistory;
   }
 }

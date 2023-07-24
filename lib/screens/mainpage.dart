@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 //import '../src/ad_helper.dart';
 import '../state/applicationstate.dart';
+import 'UserInfo/UserDetails.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -31,6 +32,7 @@ class _MainPageState extends State<MainPage> {
     // const ActiveCountryPage(),
     const League(),
     const UserInfoPage(),
+   // const UserDetails(),
   ];
 
   BannerAd? _bannerAd;
@@ -46,7 +48,7 @@ class _MainPageState extends State<MainPage> {
                   appBar: AppBar(
                     //    automaticallyImplyLeading: false,
                   // title: const Text('Tripify [V2]'),
-                    title:  Text('Tripify ${appState.packageInfo?.version} [${appState.packageInfo?.buildNumber}]'),
+                    title:  Text('Tripify 3${appState.packageInfo?.version} [${appState.packageInfo?.buildNumber}]'),
                     actions: [
                       IconButton(
                           onPressed: () {
@@ -68,12 +70,18 @@ class _MainPageState extends State<MainPage> {
                   body: SafeArea(
                     child: Stack(
                       children: <Widget>[
+Consumer<ApplicationState>(
+  builder: (context, appState, _) =>
+
                         Container(
                           // margin: const EdgeInsets.all(5.0),x`
                           child: pageList.elementAt(_selectedIndex),
                         ),
                         // TODO: Display a banner when ready
+)
+                    
                       ],
+
                     ),
                   ),
                   bottomNavigationBar: BottomNavigationBar(

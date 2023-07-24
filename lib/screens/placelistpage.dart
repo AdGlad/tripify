@@ -201,6 +201,23 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
+                    Text('Dairy : ${currentPlaceHistory.description}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.w700,
+                        )),
+
+
+
+                        
+             //     Container(child: Image.network(
+             // currentPlaceHistory.imagePaths![1],
+             // fit: BoxFit.cover,
+           // ),
+            //)
+                        
                   ],
                 ),
               )

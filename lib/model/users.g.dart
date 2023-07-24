@@ -189,6 +189,10 @@ abstract class UserProfileDocumentReference extends FirestoreDocumentReference<
     FieldValue latestregionCodeFieldValue,
     DateTime? lastRecordedDate,
     FieldValue lastRecordedDateFieldValue,
+    List<String>? countrycodelist,
+    FieldValue countrycodelistFieldValue,
+    List<String>? countryvisitlist,
+    FieldValue countryvisitlistFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -246,6 +250,10 @@ abstract class UserProfileDocumentReference extends FirestoreDocumentReference<
     FieldValue latestregionCodeFieldValue,
     DateTime? lastRecordedDate,
     FieldValue lastRecordedDateFieldValue,
+    List<String>? countrycodelist,
+    FieldValue countrycodelistFieldValue,
+    List<String>? countryvisitlist,
+    FieldValue countryvisitlistFieldValue,
   });
 }
 
@@ -337,6 +345,10 @@ class _$UserProfileDocumentReference
     FieldValue? latestregionCodeFieldValue,
     Object? lastRecordedDate = _sentinel,
     FieldValue? lastRecordedDateFieldValue,
+    Object? countrycodelist = _sentinel,
+    FieldValue? countrycodelistFieldValue,
+    Object? countryvisitlist = _sentinel,
+    FieldValue? countryvisitlistFieldValue,
   }) async {
     assert(
       userId == _sentinel || userIdFieldValue == null,
@@ -438,6 +450,14 @@ class _$UserProfileDocumentReference
       lastRecordedDate == _sentinel || lastRecordedDateFieldValue == null,
       "Cannot specify both lastRecordedDate and lastRecordedDateFieldValue",
     );
+    assert(
+      countrycodelist == _sentinel || countrycodelistFieldValue == null,
+      "Cannot specify both countrycodelist and countrycodelistFieldValue",
+    );
+    assert(
+      countryvisitlist == _sentinel || countryvisitlistFieldValue == null,
+      "Cannot specify both countryvisitlist and countryvisitlistFieldValue",
+    );
     final json = {
       if (userId != _sentinel)
         _$UserProfileFieldMap['userId']!: userId as String?,
@@ -542,6 +562,16 @@ class _$UserProfileDocumentReference
             lastRecordedDate as DateTime?,
       if (lastRecordedDateFieldValue != null)
         _$UserProfileFieldMap['lastRecordedDate']!: lastRecordedDateFieldValue,
+      if (countrycodelist != _sentinel)
+        _$UserProfileFieldMap['countrycodelist']!:
+            countrycodelist as List<String>?,
+      if (countrycodelistFieldValue != null)
+        _$UserProfileFieldMap['countrycodelist']!: countrycodelistFieldValue,
+      if (countryvisitlist != _sentinel)
+        _$UserProfileFieldMap['countryvisitlist']!:
+            countryvisitlist as List<String>?,
+      if (countryvisitlistFieldValue != null)
+        _$UserProfileFieldMap['countryvisitlist']!: countryvisitlistFieldValue,
     };
 
     return reference.update(json);
@@ -599,6 +629,10 @@ class _$UserProfileDocumentReference
     FieldValue? latestregionCodeFieldValue,
     Object? lastRecordedDate = _sentinel,
     FieldValue? lastRecordedDateFieldValue,
+    Object? countrycodelist = _sentinel,
+    FieldValue? countrycodelistFieldValue,
+    Object? countryvisitlist = _sentinel,
+    FieldValue? countryvisitlistFieldValue,
   }) {
     assert(
       userId == _sentinel || userIdFieldValue == null,
@@ -700,6 +734,14 @@ class _$UserProfileDocumentReference
       lastRecordedDate == _sentinel || lastRecordedDateFieldValue == null,
       "Cannot specify both lastRecordedDate and lastRecordedDateFieldValue",
     );
+    assert(
+      countrycodelist == _sentinel || countrycodelistFieldValue == null,
+      "Cannot specify both countrycodelist and countrycodelistFieldValue",
+    );
+    assert(
+      countryvisitlist == _sentinel || countryvisitlistFieldValue == null,
+      "Cannot specify both countryvisitlist and countryvisitlistFieldValue",
+    );
     final json = {
       if (userId != _sentinel)
         _$UserProfileFieldMap['userId']!: userId as String?,
@@ -804,6 +846,16 @@ class _$UserProfileDocumentReference
             lastRecordedDate as DateTime?,
       if (lastRecordedDateFieldValue != null)
         _$UserProfileFieldMap['lastRecordedDate']!: lastRecordedDateFieldValue,
+      if (countrycodelist != _sentinel)
+        _$UserProfileFieldMap['countrycodelist']!:
+            countrycodelist as List<String>?,
+      if (countrycodelistFieldValue != null)
+        _$UserProfileFieldMap['countrycodelist']!: countrycodelistFieldValue,
+      if (countryvisitlist != _sentinel)
+        _$UserProfileFieldMap['countryvisitlist']!:
+            countryvisitlist as List<String>?,
+      if (countryvisitlistFieldValue != null)
+        _$UserProfileFieldMap['countryvisitlist']!: countryvisitlistFieldValue,
     };
 
     transaction.update(reference, json);
@@ -1180,6 +1232,28 @@ abstract class UserProfileQuery
     List<DateTime?>? whereIn,
     List<DateTime?>? whereNotIn,
   });
+  UserProfileQuery whereCountrycodelist({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  });
+  UserProfileQuery whereCountryvisitlist({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  });
 
   UserProfileQuery orderByDocumentId({
     bool descending = false,
@@ -1487,6 +1561,30 @@ abstract class UserProfileQuery
     DateTime? startAfter,
     DateTime? endAt,
     DateTime? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByCountrycodelist({
+    bool descending = false,
+    List<String>? startAt,
+    List<String>? startAfter,
+    List<String>? endAt,
+    List<String>? endBefore,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  });
+
+  UserProfileQuery orderByCountryvisitlist({
+    bool descending = false,
+    List<String>? startAt,
+    List<String>? startAfter,
+    List<String>? endAt,
+    List<String>? endBefore,
     UserProfileDocumentSnapshot? startAtDocument,
     UserProfileDocumentSnapshot? endAtDocument,
     UserProfileDocumentSnapshot? endBeforeDocument,
@@ -2395,6 +2493,64 @@ class _$UserProfileQuery
         isNull: isNull,
         whereIn: whereIn,
         whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereCountrycodelist({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['countrycodelist']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserProfileQuery whereCountryvisitlist({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  }) {
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserProfileFieldMap['countryvisitlist']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
       ),
       $queryCursor: $queryCursor,
     );
@@ -4224,6 +4380,152 @@ class _$UserProfileQuery
   }) {
     final query = $referenceWithoutCursor.orderBy(
         _$UserProfileFieldMap['lastRecordedDate']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByCountrycodelist({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['countrycodelist']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserProfileQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserProfileQuery orderByCountryvisitlist({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserProfileDocumentSnapshot? startAtDocument,
+    UserProfileDocumentSnapshot? endAtDocument,
+    UserProfileDocumentSnapshot? endBeforeDocument,
+    UserProfileDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserProfileFieldMap['countryvisitlist']!,
         descending: descending);
     var queryCursor = $queryCursor;
 
@@ -7479,6 +7781,12 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
       latestpostal: json['latestpostal'] as String?,
       latestregion: json['latestregion'] as String?,
       latestregionCode: json['latestregionCode'] as String?,
+      countrycodelist: (json['countrycodelist'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      countryvisitlist: (json['countryvisitlist'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 const _$UserProfileFieldMap = <String, String>{
@@ -7508,6 +7816,8 @@ const _$UserProfileFieldMap = <String, String>{
   'latestregion': 'latestregion',
   'latestregionCode': 'latestregionCode',
   'lastRecordedDate': 'lastRecordedDate',
+  'countrycodelist': 'countrycodelist',
+  'countryvisitlist': 'countryvisitlist',
 };
 
 Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
@@ -7540,6 +7850,8 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
       'latestregionCode': instance.latestregionCode,
       'lastRecordedDate': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.lastRecordedDate, const FirestoreDateTimeConverter().toJson),
+      'countrycodelist': instance.countrycodelist,
+      'countryvisitlist': instance.countryvisitlist,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(
