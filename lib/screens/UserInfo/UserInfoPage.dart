@@ -51,8 +51,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
     super.initState();
     // getUserInfo();
     // _nicknameController.text = "Adam";
-    //final applicationState =
-    //    Provider.of<ApplicationState>(context, listen: true);
+//    final applicationState =
+//        Provider.of<ApplicationState>(context, listen: true);
 //
   //  _nicknameController.text = applicationState.userProfile!.nickname!;
   }
@@ -141,6 +141,10 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+   // _nicknameController.text = "Adam";
+       final applicationState =
+        Provider.of<ApplicationState>(context, listen: true);
+        _nicknameController.text = applicationState.userProfile!.nickname!;
     return Container(
       child: Consumer<ApplicationState>(
         builder: (context, appState, _) => Center(
@@ -165,7 +169,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   ),
                   SizedBox(height: 16.0),
                   TextFormField(
-                    //   initialValue: "adam",
+                    //  initialValue: "adam",
                     //  initialValue: appState.userProfile?.nickname,
                     controller: _nicknameController,
                     decoration: InputDecoration(labelText: 'Nickname'),

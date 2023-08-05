@@ -7,6 +7,7 @@ import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/UserInfo/UserProfileScreen.dart';
+import '../screens/league/league.dart';
 import '../state/applicationstate.dart';
 
 part 'users.g.dart';
@@ -240,10 +241,18 @@ class FriendRequestList extends StatelessWidget {
                         leading: Container(
                                 // color: Colors.white,
                                 //  alignment: Alignment.centerLeft,
-                                child: CircleAvatar(
-                                  radius: 10.0,
-                                  backgroundImage: NetworkImage(friendrequest.requesterAvatar!)
-                                ),),
+                                child: 
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: //Text('sdsfffs')),
+                                  avatar(friendrequest.requesterAvatar,30.0))
+                                
+                                //CircleAvatar(
+                                //  radius: 10.0,
+                                //  backgroundImage: NetworkImage(friendrequest.requesterAvatar!)
+                                //),
+                                ),
                               
                        title: Text(friendrequest.requesterNickname!,style: TextStyle(
                                     color: Colors.white,
@@ -351,7 +360,7 @@ class FriendList extends StatelessWidget {
         // Access the QuerySnapshot
         FriendQuerySnapshot querySnapshot = snapshot.requireData;
 
-        return ListView.builder(
+        return ListView.builder(          
           itemCount: querySnapshot.docs.length,
           itemBuilder: (context, index) {
             // Access the User instance
@@ -371,20 +380,28 @@ class FriendList extends StatelessWidget {
                               ),
                             );
                           },
-              child: Card(
+              child: Card(                
                      color: Color.fromARGB(255, 49, 52, 59),
                         elevation: 8.0,
                         margin: EdgeInsets.all(5.0),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                     child: ListTile(
-                      leading: Container(
-                              // color: Colors.white,
-                              //  alignment: Alignment.centerLeft,
-                              child: CircleAvatar(
-                                radius: 10.0,
-                                backgroundImage: NetworkImage(friend.friendAvatar!)
-                              ),),
+                      
+                      leading: 
+                                                      Container(
+                                                        height: 40,
+                                                        width: 40,
+                                                        child: avatar(friend.friendAvatar,20.0)),
+
+                    //  Container(
+                    //          // color: Colors.white,
+                    //          //  alignment: Alignment.centerLeft,
+                    //          child: CircleAvatar(
+                    //            radius: 10.0,
+                    //            backgroundImage: NetworkImage(friend.friendAvatar!)
+                    //          ),
+                   // ),
                             
                      title: Text(friend.friendNickname!,style: TextStyle(
                                   color: Colors.white,

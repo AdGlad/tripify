@@ -18,18 +18,19 @@ CollectionReference<Map<String, dynamic>> imagesCollection =
 List<String> imagePaths = [];
 TextEditingController descriptionController = TextEditingController();
 
-Future showPopupForm(BuildContext context, PlaceHistory placeHistory,
-    String placeHistoryId) async {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Expanded(
-        child: AlertDialog(
-          
+
+ Future<bool?> showPopupForm(BuildContext context, PlaceHistory placeHistory,
+     String placeHistoryId) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
           title: Text('Trip Details'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+          content: 
+         // Text('Do you want to save the form?'),
+           Column(
+             mainAxisSize: MainAxisSize.min,
+             children: [
              // Text(style: TextStyle(fontSize: 12), placeHistoryId),
             //  Text(style: TextStyle(fontSize: 12), placeHistory.streetAddress!),
               TextFormField(
@@ -42,12 +43,13 @@ Future showPopupForm(BuildContext context, PlaceHistory placeHistory,
                 onPressed: _selectAndSaveImages,
                 child: Text('Select Images'),
               ),
-            ],
+             ],
           ),
-          actions: [
+
+          actions: <Widget>[
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                 Navigator.of(context).pop(false);
                 descriptionController.clear();
                 imagePaths.clear();
               },
@@ -56,39 +58,130 @@ Future showPopupForm(BuildContext context, PlaceHistory placeHistory,
             ElevatedButton(
               onPressed: () {
                 _saveImagesToFirestore(placeHistory, placeHistoryId);
-                Navigator.pop(context);
+                Navigator.of(context).pop(true);
                 descriptionController.clear();
                 imagePaths.clear();
               },
               child: Text('Save'),
             ),
-                      //             ElevatedButton(
-                      //   child: Text('Share', style: TextStyle(fontSize: 12)),
-                      //   onPressed: () {
-                      //     String flags = '';
-                      // //    for (var item in appState.tripHistory) {
-                      // //      flags = flags + CountryFlag(item.countryCode!);
-                      // //    }
-                      //     FlutterShare.share(
-                      //       //  title: 'My Streak',
-                      //       title: 'My Location',
-                      //       text:
-                      //           //  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.user.DistanceTotal} Kms\n visited ${appState.user.countrycount} countries \n $flags',
-                      //           // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.user.distancetotal} Kms\n visited ${appState.user.countrycount} countries \n $flags',
-                      //           // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.user.distancetotal} Kms\n visited ${appState.user.countrycount} countries \n $flags',
-                      //           'Tripify: Hi, I am visiting ${placeHistory.region} in ${placeHistory.countryName} ${CountryFlag(placeHistory.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
-                      //       chooserTitle: 'Share on social media',
-                      //     );
-                      //     // TODO: Implement share functionality
-                      //     Navigator.of(context).pop();
-                      //   },
-                      // ),
-          ],
-        ),
-      );
-    },
-  );
-}
+          ]
+          //   TextButton(
+          //     child: Text('Cancel'),
+          //     onPressed: () {
+          //       Navigator.of(context).pop(false); // Return false on cancel
+          //     },
+          //   ),
+          //   TextButton(
+          //     child: Text('Save'),
+          //     onPressed: () {
+          //       Navigator.of(context).pop(true); // Return true on save
+          //     },
+          //   ),
+          // ],
+        );
+      },
+    );
+  }
+
+
+
+
+
+
+// Future showPopupForm(BuildContext context, PlaceHistory placeHistory,
+//     String placeHistoryId) async {
+      
+// return AlertDialog(
+//           title: Text('Popup Form'),
+//           content: Text('Do you want to save the form?'),
+//           actions: <Widget>[
+//             TextButton(
+//               child: Text('Cancel'),
+//               onPressed: () {
+//                 Navigator.of(context).pop(false); // Return false on cancel
+//               },
+//             ),
+//             TextButton(
+//               child: Text('Save'),
+//               onPressed: () {
+//                 Navigator.of(context).pop(true); // Return true on save
+//               },
+//             ),
+//           ],
+//         );
+
+
+
+  //  showDialog(
+  //   context: context,
+  //   builder: (BuildContext context) {
+  //     return Expanded(
+  //       child: AlertDialog(
+          
+  //         title: Text('Trip Details'),
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //            // Text(style: TextStyle(fontSize: 12), placeHistoryId),
+  //           //  Text(style: TextStyle(fontSize: 12), placeHistory.streetAddress!),
+  //             TextFormField(
+  //               controller: descriptionController,
+  //               decoration: InputDecoration(
+  //                 labelText: 'Thoughts',
+  //               ),
+  //             ),
+  //             ElevatedButton(
+  //               onPressed: _selectAndSaveImages,
+  //               child: Text('Select Images'),
+  //             ),
+  //           ],
+  //         ),
+  //         actions: [
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               Navigator.pop(context,'Cancel');
+  //               descriptionController.clear();
+  //               imagePaths.clear();
+  //             },
+  //             child: Text('Cancel'),
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               _saveImagesToFirestore(placeHistory, placeHistoryId);
+  //               Navigator.pop(context,'Save');
+  //               descriptionController.clear();
+  //               imagePaths.clear();
+  //             },
+  //             child: Text('Save'),
+  //           ),
+  //                     //             ElevatedButton(
+  //                     //   child: Text('Share', style: TextStyle(fontSize: 12)),
+  //                     //   onPressed: () {
+  //                     //     String flags = '';
+  //                     // //    for (var item in appState.tripHistory) {
+  //                     // //      flags = flags + CountryFlag(item.countryCode!);
+  //                     // //    }
+  //                     //     FlutterShare.share(
+  //                     //       //  title: 'My Streak',
+  //                     //       title: 'My Location',
+  //                     //       text:
+  //                     //           //  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.user.DistanceTotal} Kms\n visited ${appState.user.countrycount} countries \n $flags',
+  //                     //           // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.user.distancetotal} Kms\n visited ${appState.user.countrycount} countries \n $flags',
+  //                     //           // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.user.distancetotal} Kms\n visited ${appState.user.countrycount} countries \n $flags',
+  //                     //           'Tripify: Hi, I am visiting ${placeHistory.region} in ${placeHistory.countryName} ${CountryFlag(placeHistory.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
+  //                     //       chooserTitle: 'Share on social media',
+  //                     //     );
+  //                     //     // TODO: Implement share functionality
+  //                     //     Navigator.of(context).pop();
+  //                     //   },
+  //                     // ),
+  //         ],
+  //       ),
+  //     );
+  //   },
+  // );
+  
+//}
 
 void _selectAndSaveImages() async {
   List<XFile>? selectedImages = await ImagePicker().pickMultiImage();

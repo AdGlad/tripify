@@ -56,8 +56,8 @@ class ApplicationState extends ChangeNotifier {
   List<PlaceHistory> _placeHistory = [];
   List<PlaceHistory> get placeHistory => _placeHistory;
 
-  List<TripHistory> _tripHistory = [];
-  List<TripHistory> get tripHistory => _tripHistory;
+//  List<TripHistory> _tripHistory = [];
+//  List<TripHistory> get tripHistory => _tripHistory;
 
   UserProfile? _userProfile;
   UserProfile? get userProfile => _userProfile;
@@ -174,10 +174,10 @@ class ApplicationState extends ChangeNotifier {
           int countrycounter = 0;
           int visitcounter = 0;
           int regioncounter = 0;
-          double distancetotal = 0.0;
+          int distancetotal = 0;
           int placescounter = 0;
 
-          _tripHistory = [];
+          // _tripHistory = [];
 
           // _userTotals = UserTotals(
           //     userId: FirebaseAuth.instance.currentUser!.uid,
@@ -187,58 +187,58 @@ class ApplicationState extends ChangeNotifier {
           //     RegionTotal: 0,
           //     PlacesCount: 0);
 
-          for (final document in snapshot.docs) {
-            String currentCountryName =
-                document.data()['countryName'] as String;
-            String currentCountryCode =
-                document.data()['countryCode'] as String;
-            String currentRegionCode = document.data()['regionCode'] as String;
-            double? currentDistance =
-                document.data()['distance'] as double? ?? 0.0;
-            int? currentVisitNumber =
-                document.data()['visitnumber'] as int? ?? 0;
-            int timeInMillis = document.data()['timestamp'];
-            DateTime currentArrivalDate =
-                DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+          // for (final document in snapshot.docs) {
+          //   String currentCountryName =
+          //       document.data()['countryName'] as String;
+          //   String currentCountryCode =
+          //       document.data()['countryCode'] as String;
+          //   String currentRegionCode = document.data()['regionCode'] as String;
+          //   double? currentDistance =
+          //       document.data()['distance'] as double? ?? 0.0;
+          //   int? currentVisitNumber =
+          //       document.data()['visitnumber'] as int? ?? 0;
+          //   int timeInMillis = document.data()['timestamp'];
+          //   DateTime currentArrivalDate =
+          //       DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
-            if (previousCountryName != currentCountryName) {
-              countrycounter++;
-            }
-            if (previousRegionCode != currentRegionCode) {
-              regioncounter++;
-            }
-            if (previousVisitNumber != currentVisitNumber) {
-              visitcounter++;
-            }
+          //   if (previousCountryName != currentCountryName) {
+          //     countrycounter++;
+          //   }
+          //   if (previousRegionCode != currentRegionCode) {
+          //     regioncounter++;
+          //   }
+          //   if (previousVisitNumber != currentVisitNumber) {
+          //     visitcounter++;
+          //   }
 
-            placescounter++;
-            developer.log(
-                'distancetotal $distancetotal , current_distance, $currentDistance');
-            distancetotal = distancetotal + currentDistance;
+          //   placescounter++;
+          //   developer.log(
+          //       'distancetotal $distancetotal , current_distance, $currentDistance');
+          //   distancetotal = distancetotal + currentDistance;
 
-            if (previousCountryName != currentCountryName) {
-              _tripHistory.add(TripHistory(
-                userId: FirebaseAuth.instance.currentUser!.uid,
-                countryName: currentCountryName,
-                countryCode: currentCountryCode,
-                arrivalDate: currentArrivalDate,
-                visitNumber: currentVisitNumber,
-              ));
+          //   //   if (previousCountryName != currentCountryName) {
+          //   //     _tripHistory.add(TripHistory(
+          //   //       userId: FirebaseAuth.instance.currentUser!.uid,
+          //   //       countryName: currentCountryName,
+          //   //       countryCode: currentCountryCode,
+          //   //       arrivalDate: currentArrivalDate,
+          //   //       visitNumber: currentVisitNumber,
+          //   //     ));
 
-              if (loopcounter > 0) {
-                _tripHistory[loopcounter - 1].departureDate =
-                    currentArrivalDate;
-              }
-              loopcounter++;
+          //   //   if (loopcounter > 0) {
+          //   //     _tripHistory[loopcounter - 1].departureDate =
+          //   //         currentArrivalDate;
+          //   //   }
+          //   //   loopcounter++;
 
-              developer.log(
-                  'Creating new trip record ${document.data()['countryName']} , ${document.data()['countryCode']}, ${document.data()['visitnumber']}');
-            }
+          //   //   developer.log(
+          //   //       'Creating new trip record ${document.data()['countryName']} , ${document.data()['countryCode']}, ${document.data()['visitnumber']}');
+          //   // }
 
-            previousCountryName = currentCountryName;
-            previousRegionCode = currentRegionCode;
-            previousVisitNumber = currentVisitNumber;
-          }
+          //   previousCountryName = currentCountryName;
+          //   previousRegionCode = currentRegionCode;
+          //   previousVisitNumber = currentVisitNumber;
+          // }
 
           developer.log(
               'countrycounter $countrycounter , $visitcounter, $distancetotal');
@@ -327,8 +327,7 @@ class ApplicationState extends ChangeNotifier {
         _userProfile?.league = userData['league'] as int? ?? 0;
         _userProfile?.countrycount = userData['countrycount'] as int? ?? 0;
         _userProfile?.visitcount = userData['visitcount'] as int? ?? 0;
-        _userProfile?.distancetotal =
-            (userData['distancetotal'] as double? ?? 0.0).toInt();
+        _userProfile?.distancetotal = (userData['distancetotal'] as int? ?? 0);
         _userProfile?.regioncount = userData['regioncount'] as int? ?? 0;
         _userProfile?.placescount = userData['placescount'] as int? ?? 0;
         _userProfile?.currentstreak = userData['currentStreak'] as int? ?? 0;
@@ -353,13 +352,14 @@ class ApplicationState extends ChangeNotifier {
         _userProfile?.latestregionCode =
             userData['latestregionCode'] as String? ?? 'latestregionCode';
 
-        List<dynamic> _countryListData = userData['countrycodelist'];
+        List<dynamic>? _countryListData = userData['countrycodelist'] ?? [];
         _userProfile?.countrycodelist =
-            _countryListData.map((e) => e.toString()).toList();
+            _countryListData?.map((e) => e.toString()).toList();
 
-        List<dynamic> _countryvisitlist = userData['countryvisitlist'];
+        List<dynamic>? _countryvisitListData =
+            userData['countryvisitlist'] ?? [];
         _userProfile?.countryvisitlist =
-            _countryvisitlist.map((e) => e.toString()).toList();
+            _countryvisitListData?.map((e) => e.toString()).toList();
 
         // _userProfile?.lastRecordedDate = userData['lastRecordedDate'].toDate()
         //     as DateTime?; //  ?? DateTime.now();
@@ -440,7 +440,7 @@ class ApplicationState extends ChangeNotifier {
           league: document.data()['league'] as int? ?? 0,
           countrycount: document.data()['countrycount'] as int? ?? 0,
           visitcount: document.data()['visitcount'] as int? ?? 0,
-          distancetotal: (document.data()['distancetotal'] ?? 0.0).toInt(),
+          distancetotal: document.data()['distancetotal'] as int? ?? 0,
           regioncount: document.data()['regioncount'] as int? ?? 0,
           placescount: document.data()['placescount'] as int? ?? 0,
           currentstreak: document.data()['currentStreak'] as int? ?? 0,

@@ -2,9 +2,12 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/model/placehistory.dart';
-
 import '../../model/users.dart';
 import 'leagueTitle.dart';
+
+import 'dart:io'; 
+
+
 // import 'package:gtk_flutter/screens/regionlistpage.dart';
 
 // import '../model/placehistory.dart';
@@ -28,7 +31,7 @@ class _LeagueState extends State<League> {
               builder: (context,
                   AsyncSnapshot<UserProfileQuerySnapshot> snapshot,
                   Widget? child) {
-                if (snapshot.hasError) return Text('Something went wrong!');
+                if (snapshot.hasError) return Text('Something went wrong! ${snapshot.error}');
                 if (!snapshot.hasData) return Text('Loading users...');
 
                 // Access the QuerySnapshot
@@ -53,10 +56,10 @@ class _LeagueState extends State<League> {
                           Row(
                             children: [
                               Expanded(flex: 1, child: leaguePosition(index)),
-                              Expanded(flex: 1, child: leagueAvatar(user)),
+                              Expanded(flex: 1, child: avatar(user.avatar, 10.0)),
                              // Expanded(child: leagueCountry(user)),
                               Expanded(flex: 4, child: leagueNickname(user)),
-                              Expanded(flex: 3,child: leagueDistance(user)),
+                              Expanded(flex: 4,child: leagueDistance(user)),
                             ],
                           ),
                           // Row(
@@ -100,35 +103,50 @@ Widget leaguePosition(int index) {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 15.0,
+                          fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         ))),
   );
 }
 
-Widget leagueAvatar(UserProfile user) {
+Widget avatar(String? _useravatar, double _radius ) {
   return Container(
     alignment: Alignment.centerLeft,
-    child: CircleAvatar(
-      radius: 15.0,
-      backgroundImage: user.avatar == null
-          ? null //FileImage(_imageFile)
-          : user.avatar != null
-              ? NetworkImage(user.avatar!)
-              : null,
+    child: CircleAvatar( 
+     // radius: 10.0,
+      radius: _radius,
+      backgroundColor: Colors.blue,
+      backgroundImage: 
+      //NetworkImage('https://lh3.googleusercontent.com/a/AGNmyxZy7z0QoagLZwV8FobJdI0m1dezAfH0l9f81pz9=s96-c')
+      //AssetImage('assets/Quokka-PNG-Pic.png')
+      // FileImage(File('assets/quokka1.png')),
+      // new AssetImage('assets/quokka1.png')
+      _useravatar != null
+          ? NetworkImage(_useravatar)
+          :  AssetImage('assets/quokka1.png') as ImageProvider
+//          : FileImage(File('assets/quokka1.png'))
+        //  Image(image:  new AssetImage('assets/quokka1.png'))
+          //: AssetImage('assets/quokka1.png') as ImageProvider
+          //Image.asset('assets/quokka1.png')
+          //null //FileImage(_imageFile)
+        //  : useravatar != null
+       //       : NetworkImage(useravatar)
+             // : null,
     ),
   );
 }
 
 Widget leagueDistance(UserProfile user) {
   return Container(
+      //  color: Colors.amber,
+
     child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(' ${user.distancetotal} Kms',
+      padding: const EdgeInsets.all(3.0),
+      child: Text(' ${(user.distancetotal??0).toInt()} km',
           textAlign: TextAlign.right,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 15.0,
+            fontSize: 10.0,
             fontWeight: FontWeight.w700,
           )),
     ),
@@ -137,15 +155,22 @@ Widget leagueDistance(UserProfile user) {
 
 Widget leagueNickname(UserProfile user) {
   return Container(
-    child: Text('     ${user.nickname} ',
-      overflow: TextOverflow.ellipsis,
-  maxLines: 1,
-        textAlign: TextAlign.left,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 15.0,
-          fontWeight: FontWeight.w700,
-        )),
+   // margin: EdgeInsets.all(0.0),
+   // color: Colors.amber,
+    child: Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Text('     ${user.nickname} ',
+        overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      
+          textAlign: TextAlign.left,
+          style: TextStyle(
+    
+            color: Colors.white,
+            fontSize: 10.0,
+            fontWeight: FontWeight.w700,
+          )),
+    ),
   );
 }
 
@@ -155,7 +180,7 @@ Widget leagueCountry(UserProfile user) {
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 15.0,
+          fontSize: 10.0,
           fontWeight: FontWeight.w700,
         )),
   );
@@ -182,7 +207,7 @@ Widget leagueMembership(UserProfile user) {
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 15.0,
+          fontSize: 10.0,
           fontWeight: FontWeight.w700,
         )),
   );

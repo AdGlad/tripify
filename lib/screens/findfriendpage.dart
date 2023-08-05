@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
  import 'package:flutter/material.dart';
   import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gtk_flutter/model/users.dart';
+import 'package:gtk_flutter/screens/league/league.dart';
 import 'package:provider/provider.dart';
 
 import '../state/applicationstate.dart';
@@ -56,24 +57,43 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                   child: ListTile(
-                    leading: Container(
-                            // color: Colors.white,
-                            //  alignment: Alignment.centerLeft,
-                            child: CircleAvatar(
-                              radius: 10.0,
-                              backgroundImage: userData['avatar'] == null
-                                  ? null //FileImage(_imageFile)
-                                  : userData['avatar'] != null
-                                      ? NetworkImage(userData['avatar'])
-                                      : null,
-                            ),
-                          ),
-                   title: Text(userData['nickname'],style: TextStyle(
+                    leading: 
+                  //   Text('Hello'),
+                    // Text(userData.data().toString().contains('avatar')?userData['avatar'] : 'null'),
+                   //  Text(userData.data().toString().contains('avatar')?userData['avatar'] : 'null'),
+                    Container( width: 40,
+                    height: 40,
+                      child: avatar(userData.data().toString().contains('avatar')?userData['avatar'] : null ,30.0), 
+                      ),
+
+                   // Text('Hello'),
+
+                    //avatar(userData['avatar']),
+                    
+                    
+                    //  Container(
+                    //         // color: Colors.white,
+                    //         //  alignment: Alignment.centerLeft,
+                    //         child: CircleAvatar(
+                    //           radius: 10.0,
+                    //           backgroundImage: 
+                              
+                    //           userData['avatar'] !=null
+                    //            //   ? null //FileImage(_imageFile)
+                    //            //   : userData['avatar'] != null
+                    //                   ? NetworkImage(userData['avatar'])
+                    //                   : AssetImage('assets/quokka1.png'),
+                    //       ),
+                   title: Text(userData.data().toString().contains('nickname')? userData['nickname'] : ' ' ,
+                  //  userData['nickname'],
+                   style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 10.0,
                                 fontWeight: FontWeight.w700,
                               )), //Text('title'), //Text(userData['nickname']),
-                    subtitle: Text(userData['email'],style: TextStyle(
+                    subtitle: 
+                    Text( userData.data().toString().contains('email')?userData['email'] : ' '  , //['email'],
+                   style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 8.0,
                                 fontWeight: FontWeight.w700,

@@ -9,12 +9,16 @@ import '../country/ActiveCountryPage.dart';
 Container UserCntryContainer(
     BuildContext context, UserProfile? user, ApplicationState appState) {
   return Container(
+    //color: Color.fromARGB(255, 49, 52, 59),
+
       width: MediaQuery.of(context).size.width,
       child: GestureDetector(
         onTap: () {
           String flags = '';
-          for (var item in appState.tripHistory) {
-            flags = flags + CountryFlag(item.countryCode!);
+         // for (var item in appState.tripHistory) {
+          for (var item in appState.userProfile!.countryvisitlist!) {
+          //  flags = flags + CountryFlag(item.countryCode!);
+            flags = flags + CountryFlag(item);
           }
 
           FlutterShare.share(
@@ -38,16 +42,15 @@ Container UserCntryContainer(
                 width: MediaQuery.of(context).size.width - 20,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  reverse: true,
-                  itemCount: appState.tripHistory.length,
+                  reverse: false,
+                  itemCount: appState.userProfile!.countryvisitlist!.length,
                   itemBuilder: (BuildContext context, int index) {
                     return FittedBox(
                       fit: BoxFit.fill,
-
                       //                    fit: BoxFit.scaleDown,
 
                       child: Text(
-                        CountryFlag(appState.tripHistory[index].countryCode!),
+                        CountryFlag(appState.userProfile?.countryvisitlist![index].substring(0,2)??'au'),
                         style: TextStyle(fontSize: 25),
                       ),
                     );

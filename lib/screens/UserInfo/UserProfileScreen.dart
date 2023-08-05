@@ -34,11 +34,11 @@ class UserProfileScreen extends StatelessWidget {
         body: 
         Column(
               children: [
-                Expanded(child: userStatsContainer(appState.userProfile, context)),
+                Expanded(flex: 1, child: userStatsContainer(appState.userProfile, context)),
                // userStatsContainer(_userProfile, context),
               //  UserMapContainer( context, _userProfile!, null)
                 //Container(child: UserMapContainer( context, _userProfile!))
-              Expanded(child: UserMapContainer( context, appState.userProfile)) 
+              Expanded( flex: 1, child: UserMapContainer( context, appState.userProfile)) 
     
               ]
               )

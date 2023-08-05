@@ -83,7 +83,7 @@ Future saveLocation(
 
   // _latitude = 39.9040; //Beijing
   // _longitude = 116.4075; //Beijing
-  //   _latitude = 40.6943; //New York"
+  // _latitude = 40.6943; //New York"
   // _longitude = -73.9249;//New York"
 
   //       _latitude = 51.50853; //London
@@ -128,11 +128,11 @@ Future saveLocation(
               print("mapController.animateCamera() returned $result"));
     }
 
-    double distanceInMeters = Geolocator.distanceBetween(
-        currentPlace?.latitude ?? value.latitude!,
-        currentPlace?.longitude ?? value.longitude!,
+    int distanceInMeters = Geolocator.distanceBetween(
+        currentPlace.latitude ?? value.latitude!,
+        currentPlace.longitude ?? value.longitude!,
         value.latitude!,
-        value.longitude!);
+        value.longitude!).toInt();
     developer.log('Discance in meters ${distanceInMeters.toString()}');
     developer.log('CurrentCountry');
 
@@ -182,7 +182,7 @@ Future saveLocation(
       name: value.countryName,
       location: value.countryName,
       latitude: value.latitude,
-      distance: distanceInMeters,
+      distance: distanceInMeters.toDouble(),
       longitude: value.longitude,
       streetAddress: value.streetAddress,
       city: value.city,
@@ -216,9 +216,20 @@ Future saveLocation(
     await _incrementStreak(batch, _newCountryCount, _newCountryCode,
         newVisitNumber, distanceInMeters, value);
 
-    Future<dynamic> cancelyesno =
-        showPopupForm(context, newPlace, placehistoryDocRef.id);
-    developer.log('showPopupForm after results [$cancelyesno]');
+    // //Future<dynamic> 
+    //  var cancelyesno = await 
+    //     showPopupForm(context, newPlace, placehistoryDocRef.id);
+    // developer.log('showPopupForm1 after results [$cancelyesno]');
+
+//bool? result = await showPopupForm(context, newPlace, placehistoryDocRef.id);
+
+Future<bool?> result =  showPopupForm(context, newPlace, placehistoryDocRef.id);
+        if (result == true) {
+          print('Form saved');
+        } else {
+          print('Form canceled');
+        }
+  developer.log(' waited for showPopupForm to complete Form');
 
     try {
       // Commit the batch
@@ -240,7 +251,7 @@ Future<void> _incrementStreak(
     int? newCountryCount,
     String? newCountryCode,
     int newVisitNumber,
-    double? distanceInMeters,
+    int? distanceInMeters,
     PlaceHistory place) async {
 //Future<void> _incrementStreak(UserProfile user, PlaceHistory place) async {
   developer.log('_incrementStreak ${place.countryCode}');
@@ -281,7 +292,7 @@ Future<void> _incrementStreak(
         'distancetotal': FieldValue.increment(distanceInMeters as num),
         'regioncount': FieldValue.increment(1),
         'placescount': FieldValue.increment(1),
-        'countryvistlist': FieldValue.arrayUnion([place.countryCode! + '-' + newVisitNumber.toString()]),
+        'countryvisitlist': FieldValue.arrayUnion([place.countryCode! + '-' + newVisitNumber.toString()]),
       },
     );
 
@@ -416,8 +427,11 @@ void _showShareDialog(BuildContext context, PlaceHistory placeHistory) {
                         child: Text('SHARE', style: TextStyle(fontSize: 12)),
                         onPressed: () {
                           String flags = '';
-                          for (var item in appState.tripHistory) {
-                            flags = flags + CountryFlag(item.countryCode!);
+                         // for (var item in appState.tripHistory) {
+                         //   flags = flags + CountryFlag(item.countryCode!);
+                         // }
+                          for (var item in appState.userProfile!.countryvisitlist!) {
+                            flags = flags + CountryFlag(item);
                           }
                           FlutterShare.share(
                             //  title: 'My Streak',
