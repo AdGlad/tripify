@@ -26,7 +26,7 @@ class _PlaceHistoryListPageState extends State<PlaceHistoryListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Visted Location'),
+          title: Text('Visited Location'),
         ),
         body: Center(
           child: PlaceHistorylist(
@@ -60,7 +60,8 @@ class _PlaceHistorylistState extends State<PlaceHistorylist> {
             .orderByTimestamp(descending: true),
         builder: (context, AsyncSnapshot<PlaceHistoryQuerySnapshot> snapshot,
             Widget? child) {
-          if (snapshot.hasError) return Text('Something went wrong ${snapshot.error}!');
+          if (snapshot.hasError)
+            return Text('Something went wrong ${snapshot.error}!');
           if (!snapshot.hasData) return Text('Loading user...');
 
           // Access the UserDocumentSnapshot
@@ -163,9 +164,12 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
+
                     Text(
-                        (DateFormat('hh:mm a dd MMM yy')
-                            .format(currentPlaceHistory.arrivaldate!)),
+                        currentPlaceHistory.arrivaldate != null
+                            ? 'Arrival Date: ' + (DateFormat('hh:mm a dd MMM yy')
+                                .format(currentPlaceHistory.arrivaldate!))
+                            : 'No arrival date',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -173,20 +177,25 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                           fontWeight: FontWeight.w700,
                         )),
                     Text(
-                        'Country vist number : ${currentPlaceHistory.visitnumber}',
+                        'Visit No. : ${currentPlaceHistory.visitnumber}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text('Distance: ${currentPlaceHistory.distance}',
+
+                    Text(
+                      currentPlaceHistory.distance !=null ?
+                      'Distance: ${currentPlaceHistory.distance}' : 'no distance'
+                      ,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
+
                     Text('Lat : ${currentPlaceHistory.latitude}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -201,7 +210,10 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text('Dairy : ${currentPlaceHistory.description}',
+                    Text(
+                      currentPlaceHistory.description !=null ?
+                      'Dairy : ${currentPlaceHistory.description}' : 'Dairy : '
+                      ,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -209,15 +221,11 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                           fontWeight: FontWeight.w700,
                         )),
 
-
-
-                        
-             //     Container(child: Image.network(
-             // currentPlaceHistory.imagePaths![1],
-             // fit: BoxFit.cover,
-           // ),
-            //)
-                        
+                    //     Container(child: Image.network(
+                    // currentPlaceHistory.imagePaths![1],
+                    // fit: BoxFit.cover,
+                    // ),
+                    //)
                   ],
                 ),
               )
@@ -253,22 +261,20 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
 
             TextButton(
                 onPressed: () {
-                  if (currentPlaceHistory!.imagePaths!.isNotEmpty ) { 
+                  if (currentPlaceHistory!.imagePaths!.isNotEmpty) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImageGallery(
+                              imagePaths: currentPlaceHistory.imagePaths!)
+                          //ImageGallery( places: places
+                          //documentId: 'Y9yviPMmXlk8eFfNRld3'
+                          ,
+                        )
 
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-
-                        builder: (context) =>  ImageGallery(
-                            imagePaths: currentPlaceHistory.imagePaths!)
-                        //ImageGallery( places: places
-                        //documentId: 'Y9yviPMmXlk8eFfNRld3'
-                        ,
-                      )
-
-                      //  countrycode: currentcountry.countryCode!),
-                      //);
-                      );
+                        //  countrycode: currentcountry.countryCode!),
+                        //);
+                        );
                   }
                 },
                 child: Text(
