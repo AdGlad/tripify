@@ -17,7 +17,7 @@ CollectionReference<Map<String, dynamic>> imagesCollection =
     FirebaseFirestore.instance.collection('images');
 List<String> imagePaths = [];
 TextEditingController descriptionController = TextEditingController();
-
+List<XFile>? selectedImages;
 
  Future<bool?> showPopupForm(BuildContext context, PlaceHistory placeHistory,
      String placeHistoryId) async {
@@ -56,11 +56,9 @@ TextEditingController descriptionController = TextEditingController();
               child: Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: () {
-                _saveImagesToFirestore(placeHistory, placeHistoryId);
+              onPressed: () async {
+                 _saveImagesToFirestore(placeHistory, placeHistoryId);
                 Navigator.of(context).pop(true);
-                descriptionController.clear();
-                imagePaths.clear();
               },
               child: Text('Save'),
             ),
@@ -184,9 +182,32 @@ TextEditingController descriptionController = TextEditingController();
 //}
 
 void _selectAndSaveImages() async {
-  List<XFile>? selectedImages = await ImagePicker().pickMultiImage();
-  if (selectedImages != null) {
-    for (XFile imageFile in selectedImages) {
+  //List<XFile>? 
+  selectedImages = await ImagePicker().pickMultiImage();
+  // if (selectedImages != null) {
+  //   for (XFile imageFile in selectedImages!) {
+  //           String imagePath = await _saveImageToDirectory(imageFile);
+  //     imagePaths.add(imagePath);
+  //    // String imagePath = imageFile.path;
+  //    // String fileName = imagePath.split('/').last;
+  //    // final File savedImage = await imageFile.saveTo('tripify/$fileName');
+
+  //    // imagePaths.add(savedImage.path);
+  //   }
+  // }
+  }
+Future<String> _saveImageToDirectory(XFile imageFile) async {
+  Directory appDirectory = await getApplicationDocumentsDirectory();
+  String fileName = imageFile.path.split('/').last;
+  String savedImagePath = '${appDirectory.path}/$fileName';
+  File(imageFile.path).copy(savedImagePath);
+  return savedImagePath;
+}
+
+Future<void> _saveImagesToFirestore(
+    PlaceHistory placeHistory, String placeHistoryId) async {
+        if (selectedImages != null) {
+    for (XFile imageFile in selectedImages!) {
             String imagePath = await _saveImageToDirectory(imageFile);
       imagePaths.add(imagePath);
      // String imagePath = imageFile.path;
@@ -196,17 +217,6 @@ void _selectAndSaveImages() async {
      // imagePaths.add(savedImage.path);
     }
   }
-}
-Future<String> _saveImageToDirectory(XFile imageFile) async {
-  Directory appDirectory = await getApplicationDocumentsDirectory();
-  String fileName = imageFile.path.split('/').last;
-  String savedImagePath = '${appDirectory.path}/$fileName';
-  File(imageFile.path).copy(savedImagePath);
-  return savedImagePath;
-}
-
-void _saveImagesToFirestore(
-    PlaceHistory placeHistory, String placeHistoryId) async {
   CollectionReference placehistoryref =
       FirebaseFirestore.instance.collection('placehistory');
 //final placehistoryRef = PlaceHistoryCollectionReference;
@@ -228,6 +238,8 @@ void _saveImagesToFirestore(
     'imagePaths': imagePaths
   });
   developer.log('placehistory update after');
+                  descriptionController.clear();
+                imagePaths.clear();
 
   // placehistoryref.  doc(placeHistoryId) ({
   // 'description': descriptionController.text,
