@@ -86,6 +86,8 @@
 	<string>Your location is required in order to record your travel details including countries you have visted.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Sharing of location details via social media requires access to your photos. </string>
+	<key>NSCameraUsageDescription</key>
+	<string>Sharing of location details via social media requires access to your photos. </string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>PROJECT_ID</key>

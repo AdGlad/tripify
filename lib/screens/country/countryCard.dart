@@ -5,6 +5,7 @@ import '../../model/placehistory.dart';
 
 Widget countrycard(CurrentCountry country, BuildContext context) {
   return Card(
+
     color: Color.fromARGB(255, 49, 52, 59),
     elevation: 8.0,
     margin: EdgeInsets.all(5.0),
@@ -18,7 +19,7 @@ Widget countrycard(CurrentCountry country, BuildContext context) {
             children: [
               Text(
                 CountryFlag(country.countryCode),
-                style: TextStyle(fontSize: 35),
+                style: TextStyle(fontSize: 25),
               ),
               Container(
               //            color: Color.fromARGB(255, 81, 126, 231),
@@ -31,7 +32,7 @@ Widget countrycard(CurrentCountry country, BuildContext context) {
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20.0,
+                          fontSize: 15.0,
                           fontWeight: FontWeight.w700,
                         )),
                   ],
@@ -40,23 +41,24 @@ Widget countrycard(CurrentCountry country, BuildContext context) {
             ],
           ),
         ),
-        ButtonBar(
-          alignment: MainAxisAlignment.end,
-          children: [
-            IconButton(
-              color: Color.fromARGB(255, 26, 173, 182),
-              onPressed: () {},
-              icon: const Icon(Icons.share),
-              tooltip: 'Share',
-            ),
-            //child: Text('SHARE')),
-            TextButton(
-                onPressed: () {},
-                child: Text(
-                    style: TextStyle(color: Color.fromARGB(255, 26, 173, 182)),
-                    'Learn More'))
-          ],
-        )
+        // ButtonBar(
+        //   mainAxisSize: MainAxisSize.min,
+        //   alignment: MainAxisAlignment.end,
+        //   children: [
+        //     IconButton(
+        //       color: Color.fromARGB(255, 26, 173, 182),
+        //       onPressed: () {},
+        //       icon: const Icon(Icons.share),
+        //       tooltip: 'Share',
+        //     ),
+        //     //child: Text('SHARE')),
+        //     TextButton(
+        //         onPressed: () {},
+        //         child: Text(
+        //             style: TextStyle(color: Color.fromARGB(255, 26, 173, 182)),
+        //             'Learn More'))
+        //   ],
+        // )
       ],
     ),
   );

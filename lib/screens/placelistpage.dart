@@ -7,6 +7,10 @@ import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../model/placehistory.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
+import 'package:share_plus/share_plus.dart';
+import 'package:flutter_share/flutter_share.dart';
+
 
 class PlaceHistoryListPage extends StatefulWidget {
   final String countrycode;
@@ -167,8 +171,9 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
 
                     Text(
                         currentPlaceHistory.arrivaldate != null
-                            ? 'Arrival Date: ' + (DateFormat('hh:mm a dd MMM yy')
-                                .format(currentPlaceHistory.arrivaldate!))
+                            ? 'Arrival Date: ' +
+                                (DateFormat('hh:mm a dd MMM yy')
+                                    .format(currentPlaceHistory.arrivaldate!))
                             : 'No arrival date',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -176,8 +181,7 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text(
-                        'Visit No. : ${currentPlaceHistory.visitnumber}',
+                    Text('Visit No. : ${currentPlaceHistory.visitnumber}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -186,9 +190,9 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                         )),
 
                     Text(
-                      currentPlaceHistory.distance !=null ?
-                      'Distance: ${currentPlaceHistory.distance}' : 'no distance'
-                      ,
+                        currentPlaceHistory.distance != null
+                            ? 'Distance: ${currentPlaceHistory.distance}'
+                            : 'no distance',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -211,21 +215,30 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                           fontWeight: FontWeight.w700,
                         )),
                     Text(
-                      currentPlaceHistory.description !=null ?
-                      'Dairy : ${currentPlaceHistory.description}' : 'Dairy : '
-                      ,
+                        currentPlaceHistory.description != null
+                            ? 'Diary : ${currentPlaceHistory.description}'
+                            : 'Diary : ',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-
-                    //     Container(child: Image.network(
-                    // currentPlaceHistory.imagePaths![1],
-                    // fit: BoxFit.cover,
-                    // ),
-                    //)
+                    Container(
+                      height: 40,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: currentPlaceHistory.imagePaths?.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: 
+                              currentPlaceHistory.imagePaths?[index] != null ?
+                              Image.file(File(currentPlaceHistory.imagePaths![index]))
+                                   : Text(' '),
+                            );
+                          }),
+                    )
                   ],
                 ),
               )
@@ -237,52 +250,95 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
           children: [
             IconButton(
               color: Color.fromARGB(255, 26, 173, 182),
-              onPressed: () {},
+              onPressed: () {
+               // _fluttershareImages( currentPlaceHistory!);
+              _shareImages( currentPlaceHistory!);
+                },
               icon: const Icon(Icons.share),
+              tooltip: 'Pics',
+            ),
+            IconButton(
+              color: Color.fromARGB(255, 26, 173, 182),
+              onPressed: () {
+                if (currentPlaceHistory!.imagePaths!.isNotEmpty) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageGallery(
+                            imagePaths: currentPlaceHistory.imagePaths!)
+                        //ImageGallery( places: places
+                        //documentId: 'Y9yviPMmXlk8eFfNRld3'
+                        ,
+                      )
+
+                      //  countrycode: currentcountry.countryCode!),
+                      //);
+                      );
+                }
+              },
+              icon: const Icon(Icons.image),
               tooltip: 'Share',
             ),
-            //child: Text('SHARE')),
-            TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LocationMapPage(
-                            placeHistory: currentPlaceHistory
-                            //latlng: LatLng(currentPlaceHistory.l//atitude!,
-                            //currentPlaceHistory.longitude!
-                            )),
-                    //  countrycode: currentcountry.countryCode!),
-                  );
-                },
-                child: Text(
-                    style: TextStyle(color: Color.fromARGB(255, 26, 173, 182)),
-                    'Show on map')),
-
-            TextButton(
-                onPressed: () {
-                  if (currentPlaceHistory!.imagePaths!.isNotEmpty) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ImageGallery(
-                              imagePaths: currentPlaceHistory.imagePaths!)
-                          //ImageGallery( places: places
-                          //documentId: 'Y9yviPMmXlk8eFfNRld3'
-                          ,
-                        )
-
-                        //  countrycode: currentcountry.countryCode!),
-                        //);
-                        );
-                  }
-                },
-                child: Text(
-                    style: TextStyle(color: Color.fromARGB(255, 26, 173, 182)),
-                    'Show Images'))
+            IconButton(
+              color: Color.fromARGB(255, 26, 173, 182),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          LocationMapPage(placeHistory: currentPlaceHistory
+                              //latlng: LatLng(currentPlaceHistory.l//atitude!,
+                              //currentPlaceHistory.longitude!
+                              )),
+                  //  countrycode: currentcountry.countryCode!),
+                );
+              },
+              icon: const Icon(Icons.map),
+              tooltip: 'Map',
+            ),
           ],
         )
       ],
     ),
   );
 }
+  void _shareImages(PlaceHistory currentPlaceHistory) async {
+      final files = <XFile>[];
+
+if (currentPlaceHistory.imagePaths != null) {
+      for (var i = 0; i < currentPlaceHistory.imagePaths!.length; i++) {
+        files.add(XFile(currentPlaceHistory.imagePaths![i], name: currentPlaceHistory.imagePaths![i]));
+      }
+}
+
+    if (currentPlaceHistory.imagePaths != null) {
+
+//final result = await Share.shareXFiles([XFile('/var/mobile/Containers/Data/Application/EAA8DD50-60C3-456C-8E0F-15DD007F930E/Documents/image_picker_6332C981-94B7-4B68-9F68-41257A7D429C-15817-00000898000C298E.jpg')], text: 'Great picture');
+
+//final result = await Share.shareXFiles([XFile(imagePaths)], text: 'Great picture');
+//final result = await Share.shareXFiles(files, text: currentPlaceHistory.streetAddress ,subject: 'In Australia',);
+final result = await Share.shareXFiles(files, text: currentPlaceHistory.streetAddress ,subject: 'In Australia',
+);
+
+if (result.status == ShareResultStatus.success) {
+    print('Thank you for sharing the picture!');
+   // await Share.shareXFiles(imagePaths.cast<XFile>()
+     // mimeTypes: List.filled(imagePaths!.length, 'image/jpeg'), // Specify mime types
+     // text: 'Check out these images!', // Optional text message
+   // );
+      }
+  }
+  }
+
+   void _fluttershareImages(PlaceHistory currentPlaceHistory) async {
+      final files = <XFile>[];
+
+    if (currentPlaceHistory.imagePaths != null) {
+          await FlutterShare.shareFile(
+      title: 'Example share',
+      text: 'Example share text',
+      filePath: currentPlaceHistory.imagePaths![0],
+    );
+
+  }
+  }

@@ -196,7 +196,7 @@ Future saveLocation(
       timestamp: value.timestamp, // DateTime.now().millisecondsSinceEpoch,
       arrivaldate: value.arrivaldate, // DateTime.now()
       visitnumber: newVisitNumber,
-      imagePaths: value.imagePaths,
+      //imagePaths: value.imagePaths,
     );
     developer.log('PlaceHistoryCollectionReference');
 
@@ -223,7 +223,10 @@ Future saveLocation(
 
 //bool? result = await showPopupForm(context, newPlace, placehistoryDocRef.id);
 
-Future<bool?> result =  showPopupForm(context, newPlace, placehistoryDocRef.id);
+//Future<bool?> result =   showPopupForm(context, newPlace, placehistoryDocRef.id);
+bool? result =  await showPopupForm(context, newPlace, placehistoryDocRef.id);
+
+
         if (result == true) {
           print('Form saved');
         } else {

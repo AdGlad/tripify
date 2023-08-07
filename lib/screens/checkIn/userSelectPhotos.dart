@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'dart:developer' as developer;
 import 'package:path_provider/path_provider.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../model/placehistory.dart';
 import '../country/ActiveCountryPage.dart';
@@ -17,7 +18,9 @@ CollectionReference<Map<String, dynamic>> imagesCollection =
     FirebaseFirestore.instance.collection('images');
 List<String> imagePaths = [];
 TextEditingController descriptionController = TextEditingController();
-List<XFile>? selectedImages;
+List<XFile>? selectedImages = [];
+List<String>? selectedImagePaths =[];
+//XFile? selectedImage;
 
  Future<bool?> showPopupForm(BuildContext context, PlaceHistory placeHistory,
      String placeHistoryId) async {
@@ -39,9 +42,17 @@ List<XFile>? selectedImages;
                   labelText: 'Thoughts',
                 ),
               ),
-              ElevatedButton(
-                onPressed: _selectAndSaveImages,
-                child: Text('Select Images'),
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed:  () async { await _selectAndSaveImages(ImageSource.gallery);},
+                    child: Text('Image From Gallery'),
+                  ),
+                                    ElevatedButton(
+                    onPressed: () async {await _selectAndSaveImages(ImageSource.camera);},
+                    child: Text('Image From Camera'),
+                  ),
+                ],
               ),
              ],
           ),
@@ -51,7 +62,13 @@ List<XFile>? selectedImages;
               onPressed: () {
                  Navigator.of(context).pop(false);
                 descriptionController.clear();
+                developer.log('cancel imagePaths 1 Length ${imagePaths.length} ');
                 imagePaths.clear();
+                imagePaths = [];
+                selectedImages?.clear();
+
+                developer.log('cancel imagePaths 2 Length ${imagePaths.length} ');
+
               },
               child: Text('Cancel'),
             ),
@@ -59,6 +76,8 @@ List<XFile>? selectedImages;
               onPressed: () async {
                  _saveImagesToFirestore(placeHistory, placeHistoryId);
                 Navigator.of(context).pop(true);
+               // descriptionController.clear();
+               // imagePaths.clear();
               },
               child: Text('Save'),
             ),
@@ -69,24 +88,62 @@ List<XFile>? selectedImages;
   }
 
 
-void _selectAndSaveImages() async {
-  selectedImages = await ImagePicker().pickMultiImage();
+Future <void> _selectAndSaveImages(ImageSource _imagesource ) async {
+   developer.log('imagePaths 1 Length ${imagePaths.length} ');
+
+  imagePaths.clear();
+  imagePaths = [];
+  selectedImages?.clear();
+  selectedImagePaths?.clear();
+  //selectedImage = null;
+
+
+ developer.log('imagePaths 2 Length ${imagePaths.length} ');
+
+ // selectedImages = await ImagePicker().pickMultiImage( );
+ // XFile? selectedImage = await ImagePicker().pickImage(requestFullMetadata: true,
+ //   maxHeight: 300,maxWidth: 300, preferredCameraDevice: CameraDevice.rear,
+ //   source: ImageSource.camera);
+  //XFile? selectedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+  XFile? selectedImage = await ImagePicker().pickImage(source: _imagesource);
+  if (selectedImage != null) {
+      developer.log('selectedImage is not null ');
+
+  selectedImages?.add(selectedImage);
+  selectedImagePaths?.add(selectedImage.path);
+  }
+  developer.log('imagePaths 3 Length ${selectedImages?[0]} ');
+  developer.log('imagePaths 4 Length $selectedImage ');
+  developer.log('imagePaths 3 Length ${selectedImagePaths?[0]} ');
+
   }
 Future<String> _saveImageToDirectory(XFile imageFile) async {
+final storageRef = FirebaseStorage.instance.ref();
+
   Directory appDirectory = await getApplicationDocumentsDirectory();
   String fileName = imageFile.path.split('/').last;
   String savedImagePath = '${appDirectory.path}/$fileName';
   File(imageFile.path).copy(savedImagePath);
+  
+  
+  
   return savedImagePath;
+
+
 }
 
 Future<void> _saveImagesToFirestore(
+
     PlaceHistory placeHistory, String placeHistoryId) async {
         if (selectedImages != null) {
     for (XFile imageFile in selectedImages!) {
             String imagePath = await _saveImageToDirectory(imageFile);
       imagePaths.add(imagePath);
     }
+  } else
+  {
+      developer.log('selectedImages is null');
+
   }
   CollectionReference placehistoryref =
       FirebaseFirestore.instance.collection('placehistory');
@@ -109,7 +166,13 @@ Future<void> _saveImagesToFirestore(
     'imagePaths': imagePaths
   });
   developer.log('placehistory update after');
-                  descriptionController.clear();
-                imagePaths.clear();
+  descriptionController.clear();
+  developer.log('save imagePaths 0 Length ${imagePaths.length} ');
+
+  imagePaths.clear();
+  imagePaths = [];
+  selectedImages?.clear();
+
+  developer.log('save imagePaths 1 Length ${imagePaths.length} ');
 
 }

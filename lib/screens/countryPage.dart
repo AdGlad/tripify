@@ -31,14 +31,13 @@ class _SupportedCountriesMapState extends State<SupportedCountriesMap> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SizedBox(
+        SizedBox( 
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: InteractiveViewer(
             maxScale: 75.0,
             child: Row(
               children: [
-// const IconAndDetail(Icons.location_city, 'San Francisco'),
                 Consumer<ApplicationState>(
                     builder: (context, appState, _) => SizedBox(
                           width: MediaQuery.of(context).size.width * 0.92,
@@ -56,7 +55,7 @@ class _SupportedCountriesMapState extends State<SupportedCountriesMap> {
                           ),
                         )),
                 // Creates 8% from right side so the map looks more centered.
-                Container(width: MediaQuery.of(context).size.width * 0.08),
+               // Container(width: MediaQuery.of(context).size.width * 0.08),
               ],
             ),
           ),
@@ -203,9 +202,9 @@ class _CountryPageState extends State<CountryPage> {
                                   width: 320,
                                   height: MediaQuery.of(context).size.height,
                                   child: Card(
-                                   // color: Color.fromARGB(255, 49, 52, 59),
-                                   // margin: EdgeInsets.all(16),
-                                   // elevation: 8,
+                                    // color: Color.fromARGB(255, 49, 52, 59),
+                                    // margin: EdgeInsets.all(16),
+                                    // elevation: 8,
                                     child: ListView(
                                       children: [
                                         for (int i = 0;
@@ -305,12 +304,14 @@ class _CountryPageState extends State<CountryPage> {
                                             color: properties[i]['color'] ??
                                                 Colors.grey.shade300,
                                           ),
-                                          subtitle: Text(properties[i]['id'],
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.w700)),
+                                          // subtitle: Text(properties[i]['id'],
+                                          //     textAlign: TextAlign.left,
+                                          //     style: TextStyle(
+                                          //         color: Colors.white,
+                                          //         fontSize: 15.0,
+                                          //         fontWeight: FontWeight.w700)
+                                                  
+                                          //         ),
                                           onTap: () {
                                             Navigator.push(
                                               context,
