@@ -1,0 +1,223 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'placehistory.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+CurrentUser _$CurrentUserFromJson(Map<String, dynamic> json) => CurrentUser(
+      id: json['id'] as String,
+      userId: json['userId'] as String?,
+      email: json['email'] as String?,
+      displayname: json['displayname'] as String?,
+    );
+
+const _$CurrentUserFieldMap = <String, String>{
+  'id': 'id',
+  'userId': 'userId',
+  'email': 'email',
+  'displayname': 'displayname',
+};
+
+Map<String, dynamic> _$CurrentUserToJson(CurrentUser instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'email': instance.email,
+      'displayname': instance.displayname,
+    };
+
+CurrentCountry _$CurrentCountryFromJson(Map<String, dynamic> json) =>
+    CurrentCountry(
+      countryCode: json['countryCode'] as String,
+      countryName: json['countryName'] as String?,
+      userId: json['userId'] as String?,
+      alpha3code: json['alpha3code'] as String?,
+      callingcode: json['callingcode'] as String?,
+      capital: json['capital'] as String?,
+      subregion: json['subregion'] as String?,
+      region: json['region'] as String?,
+      population: json['population'] as int?,
+      timezones: json['timezones'] as String?,
+      numericCode: json['numericCode'] as String?,
+      flag: json['flag'] as String?,
+      longitude: (json['longitude'] as num?)?.toDouble(),
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      currencycode: json['currencycode'] as String?,
+      currencyname: json['currencyname'] as String?,
+      currencysymbol: json['currencysymbol'] as String?,
+      langiso6391: json['langiso6391'] as String?,
+      langname: json['langname'] as String?,
+      arrivaldate: _$JsonConverterFromJson<Timestamp, DateTime>(
+          json['arrivaldate'], const FirestoreDateTimeConverter().fromJson),
+      departuredate: _$JsonConverterFromJson<Timestamp, DateTime>(
+          json['departuredate'], const FirestoreDateTimeConverter().fromJson),
+    );
+
+const _$CurrentCountryFieldMap = <String, String>{
+  'countryCode': 'countryCode',
+  'countryName': 'countryName',
+  'userId': 'userId',
+  'alpha3code': 'alpha3code',
+  'callingcode': 'callingcode',
+  'capital': 'capital',
+  'subregion': 'subregion',
+  'region': 'region',
+  'population': 'population',
+  'timezones': 'timezones',
+  'numericCode': 'numericCode',
+  'flag': 'flag',
+  'longitude': 'longitude',
+  'latitude': 'latitude',
+  'currencycode': 'currencycode',
+  'currencyname': 'currencyname',
+  'currencysymbol': 'currencysymbol',
+  'langiso6391': 'langiso6391',
+  'langname': 'langname',
+  'arrivaldate': 'arrivaldate',
+  'departuredate': 'departuredate',
+};
+
+Map<String, dynamic> _$CurrentCountryToJson(CurrentCountry instance) =>
+    <String, dynamic>{
+      'countryCode': instance.countryCode,
+      'countryName': instance.countryName,
+      'userId': instance.userId,
+      'alpha3code': instance.alpha3code,
+      'callingcode': instance.callingcode,
+      'capital': instance.capital,
+      'subregion': instance.subregion,
+      'region': instance.region,
+      'population': instance.population,
+      'timezones': instance.timezones,
+      'numericCode': instance.numericCode,
+      'flag': instance.flag,
+      'longitude': instance.longitude,
+      'latitude': instance.latitude,
+      'currencycode': instance.currencycode,
+      'currencyname': instance.currencyname,
+      'currencysymbol': instance.currencysymbol,
+      'langiso6391': instance.langiso6391,
+      'langname': instance.langname,
+      'arrivaldate': _$JsonConverterToJson<Timestamp, DateTime>(
+          instance.arrivaldate, const FirestoreDateTimeConverter().toJson),
+      'departuredate': _$JsonConverterToJson<Timestamp, DateTime>(
+          instance.departuredate, const FirestoreDateTimeConverter().toJson),
+    };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
+
+Region _$RegionFromJson(Map<String, dynamic> json) => Region(
+      regionCode: json['regionCode'] as String,
+      region: json['region'] as String?,
+      countryCode: json['countryCode'] as String?,
+      userId: json['userId'] as String?,
+    );
+
+const _$RegionFieldMap = <String, String>{
+  'regionCode': 'regionCode',
+  'region': 'region',
+  'countryCode': 'countryCode',
+  'userId': 'userId',
+};
+
+Map<String, dynamic> _$RegionToJson(Region instance) => <String, dynamic>{
+      'regionCode': instance.regionCode,
+      'region': instance.region,
+      'countryCode': instance.countryCode,
+      'userId': instance.userId,
+    };
+
+PlaceHistory _$PlaceHistoryFromJson(Map<String, dynamic> json) => PlaceHistory(
+      id: json['id'] as String?,
+      name: json['name'] as String?,
+      location: json['location'] as String?,
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
+      distance: (json['distance'] as num?)?.toDouble(),
+      streetAddress: json['streetAddress'] as String?,
+      city: json['city'] as String?,
+      countryName: json['countryName'] as String?,
+      countryCode: json['countryCode'] as String?,
+      postal: json['postal'] as String?,
+      region: json['region'] as String?,
+      regionCode: json['regionCode'] as String?,
+      timezone: json['timezone'] as String?,
+      elevation: json['elevation'] as int?,
+      timestamp: json['timestamp'] as int?,
+      arrivaldate: _$JsonConverterFromJson<Timestamp, DateTime>(
+          json['arrivaldate'], const FirestoreDateTimeConverter().fromJson),
+      visitnumber: json['visitnumber'] as int?,
+      userId: json['userId'] as String?,
+      description: json['description'] as String?,
+      rating: json['rating'] as String?,
+      poi: json['poi'] as String?,
+      imagePaths: (json['imagePaths'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+    );
+
+const _$PlaceHistoryFieldMap = <String, String>{
+  'id': 'id',
+  'name': 'name',
+  'location': 'location',
+  'latitude': 'latitude',
+  'longitude': 'longitude',
+  'distance': 'distance',
+  'streetAddress': 'streetAddress',
+  'city': 'city',
+  'countryName': 'countryName',
+  'countryCode': 'countryCode',
+  'postal': 'postal',
+  'region': 'region',
+  'regionCode': 'regionCode',
+  'timezone': 'timezone',
+  'elevation': 'elevation',
+  'timestamp': 'timestamp',
+  'arrivaldate': 'arrivaldate',
+  'visitnumber': 'visitnumber',
+  'userId': 'userId',
+  'description': 'description',
+  'rating': 'rating',
+  'poi': 'poi',
+  'imagePaths': 'imagePaths',
+};
+
+Map<String, dynamic> _$PlaceHistoryToJson(PlaceHistory instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'location': instance.location,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'distance': instance.distance,
+      'streetAddress': instance.streetAddress,
+      'city': instance.city,
+      'countryName': instance.countryName,
+      'countryCode': instance.countryCode,
+      'postal': instance.postal,
+      'region': instance.region,
+      'regionCode': instance.regionCode,
+      'timezone': instance.timezone,
+      'elevation': instance.elevation,
+      'timestamp': instance.timestamp,
+      'arrivaldate': _$JsonConverterToJson<Timestamp, DateTime>(
+          instance.arrivaldate, const FirestoreDateTimeConverter().toJson),
+      'visitnumber': instance.visitnumber,
+      'userId': instance.userId,
+      'description': instance.description,
+      'rating': instance.rating,
+      'poi': instance.poi,
+      'imagePaths': instance.imagePaths,
+    };

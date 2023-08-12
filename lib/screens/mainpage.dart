@@ -53,7 +53,6 @@ class _MainPageState extends State<MainPage> {
                       IconButton(
                           onPressed: () {
                             FirebaseAuth.instance.signOut();
-
                             context.go("/sign-in");
                           },
                           icon: Icon(Icons.login)),

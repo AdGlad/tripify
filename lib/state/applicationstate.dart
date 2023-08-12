@@ -330,7 +330,7 @@ class ApplicationState extends ChangeNotifier {
         _userProfile?.distancetotal = (userData['distancetotal'] as int? ?? 0);
         _userProfile?.regioncount = userData['regioncount'] as int? ?? 0;
         _userProfile?.placescount = userData['placescount'] as int? ?? 0;
-        _userProfile?.currentstreak = userData['currentStreak'] as int? ?? 0;
+        _userProfile?.currentstreak = userData['currentstreak'] as int? ?? 0;
 
         //  _userProfile?.currentstreak = userData['lastRecordedDate'] ?? 0;
         _userProfile?.latestlatitude =
@@ -443,7 +443,7 @@ class ApplicationState extends ChangeNotifier {
           distancetotal: document.data()['distancetotal'] as int? ?? 0,
           regioncount: document.data()['regioncount'] as int? ?? 0,
           placescount: document.data()['placescount'] as int? ?? 0,
-          currentstreak: document.data()['currentStreak'] as int? ?? 0,
+          currentstreak: document.data()['currentstreak'] as int? ?? 0,
           lastRecordedDate: lastRecordedDate,
           //    lastRecordedDate: document.data()['lastRecordedDate']?.toDate ?? DateTime.now(),
           // lastRecordedDate: document.data()['lastRecordedDate'].toDate as DateTime?,

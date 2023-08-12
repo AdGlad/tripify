@@ -23,7 +23,7 @@ class _DailyStreakTrackerState extends State<DailyStreakTracker> {
         .get();
     if (docSnapshot.exists) {
       setState(() {
-        _currentStreak = docSnapshot.data()!['currentStreak'];
+        _currentStreak = docSnapshot.data()!['currentstreak'];
       });
     }
   }
@@ -42,7 +42,7 @@ class _DailyStreakTrackerState extends State<DailyStreakTracker> {
         final newStreak = _currentStreak + 1;
         await docRef.update({
           'lastRecordedDate': today,
-          'currentStreak': newStreak,
+          'currentstreak': newStreak,
         });
         setState(() {
           _currentStreak = newStreak;
@@ -51,7 +51,7 @@ class _DailyStreakTrackerState extends State<DailyStreakTracker> {
     } else {
       await docRef.set({
         'lastRecordedDate': today,
-        'currentStreak': 1,
+        'currentstreak': 1,
       });
       setState(() {
         _currentStreak = 1;

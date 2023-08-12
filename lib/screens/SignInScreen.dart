@@ -44,7 +44,7 @@ class _SignInState extends State<SignIn> {
       actions: [
         ForgotPasswordAction(((context, email) {
           final uri = Uri(
-            path: '/sign-in/forgot-password',
+            path: '/forgot-password',
             queryParameters: <String, String?>{
               'email': email,
             },
@@ -80,7 +80,7 @@ class _SignInState extends State<SignIn> {
                 'distancetotal': 0,
                 'regioncount': 0,
                 'placescount': 0,
-                'currentStreak': 1,
+                'currentstreak': 1,
                 'lastRecordedDate': DateTime.now(),
 
               });

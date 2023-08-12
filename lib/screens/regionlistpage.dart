@@ -80,7 +80,8 @@ class _RegionlistState extends State<Regionlist> {
                     MaterialPageRoute(
                       builder: (context) => PlaceHistoryListPage(
                           countrycode: currentregion.countryCode!,
-                          regioncode: currentregion.regionCode),
+                          regioncode: currentregion.regionCode,
+                          userid: FirebaseAuth.instance.currentUser!.uid),
                     ),
                   );
                 },

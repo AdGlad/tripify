@@ -191,7 +191,8 @@ class _CountryPageState extends State<CountryPage> {
                                       builder: (context) =>
                                           PlaceHistoryListPage(
                                               countrycode: widget.country,
-                                              regioncode: properties[i]['id']),
+                                              regioncode: properties[i]['id'],
+                                              userid: FirebaseAuth.instance.currentUser!.uid ),
                                     ),
                                   );
                                 });
@@ -253,7 +254,8 @@ class _CountryPageState extends State<CountryPage> {
                                                                 widget.country,
                                                             regioncode:
                                                                 properties[i]
-                                                                    ['id']),
+                                                                    ['id'],
+                                                                    userid: FirebaseAuth.instance.currentUser!.uid),
                                                   ),
                                                 );
 
@@ -322,7 +324,8 @@ class _CountryPageState extends State<CountryPage> {
                                                             widget.country,
                                                         regioncode:
                                                             properties[i]
-                                                                ['id']),
+                                                                ['id'],
+                                                                userid: FirebaseAuth.instance.currentUser!.uid),
                                               ),
                                             );
                                             // setState(() {

@@ -155,7 +155,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             body: Form(
               key: _formKey,
               child: ListView(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(5),
                 children: [
                   Center(
                     child: CircleAvatar(

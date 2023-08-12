@@ -6,6 +6,7 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/UserInfo/FriendProfileScreen.dart';
 import '../screens/UserInfo/UserProfileScreen.dart';
 import '../screens/league/league.dart';
 import '../state/applicationstate.dart';
@@ -154,8 +155,9 @@ final usersRef = UserProfileCollectionReference();
 //final friendrequestsRef = FriendRequestCollectionReference();
 //FriendRequestCollectionReference friendrequestsRef = usersRef.doc('myDocumentID').addresses;
 
+/////////
 
-
+//////////
 
 // @JsonSerializable(explicitToJson: true)
 // class User {
@@ -229,7 +231,6 @@ class FriendRequestList extends StatelessWidget {
               itemBuilder: (context, index) {
                 // Access the User instance
                 FriendRequest friendrequest = querySnapshot.docs[index].data;
-                  
                 return 
                 Card(
                        color: Color.fromARGB(255, 49, 52, 59),
@@ -369,12 +370,13 @@ class FriendList extends StatelessWidget {
             return 
             GestureDetector(
                                         onTap: () {
+                                          
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => 
-                                        UserProfileScreen(
-                                            userId: friend.id
+                                        FriendProfileScreen(
+                                             friend.id
                                                     ),
                                 
                               ),

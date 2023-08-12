@@ -93,12 +93,12 @@ final _router = GoRouter(
           path: 'sign-in',
           builder: (context, state) => const SignIn(),
         ),
-        GoRoute(
-          path: ' ',
-          builder: (context, state) {
-            return SignIn();
-          },
-          routes: [
+       // GoRoute(
+       //   path: ' ',
+        //  builder: (context, state) {
+        //    return SignIn();
+        //  },
+        //  routes: [
             GoRoute(
               path: 'forgot-password',
               builder: (context, state) {
@@ -109,8 +109,8 @@ final _router = GoRouter(
                 );
               },
             ),
-          ],
-        ),
+        //  ],
+       // ),
         GoRoute(
           path: 'profile',
           builder: (context, state) {

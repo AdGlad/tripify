@@ -208,10 +208,11 @@ Future saveLocation(
 
     await setCountry(batch, countyRef, newcountry);
     await setRegion(batch, value.countryCode, regionRef, region);
+
     DocumentReference placehistoryDocRef =
         await addPlaceHistory(batch, placehistoryRef, newPlace);
 
-    developer.log('addPlaceHistory batch done');
+    developer.log('addPlaceHistory batch done DocumentReference placehistoryDocRef ');
 
     await _incrementStreak(batch, _newCountryCount, _newCountryCode,
         newVisitNumber, distanceInMeters, value);
@@ -224,7 +225,7 @@ Future saveLocation(
 //bool? result = await showPopupForm(context, newPlace, placehistoryDocRef.id);
 
 //Future<bool?> result =   showPopupForm(context, newPlace, placehistoryDocRef.id);
-bool? result =  await showPopupForm(context, newPlace, placehistoryDocRef.id);
+bool? result =  await showPopupForm(context, batch ,newPlace,  placehistoryDocRef);
 
 
         if (result == true) {
@@ -281,7 +282,7 @@ Future<void> _incrementStreak(
       userdocRef,
       {
         'lastRecordedDate': today,
-        'currentStreak': FieldValue.increment(newStreak),
+        'currentstreak': FieldValue.increment(newStreak),
         'latestlongitude': place.longitude,
         'latestlatitude': place.latitude,
         'lateststreetAddress': place.streetAddress,
@@ -541,6 +542,7 @@ Future<DocumentReference> addPlaceHistory(WriteBatch batch,
     PlaceHistoryCollectionReference placehistoryref, PlaceHistory place) async {
   //      DocumentReference docRef =
   //  placehistoryref as DocumentReference;
+  developer.log('addPlaceHistory');
 
   DocumentReference docRef = FirebaseFirestore.instance
       .collection('currentuser')
@@ -551,6 +553,12 @@ Future<DocumentReference> addPlaceHistory(WriteBatch batch,
       .doc(place.regionCode)
       .collection('placehistory')
       .doc();
+
+
+// Write new placehistory document
+
   batch.set(docRef, place.toJson());
+  developer.log('addPlaceHistory docRef $docRef');
+
   return docRef;
 }

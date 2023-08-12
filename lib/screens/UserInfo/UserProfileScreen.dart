@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../model/users.dart';
 import '../../state/applicationstate.dart';
 import '../checkIn/UserMapContainer.dart';
+import '../placelistpage.dart';
 
 class UserProfileScreen extends StatelessWidget {
   final String userId;
@@ -29,10 +30,12 @@ class UserProfileScreen extends StatelessWidget {
         builder: (context, appState, _) =>
       Scaffold(
         appBar: AppBar(
-          title: Text('Profile'),
+          title: Text('User States $userId'),
         ),
         body: 
         Column(
+              // PlaceHistorylist(
+             // countrycode: widget.countrycode, regioncode: widget.regioncode, userid: widget.userid),
               children: [
                 Expanded(flex: 1, child: userStatsContainer(appState.userProfile, context)),
                // userStatsContainer(_userProfile, context),
