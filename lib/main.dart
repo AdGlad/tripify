@@ -8,42 +8,75 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gtk_flutter/firebase_options.dart';
 import 'package:gtk_flutter/screens/SignInScreen.dart';
+import 'package:gtk_flutter/screens/findfriendpage.dart';
 import 'package:gtk_flutter/screens/firstpage.dart';
 import 'package:gtk_flutter/screens/mainpage.dart';
+import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:provider/provider.dart';
 import 'state/applicationstate.dart';
 import 'screens/splashscreen.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:flutterfire_ui/auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
+  
+  try {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+
+  FirebaseUIAuth.configureProviders([
+    EmailAuthProvider(),
+    // emailLinkProviderConfig,
+    PhoneAuthProvider(),
+    GoogleProvider(
+        clientId:
+            "90817750920-9307of40hl4eg62dabtvcd403s6pg5a8.apps.googleusercontent.com"),
+    //  AppleProvider(),
+    FacebookProvider(clientId: "1dae917812269b6ffe95a586db98aca8"),
+    //TwitterProvider(
+    // apiKey: TWITTER_API_KEY,
+    // apiSecretKey: TWITTER_API_SECRET_KEY,
+    // redirectUri: TWITTER_REDIRECT_URI,
+    //),
+  ]);
 
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
     builder: ((context, child) => const App()),
   ));
+    }
+  catch (e) {
+    print('Error initializing Firebase: $e');
+  }
+
 }
 
 final _router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/SplashScreen',
   routes: [
     GoRoute(
-      path: '/',
+      path: '/SplashScreen',
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
       path: '/',
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) => const MainPage(),
       routes: [
         GoRoute(
           path: 'home',
           builder: (context, state) => const MainPage(),
+        ),
+        GoRoute(
+          path: 'userprofile',
+          builder: (context, state) => const UserInfoPage(),
         ),
         GoRoute(
             path: 'first',
@@ -53,11 +86,19 @@ final _router = GoRouter(
                       FirstPage(loggedIn: appState.loggedIn));
             }),
         GoRoute(
+          path: 'findfriends',
+          builder: (context, state) => const FindFriendsPage(),
+        ),
+        GoRoute(
           path: 'sign-in',
-          builder: (context, state) {
-            return SignIn();
-          },
-          routes: [
+          builder: (context, state) => const SignIn(),
+        ),
+       // GoRoute(
+       //   path: ' ',
+        //  builder: (context, state) {
+        //    return SignIn();
+        //  },
+        //  routes: [
             GoRoute(
               path: 'forgot-password',
               builder: (context, state) {
@@ -68,16 +109,24 @@ final _router = GoRouter(
                 );
               },
             ),
-          ],
-        ),
+        //  ],
+       // ),
         GoRoute(
           path: 'profile',
           builder: (context, state) {
             return Consumer<ApplicationState>(
               builder: (context, appState, _) => ProfileScreen(
-                key: ValueKey(appState.emailVerified),
+                appBar: AppBar(
+                  title: const Text('User Profile'),
+                ),
+                // key: xalueKey(appState.emailVerified),
                 //providers: const [],
-                actions: [],
+                actions: [
+                  SignedOutAction((context) {
+                    Navigator.pushReplacementNamed(context, '/sign-in');
+                    //  Navigator.of(context).pop();
+                  })
+                ],
                 children: [
                   Visibility(
                       visible: !appState.emailVerified,
@@ -110,6 +159,13 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       title: 'Tripify',
       theme: ThemeData(
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+                primary: Color.fromARGB(255, 49, 52, 59),
+                // secondary will be the textColor, when the textTheme is set to accent
+                secondary: Colors.white,
+              ),
+          //),
+
           // buttonTheme: ButtonThemeData(
           //   textTheme: ButtonTextTheme.accent,
           //   colorScheme: Theme.of(context).colorScheme.copyWith(

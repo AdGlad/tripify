@@ -1,8 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutterfire_ui/auth.dart';
+//import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart'
+    hide PhoneAuthProvider, EmailAuthProvider;
+
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:gtk_flutter/src/ad_helper.dart';
 
@@ -23,20 +31,20 @@ class _SignInState extends State<SignIn> {
       resizeToAvoidBottomInset: false,
 
       oauthButtonVariant: OAuthButtonVariant.icon,
-      providerConfigs: [
-        EmailProviderConfiguration(),
-        FacebookProviderConfiguration(
-            clientId: "1dae917812269b6ffe95a586db98aca8"),
-        GoogleProviderConfiguration(
-            clientId:
-                "90817750920-9307of40hl4eg62dabtvcd403s6pg5a8.apps.googleusercontent.com"),
-        //     "90817750920-qeda6kshcc4msuc0tbgnvd0lu9mh1enb.apps.googleusercontent.com"),
-        // "90817750920-2bmot5is9ic9m61t8a7875v4ekhnj1m4.apps.googleusercontent.com"),
-      ],
+      // providers:
+      //   //EmailProviderConfiguration(),
+      //   //FacebookProviderConfiguration( clientId: "1dae917812269b6ffe95a586db98aca8"),
+      //   //GoogleProviderConfiguration( clientId: "90817750920-9307of40hl4eg62dabtvcd403s6pg5a8.apps.googleusercontent.com"),
+      //    EmailProvider(),
+      //   FacebookProvider(clientId: "1dae917812269b6ffe95a586db98aca8"),
+      //   GoogleProvider(
+      //       clientId:
+      //           "90817750920-9307of40hl4eg62dabtvcd403s6pg5a8.apps.googleusercontent.com"),
+      // ,
       actions: [
         ForgotPasswordAction(((context, email) {
           final uri = Uri(
-            path: '/sign-in/forgot-password',
+            path: '/forgot-password',
             queryParameters: <String, String?>{
               'email': email,
             },
@@ -52,7 +60,32 @@ class _SignInState extends State<SignIn> {
               return;
             }
             if (state is UserCreated) {
-              user.updateDisplayName(user.email!.split('@')[0]);
+              // Create profile record
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user!.uid)
+                  .set({
+                // set({
+                'userId': FirebaseAuth.instance.currentUser!.uid,
+                'nickname': user.displayName ?? 'nickname',
+                'email': user.email ?? 'email',
+                'avatar': user.photoURL ?? 'https://s.gravatar.com/avatar/7f6e6555feaeb5966808376abd27e93b?s=80',
+                // 'age': int.parse(_ageController.text),
+                'friend': 0,
+                'league': 0,
+                'language': 'en',
+                'joinDate': DateTime.now(),
+                'countrycount': 0,
+                'visitcount': 0,
+                'distancetotal': 0,
+                'regioncount': 0,
+                'placescount': 0,
+                'currentstreak': 1,
+                'lastRecordedDate': DateTime.now(),
+
+              });
+
+              // user.updateDisplayName(user.email!.split('@')[0]);
             }
             if (!user.emailVerified) {
               user.sendEmailVerification();

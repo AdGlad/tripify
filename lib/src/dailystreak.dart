@@ -18,12 +18,12 @@ class _DailyStreakTrackerState extends State<DailyStreakTracker> {
 
   Future<void> _loadStreakFromFirestore() async {
     final docSnapshot = await FirebaseFirestore.instance
-        .collection('streaks')
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     if (docSnapshot.exists) {
       setState(() {
-        _currentStreak = docSnapshot.data()!['currentStreak'];
+        _currentStreak = docSnapshot.data()!['currentstreak'];
       });
     }
   }
@@ -32,7 +32,7 @@ class _DailyStreakTrackerState extends State<DailyStreakTracker> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final docRef = FirebaseFirestore.instance
-        .collection('streaks')
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid);
     final docSnapshot = await docRef.get();
 
@@ -42,7 +42,7 @@ class _DailyStreakTrackerState extends State<DailyStreakTracker> {
         final newStreak = _currentStreak + 1;
         await docRef.update({
           'lastRecordedDate': today,
-          'currentStreak': newStreak,
+          'currentstreak': newStreak,
         });
         setState(() {
           _currentStreak = newStreak;
@@ -51,7 +51,7 @@ class _DailyStreakTrackerState extends State<DailyStreakTracker> {
     } else {
       await docRef.set({
         'lastRecordedDate': today,
-        'currentStreak': 1,
+        'currentstreak': 1,
       });
       setState(() {
         _currentStreak = 1;

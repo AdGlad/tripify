@@ -1,5 +1,8 @@
+import 'dart:core';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gtk_flutter/model/users.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +12,8 @@ import 'package:http/http.dart' as http;
 
 // This doesn't exist yet...! See "Next Steps"
 part 'placehistory.g.dart';
+
+
 
 @firestoreSerializable
 class CurrentUser {
@@ -30,6 +35,10 @@ class CurrentUser {
 
   Map<String, Object?> toJson() => _$CurrentUserToJson(this);
 }
+
+
+
+
 
 @firestoreSerializable
 class CurrentCountry {
@@ -55,6 +64,8 @@ class CurrentCountry {
     this.langname,
     this.arrivaldate,
     this.departuredate,
+
+
   });
   //{
   //   _$assertPlaceHistory(this);
@@ -88,8 +99,11 @@ class CurrentCountry {
   DateTime? arrivaldate;
   DateTime? departuredate;
 
+
   Map<String, Object?> toJson() => _$CurrentCountryToJson(this);
 }
+
+
 
 //@Collection<PlaceHistory>('placehistory')
 @firestoreSerializable
@@ -131,7 +145,7 @@ const firestoreSerializable = JsonSerializable(
 class PlaceHistory {
   PlaceHistory(
       {
-      //required this.id,
+      this.id,
       this.name,
       this.location,
       this.latitude,
@@ -149,7 +163,12 @@ class PlaceHistory {
       this.timestamp,
       this.arrivaldate,
       this.visitnumber,
-      this.userId});
+      this.userId,
+          this.description,
+    this.rating,
+    this.poi,
+    this.imagePaths,
+      });
   //{
   //   _$assertPlaceHistory(this);
   // }
@@ -159,8 +178,8 @@ class PlaceHistory {
 
   //String get id => FirebaseAuth.instance.currentUser!.uid;
 
-  // @Id()
-  // final String id;
+   @Id()
+  late final String? id;
   String? name;
   String? location;
   double? latitude;
@@ -179,18 +198,24 @@ class PlaceHistory {
   DateTime? arrivaldate;
   int? visitnumber;
   String? userId;
+  String? description;
+  String? rating;
+  String? poi;
+  List<String>? imagePaths;
 
   Map<String, Object?> toJson() => _$PlaceHistoryToJson(this);
 }
+
 
 @Collection<CurrentUser>('currentuser')
 @Collection<CurrentCountry>('currentuser/*/country')
 @Collection<Region>('currentuser/*/country/*/region')
 @Collection<PlaceHistory>('currentuser/*/country/*/region/*/placehistory')
 final currentuserRef = CurrentUserCollectionReference();
-CurrentCountryCollectionReference countyRef =
+//final UsersCollectionReference = UserCollectionReference();
+CurrentCountryCollectionReference countryRef =
     currentuserRef.doc('wedww').country;
-RegionCollectionReference regionRef = countyRef.doc('wefdw').region;
+RegionCollectionReference regionRef = countryRef.doc('wefdw').region;
 PlaceHistoryCollectionReference placehistoryRef =
     regionRef.doc('wedwef').placehistory;
 
@@ -232,7 +257,7 @@ class _PlaceHistoryListState extends State<PlaceHistoryList> {
 
 class FirestoreService {
   // CollectionReference region = FirebaseFirestore.instance.collection('region');
-
+  CollectionReference userRef = FirebaseFirestore.instance.collection('user');
   CollectionReference currentuserref =
       FirebaseFirestore.instance.collection('currentuser');
   CollectionReference placehistoryref =
@@ -370,9 +395,9 @@ class FirestoreService {
     //adicionar o objecto em forma de json para a coleção de placehistory
     return placehistoryref
         .add(place)
-        .then((value) => "Mais um placehistory adicionado à família")
+        .then((value) => value.id )
         .catchError((error) =>
-            "Parece que teve problemas com o último placehistory:\n $error");
+            "Error with placehistory:\n $error");
   }
 
   Future<PlaceHistoryQuerySnapshot> queryCollection(queryString) async {

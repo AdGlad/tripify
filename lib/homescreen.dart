@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+//import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+//import 'package:firebase_ui_oauth_google/firebase_ui_oauth_facebook';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
