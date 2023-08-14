@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import '../../state/applicationstate.dart';
 
 Container UserLocationContainer(
-    BuildContext context, UserProfile user, ApplicationState appState) {
+    BuildContext context, UserProfile? user, ApplicationState? appState) {
   return Container(
     //ss  width: MediaQuery.of(context).size.width - 5,
     child: GestureDetector(
@@ -16,7 +16,7 @@ Container UserLocationContainer(
           //  title: 'My Streak',
           title: 'My Location',
           text:
-              'Tripify: Hi, I am visiting ${appState.currentPlace!.streetAddress} ${CountryFlag(appState.currentPlace!.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!! ${appState.userProfile?.nickname}',
+              'Tripify: Hi, I am visiting ${appState?.currentPlace?.streetAddress} ${CountryFlag(appState?.currentPlace?.countryCode??'au')} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!! ${appState!.userProfile?.nickname}',
           chooserTitle: 'Share on social media',
         );
       },
@@ -48,8 +48,8 @@ Container UserLocationContainer(
                         margin: EdgeInsets.all(5.0),
                         child: Row(
                           children: [
-                            (appState.currentPlace != null)
-                                ? Text(appState.currentPlace!.countryName!,
+                            (appState?.currentPlace != null)
+                                ? Text(appState?.currentPlace?.countryName??'countryName',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: Colors.white,
@@ -58,8 +58,8 @@ Container UserLocationContainer(
                                     ))
                                 : Text('', style: TextStyle(fontSize: 20)),
                             Text(': ', style: TextStyle(fontSize: 20)),
-                            (appState.currentPlace != null)
-                                ? Text(appState.currentPlace!.region!,
+                            (appState?.currentPlace != null)
+                                ? Text(appState?.currentPlace?.region??'Region',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: Colors.white,
@@ -70,8 +70,8 @@ Container UserLocationContainer(
                           ],
                         ),
                       ),
-                      (appState.currentPlace != null)
-                          ? Text(appState.currentPlace!.streetAddress!,
+                      (appState?.currentPlace != null)
+                          ? Text(appState?.currentPlace?.streetAddress??'streetAddress',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 color: Colors.white,

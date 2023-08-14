@@ -75,6 +75,10 @@ Future saveLocation(
   //_latitude = 19.4333; // Mexico
   //_longitude = -99.1333; // Mexico
 
+ // double
+  _latitude = 1.290270;
+  // double
+  _longitude = 103.851959;
   // double
   //_latitude = -6.2146;
   // double
@@ -359,9 +363,15 @@ Future<PlaceHistory> fetchNewPlace(double? latitude, double? longitude) async {
 
   developer.log(jsonString.toString(), name: 'my.app.jsonString');
 
+
+
   var features = jsonString['features'];
+
   for (var feature in features) {
     _placeHistory.streetAddress = feature['place_name'];
+
+   _placeHistory.poi = feature['text'];
+   //_placeHistory.poi ='new poi';
 
     var context = feature['context'];
 
@@ -385,6 +395,14 @@ Future<PlaceHistory> fetchNewPlace(double? latitude, double? longitude) async {
 
         if ((_placeHistory.region == 'region') & (item['text'] != null)) {
           _placeHistory.region = item['text'];
+        }
+
+        if ((_placeHistory.countryCode == 'countryCode') & (item['short_code'] != null)) {
+          _placeHistory.countryCode = item['short_code'];
+        }
+
+        if ((_placeHistory.countryName == 'countryName') & (item['text'] != null)) {
+          _placeHistory.countryName = item['text'];
         }
 
         _placeHistory.city = item['text'];
@@ -467,8 +485,23 @@ Future<void> setCountry(
   );
   var jsonString;
   jsonString = jsonDecode(res.body);
+
+
   developer.log(res.body, name: 'my.app.category');
-  String capital = jsonString[0]['capital'][0];
+
+String? capital = jsonString.isNotEmpty && jsonString[0].containsKey('capital')
+    ? (jsonString[0]['capital'] as List<dynamic>).isNotEmpty
+        ? jsonString[0]['capital'][0].toString()
+        : null
+    : null;
+
+  //if (jsonString[0]!.containsKey('capital')) {
+  //  String capital = jsonString[0]['capital'][0];
+  //       }
+  //       else
+  //       capital = 'capital';
+
+ // String capital = jsonString[0]['capital'][0];
   String subregion = jsonString[0]['subregion'];
   String region = jsonString[0]['region'];
   int population = jsonString[0]['population'];

@@ -173,8 +173,8 @@ class _CheckCountryState extends State<CheckCountry> {
                     Expanded(flex: 1,  child: UserStreakContainer(context, appState.userProfile)),
                     Expanded( flex: 2,child: UserCntryContainer(context, appState.userProfile, appState)),
                    Expanded(flex: 12,child: UserMapContainer(context, appState.userProfile)),
-                   Expanded(flex: 2,child: UserLocationContainer( context, appState.userProfile! , appState )),
-                    Expanded(flex: 2,child: CheckInContainer(context: context, appState: appState , user: appState.userProfile!)),
+                   Expanded(flex: 2,child: UserLocationContainer( context, appState?.userProfile , appState )),
+                    Expanded(flex: 2,child: CheckInContainer(context: context, appState: appState , user: appState.userProfile)),
                           // Spacer(),
                      Container(
                       child: Align(

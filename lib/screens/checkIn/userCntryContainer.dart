@@ -43,7 +43,7 @@ Container UserCntryContainer(
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   reverse: false,
-                  itemCount: appState.userProfile!.countryvisitlist!.length,
+                  itemCount: (appState.userProfile?.countryvisitlist?.length)??0,
                   itemBuilder: (BuildContext context, int index) {
                     return FittedBox(
                       fit: BoxFit.fill,

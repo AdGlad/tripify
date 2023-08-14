@@ -177,7 +177,7 @@ Future<void> _saveImagesToFirestore(    WriteBatch batch,
 
  batch.update(placeHistoryId, {
   'rating': '5 Stars',
-    'poi': 'place of interest',
+   // 'poi': 'place of interest',
     'description': descriptionController.text,
     'imagePaths': imagePaths
  });
