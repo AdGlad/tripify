@@ -1,14 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'package:gtk_flutter/model/users.dart';
-import 'package:gtk_flutter/screens/checkIn/userSaveLocation.dart';
 
 import '../../model/usertotals.dart';
-import '../../state/applicationstate.dart';
 //import '../ActiveCountryPage.dart';
-import 'checkcountry.dart';
 import 'dart:developer' as developer;
 
 Future<void> updateStats(UserTotals userTotals) async {

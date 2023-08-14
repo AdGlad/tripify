@@ -3,11 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
-import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/UserInfo/FriendProfileScreen.dart';
-import '../screens/UserInfo/UserProfileScreen.dart';
 import '../screens/league/league.dart';
 import '../state/applicationstate.dart';
 

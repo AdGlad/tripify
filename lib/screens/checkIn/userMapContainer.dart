@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:gtk_flutter/model/users.dart';
-import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:gtk_flutter/src/globals.dart' as globals;
 
-import '../../state/applicationstate.dart';
 
 MapboxMapController? mapController;
 
@@ -87,7 +83,7 @@ void _onStyleLoaded() {
                       //user?.latestlatitude??0.0,
                       //user?.latestlongitude??0.0,
                       user!.latestlatitude!,
-                      user!.latestlongitude!,
+                      user.latestlongitude!,
                     ),
                     zoom: 13.0,
                   ),

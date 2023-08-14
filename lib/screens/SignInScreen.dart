@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 //import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide PhoneAuthProvider, EmailAuthProvider;
 
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
-import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 
@@ -63,7 +59,7 @@ class _SignInState extends State<SignIn> {
               // Create profile record
               FirebaseFirestore.instance
                   .collection('users')
-                  .doc(user!.uid)
+                  .doc(user.uid)
                   .set({
                 // set({
                 'userId': FirebaseAuth.instance.currentUser!.uid,

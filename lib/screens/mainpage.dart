@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gtk_flutter/screens/country/ActiveCountryPage.dart';
 import 'package:gtk_flutter/screens/checkIn/checkcountry.dart';
 import 'package:gtk_flutter/screens/country/UserCountryPage.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
@@ -9,12 +8,10 @@ import 'package:gtk_flutter/screens/country/UserCountryPage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:gtk_flutter/screens/league/league.dart';
 import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
-import 'package:gtk_flutter/screens/userstats.dart';
 import 'package:provider/provider.dart';
 
 //import '../src/ad_helper.dart';
 import '../state/applicationstate.dart';
-import 'UserInfo/UserDetails.dart';
 
 
 class MainPage extends StatefulWidget {

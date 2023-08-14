@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
-import '../../model/placehistory.dart';
 import '../../model/users.dart';
 import '../../src/customwidgets.dart';
-import '../../state/applicationstate.dart';
 
 //Widget userStatsContainer(Map<String, dynamic>? userProfile, BuildContext context) {
 Widget userStatsContainer(UserProfile? userProfile, BuildContext context) {
@@ -41,7 +36,7 @@ Widget userStatsContainer(UserProfile? userProfile, BuildContext context) {
                                   child: IconTextWidget(icon: Icons.local_fire_department,units: 'Days', message: (userProfile?.currentstreak??0).toString(), size: 8, title: 'Streak',)),
                              Expanded(
                                //   child:IconTextWidget(icon: Icons.run_circle,units: 'km', message: appState.userProfile!.distancetotal!.toInt().toString(), size: 12, title: 'Distance',)),
-                                  child:IconTextWidget(icon: Icons.run_circle,units: '1000 kms', message: ((userProfile?.distancetotal??0)/1000).toInt().toString(), size: 8, title: 'Distance',)),
+                                  child:IconTextWidget(icon: Icons.run_circle,units: '1000 kms', message: (((userProfile?.distancetotal??0)/1000).toInt()).toString(), size: 8, title: 'Distance',)),
                Expanded(
                                 //  child: IconTextWidget(icon: Icons.map_outlined,units: '', message: appState.userProfile!.countrycount.toString(), size: 12, title: 'Countries',)),
                                   child: IconTextWidget(icon: Icons.map_outlined,units: 'Count', message: (userProfile?.countrycount??0).toString(), size: 8, title: 'Countries',)),

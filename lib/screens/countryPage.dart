@@ -1,18 +1,13 @@
-import 'dart:async';
 import 'dart:convert';
-import 'dart:developer' as developer;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/map/countries_world_map.dart';
 import 'package:gtk_flutter/map/data/maps/world_map.dart';
 import 'package:gtk_flutter/screens/placelistpage.dart';
-import 'package:gtk_flutter/screens/regionlistpage.dart';
 import 'package:gtk_flutter/state/applicationstate.dart';
 import 'package:provider/provider.dart';
 
-import '../model/placehistory.dart';
 
 class SupportedCountriesMap extends StatefulWidget {
   const SupportedCountriesMap({

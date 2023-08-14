@@ -1,11 +1,9 @@
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gtk_flutter/model/placehistory.dart';
 import '../../model/users.dart';
 import 'leagueTitle.dart';
 
-import 'dart:io'; 
 
 
 // import 'package:gtk_flutter/screens/regionlistpage.dart';

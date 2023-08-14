@@ -2,9 +2,6 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/screens/country/LocationMapPage.dart';
-import 'package:gtk_flutter/screens/photoGallery.dart';
-import 'package:location/location.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:path_provider/path_provider.dart';
 import '../model/placehistory.dart';
 import 'package:intl/intl.dart';
@@ -306,7 +303,7 @@ _storageReference = FirebaseStorage.instance.ref().child(FirebaseAuth.instance.c
               color: Color.fromARGB(255, 26, 173, 182),
               onPressed: () {
                // _fluttershareImages( currentPlaceHistory!);
-              _shareImages( currentPlaceHistory!);
+              _shareImages( currentPlaceHistory);
                 },
               icon: const Icon(Icons.share),
               tooltip: 'Share',

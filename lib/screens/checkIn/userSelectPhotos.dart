@@ -3,16 +3,12 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:photo_view/photo_view.dart';
 import 'dart:developer' as developer;
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../model/placehistory.dart';
-import '../country/ActiveCountryPage.dart';
 
 CollectionReference<Map<String, dynamic>> imagesCollection =
     FirebaseFirestore.instance.collection('images');
@@ -126,7 +122,7 @@ Future<Reference> _saveImageToCloudStorage(XFile imageFile) async {
 
     Reference storageReference =
         FirebaseStorage.instance.ref().child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
-    UploadTask uploadTask = storageReference.putFile(_image!);
+    UploadTask uploadTask = storageReference.putFile(_image);
 
     await uploadTask.whenComplete(() => print('Image uploaded'));
 
@@ -146,7 +142,7 @@ Future<String> _saveImageToDirectory(XFile imageFile) async {
 
     Reference storageReference =
         FirebaseStorage.instance.ref().child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
-    UploadTask uploadTask = storageReference.putFile(_image!);
+    UploadTask uploadTask = storageReference.putFile(_image);
 
     await uploadTask.whenComplete(() => print('Image uploaded'));
 

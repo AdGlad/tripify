@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:gtk_flutter/screens/UserInfo/UserStatsContainer.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/users.dart';
 import '../../state/applicationstate.dart';
 import '../checkIn/UserMapContainer.dart';
-import '../placelistpage.dart';
 
 class UserProfileScreen extends StatelessWidget {
   final String userId;

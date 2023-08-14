@@ -10,9 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../map/data/maps/world_map.dart';
 import '../../state/applicationstate.dart';
-import '../../map/data/maps/world_map.dart';
 import '../../model/placehistory.dart';
-import '../../state/applicationstate.dart';
 
 class ActiveCountryPage extends StatefulWidget {
   const ActiveCountryPage({super.key});
@@ -341,7 +339,7 @@ class ActiveCountrylist extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => RegionListPage(
-                          countrycode: currentcountry.countryCode!),
+                          countrycode: currentcountry.countryCode),
                     ),
                   );
                 },

@@ -46,6 +46,6 @@ class _UserDetailsState extends State<UserDetails> {
                                       'Check-ins')),
                             ],
                           ),),
-    )));;
+    )));
   }
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/model/users.dart';
-import 'package:gtk_flutter/screens/checkIn/updateStats.dart';
 import 'package:gtk_flutter/screens/checkIn/userSaveLocation.dart';
-import 'package:gtk_flutter/screens/checkIn/userSelectPhotos.dart';
 import '../../state/applicationstate.dart';
 
 

@@ -16,7 +16,6 @@ import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../state/applicationstate.dart';
 //import '../ActiveCountryPage.dart';
@@ -104,11 +103,11 @@ Future saveLocation(
     developer.log(
         'Getting location for ${_latitude.toString()} , ${_longitude.toString()}');
 
-    newVisitNumber = currentPlace?.visitnumber ?? 0;
+    newVisitNumber = currentPlace.visitnumber ?? 0;
     //newVisitNumber = 0;
 
     if (value.latitude != null && value.longitude != null) {
-      developer.log('newVisitNumber is ${newVisitNumber}');
+      developer.log('newVisitNumber is $newVisitNumber');
 
       mapController
           ?.animateCamera(
@@ -147,7 +146,7 @@ Future saveLocation(
       _newCountryCount = 1;
       _newCountryCode = value.countryCode;
       developer.log(
-          'New Country identified. CurrentPlace ${currentPlace?.countryCode} NewPlace ${value.countryCode} ');
+          'New Country identified. CurrentPlace ${currentPlace.countryCode} NewPlace ${value.countryCode} ');
 
       newVisitNumber++;
 

@@ -21,13 +21,9 @@ import 'dart:async';
 import 'package:gtk_flutter/src/globals.dart' as globals;
 import 'dart:developer' as developer;
 
-import '../model/triphistory.dart';
-import '../model/usertotals.dart';
 import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 
-import '../screens/UserInfo/UserProfileScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'dart:developer' as developer;
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
@@ -428,11 +424,11 @@ class ApplicationState extends ChangeNotifier {
         _users.add(UserProfile(
           id: document.id,
           userId: document.data()['userId'] ?? 'userId',
-          email: document.data()['email'] ?? 'email' as String,
-          nickname: document.data()['nickname'] ?? 'nickname' as String,
-          avatar: document.data()['avatar'] ?? 'avatar' as String,
+          email: document.data()['email'] ?? 'email',
+          nickname: document.data()['nickname'] ?? 'nickname',
+          avatar: document.data()['avatar'] ?? 'avatar',
           // photo: document.data()['photo"']  ?? 'photo' as String,
-          language: document.data()['language'] ?? 'language' as String,
+          language: document.data()['language'] ?? 'language',
           joinDate: joinDate,
           //    joinDate: document.data()['joinDate']?.toDate ?? DateTime.now(),
           //  joinDate: DateTime.tryParse(document.data()['joinDate']),
@@ -514,7 +510,7 @@ class ApplicationState extends ChangeNotifier {
         globals.new_latitude = document.data()['latitude'] as double;
         globals.new_longitude = document.data()['longitude'] as double;
         int timeInMillis = document.data()['timestamp'] as int;
-        DateTime current_arrivalDate =
+        DateTime currentArrivaldate =
             DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
         final List<dynamic> imagePathList =
@@ -540,7 +536,7 @@ class ApplicationState extends ChangeNotifier {
             poi: document.data()['poi'] as String?,
             //imagePaths: document.data()['imagePaths'] as List<String>?,
             imagePaths: imagePath,
-            arrivaldate: current_arrivalDate);
+            arrivaldate: currentArrivaldate);
 
         developer.log('listenForCurrrentPlace out ');
       }
@@ -568,7 +564,7 @@ class ApplicationState extends ChangeNotifier {
         //  globals.new_latitude = document.data()['latitude'] as double;
         //  globals.new_longitude = document.data()['longitude'] as double;
         int timeInMillis = document.data()['timestamp'] as int;
-        DateTime current_arrivalDate =
+        DateTime currentArrivaldate =
             DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
         _placeHistory.add(PlaceHistory(
@@ -592,7 +588,7 @@ class ApplicationState extends ChangeNotifier {
             // imagePaths: document.data()['imagePaths'] as List<String>?,
             imagePaths: (document.data()['imagePaths'] as List<dynamic>?)
                 ?.cast<String>(),
-            arrivaldate: current_arrivalDate));
+            arrivaldate: currentArrivaldate));
 
         developer.log('_placeHistory.add  in ');
       }
