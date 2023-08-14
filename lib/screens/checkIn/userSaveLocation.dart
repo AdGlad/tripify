@@ -74,12 +74,14 @@ Future saveLocation(
 
   //_latitude = 19.4333; // Mexico
   //_longitude = -99.1333; // Mexico
+ // _latitude = 48.856614; // French Fair 
+ // _longitude = 2.3522219;
 
- // double
-  _latitude = 1.290270;
-  // double
-  _longitude = 103.851959;
-  // double
+    _latitude = 48.8584; // eiffel tower 
+  _longitude = 2.2945;
+ 
+  //_latitude = 1.290270; // Singapore Airport
+  //_longitude = 103.851959;
   //_latitude = -6.2146;
   // double
   //_longitude = 106.8451;
@@ -187,6 +189,7 @@ Future saveLocation(
       latitude: value.latitude,
       distance: distanceInMeters.toDouble(),
       longitude: value.longitude,
+      poi: value.poi,
       streetAddress: value.streetAddress,
       city: value.city,
       countryName: value.countryName,
@@ -371,8 +374,22 @@ Future<PlaceHistory> fetchNewPlace(double? latitude, double? longitude) async {
     _placeHistory.streetAddress = feature['place_name'];
 
    _placeHistory.poi = feature['text'];
+
    //_placeHistory.poi ='new poi';
 
+  developer.log('placeHistory.poi  ${_placeHistory.poi }');
+
+  if (feature.isNotEmpty) {
+    Map<String, dynamic> properties = feature['properties'];
+    if (properties != null && properties.containsKey('category')) {
+      String categoryValue = properties['category'];
+      developer.log('categoryValue ${categoryValue}'); // Output: art gallery, art galleries, galleries, painting, art, gallery, tourism
+    } else {
+      print('Category field is missing or empty');
+    }
+  } else {
+    print('No features found');
+  }
     var context = feature['context'];
 
     for (var item in context) {
