@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/screens/country/ActiveCountryPage.dart';
 import 'package:gtk_flutter/screens/country/countryCard.dart';
-import 'package:gtk_flutter/screens/countryPage.dart';
+import 'package:gtk_flutter/screens/country/countryPage.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/placehistory.dart';
@@ -69,6 +69,7 @@ class UserCountrylist extends StatelessWidget {
                                         CountryPage(
                                             country: currentcountry.countryCode,
                                             regionrecords: appState.regionrecords,
+                                           // regionrecords: appState.regionrecords,
                                                     ),
                                 
                               ),

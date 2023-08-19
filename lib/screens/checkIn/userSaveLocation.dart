@@ -63,6 +63,11 @@ Future saveLocation(
 // Beijing","39.9040","116.4075"
 // Jakarta","-6.2146","106.8451"
 
+
+//Rome
+_latitude = 41.9028;
+_longitude= 12.4964;
+
 //Madrid
 //double? _latitude = 40.416775;
 //double? _longitude= -3.703790;
@@ -77,8 +82,8 @@ Future saveLocation(
  // _latitude = 48.856614; // French Fair 
  // _longitude = 2.3522219;
 
-    _latitude = 48.8584; // eiffel tower 
-  _longitude = 2.2945;
+  //  _latitude = 48.8584; // eiffel tower 
+  //_longitude = 2.2945;
  
   //_latitude = 1.290270; // Singapore Airport
   //_longitude = 103.851959;

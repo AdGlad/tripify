@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 //import 'package:flutter/src/widgets/container.dart';
 //import 'package:flutter/src/widgets/framework.dart';
 //import 'package:gtk_flutter/map/data/countrycodes.dart';
-import 'package:gtk_flutter/screens/countryPage.dart';
+import 'package:gtk_flutter/screens/country/countryPage.dart';
 import 'package:gtk_flutter/screens/regionlistpage.dart';
 import 'package:provider/provider.dart';
 
@@ -21,9 +21,13 @@ class ActiveCountryPage extends StatefulWidget {
 
 Color returnRegionColor(Map<String, dynamic> regionrecords, String regionCode) {
   if (regionrecords.containsKey(regionCode)) {
-    return Colors.blue;
+    //return Colors.blue;
+          return const Color.fromARGB(255, 145, 99, 96);
+
   } else {
-    return Colors.orangeAccent;
+//    return Colors.orangeAccent;
+          return Colors.blueGrey;
+
   }
 }
 
@@ -31,9 +35,13 @@ Color returnCountryColor(
     Map<String, dynamic> countryrecords, String countryCode) {
   String _countryCode = countryCode.toLowerCase();
   if (countryrecords.containsKey(_countryCode)) {
+        return const Color.fromARGB(255, 145, 99, 96);
+
     return Colors.blue;
   } else {
-    return Colors.orangeAccent;
+//    return Colors.orangeAccent;
+        return Colors.blueGrey;
+
   }
 }
 

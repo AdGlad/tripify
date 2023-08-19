@@ -8,6 +8,8 @@ import 'package:gtk_flutter/screens/placelistpage.dart';
 import 'package:gtk_flutter/state/applicationstate.dart';
 import 'package:provider/provider.dart';
 
+import '../../map/src/isocountry2.dart';
+
 
 class SupportedCountriesMap extends StatefulWidget {
   const SupportedCountriesMap({
@@ -39,7 +41,6 @@ class _SupportedCountriesMapState extends State<SupportedCountriesMap> {
                           // Actual widget from the Countries_world_map package.
                           child: SimpleMap(
                             instructions: SMapWorld.instructions,
-
                             // If the color of a country is not specified it will take in a default color.
                             defaultColor: Colors.lightGreen,
                             // CountryColors takes in 250 different colors that will color each country the color you want. In this example it generates a random color each time SetState({}) is called.
@@ -59,7 +60,7 @@ class _SupportedCountriesMapState extends State<SupportedCountriesMap> {
             top: 10,
             left: 0,
             right: 0,
-            child: Text('Tap / click a country to see its map',
+            child: Text('Tap country to see its map',
                 style: TextStyle(fontSize: 6), textAlign: TextAlign.center)),
       ],
     );
@@ -100,24 +101,28 @@ class _CountryPageState extends State<CountryPage> {
 
   late Map<String, Color?> keyValuesPaires;
 
-  Map<String, dynamic> fetchRegions(
-      String countryCode, Map<String, dynamic> regionrecords) {
-    instruction = getInstructions(widget.country);
-    properties = getProperties(instruction);
+  // Map<String, dynamic> fetchRegions(
+  //     String countryCode, Map<String, dynamic> regionrecords) {
+  //   instruction = getInstructions(widget.country);
+  //   properties = getProperties(instruction);
 
-    properties.forEach((element) {
-      keyValuesPaires.addAll(
-          {element['id']: returnRegionColor(regionrecords, element['id'])});
-    });
+  //   properties.forEach((element) {
+  //     keyValuesPaires.addAll(
+  //         {element['id']: returnRegionColor(regionrecords, element['id'])});
+  //   });
 
-    return keyValuesPaires;
-  }
+  //   return keyValuesPaires;
+  // }
+    // get IsoCountry2List from applicationstate provider package
+        
+
 
   @override
   void initState() {
     super.initState();
 
-    instruction = getInstructions(widget.country);
+ 
+  instruction = getInstructions(widget.country);
 
     if (instruction != "NOT SUPPORTED") {
       properties = getProperties(instruction);
@@ -129,19 +134,22 @@ class _CountryPageState extends State<CountryPage> {
         keyValuesPaires.addAll({element['id']: element['color']});
       });
 
-      state = 'Tap a state, prefecture or province';
+     state = 'Select Region On Map';
     } else {
       state = 'This country is not supported';
     }
     super.initState();
   }
+  
 
   Color returnRegionColor(
       Map<String, dynamic> regionrecords, String regionCode) {
-    if (regionrecords.containsKey(regionCode)) {
-      return Colors.blue;
+   // if (regionrecords.containsKey(regionCode)) {
+    if (regionrecords.containsValue(regionCode)) {
+      return const Color.fromARGB(255, 145, 99, 96);
     } else {
-      return Colors.orangeAccent;
+      //return Colors.orangeAccent;
+      return Colors.blueGrey;
     }
   }
 
@@ -170,14 +178,10 @@ class _CountryPageState extends State<CountryPage> {
                               defaultColor: Colors.grey.shade300,
                               key: Key(properties.toString()),
                               colors: keyValuesPaires,
-                              // colors: fetchRegions(
-                              //     widget.country, appState.regionrecords),
-                              // colors: keyValuesPaires,
                               instructions: instruction,
                               callback: (id, name, tapDetails) {
                                 setState(() {
                                   state = name;
-
                                   int i = properties.indexWhere(
                                       (element) => element['id'] == id);
                                   Navigator.push(
@@ -187,6 +191,7 @@ class _CountryPageState extends State<CountryPage> {
                                           PlaceHistoryListPage(
                                               countrycode: widget.country,
                                               regioncode: properties[i]['id'],
+                                             // regioncode: IsoCountry2GetCode(appState.IsoCountry2List,properties[i]['id']),
                                               userid: FirebaseAuth.instance.currentUser!.uid ),
                                     ),
                                   );
@@ -231,7 +236,7 @@ class _CountryPageState extends State<CountryPage> {
                                                       Colors.orangeAccent
                                                   // Colors.grey.shade300,
                                                   ),
-                                              subtitle: Text(
+                                              subtitle: Text( 
                                                   properties[i]['id'],
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
@@ -253,17 +258,6 @@ class _CountryPageState extends State<CountryPage> {
                                                                     userid: FirebaseAuth.instance.currentUser!.uid),
                                                   ),
                                                 );
-
-                                                // setState(() {
-                                                //   properties[i]['color'] =
-                                                //       properties[i]['color'] ==
-                                                //               Colors.green
-                                                //           ? Colors.orangeAccent
-                                                //           : Colors.green;
-                                                //   keyValuesPaires[properties[i]
-                                                //           ['id']] =
-                                                //       properties[i]['color'];
-                                                // });
                                               },
                                             ),
                                           )
@@ -287,7 +281,14 @@ class _CountryPageState extends State<CountryPage> {
                                                 BorderRadius.circular(15)),
                                         elevation: 8,
                                         child: ListTile(
-                                          title: Text(properties[i]['name'],
+                                          title: 
+                                          Text( 'ME ' + 
+                                            properties[i]['id'] + ' - ' +
+                                          //IsoCountry2GetCode(appState.IsoCountry2List,properties[i]['id']) + 
+                                        //   IsoCountry2GetName(appState.IsoCountry2List as List<IsoCountry2>,properties[i]['id'])
+                                           
+                                           // +
+  properties[i]['name'],
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 color: Colors.white,
@@ -347,6 +348,12 @@ class _CountryPageState extends State<CountryPage> {
   List<Map<String, dynamic>> getProperties(String input) {
     Map<String, dynamic> instructions = json.decode(input);
 
+// convert country code 'IT-CO' into iso code using IsoCountry2GetCode function
+//List paths = instructions['i'].map((e) => e['u'] = IsoCountry2GetCode(appState.IsoCountry2List,e['u'])).toList();
+// Access appState.IsoCountry2List from application state provider package
+
+    //List<IsoCountry2> isoCountry2List = Provider.of<ApplicationState>(context).IsoCountry2List;
+
     List paths = instructions['i'];
 
     List<Map<String, dynamic>> properties = [];
@@ -357,6 +364,7 @@ class _CountryPageState extends State<CountryPage> {
         'id': element['u'],
         // 'color': Colors.amber,
         'color': returnRegionColor(widget.regionrecords, element['u'])
+   //     'color': returnRegionColor(widget.regionrecords, IsoCountry2GetCode(isoCountry2List,element['u']))
       });
     });
 

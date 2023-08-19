@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 //import 'dart:ffi';
 
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide PhoneAuthProvider, EmailAuthProvider;
+import 'package:flutter/services.dart';
 //import 'package:firebase_auth/firebase_auth.dart' // new
 //   hide
 //        EmailAuthProvider,
@@ -24,6 +26,8 @@ import 'dart:developer' as developer;
 import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
+
+import '../map/src/isocountry2.dart';
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
@@ -84,6 +88,11 @@ class ApplicationState extends ChangeNotifier {
   List<Region> _userRegionList = [];
   List<Region> get userRegionlist => _userRegionList;
 
+//List<IsoCountry2>  _IsoCountry2List = []; 
+List<IsoCountry2> _IsoCountry2List =[];
+List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
+
+
   Map<String, dynamic> _countryrecords = {};
   Map<String, dynamic> get countryrecords => _countryrecords;
 
@@ -91,7 +100,10 @@ class ApplicationState extends ChangeNotifier {
   Map<String, dynamic> get regionrecords => _regionrecords;
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+//import json file /asset/data_iso_3166-*.json into IsoCountry2Rec arrary of type IsoCountry2
+
   Future<void> init() async {
+    _IsoCountry2List = await  loadIsoCountry2Rec('2');
     WidgetsFlutterBinding.ensureInitialized();
 
     _packageInfo = await PackageInfo.fromPlatform();
@@ -142,7 +154,7 @@ class ApplicationState extends ChangeNotifier {
             _userCountryList.add(CurrentCountry(
               countryCode: document.id,
               countryName: document.data()['countryName'] as String,
-              userId: document.data()['userId'] as String,
+          //    userId: document.data()['userId'] as String,
             ));
           }
           notifyListeners();
@@ -274,6 +286,7 @@ class ApplicationState extends ChangeNotifier {
 
     await currentUser.reload();
   }
+
 
   //UserProfile?
   listenForUserChanges(String userId) {
@@ -471,7 +484,15 @@ class ApplicationState extends ChangeNotifier {
       _userRegionList = [];
 
       for (final document in snapshot.docs) {
-        _regionrecords[document.id] = document.id;
+
+        developer.log(' document.id ${document.id}}');
+
+        //_regionrecords[document.id] = document.id;
+     //   _regionrecords[IsoCountry2GetCode( _IsoCountry2List,document.id)] = document.id;
+       _regionrecords[document.id] = IsoCountry2GetCode( _IsoCountry2List,document.id);
+        developer.log(' _regionrecords ${IsoCountry2GetCode( _IsoCountry2List,document.id)}');
+       // developer.log(' _regionrecords ${document.id}');
+
 
         _userRegionList.add(
           Region(
@@ -479,6 +500,7 @@ class ApplicationState extends ChangeNotifier {
             regionCode: document.id,
             region: document.data()['region'] as String,
             countryCode: document.data()['countryCode'] as String,
+            mapregion: IsoCountry2GetCode( _IsoCountry2List, document.id),
           ),
         );
       }
@@ -597,4 +619,5 @@ class ApplicationState extends ChangeNotifier {
     });
 //    return _placeHistory;
   }
+
 }

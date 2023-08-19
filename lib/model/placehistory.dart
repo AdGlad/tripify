@@ -109,6 +109,7 @@ class Region {
   Region(
       {required this.regionCode,
       required this.region,
+      this.mapregion,
       this.countryCode,
       this.userId});
   //{
@@ -122,6 +123,7 @@ class Region {
   @Id()
   final String regionCode;
   String? region;
+  String? mapregion;
   String? countryCode;
   String? userId;
 
