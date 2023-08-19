@@ -158,6 +158,7 @@ class PlaceHistory {
       this.postal,
       this.region,
       this.regionCode,
+      this.mapregion,
       this.timezone,
       this.elevation,
       this.timestamp,
@@ -192,6 +193,7 @@ class PlaceHistory {
   String? postal;
   String? region;
   String? regionCode;
+  String? mapregion;
   String? timezone;
   int? elevation;
   int? timestamp;

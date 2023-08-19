@@ -52,6 +52,7 @@ class _CheckInContainerState extends State<CheckInContainer> {
 
                               _toggleLoading();
                               await saveLocation(context,
+                                  widget.appState!.IsoCountry2List,
                                   widget.appState!.currentPlace, widget.appState!.userProfile);
                            //   updateStats(widget.appState.userTotals);
                               _toggleLoading();

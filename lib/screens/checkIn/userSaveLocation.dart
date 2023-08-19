@@ -11,12 +11,14 @@ import 'package:gtk_flutter/model/placehistory.dart';
 import 'package:gtk_flutter/model/users.dart';
 import 'package:gtk_flutter/screens/checkIn/userMapContainer.dart';
 import 'package:gtk_flutter/screens/checkIn/userSelectPhotos.dart';
+import 'package:gtk_flutter/src/temp.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
 
+import '../../map/src/isocountry2.dart';
 import '../../state/applicationstate.dart';
 //import '../ActiveCountryPage.dart';
 import 'checkcountry.dart';
@@ -24,6 +26,7 @@ import '../country/ActiveCountryPage.dart';
 
 Future saveLocation(
   BuildContext context,
+  List<IsoCountry2> isoCountryList,
   PlaceHistory? currentPlace,
   UserProfile? userProfile,
   //  UserTotals? userTotals,
@@ -65,8 +68,8 @@ Future saveLocation(
 
 
 //Rome
-_latitude = 41.9028;
-_longitude= 12.4964;
+//_latitude = 41.9028;
+//_longitude= 12.4964;
 
 //Madrid
 //double? _latitude = 40.416775;
@@ -82,8 +85,8 @@ _longitude= 12.4964;
  // _latitude = 48.856614; // French Fair 
  // _longitude = 2.3522219;
 
-  //  _latitude = 48.8584; // eiffel tower 
-  //_longitude = 2.2945;
+    _latitude = 48.8584; // eiffel tower 
+  _longitude = 2.2945;
  
   //_latitude = 1.290270; // Singapore Airport
   //_longitude = 103.851959;
@@ -169,12 +172,25 @@ _longitude= 12.4964;
     }
 
     developer.log('Region');
+    
+    developer.log('isoCountry2List Provider');
+
+   // List<IsoCountry2> isoCountry2List = Provider.of<ApplicationState>(context).IsoCountry2List;
+  
+    developer.log('isoCountry2List before');
+
+
+    String? _mapregion = IsoCountry2GetCode( isoCountryList, value.regionCode!);
+
+    developer.log('isoCountry2List before');
 
     Region region = Region(
         regionCode: value.regionCode!,
         region: value.region!,
         countryCode: value.countryCode!,
-        userId: _userId);
+        userId: _userId,
+        mapregion: _mapregion
+        );
     developer.log('regionRef');
 
     RegionCollectionReference regionRef =
@@ -201,6 +217,7 @@ _longitude= 12.4964;
       countryCode: value.countryCode,
       postal: value.postal,
       region: value.region,
+      mapregion: _mapregion,
       regionCode: value.regionCode,
       elevation: value.elevation,
       timezone: value.timezone,
