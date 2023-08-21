@@ -4859,8 +4859,8 @@ abstract class RegionDocumentReference
   Future<void> update({
     String? region,
     FieldValue regionFieldValue,
-    String? mapregion,
-    FieldValue mapregionFieldValue,
+    String? apiregionCode,
+    FieldValue apiregionCodeFieldValue,
     String? countryCode,
     FieldValue countryCodeFieldValue,
     String? userId,
@@ -4874,8 +4874,8 @@ abstract class RegionDocumentReference
     Transaction transaction, {
     String? region,
     FieldValue regionFieldValue,
-    String? mapregion,
-    FieldValue mapregionFieldValue,
+    String? apiregionCode,
+    FieldValue apiregionCodeFieldValue,
     String? countryCode,
     FieldValue countryCodeFieldValue,
     String? userId,
@@ -4924,8 +4924,8 @@ class _$RegionDocumentReference
   Future<void> update({
     Object? region = _sentinel,
     FieldValue? regionFieldValue,
-    Object? mapregion = _sentinel,
-    FieldValue? mapregionFieldValue,
+    Object? apiregionCode = _sentinel,
+    FieldValue? apiregionCodeFieldValue,
     Object? countryCode = _sentinel,
     FieldValue? countryCodeFieldValue,
     Object? userId = _sentinel,
@@ -4936,8 +4936,8 @@ class _$RegionDocumentReference
       "Cannot specify both region and regionFieldValue",
     );
     assert(
-      mapregion == _sentinel || mapregionFieldValue == null,
-      "Cannot specify both mapregion and mapregionFieldValue",
+      apiregionCode == _sentinel || apiregionCodeFieldValue == null,
+      "Cannot specify both apiregionCode and apiregionCodeFieldValue",
     );
     assert(
       countryCode == _sentinel || countryCodeFieldValue == null,
@@ -4951,10 +4951,10 @@ class _$RegionDocumentReference
       if (region != _sentinel) _$RegionFieldMap['region']!: region as String?,
       if (regionFieldValue != null)
         _$RegionFieldMap['region']!: regionFieldValue,
-      if (mapregion != _sentinel)
-        _$RegionFieldMap['mapregion']!: mapregion as String?,
-      if (mapregionFieldValue != null)
-        _$RegionFieldMap['mapregion']!: mapregionFieldValue,
+      if (apiregionCode != _sentinel)
+        _$RegionFieldMap['apiregionCode']!: apiregionCode as String?,
+      if (apiregionCodeFieldValue != null)
+        _$RegionFieldMap['apiregionCode']!: apiregionCodeFieldValue,
       if (countryCode != _sentinel)
         _$RegionFieldMap['countryCode']!: countryCode as String?,
       if (countryCodeFieldValue != null)
@@ -4971,8 +4971,8 @@ class _$RegionDocumentReference
     Transaction transaction, {
     Object? region = _sentinel,
     FieldValue? regionFieldValue,
-    Object? mapregion = _sentinel,
-    FieldValue? mapregionFieldValue,
+    Object? apiregionCode = _sentinel,
+    FieldValue? apiregionCodeFieldValue,
     Object? countryCode = _sentinel,
     FieldValue? countryCodeFieldValue,
     Object? userId = _sentinel,
@@ -4983,8 +4983,8 @@ class _$RegionDocumentReference
       "Cannot specify both region and regionFieldValue",
     );
     assert(
-      mapregion == _sentinel || mapregionFieldValue == null,
-      "Cannot specify both mapregion and mapregionFieldValue",
+      apiregionCode == _sentinel || apiregionCodeFieldValue == null,
+      "Cannot specify both apiregionCode and apiregionCodeFieldValue",
     );
     assert(
       countryCode == _sentinel || countryCodeFieldValue == null,
@@ -4998,10 +4998,10 @@ class _$RegionDocumentReference
       if (region != _sentinel) _$RegionFieldMap['region']!: region as String?,
       if (regionFieldValue != null)
         _$RegionFieldMap['region']!: regionFieldValue,
-      if (mapregion != _sentinel)
-        _$RegionFieldMap['mapregion']!: mapregion as String?,
-      if (mapregionFieldValue != null)
-        _$RegionFieldMap['mapregion']!: mapregionFieldValue,
+      if (apiregionCode != _sentinel)
+        _$RegionFieldMap['apiregionCode']!: apiregionCode as String?,
+      if (apiregionCodeFieldValue != null)
+        _$RegionFieldMap['apiregionCode']!: apiregionCodeFieldValue,
       if (countryCode != _sentinel)
         _$RegionFieldMap['countryCode']!: countryCode as String?,
       if (countryCodeFieldValue != null)
@@ -5121,7 +5121,7 @@ abstract class RegionQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
-  RegionQuery whereMapregion({
+  RegionQuery whereApiregionCode({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -5179,7 +5179,7 @@ abstract class RegionQuery
     RegionDocumentSnapshot? startAfterDocument,
   });
 
-  RegionQuery orderByMapregion({
+  RegionQuery orderByApiregionCode({
     bool descending = false,
     String? startAt,
     String? startAfter,
@@ -5421,7 +5421,7 @@ class _$RegionQuery extends QueryReference<Region, RegionQuerySnapshot>
     );
   }
 
-  RegionQuery whereMapregion({
+  RegionQuery whereApiregionCode({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -5435,7 +5435,7 @@ class _$RegionQuery extends QueryReference<Region, RegionQuerySnapshot>
     return _$RegionQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$RegionFieldMap['mapregion']!,
+        _$RegionFieldMap['apiregionCode']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -5652,7 +5652,7 @@ class _$RegionQuery extends QueryReference<Region, RegionQuerySnapshot>
     );
   }
 
-  RegionQuery orderByMapregion({
+  RegionQuery orderByApiregionCode({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -5664,7 +5664,7 @@ class _$RegionQuery extends QueryReference<Region, RegionQuerySnapshot>
     RegionDocumentSnapshot? startAfterDocument,
   }) {
     final query = $referenceWithoutCursor
-        .orderBy(_$RegionFieldMap['mapregion']!, descending: descending);
+        .orderBy(_$RegionFieldMap['apiregionCode']!, descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -6113,8 +6113,8 @@ abstract class PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue regionFieldValue,
     String? regionCode,
     FieldValue regionCodeFieldValue,
-    String? mapregion,
-    FieldValue mapregionFieldValue,
+    String? apiregionCode,
+    FieldValue apiregionCodeFieldValue,
     String? timezone,
     FieldValue timezoneFieldValue,
     int? elevation,
@@ -6133,6 +6133,8 @@ abstract class PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue ratingFieldValue,
     String? poi,
     FieldValue poiFieldValue,
+    String? locationRaw,
+    FieldValue locationRawFieldValue,
     List<String>? imagePaths,
     FieldValue imagePathsFieldValue,
   });
@@ -6166,8 +6168,8 @@ abstract class PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue regionFieldValue,
     String? regionCode,
     FieldValue regionCodeFieldValue,
-    String? mapregion,
-    FieldValue mapregionFieldValue,
+    String? apiregionCode,
+    FieldValue apiregionCodeFieldValue,
     String? timezone,
     FieldValue timezoneFieldValue,
     int? elevation,
@@ -6186,6 +6188,8 @@ abstract class PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue ratingFieldValue,
     String? poi,
     FieldValue poiFieldValue,
+    String? locationRaw,
+    FieldValue locationRawFieldValue,
     List<String>? imagePaths,
     FieldValue imagePathsFieldValue,
   });
@@ -6249,8 +6253,8 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue? regionFieldValue,
     Object? regionCode = _sentinel,
     FieldValue? regionCodeFieldValue,
-    Object? mapregion = _sentinel,
-    FieldValue? mapregionFieldValue,
+    Object? apiregionCode = _sentinel,
+    FieldValue? apiregionCodeFieldValue,
     Object? timezone = _sentinel,
     FieldValue? timezoneFieldValue,
     Object? elevation = _sentinel,
@@ -6269,6 +6273,8 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue? ratingFieldValue,
     Object? poi = _sentinel,
     FieldValue? poiFieldValue,
+    Object? locationRaw = _sentinel,
+    FieldValue? locationRawFieldValue,
     Object? imagePaths = _sentinel,
     FieldValue? imagePathsFieldValue,
   }) async {
@@ -6321,8 +6327,8 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
       "Cannot specify both regionCode and regionCodeFieldValue",
     );
     assert(
-      mapregion == _sentinel || mapregionFieldValue == null,
-      "Cannot specify both mapregion and mapregionFieldValue",
+      apiregionCode == _sentinel || apiregionCodeFieldValue == null,
+      "Cannot specify both apiregionCode and apiregionCodeFieldValue",
     );
     assert(
       timezone == _sentinel || timezoneFieldValue == null,
@@ -6359,6 +6365,10 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     assert(
       poi == _sentinel || poiFieldValue == null,
       "Cannot specify both poi and poiFieldValue",
+    );
+    assert(
+      locationRaw == _sentinel || locationRawFieldValue == null,
+      "Cannot specify both locationRaw and locationRawFieldValue",
     );
     assert(
       imagePaths == _sentinel || imagePathsFieldValue == null,
@@ -6411,10 +6421,10 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
         _$PlaceHistoryFieldMap['regionCode']!: regionCode as String?,
       if (regionCodeFieldValue != null)
         _$PlaceHistoryFieldMap['regionCode']!: regionCodeFieldValue,
-      if (mapregion != _sentinel)
-        _$PlaceHistoryFieldMap['mapregion']!: mapregion as String?,
-      if (mapregionFieldValue != null)
-        _$PlaceHistoryFieldMap['mapregion']!: mapregionFieldValue,
+      if (apiregionCode != _sentinel)
+        _$PlaceHistoryFieldMap['apiregionCode']!: apiregionCode as String?,
+      if (apiregionCodeFieldValue != null)
+        _$PlaceHistoryFieldMap['apiregionCode']!: apiregionCodeFieldValue,
       if (timezone != _sentinel)
         _$PlaceHistoryFieldMap['timezone']!: timezone as String?,
       if (timezoneFieldValue != null)
@@ -6449,6 +6459,10 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
         _$PlaceHistoryFieldMap['rating']!: ratingFieldValue,
       if (poi != _sentinel) _$PlaceHistoryFieldMap['poi']!: poi as String?,
       if (poiFieldValue != null) _$PlaceHistoryFieldMap['poi']!: poiFieldValue,
+      if (locationRaw != _sentinel)
+        _$PlaceHistoryFieldMap['locationRaw']!: locationRaw as String?,
+      if (locationRawFieldValue != null)
+        _$PlaceHistoryFieldMap['locationRaw']!: locationRawFieldValue,
       if (imagePaths != _sentinel)
         _$PlaceHistoryFieldMap['imagePaths']!: imagePaths as List<String>?,
       if (imagePathsFieldValue != null)
@@ -6484,8 +6498,8 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue? regionFieldValue,
     Object? regionCode = _sentinel,
     FieldValue? regionCodeFieldValue,
-    Object? mapregion = _sentinel,
-    FieldValue? mapregionFieldValue,
+    Object? apiregionCode = _sentinel,
+    FieldValue? apiregionCodeFieldValue,
     Object? timezone = _sentinel,
     FieldValue? timezoneFieldValue,
     Object? elevation = _sentinel,
@@ -6504,6 +6518,8 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue? ratingFieldValue,
     Object? poi = _sentinel,
     FieldValue? poiFieldValue,
+    Object? locationRaw = _sentinel,
+    FieldValue? locationRawFieldValue,
     Object? imagePaths = _sentinel,
     FieldValue? imagePathsFieldValue,
   }) {
@@ -6556,8 +6572,8 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
       "Cannot specify both regionCode and regionCodeFieldValue",
     );
     assert(
-      mapregion == _sentinel || mapregionFieldValue == null,
-      "Cannot specify both mapregion and mapregionFieldValue",
+      apiregionCode == _sentinel || apiregionCodeFieldValue == null,
+      "Cannot specify both apiregionCode and apiregionCodeFieldValue",
     );
     assert(
       timezone == _sentinel || timezoneFieldValue == null,
@@ -6594,6 +6610,10 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     assert(
       poi == _sentinel || poiFieldValue == null,
       "Cannot specify both poi and poiFieldValue",
+    );
+    assert(
+      locationRaw == _sentinel || locationRawFieldValue == null,
+      "Cannot specify both locationRaw and locationRawFieldValue",
     );
     assert(
       imagePaths == _sentinel || imagePathsFieldValue == null,
@@ -6646,10 +6666,10 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
         _$PlaceHistoryFieldMap['regionCode']!: regionCode as String?,
       if (regionCodeFieldValue != null)
         _$PlaceHistoryFieldMap['regionCode']!: regionCodeFieldValue,
-      if (mapregion != _sentinel)
-        _$PlaceHistoryFieldMap['mapregion']!: mapregion as String?,
-      if (mapregionFieldValue != null)
-        _$PlaceHistoryFieldMap['mapregion']!: mapregionFieldValue,
+      if (apiregionCode != _sentinel)
+        _$PlaceHistoryFieldMap['apiregionCode']!: apiregionCode as String?,
+      if (apiregionCodeFieldValue != null)
+        _$PlaceHistoryFieldMap['apiregionCode']!: apiregionCodeFieldValue,
       if (timezone != _sentinel)
         _$PlaceHistoryFieldMap['timezone']!: timezone as String?,
       if (timezoneFieldValue != null)
@@ -6684,6 +6704,10 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
         _$PlaceHistoryFieldMap['rating']!: ratingFieldValue,
       if (poi != _sentinel) _$PlaceHistoryFieldMap['poi']!: poi as String?,
       if (poiFieldValue != null) _$PlaceHistoryFieldMap['poi']!: poiFieldValue,
+      if (locationRaw != _sentinel)
+        _$PlaceHistoryFieldMap['locationRaw']!: locationRaw as String?,
+      if (locationRawFieldValue != null)
+        _$PlaceHistoryFieldMap['locationRaw']!: locationRawFieldValue,
       if (imagePaths != _sentinel)
         _$PlaceHistoryFieldMap['imagePaths']!: imagePaths as List<String>?,
       if (imagePathsFieldValue != null)
@@ -6921,7 +6945,7 @@ abstract class PlaceHistoryQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
-  PlaceHistoryQuery whereMapregion({
+  PlaceHistoryQuery whereApiregionCode({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -7021,6 +7045,17 @@ abstract class PlaceHistoryQuery
     List<String?>? whereNotIn,
   });
   PlaceHistoryQuery wherePoi({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  PlaceHistoryQuery whereLocationRaw({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -7199,7 +7234,7 @@ abstract class PlaceHistoryQuery
     PlaceHistoryDocumentSnapshot? startAfterDocument,
   });
 
-  PlaceHistoryQuery orderByMapregion({
+  PlaceHistoryQuery orderByApiregionCode({
     bool descending = false,
     String? startAt,
     String? startAfter,
@@ -7308,6 +7343,18 @@ abstract class PlaceHistoryQuery
   });
 
   PlaceHistoryQuery orderByPoi({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  });
+
+  PlaceHistoryQuery orderByLocationRaw({
     bool descending = false,
     String? startAt,
     String? startAfter,
@@ -7861,7 +7908,7 @@ class _$PlaceHistoryQuery
     );
   }
 
-  PlaceHistoryQuery whereMapregion({
+  PlaceHistoryQuery whereApiregionCode({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -7875,7 +7922,7 @@ class _$PlaceHistoryQuery
     return _$PlaceHistoryQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$PlaceHistoryFieldMap['mapregion']!,
+        _$PlaceHistoryFieldMap['apiregionCode']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -8137,6 +8184,35 @@ class _$PlaceHistoryQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$PlaceHistoryFieldMap['poi']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery whereLocationRaw({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PlaceHistoryFieldMap['locationRaw']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -9119,7 +9195,7 @@ class _$PlaceHistoryQuery
     );
   }
 
-  PlaceHistoryQuery orderByMapregion({
+  PlaceHistoryQuery orderByApiregionCode({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -9130,8 +9206,9 @@ class _$PlaceHistoryQuery
     PlaceHistoryDocumentSnapshot? endBeforeDocument,
     PlaceHistoryDocumentSnapshot? startAfterDocument,
   }) {
-    final query = $referenceWithoutCursor
-        .orderBy(_$PlaceHistoryFieldMap['mapregion']!, descending: descending);
+    final query = $referenceWithoutCursor.orderBy(
+        _$PlaceHistoryFieldMap['apiregionCode']!,
+        descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -9842,6 +9919,79 @@ class _$PlaceHistoryQuery
     );
   }
 
+  PlaceHistoryQuery orderByLocationRaw({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$PlaceHistoryFieldMap['locationRaw']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
   PlaceHistoryQuery orderByImagePaths({
     bool descending = false,
     Object? startAt = _sentinel,
@@ -10129,7 +10279,7 @@ Json? _$JsonConverterToJson<Json, Value>(
 Region _$RegionFromJson(Map<String, dynamic> json) => Region(
       regionCode: json['regionCode'] as String,
       region: json['region'] as String?,
-      mapregion: json['mapregion'] as String?,
+      apiregionCode: json['apiregionCode'] as String?,
       countryCode: json['countryCode'] as String?,
       userId: json['userId'] as String?,
     );
@@ -10137,7 +10287,7 @@ Region _$RegionFromJson(Map<String, dynamic> json) => Region(
 const _$RegionFieldMap = <String, String>{
   'regionCode': 'regionCode',
   'region': 'region',
-  'mapregion': 'mapregion',
+  'apiregionCode': 'apiregionCode',
   'countryCode': 'countryCode',
   'userId': 'userId',
 };
@@ -10145,7 +10295,7 @@ const _$RegionFieldMap = <String, String>{
 Map<String, dynamic> _$RegionToJson(Region instance) => <String, dynamic>{
       'regionCode': instance.regionCode,
       'region': instance.region,
-      'mapregion': instance.mapregion,
+      'apiregionCode': instance.apiregionCode,
       'countryCode': instance.countryCode,
       'userId': instance.userId,
     };
@@ -10164,7 +10314,7 @@ PlaceHistory _$PlaceHistoryFromJson(Map<String, dynamic> json) => PlaceHistory(
       postal: json['postal'] as String?,
       region: json['region'] as String?,
       regionCode: json['regionCode'] as String?,
-      mapregion: json['mapregion'] as String?,
+      apiregionCode: json['apiregionCode'] as String?,
       timezone: json['timezone'] as String?,
       elevation: json['elevation'] as int?,
       timestamp: json['timestamp'] as int?,
@@ -10178,6 +10328,7 @@ PlaceHistory _$PlaceHistoryFromJson(Map<String, dynamic> json) => PlaceHistory(
       imagePaths: (json['imagePaths'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      locationRaw: json['locationRaw'] as String?,
     );
 
 const _$PlaceHistoryFieldMap = <String, String>{
@@ -10194,7 +10345,7 @@ const _$PlaceHistoryFieldMap = <String, String>{
   'postal': 'postal',
   'region': 'region',
   'regionCode': 'regionCode',
-  'mapregion': 'mapregion',
+  'apiregionCode': 'apiregionCode',
   'timezone': 'timezone',
   'elevation': 'elevation',
   'timestamp': 'timestamp',
@@ -10204,6 +10355,7 @@ const _$PlaceHistoryFieldMap = <String, String>{
   'description': 'description',
   'rating': 'rating',
   'poi': 'poi',
+  'locationRaw': 'locationRaw',
   'imagePaths': 'imagePaths',
 };
 
@@ -10222,7 +10374,7 @@ Map<String, dynamic> _$PlaceHistoryToJson(PlaceHistory instance) =>
       'postal': instance.postal,
       'region': instance.region,
       'regionCode': instance.regionCode,
-      'mapregion': instance.mapregion,
+      'apiregionCode': instance.apiregionCode,
       'timezone': instance.timezone,
       'elevation': instance.elevation,
       'timestamp': instance.timestamp,
@@ -10233,5 +10385,6 @@ Map<String, dynamic> _$PlaceHistoryToJson(PlaceHistory instance) =>
       'description': instance.description,
       'rating': instance.rating,
       'poi': instance.poi,
+      'locationRaw': instance.locationRaw,
       'imagePaths': instance.imagePaths,
     };

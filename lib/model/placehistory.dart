@@ -109,7 +109,7 @@ class Region {
   Region(
       {required this.regionCode,
       required this.region,
-      this.mapregion,
+      this.apiregionCode,
       this.countryCode,
       this.userId});
   //{
@@ -123,7 +123,7 @@ class Region {
   @Id()
   final String regionCode;
   String? region;
-  String? mapregion;
+  String? apiregionCode;
   String? countryCode;
   String? userId;
 
@@ -158,17 +158,18 @@ class PlaceHistory {
       this.postal,
       this.region,
       this.regionCode,
-      this.mapregion,
+      this.apiregionCode,
       this.timezone,
       this.elevation,
       this.timestamp,
       this.arrivaldate,
       this.visitnumber,
       this.userId,
-          this.description,
+      this.description,
     this.rating,
     this.poi,
     this.imagePaths,
+    this.locationRaw
       });
   //{
   //   _$assertPlaceHistory(this);
@@ -193,7 +194,7 @@ class PlaceHistory {
   String? postal;
   String? region;
   String? regionCode;
-  String? mapregion;
+  String? apiregionCode;
   String? timezone;
   int? elevation;
   int? timestamp;
@@ -203,6 +204,7 @@ class PlaceHistory {
   String? description;
   String? rating;
   String? poi;
+  String? locationRaw;
   List<String>? imagePaths;
 
   Map<String, Object?> toJson() => _$PlaceHistoryToJson(this);

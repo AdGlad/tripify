@@ -487,12 +487,19 @@ List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
 
         developer.log(' document.id ${document.id}}');
 
-        //_regionrecords[document.id] = document.id;
+        _regionrecords[document.id] = document.id;
      //   _regionrecords[IsoCountry2GetCode( _IsoCountry2List,document.id)] = document.id;
-       _regionrecords[document.id] = IsoCountry2GetCode( _IsoCountry2List,document.id);
-        developer.log(' _regionrecords ${IsoCountry2GetCode( _IsoCountry2List,document.id)}');
+     //  _regionrecords[document.id] = IsoCountry2GetCode( _IsoCountry2List,document.id);
+    //    developer.log(' _regionrecords ${IsoCountry2GetCode( _IsoCountry2List,document.id)}');
        // developer.log(' _regionrecords ${document.id}');
 
+String apiregionCode = 'AU-NSW';
+if (document.data().containsKey('apiregionCode')) {
+   apiregionCode = document.data()['apiregionCode'] as String;
+  // Now you can use the apiregionCode value
+} else {
+  print('apiregionCode field does not exist in the document.');
+}
 
         _userRegionList.add(
           Region(
@@ -500,7 +507,8 @@ List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
             regionCode: document.id,
             region: document.data()['region'] as String,
             countryCode: document.data()['countryCode'] as String,
-            mapregion: IsoCountry2GetCode( _IsoCountry2List, document.id),
+            apiregionCode: apiregionCode,
+          ///  apiregionCode: IsoCountry2GetCode( _IsoCountry2List, document.id),
           ),
         );
       }

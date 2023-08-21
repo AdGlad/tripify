@@ -28,8 +28,7 @@ class _MainPageState extends State<MainPage> {
     const CheckCountry(),
     const UserCountryPage(),
     // const ActiveCountryPage(),
-    IsoCountryList(),
-   // const League(),
+    const League(),
     const UserInfoPage(),
    // const UserDetails(),
   ];

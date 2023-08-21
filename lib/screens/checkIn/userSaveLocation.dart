@@ -71,10 +71,21 @@ Future saveLocation(
 //_latitude = 41.9028;
 //_longitude= 12.4964;
 
-//Madrid
-//double? _latitude = 40.416775;
-//double? _longitude= -3.703790;
+// Darwin Australia 
+_longitude= 130.8456;
+ _latitude = -12.4634;
 
+//Yorkshire  _longitude= -1.1439;
+// _latitude = 53.8108;
+// _longitude= -1.1439;
+
+ // Leeds longitude= -1.5491;
+  // _latitude = 53.8008;
+
+
+//Madrid
+ //_latitude = 40.416775;
+// _longitude= -3.703790;
   //double
   //_latitude = 35.6839;
   //double
@@ -85,8 +96,8 @@ Future saveLocation(
  // _latitude = 48.856614; // French Fair 
  // _longitude = 2.3522219;
 
-    _latitude = 48.8584; // eiffel tower 
-  _longitude = 2.2945;
+   // _latitude = 48.8584; // eiffel tower 
+  //_longitude = 2.2945;
  
   //_latitude = 1.290270; // Singapore Airport
   //_longitude = 103.851959;
@@ -180,16 +191,19 @@ Future saveLocation(
     developer.log('isoCountry2List before');
 
 
-    String? _mapregion = IsoCountry2GetCode( isoCountryList, value.regionCode!);
+    String? _isoregionCode = IsoCountry2GetCode( isoCountryList, value.regionCode!);
 
     developer.log('isoCountry2List before');
-
+// Check for null _isoregionCode
+    if (_isoregionCode == null) {
+    developer.log('_isoregionCode is null');
+    }
     Region region = Region(
-        regionCode: value.regionCode!,
+        regionCode: _isoregionCode,
         region: value.region!,
         countryCode: value.countryCode!,
         userId: _userId,
-        mapregion: _mapregion
+        apiregionCode:  value.regionCode! 
         );
     developer.log('regionRef');
 
@@ -217,10 +231,11 @@ Future saveLocation(
       countryCode: value.countryCode,
       postal: value.postal,
       region: value.region,
-      mapregion: _mapregion,
-      regionCode: value.regionCode,
+      apiregionCode: value.regionCode! ,
+      regionCode: _isoregionCode,
       elevation: value.elevation,
       timezone: value.timezone,
+      locationRaw: value.locationRaw,
       timestamp: value.timestamp, // DateTime.now().millisecondsSinceEpoch,
       arrivaldate: value.arrivaldate, // DateTime.now()
       visitnumber: newVisitNumber,
@@ -382,7 +397,7 @@ Future<PlaceHistory> fetchNewPlace(double? latitude, double? longitude) async {
     Uri.parse(urlString),
   );
   developer.log(urlString, name: 'my.app.urlstring');
-
+_placeHistory.locationRaw = res.body;
   developer.log(res.body, name: 'my.app.category');
   jsonString = jsonDecode(res.body);
 

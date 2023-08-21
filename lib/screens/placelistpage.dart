@@ -12,14 +12,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import '../src/firebaseImage.dart';
 
-
-
 class PlaceHistoryListPage extends StatefulWidget {
   final String countrycode;
   final String regioncode;
   final String userid;
 
-  PlaceHistoryListPage({required this.countrycode, required this.regioncode, required this.userid});
+  PlaceHistoryListPage(
+      {required this.countrycode,
+      required this.regioncode,
+      required this.userid});
 
   @override
   State<PlaceHistoryListPage> createState() => _PlaceHistoryListPageState();
@@ -37,7 +38,9 @@ class _PlaceHistoryListPageState extends State<PlaceHistoryListPage> {
         ),
         body: Center(
           child: PlaceHistorylist(
-              countrycode: widget.countrycode, regioncode: widget.regioncode, userid: widget.userid),
+              countrycode: widget.countrycode,
+              regioncode: widget.regioncode,
+              userid: widget.userid),
         ));
   }
 }
@@ -46,29 +49,32 @@ class PlaceHistorylist extends StatefulWidget {
   final String countrycode;
   final String regioncode;
   final String userid;
-  
 
-  PlaceHistorylist({required this.countrycode, required this.regioncode, required this.userid
-  });
+  PlaceHistorylist(
+      {required this.countrycode,
+      required this.regioncode,
+      required this.userid});
 
   @override
   State<PlaceHistorylist> createState() => _PlaceHistorylistState();
 }
 
 class _PlaceHistorylistState extends State<PlaceHistorylist> {
- // final CurrentCountryCollectionReference countyRef =
-    //  currentuserRef.doc(FirebaseAuth.instance.currentUser!.uid).country;
-    //  currentuserRef.doc(FirebaseAuth.instance.currentUser!.uid).country;
+  // final CurrentCountryCollectionReference countyRef =
+  //  currentuserRef.doc(FirebaseAuth.instance.currentUser!.uid).country;
+  //  currentuserRef.doc(FirebaseAuth.instance.currentUser!.uid).country;
 
   @override
   Widget build(BuildContext context) {
     return FirestoreBuilder<PlaceHistoryQuerySnapshot>(
-      //  ref: countyRef
-        ref: currentuserRef.doc(widget.userid).country
+        ref: currentuserRef
+            .doc(widget.userid)
+            .country
             .doc(widget.countrycode)
             .region
             .doc(widget.regioncode)
             .placehistory
+            //.doc(widget.regioncode)
             .orderByTimestamp(descending: true),
         builder: (context, AsyncSnapshot<PlaceHistoryQuerySnapshot> snapshot,
             Widget? child) {
@@ -120,20 +126,21 @@ class _PlaceHistorylistState extends State<PlaceHistorylist> {
 }
 
 Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
-
-late Reference _storageReference;
-_storageReference = FirebaseStorage.instance.ref().child(FirebaseAuth.instance.currentUser!.uid);
+  late Reference _storageReference;
+  _storageReference = FirebaseStorage.instance
+      .ref()
+      .child(FirebaseAuth.instance.currentUser!.uid);
 
   return Card(
     color: Color.fromARGB(255, 49, 52, 59),
     //shadowColor: Colors.blueAccent,
     elevation: 8.0,
-    margin: EdgeInsets.all(4.0),
+    margin: EdgeInsets.all(2.0),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     child: Column(
       children: [
         Container(
-          margin: EdgeInsets.all(4),
+          margin: EdgeInsets.all(2),
           child: Column(
             // verticalDirection: VerticalDirection.up,
             //  mainAxisAlignment: MainAxisAlignment.center,
@@ -193,39 +200,52 @@ _storageReference = FirebaseStorage.instance.ref().child(FirebaseAuth.instance.c
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text('Visit No. : ${currentPlaceHistory.visitnumber}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w700,
-                        )),
+                    // Center Row in middle
+                    Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.center, // Center row horizontally
+                      children: [
+                        Text('Visit No. : ${currentPlaceHistory.visitnumber}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.0,
+                              fontWeight: FontWeight.w700,
+                            )),
+                        Text(
+                            currentPlaceHistory.distance != null
+                                ? '  Distance: ${currentPlaceHistory.distance}'
+                                : 'no distance',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.0,
+                              fontWeight: FontWeight.w700,
+                            )),
+                      ],
+                    ),
 
-                    Text(
-                        currentPlaceHistory.distance != null
-                            ? 'Distance: ${currentPlaceHistory.distance}'
-                            : 'no distance',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w700,
-                        )),
+                    Row(
+                                  mainAxisAlignment: MainAxisAlignment.center, // Center row horizontally
 
-                    Text('Lat : ${currentPlaceHistory.latitude}',
+                      children: [
+                        Text('Lat : ${currentPlaceHistory.latitude}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.0,
+                              fontWeight: FontWeight.w700,
+                            )),
+                                               Text('  Lng : ${currentPlaceHistory.longitude}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text('Lng : ${currentPlaceHistory.longitude}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w700,
-                        )),
+                      ],
+                    ),
+ 
                     Text(
                         currentPlaceHistory.description != null
                             ? 'Diary : ${currentPlaceHistory.description}'
@@ -237,58 +257,61 @@ _storageReference = FirebaseStorage.instance.ref().child(FirebaseAuth.instance.c
                           fontWeight: FontWeight.w700,
                         )),
                     Container(
-                      height: 200,
-                      child: 
-      //                        ListView.builder(
-      //   itemCount: currentPlaceHistory.imagePaths?.length,
-      //   itemBuilder: (context, index) {
-      //     return FutureBuilder(
-      //       future: _storageReference.child(currentPlaceHistory.imagePaths![index]).getDownloadURL(),
-      //       builder: (context, snapshot) {
-      //         if (snapshot.connectionState == ConnectionState.waiting) {
-      //           return CircularProgressIndicator();
-      //         } else if (snapshot.hasError) {
-      //           return Text('Error: ${snapshot.error}');
-      //         } else if (snapshot.hasData) {
-      //           String imageUrl = snapshot.data.toString();
-      //           return ListTile(
-      //             title: Text('Image ${index + 1}'),
-      //             leading: Image.network(imageUrl),
-      //           );
-      //         } else {
-      //           return Text('No image available.');
-      //         }
-      //       },
-      //     );
-      //   },
-      // ),
-                      // ListView.builder(
-                      //     scrollDirection: Axis.horizontal,
-                      //     itemCount: currentPlaceHistory.imagePaths?.length,
-                      //     itemBuilder: (context, index) {
-                      //       return Padding(
-                      //         padding: EdgeInsets.all(8.0),
-                      //         child: 
-                      //         currentPlaceHistory.imagePaths?[index] != null ?
-                      //         Image.file(File(currentPlaceHistory.imagePaths![index]))
-                      //              : Text(' '),
-                      //       );
-                      //     }),
-                      ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: currentPlaceHistory.imagePaths?.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              height: 200,
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: 
-                                currentPlaceHistory.imagePaths?[index] != null ?
-                                FirebaseImage(storagePath: currentPlaceHistory.imagePaths![index])                                  : Text(' '),
-                              ),
-                            );
-                          }),
-
+                      height: 100,
+                      child:
+                          //                        ListView.builder(
+                          //   itemCount: currentPlaceHistory.imagePaths?.length,
+                          //   itemBuilder: (context, index) {
+                          //     return FutureBuilder(
+                          //       future: _storageReference.child(currentPlaceHistory.imagePaths![index]).getDownloadURL(),
+                          //       builder: (context, snapshot) {
+                          //         if (snapshot.connectionState == ConnectionState.waiting) {
+                          //           return CircularProgressIndicator();
+                          //         } else if (snapshot.hasError) {
+                          //           return Text('Error: ${snapshot.error}');
+                          //         } else if (snapshot.hasData) {
+                          //           String imageUrl = snapshot.data.toString();
+                          //           return ListTile(
+                          //             title: Text('Image ${index + 1}'),
+                          //             leading: Image.network(imageUrl),
+                          //           );
+                          //         } else {
+                          //           return Text('No image available.');
+                          //         }
+                          //       },
+                          //     );
+                          //   },
+                          // ),
+                          // ListView.builder(
+                          //     scrollDirection: Axis.horizontal,
+                          //     itemCount: currentPlaceHistory.imagePaths?.length,
+                          //     itemBuilder: (context, index) {
+                          //       return Padding(
+                          //         padding: EdgeInsets.all(8.0),
+                          //         child:
+                          //         currentPlaceHistory.imagePaths?[index] != null ?
+                          //         Image.file(File(currentPlaceHistory.imagePaths![index]))
+                          //              : Text(' '),
+                          //       );
+                          //     }),
+                          ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: currentPlaceHistory.imagePaths?.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  height: 100,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: currentPlaceHistory
+                                                .imagePaths?[index] !=
+                                            null
+                                        ? FirebaseImage(
+                                            storagePath: currentPlaceHistory
+                                                .imagePaths![index])
+                                        : Text(' '),
+                                  ),
+                                );
+                              }),
                     )
                   ],
                 ),
@@ -302,9 +325,9 @@ _storageReference = FirebaseStorage.instance.ref().child(FirebaseAuth.instance.c
             IconButton(
               color: Color.fromARGB(255, 26, 173, 182),
               onPressed: () {
-               // _fluttershareImages( currentPlaceHistory!);
-              _shareImages( currentPlaceHistory);
-                },
+                // _fluttershareImages( currentPlaceHistory!);
+                _shareImages(currentPlaceHistory);
+              },
               icon: const Icon(Icons.share),
               tooltip: 'Share',
             ),
@@ -353,54 +376,55 @@ _storageReference = FirebaseStorage.instance.ref().child(FirebaseAuth.instance.c
     ),
   );
 }
-  void _shareImages(PlaceHistory currentPlaceHistory) async {
-      final files = <XFile>[];
-    final tempDir = await getTemporaryDirectory();
-    
-if (currentPlaceHistory.imagePaths != null) {
-      for (var i = 0; i < currentPlaceHistory.imagePaths!.length; i++) {
 
-    final storagePath = currentPlaceHistory.imagePaths![i];
+void _shareImages(PlaceHistory currentPlaceHistory) async {
+  final files = <XFile>[];
+  final tempDir = await getTemporaryDirectory();
 
-    final fileName = storagePath.split('/').last;
-    final file = File('${tempDir.path}/$fileName');
+  if (currentPlaceHistory.imagePaths != null) {
+    for (var i = 0; i < currentPlaceHistory.imagePaths!.length; i++) {
+      final storagePath = currentPlaceHistory.imagePaths![i];
 
-        //  FirebaseImage(storagePath: currentPlaceHistory.imagePaths![i]).storagePath; 
+      final fileName = storagePath.split('/').last;
+      final file = File('${tempDir.path}/$fileName');
 
-        files.add(XFile(file.path, name: fileName));
+      //  FirebaseImage(storagePath: currentPlaceHistory.imagePaths![i]).storagePath;
+
+      files.add(XFile(file.path, name: fileName));
 //        files.add(XFile(currentPlaceHistory.imagePaths![i], name: currentPlaceHistory.imagePaths![i]));
-     //   files.add(XFile((FirebaseImage(storagePath: currentPlaceHistory.imagePaths![i])).path, name: FirebaseImage(storagePath: currentPlaceHistory.imagePaths![i]).storagePath));
-      }
-}
+      //   files.add(XFile((FirebaseImage(storagePath: currentPlaceHistory.imagePaths![i])).path, name: FirebaseImage(storagePath: currentPlaceHistory.imagePaths![i]).storagePath));
+    }
+  }
 
-    if (currentPlaceHistory.imagePaths != null) {
-
+  if (currentPlaceHistory.imagePaths != null) {
 //final result = await Share.shareXFiles([XFile('/var/mobile/Containers/Data/Application/EAA8DD50-60C3-456C-8E0F-15DD007F930E/Documents/image_picker_6332C981-94B7-4B68-9F68-41257A7D429C-15817-00000898000C298E.jpg')], text: 'Great picture');
 
 //final result = await Share.shareXFiles([XFile(imagePaths)], text: 'Great picture');
 //final result = await Share.shareXFiles(files, text: currentPlaceHistory.streetAddress ,subject: 'In Australia',);
-final result = await Share.shareXFiles(files, text: currentPlaceHistory.streetAddress ,subject: 'In Australia',
-);
+    final result = await Share.shareXFiles(
+      files,
+      text: currentPlaceHistory.streetAddress,
+      subject: 'In Australia',
+    );
 
-if (result.status == ShareResultStatus.success) {
-    print('Thank you for sharing the picture!');
-   // await Share.shareXFiles(imagePaths.cast<XFile>()
-     // mimeTypes: List.filled(imagePaths!.length, 'image/jpeg'), // Specify mime types
-     // text: 'Check out these images!', // Optional text message
-   // );
-      }
+    if (result.status == ShareResultStatus.success) {
+      print('Thank you for sharing the picture!');
+      // await Share.shareXFiles(imagePaths.cast<XFile>()
+      // mimeTypes: List.filled(imagePaths!.length, 'image/jpeg'), // Specify mime types
+      // text: 'Check out these images!', // Optional text message
+      // );
+    }
   }
-  }
+}
 
-   void _fluttershareImages(PlaceHistory currentPlaceHistory) async {
-      final files = <XFile>[];
+void _fluttershareImages(PlaceHistory currentPlaceHistory) async {
+  final files = <XFile>[];
 
-    if (currentPlaceHistory.imagePaths != null) {
-          await FlutterShare.shareFile(
+  if (currentPlaceHistory.imagePaths != null) {
+    await FlutterShare.shareFile(
       title: 'Example share',
       text: 'Example share text',
       filePath: currentPlaceHistory.imagePaths![0],
     );
-
   }
-  }
+}
