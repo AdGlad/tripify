@@ -46,7 +46,8 @@ class _MainPageState extends State<MainPage> {
                   appBar: AppBar(
                     //    automaticallyImplyLeading: false,
                   // title: const Text('Tripify [V2]'),
-                    title:  Text('Tripify 3${appState.packageInfo?.version} [${appState.packageInfo?.buildNumber}]'),
+                    title:  Text('Tripify ${appState.packageInfo?.version} [${appState.packageInfo?.buildNumber}]',
+                    style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
                     actions: [
                       IconButton(
                           onPressed: () {

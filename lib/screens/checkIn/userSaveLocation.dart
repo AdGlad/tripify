@@ -66,14 +66,35 @@ Future saveLocation(
 // Beijing","39.9040","116.4075"
 // Jakarta","-6.2146","106.8451"
 
+// Rio de Janeiro
+//_latitude = -22.9068; 
+//_longitude = -43.1729;
 
+// Deli 
+//_latitude = 28.7041; 
+//_longitude = 77.1025;
+// Somalia 
+//_latitude = 5.1521; 
+//_longitude = 46.1996;
+
+// New York
+//_latitude = 40.6943; 
+//_longitude = -73.9249;
+
+// Seychelles 
+//_latitude = -4.6796; 
+//_longitude = 55.4920;
+
+// San Francisco 
+//_latitude = 37.7749; 
+//_longitude = -122.4194;
 //Rome
 //_latitude = 41.9028;
 //_longitude= 12.4964;
 
 // Darwin Australia 
-_longitude= 130.8456;
- _latitude = -12.4634;
+//_longitude= 130.8456;
+// _latitude = -12.4634;
 
 //Yorkshire  _longitude= -1.1439;
 // _latitude = 53.8108;
@@ -96,9 +117,18 @@ _longitude= 130.8456;
  // _latitude = 48.856614; // French Fair 
  // _longitude = 2.3522219;
 
+// Empire State Builder _latitude = 40.74844162658724 _longitude = -73.98565918207169
+// London Eye _latitude =51.50318735304264 _longitude = -0.11944598989508606
+
+// Trafalgar Square _latitude = 51.50798872115172 _longitude = -0.12802451848983765
+
+// The Little Mermaid in Copenhagen, Denmark _latitude = 55.69289152978713 _longitude = 12.599126876148214
+
+
+
    // _latitude = 48.8584; // eiffel tower 
   //_longitude = 2.2945;
- 
+ // Empire State Building longitude= -73.9857; latitude = 40.7484
   //_latitude = 1.290270; // Singapore Airport
   //_longitude = 103.851959;
   //_latitude = -6.2146;

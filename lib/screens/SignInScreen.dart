@@ -63,7 +63,7 @@ class _SignInState extends State<SignIn> {
                   .set({
                 // set({
                 'userId': FirebaseAuth.instance.currentUser!.uid,
-                'nickname': user.displayName ?? 'nickname',
+                'nickname': (user.displayName ?? 'nickname').toLowerCase(),
                 'email': user.email ?? 'email',
                 'avatar': user.photoURL ?? 'https://s.gravatar.com/avatar/7f6e6555feaeb5966808376abd27e93b?s=80',
                 // 'age': int.parse(_ageController.text),

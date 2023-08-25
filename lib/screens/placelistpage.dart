@@ -214,7 +214,7 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                             )),
                         Text(
                             currentPlaceHistory.distance != null
-                                ? '  Distance: ${currentPlaceHistory.distance}'
+                                ? '  Distance: ${currentPlaceHistory.distance!.toStringAsFixed(0)}}'
                                 : 'no distance',
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -229,14 +229,14 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
                                   mainAxisAlignment: MainAxisAlignment.center, // Center row horizontally
 
                       children: [
-                        Text('Lat : ${currentPlaceHistory.latitude}',
+                        Text('Lat : ${currentPlaceHistory.latitude!.toStringAsFixed(4)}',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10.0,
                               fontWeight: FontWeight.w700,
                             )),
-                                               Text('  Lng : ${currentPlaceHistory.longitude}',
+                                               Text('  Lng : ${currentPlaceHistory.longitude!.toStringAsFixed(4)}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,

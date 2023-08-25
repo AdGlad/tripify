@@ -103,7 +103,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   Future<void> _saveUserInfo() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('users')
-        .where('nickname', isEqualTo: _nicknameController.text)
+        .where('nickname', isEqualTo: _nicknameController.text.toLowerCase())
         .where(FieldPath.documentId,
             isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
@@ -128,7 +128,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           .update({
         // set({
         // 'userId': FirebaseAuth.instance.currentUser!.uid,
-        'nickname': _nicknameController.text,
+        'nickname': _nicknameController.text.toLowerCase(),
         //   'email': _email,
         // 'age': int.parse(_ageController.text),
         //   'friend': _friendable,
@@ -142,7 +142,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
    // _nicknameController.text = "Adam";
        final applicationState =
         Provider.of<ApplicationState>(context, listen: true);
-        _nicknameController.text = applicationState.userProfile!.nickname!;
+        _nicknameController.text = applicationState.userProfile!.nickname!.toLowerCase();
     return Container(
       child: Consumer<ApplicationState>(
         builder: (context, appState, _) => Center(
@@ -167,13 +167,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   ),
                   SizedBox(height: 16.0),
                   TextFormField(
+                   // onChanged: ,
                     //  initialValue: "adam",
                     //  initialValue: appState.userProfile?.nickname,
                     controller: _nicknameController,
-                    decoration: InputDecoration(labelText: 'Nickname'),
+                    decoration: InputDecoration(labelText: 'Enter Nickname in lower case'),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter a nickname';
+                        return 'Please enter a nickname  in lower case';
                       }
                       return null;
                     },

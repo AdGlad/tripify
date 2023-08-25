@@ -50,9 +50,9 @@ class _ActiveCountryPageState extends State<ActiveCountryPage> {
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
         builder: (context, appState, child) => Scaffold(
-                // appBar: AppBar(
-                //   title: const Text('Countries Visted '),
-                // ),
+               //  appBar: AppBar(
+               //    title: const Text('Countries Visted  '),
+               //  ),
                 body: Center(
                     child: SupportedCountriesMap(
               countryColors: SMapWorldColors(

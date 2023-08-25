@@ -49,12 +49,16 @@ class ApplicationState extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? _locationCurrentSubscription;
   StreamSubscription<QuerySnapshot>? _placeHistorySubscription;
   StreamSubscription<QuerySnapshot>? _userRegionListSubscription;
+  StreamSubscription<QuerySnapshot>? _friendSubscription;
 
   List<UserProfile> _users = [];
   List<UserProfile> get users => _users;
 
   List<PlaceHistory> _placeHistory = [];
   List<PlaceHistory> get placeHistory => _placeHistory;
+
+  List<Friend> _friendList = [];
+  List<Friend> get friendList => _friendList;
 
 //  List<TripHistory> _tripHistory = [];
 //  List<TripHistory> get tripHistory => _tripHistory;
@@ -88,10 +92,9 @@ class ApplicationState extends ChangeNotifier {
   List<Region> _userRegionList = [];
   List<Region> get userRegionlist => _userRegionList;
 
-//List<IsoCountry2>  _IsoCountry2List = []; 
-List<IsoCountry2> _IsoCountry2List =[];
-List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
-
+//List<IsoCountry2>  _IsoCountry2List = [];
+  List<IsoCountry2> _IsoCountry2List = [];
+  List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
 
   Map<String, dynamic> _countryrecords = {};
   Map<String, dynamic> get countryrecords => _countryrecords;
@@ -103,7 +106,7 @@ List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
 //import json file /asset/data_iso_3166-*.json into IsoCountry2Rec arrary of type IsoCountry2
 
   Future<void> init() async {
-    _IsoCountry2List = await  loadIsoCountry2Rec('2');
+    _IsoCountry2List = await loadIsoCountry2Rec('2');
     WidgetsFlutterBinding.ensureInitialized();
 
     _packageInfo = await PackageInfo.fromPlatform();
@@ -154,7 +157,7 @@ List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
             _userCountryList.add(CurrentCountry(
               countryCode: document.id,
               countryName: document.data()['countryName'] as String,
-          //    userId: document.data()['userId'] as String,
+              //    userId: document.data()['userId'] as String,
             ));
           }
           notifyListeners();
@@ -167,6 +170,8 @@ List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
         listenForRegionChanges(FirebaseAuth.instance.currentUser!.uid);
         listenForCurrrentPlace(FirebaseAuth.instance.currentUser!.uid);
         listenForPlaceHistory(FirebaseAuth.instance.currentUser!.uid);
+        listenForAllFriends(FirebaseAuth.instance.currentUser!.uid);
+
         notifyListeners();
 
         _tripsSubscription = FirebaseFirestore.instance
@@ -286,7 +291,6 @@ List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
 
     await currentUser.reload();
   }
-
 
   //UserProfile?
   listenForUserChanges(String userId) {
@@ -484,22 +488,21 @@ List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
       _userRegionList = [];
 
       for (final document in snapshot.docs) {
-
         developer.log(' document.id ${document.id}}');
 
         _regionrecords[document.id] = document.id;
-     //   _regionrecords[IsoCountry2GetCode( _IsoCountry2List,document.id)] = document.id;
-     //  _regionrecords[document.id] = IsoCountry2GetCode( _IsoCountry2List,document.id);
-    //    developer.log(' _regionrecords ${IsoCountry2GetCode( _IsoCountry2List,document.id)}');
-       // developer.log(' _regionrecords ${document.id}');
+        //   _regionrecords[IsoCountry2GetCode( _IsoCountry2List,document.id)] = document.id;
+        //  _regionrecords[document.id] = IsoCountry2GetCode( _IsoCountry2List,document.id);
+        //    developer.log(' _regionrecords ${IsoCountry2GetCode( _IsoCountry2List,document.id)}');
+        // developer.log(' _regionrecords ${document.id}');
 
-String apiregionCode = 'AU-NSW';
-if (document.data().containsKey('apiregionCode')) {
-   apiregionCode = document.data()['apiregionCode'] as String;
-  // Now you can use the apiregionCode value
-} else {
-  print('apiregionCode field does not exist in the document.');
-}
+        String apiregionCode = 'AU-NSW';
+        if (document.data().containsKey('apiregionCode')) {
+          apiregionCode = document.data()['apiregionCode'] as String;
+          // Now you can use the apiregionCode value
+        } else {
+          print('apiregionCode field does not exist in the document.');
+        }
 
         _userRegionList.add(
           Region(
@@ -508,7 +511,8 @@ if (document.data().containsKey('apiregionCode')) {
             region: document.data()['region'] as String,
             countryCode: document.data()['countryCode'] as String,
             apiregionCode: apiregionCode,
-          ///  apiregionCode: IsoCountry2GetCode( _IsoCountry2List, document.id),
+
+            ///  apiregionCode: IsoCountry2GetCode( _IsoCountry2List, document.id),
           ),
         );
       }
@@ -625,7 +629,43 @@ if (document.data().containsKey('apiregionCode')) {
 
       notifyListeners();
     });
-//    return _placeHistory;
   }
 
+  listenForAllFriends(String userId) {
+    // List<UserProfile> users = [];
+    developer.log('listenForAllFriends start ');
+
+    _friendSubscription = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        // .collection('friendRequests')
+        .collection('friends')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy('friendNickname', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      _users = [];
+
+      for (final document in snapshot.docs) {
+        _friendList.add(Friend(
+            id: document.id,
+            userId: document.data()['userId'] ?? 'userId',
+            friendId: document.data()['friendId'] ?? 'friendId',
+            friendNickname: document.data()['friendNickname'] ?? 'friendNickname',
+            friendEmail: document.data()['friendEmail'] ?? 'friendEmail',
+            friendAvatar: document.data()['friendAvatar'] ?? 'friendAvatar',
+            status: document.data()['status'] ?? 'status'));
+
+
+            developer.log('listenForAllFriends adding friend ${document.data()['friendId']} ');
+
+
+      }
+
+      developer.log('listenForAllFriends end ');
+    });
+    notifyListeners();
+
+    // return users;
+  }
 }

@@ -26,8 +26,14 @@ class _UserCountryPageState extends State<UserCountryPage> {
   }
 }
 
-class UserCountrylist extends StatelessWidget {
+class UserCountrylist extends StatefulWidget {
   UserCountrylist();
+
+  @override
+  State<UserCountrylist> createState() => _UserCountrylistState();
+}
+
+class _UserCountrylistState extends State<UserCountrylist> {
   final CurrentCountryCollectionReference countryRef =
       currentuserRef.doc(FirebaseAuth.instance.currentUser!.uid).country;
 

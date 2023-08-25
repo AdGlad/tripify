@@ -23,29 +23,34 @@ class SupportedCountriesMap extends StatefulWidget {
 class _SupportedCountriesMapState extends State<SupportedCountriesMap> {
   @override
   Widget build(BuildContext context) {
+    
     return Stack(
       children: [
         SizedBox( 
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: InteractiveViewer(
-            maxScale: 75.0,
+            maxScale: 100.0,
             child: Row(
               children: [
                 Consumer<ApplicationState>(
                     builder: (context, appState, _) => SizedBox(
                           width: MediaQuery.of(context).size.width * 0.92,
                           // Actual widget from the Countries_world_map package.
-                          child: SimpleMap(
-                            instructions: SMapWorld.instructions,
-                            // If the color of a country is not specified it will take in a default color.
-                            defaultColor: Colors.lightGreen,
-                            // CountryColors takes in 250 different colors that will color each country the color you want. In this example it generates a random color each time SetState({}) is called.
-                            callback: (id, name, tapdetails) {
-                              goToCountry(id, appState.regionrecords);
-                            },
-                            colors: widget.countryColors.toMap(),
-                          ),
+                          child: 
+                                  SimpleMap(
+                                instructions: SMapWorld.instructions,
+                                // If the color of a country is not specified it will take in a default color.
+                                defaultColor: Colors.lightGreen,
+                                // CountryColors takes in 250 different colors that will color each country the color you want. In this example it generates a random color each time SetState({}) is called.
+                                callback: (id, name, tapdetails) {
+                                  goToCountry(id, appState.regionrecords);
+                                },
+                                colors: widget.countryColors.toMap(),
+                              ),
+                      
+
+
                         )),
                 // Creates 8% from right side so the map looks more centered.
                // Container(width: MediaQuery.of(context).size.width * 0.08),
@@ -57,7 +62,8 @@ class _SupportedCountriesMapState extends State<SupportedCountriesMap> {
             top: 10,
             left: 0,
             right: 0,
-            child: Text('Tap country to see its map',
+           // child: Text('Tap country to see its map ${FirebaseAuth.instance.currentUser!.uid}',
+            child: Text('Tap country to see its map ',
                 style: TextStyle(fontSize: 6), textAlign: TextAlign.center)),
       ],
     );
@@ -149,6 +155,7 @@ class _CountryPageState extends State<CountryPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<ApplicationState>(
         builder: (context, appState, child) => Scaffold(
               appBar: AppBar(

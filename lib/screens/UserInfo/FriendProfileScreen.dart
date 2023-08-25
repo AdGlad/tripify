@@ -42,23 +42,28 @@ class FriendProfileScreen extends StatelessWidget {
         return Container(
         child: Scaffold(
                 appBar: AppBar(
-                  title: Text('${userprofile?.nickname??' '} Stats'),
+                  title: Text('${userprofile.nickname??' '} Stats'),
                 ),
                 body: ListView(
                       children: [
-                        Container(height: 150 ,  child: userStatsContainer(userprofile, context)),
+                        Container(height: 130 ,  child: userStatsContainer(userprofile, context)),
                           Align(
                             alignment: Alignment.center,
                             child: Text(
                               
                              // 'Statistics for ${appState.userProfile!.nickname}',
-                              'Lastest location for ${userprofile?.nickname??' '}',
+                              'Latest location for ${userprofile.nickname??' '}',
                               style: TextStyle(
                                   fontSize: 10.0, fontWeight: FontWeight.bold),
                             ),
                           ),
-                        Container( height: 400 ,  child: Expanded( flex: 1, child: FriendPlaceHistorylist(countrycode: userprofile.latestcountryCode,regioncode: userprofile.latestregionCode!, userid: userprofile.id))),
-                        Container(height: 400 , child: Expanded( flex: 1, child: UserMapContainer(context, userprofile))),                      ]
+                        //  Text(userprofile.toJson().toString()),
+                      Container( height: 300 ,  child: FriendPlaceHistorylist(countrycode: userprofile.latestcountryCode,regioncode: userprofile.latestregionCode!, userid: userprofile.id)),
+                      Container(height: 250 , child: UserMapContainer(context, userprofile)),                   
+
+                      // Container( height: 400 ,  child: Expanded( flex: 1, child: FriendPlaceHistorylist(countrycode: userprofile.latestcountryCode,regioncode: userprofile.latestregionCode!, userid: userprofile.id))),
+                       // Container(height: 400 , child: Expanded( flex: 1, child: UserMapContainer(context, userprofile))),                   
+                         ]
                       ),
                 )
                     
@@ -96,61 +101,62 @@ class _FriendPlaceHistorylistState extends State<FriendPlaceHistorylist> {
 
   @override
   Widget build(BuildContext context) {
-    return FirestoreBuilder<PlaceHistoryQuerySnapshot>(
-      //  ref: countyRef
-        ref: currentuserRef.doc(widget.userid).country
-            .doc(widget.countrycode)
-            .region
-            .doc(widget.regioncode)
-            .placehistory
-            .orderByTimestamp(descending: true)
-            .limit(1),
-        builder: (context, AsyncSnapshot<PlaceHistoryQuerySnapshot> snapshot,
-            Widget? child) {
-          if (snapshot.hasError)
-            return Text('Something went wrong ${snapshot.error}!');
-          if (!snapshot.hasData) return Text('Loading user...');
-
-          // Access the UserDocumentSnapshot
-          PlaceHistoryQuerySnapshot querySnapshot = snapshot.requireData;
-          return ListView.builder(
-            itemCount: querySnapshot.docs.length,
-            itemBuilder: (context, index) {
-              // Access the User instance
-              PlaceHistory currentPlaceHistory = querySnapshot.docs[index].data;
-
-              return GestureDetector(
-                child: placescard(currentPlaceHistory, context),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LocationMapPage(
-                            placeHistory: currentPlaceHistory
-                            //latlng: LatLng(currentPlaceHistory.l//atitude!,
-                            //currentPlaceHistory.longitude!
-                            )),
-                    //  countrycode: currentcountry.countryCode!),
-                  );
-                },
-              );
-              //  ListTile(
-              //   title: Text('${currentPlaceHistory.streetAddress}'),
-              //   subtitle: Text('${currentPlaceHistory.city}'),
-              //   onTap: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => PlaceHistoryListPage(
-              //             countrycode: currentPlaceHistory.countryCode!,
-              //             regioncode: currentPlaceHistory.region!),
-              //       ),
-              //     );
-              //   },
-              // );
-            },
-          );
-        });
+    return  FirestoreBuilder<PlaceHistoryQuerySnapshot>(
+        //  ref: countyRef
+          ref: currentuserRef.doc(widget.userid).country
+              .doc(widget.countrycode)
+              .region
+              .doc(widget.regioncode)
+              .placehistory
+              .orderByTimestamp(descending: true)
+              .limit(1),
+          builder: (context, AsyncSnapshot<PlaceHistoryQuerySnapshot> snapshot,
+              Widget? child) {
+            if (snapshot.hasError)
+              return Text('Something went wrong ${snapshot.error}!');
+            if (!snapshot.hasData) return Text('Loading user...');
+    
+            // Access the UserDocumentSnapshot
+            PlaceHistoryQuerySnapshot querySnapshot = snapshot.requireData;
+            return ListView.builder(
+              itemCount: querySnapshot.docs.length,
+              itemBuilder: (context, index) {
+                // Access the User instance
+                PlaceHistory currentPlaceHistory = querySnapshot.docs[index].data;
+    
+                return GestureDetector(
+                  child: placescard(currentPlaceHistory, context),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LocationMapPage(
+                              placeHistory: currentPlaceHistory
+                              //latlng: LatLng(currentPlaceHistory.l//atitude!,
+                              //currentPlaceHistory.longitude!
+                              )),
+                      //  countrycode: currentcountry.countryCode!),
+                    );
+                  },
+                );
+                //  ListTile(
+                //   title: Text('${currentPlaceHistory.streetAddress}'),
+                //   subtitle: Text('${currentPlaceHistory.city}'),
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => PlaceHistoryListPage(
+                //             countrycode: currentPlaceHistory.countryCode!,
+                //             regioncode: currentPlaceHistory.region!),
+                //       ),
+                //     );
+                //   },
+                // );
+              },
+            );
+          },
+    );
   }
   
 }
