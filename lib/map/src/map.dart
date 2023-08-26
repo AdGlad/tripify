@@ -64,6 +64,7 @@ class SimpleMap extends StatelessWidget {
                         paintingStyle: paintingStyle,
                         colors: colors,
                         defaultColor: defaultColor ?? Colors.grey),
+//                        defaultColor: defaultColor ?? Colors.grey),
                   ))),
     );
   }

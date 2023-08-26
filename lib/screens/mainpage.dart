@@ -11,6 +11,7 @@ import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:provider/provider.dart';
 
 //import '../src/ad_helper.dart';
+import '../map/countriesMapboxState.dart';
 import '../src/temp.dart';
 import '../state/applicationstate.dart';
 
@@ -26,6 +27,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   List<Widget> pageList = [
     const CheckCountry(),
+    //const CountriesMapbox(),
     const UserCountryPage(),
     // const ActiveCountryPage(),
     const League(),

@@ -265,8 +265,8 @@ class FriendRequestList extends StatelessWidget {
                                   )), //Text('email'), //Text(userData['email']),
                         trailing: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orangeAccent,
-                                elevation: 5,),
+                                backgroundColor:   Colors.orangeAccent,
+                                elevation: 5,), 
                           
                           child: Text('Accept \nFriend',
                           style: TextStyle(

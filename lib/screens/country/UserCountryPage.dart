@@ -6,6 +6,7 @@ import 'package:gtk_flutter/screens/country/countryCard.dart';
 import 'package:gtk_flutter/screens/country/countryPage.dart';
 import 'package:provider/provider.dart';
 
+import '../../map/countriesMapboxState.dart';
 import '../../model/placehistory.dart';
 import '../../state/applicationstate.dart';
 
@@ -57,7 +58,9 @@ class _UserCountrylistState extends State<UserCountrylist> {
               Column(
                 children: [
                   Container( height: 300,
-                    child: ActiveCountryPage()),
+                    child: CountriesMapbox()   //ActiveCountryPage()
+                    
+                    ),
                   Flexible(
                     child: ListView.builder(
                       itemCount: querySnapshot.docs.length,
