@@ -6,6 +6,7 @@ import 'package:gtk_flutter/screens/findfriendpage.dart';
 import 'package:provider/provider.dart';
 //import 'package:toggle_switch/toggle_switch.dart';
 import '../../src/acceptfriendrequests.dart';
+import '../poiToVisitList.dart';
 import 'listfriends.dart';
 import '../../state/applicationstate.dart';
 
@@ -52,7 +53,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
 //    final applicationState =
 //        Provider.of<ApplicationState>(context, listen: true);
 //
-  //  _nicknameController.text = applicationState.userProfile!.nickname!;
+    //  _nicknameController.text = applicationState.userProfile!.nickname!;
   }
 
   // Future<void> getUserInfo() async {
@@ -139,10 +140,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-   // _nicknameController.text = "Adam";
-       final applicationState =
+    // _nicknameController.text = "Adam";
+    final applicationState =
         Provider.of<ApplicationState>(context, listen: true);
-        _nicknameController.text = applicationState.userProfile!.nickname!.toLowerCase();
+    _nicknameController.text =
+        applicationState.userProfile!.nickname!.toLowerCase();
     return Container(
       child: Consumer<ApplicationState>(
         builder: (context, appState, _) => Center(
@@ -167,11 +169,12 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   ),
                   SizedBox(height: 16.0),
                   TextFormField(
-                   // onChanged: ,
+                    // onChanged: ,
                     //  initialValue: "adam",
                     //  initialValue: appState.userProfile?.nickname,
                     controller: _nicknameController,
-                    decoration: InputDecoration(labelText: 'Enter Nickname in lower case'),
+                    decoration: InputDecoration(
+                        labelText: 'Enter Nickname in lower case'),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please enter a nickname  in lower case';
@@ -365,6 +368,32 @@ class _UserInfoPageState extends State<UserInfoPage> {
                         //  Navigator.push(context, '/findfriends');
                       },
                       child: Text('Friends'),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+
+                  Container(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(
+                            Size(200, 48)), // Set the desired width and height
+                      ),
+                      // style: ButtonStyle.lerp(a, b, t),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PoiToVisitList(),
+                          ),
+                        );
+
+                        //   Navigator.of(context)
+                        //       .pushReplacementNamed('/findfriends');
+                        // Navigator.of(context).pushReplacementNamed('/findfriends');
+                        //   Navigator.pushNamed(context, 'findfriends');
+                        //  Navigator.push(context, '/findfriends');
+                      },
+                      child: Text('Bucket List '),
                     ),
                   ),
                   // Container(

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gtk_flutter/model/poi-to-visit.dart';
 import 'package:gtk_flutter/screens/checkIn/checkcountry.dart';
 import 'package:gtk_flutter/screens/country/UserCountryPage.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'checkIn/countriesMapboxState.dart';
 import '../src/temp.dart';
 import '../state/applicationstate.dart';
+import 'poiToVisitList.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -31,7 +33,8 @@ class _MainPageState extends State<MainPage> {
     const UserCountryPage(),
     // const ActiveCountryPage(),
     const League(),
-    const UserInfoPage(),
+   // const PoiToVisitList(),
+   const UserInfoPage(),
    // const UserDetails(),
   ];
 
