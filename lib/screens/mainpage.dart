@@ -11,7 +11,7 @@ import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:provider/provider.dart';
 
 //import '../src/ad_helper.dart';
-import '../map/countriesMapboxState.dart';
+import 'checkIn/countriesMapboxState.dart';
 import '../src/temp.dart';
 import '../state/applicationstate.dart';
 

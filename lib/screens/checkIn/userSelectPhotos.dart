@@ -15,24 +15,23 @@ CollectionReference<Map<String, dynamic>> imagesCollection =
 List<String> imagePaths = [];
 TextEditingController descriptionController = TextEditingController();
 List<XFile>? selectedImages = [];
-List<String>? selectedImagePaths =[];
+//List<String>? selectedImagePaths = [];
 //XFile? selectedImage;
 
-Future<bool?> showPopupForm(BuildContext context,     WriteBatch batch,
-PlaceHistory placeHistory,
-     DocumentReference<Object?> placeHistoryId) async {
-    return showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
+Future<bool?> showPopupForm(
+    BuildContext context,
+    WriteBatch batch,
+    DocumentReference<Object?> placeHistoryId) async {
+  return showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
           title: Text('Trip Details'),
-          content: 
-         // Text('Do you want to save the form?'),
-           Column(
-             mainAxisSize: MainAxisSize.min,
-             children: [
-             // Text(style: TextStyle(fontSize: 12), placeHistoryId),
-            //  Text(style: TextStyle(fontSize: 12), placeHistory.streetAddress!),
+          content:
+              // Text('Do you want to save the form?'),
+              Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
               TextFormField(
                 controller: descriptionController,
                 decoration: InputDecoration(
@@ -42,146 +41,144 @@ PlaceHistory placeHistory,
               Column(
                 children: [
                   ElevatedButton(
-                    onPressed:  () async { await _selectAndSaveImages(ImageSource.gallery);},
+                    onPressed: () async {
+                      await _selectAndSaveImages(ImageSource.gallery);
+                    },
                     child: Text('Image From Gallery'),
                   ),
-                                    ElevatedButton(
-                    onPressed: () async {await _selectAndSaveImages(ImageSource.camera);},
+                  ElevatedButton(
+                    onPressed: () async {
+                      await _selectAndSaveImages(ImageSource.camera);
+                    },
                     child: Text('Image From Camera'),
                   ),
                 ],
               ),
-             ],
+            ],
           ),
-
           actions: <Widget>[
             ElevatedButton(
               onPressed: () {
-                 Navigator.of(context).pop(false);
+                Navigator.of(context).pop(false);
                 descriptionController.clear();
-                developer.log('cancel imagePaths 1 Length ${imagePaths.length} ');
+                developer
+                    .log('cancel imagePaths 1 Length ${imagePaths.length} ');
                 imagePaths.clear();
                 imagePaths = [];
                 selectedImages?.clear();
 
-                developer.log('cancel imagePaths 2 Length ${imagePaths.length} ');
-
+                developer
+                    .log('cancel imagePaths 2 Length ${imagePaths.length} ');
               },
               child: Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () async {
-                await _saveImagesToFirestore( batch,
-placeHistory, placeHistoryId);
+                // await saveImagesToFirestore( batch, placeHistory, placeHistoryId);
+                await saveImagesToFirestore(batch, placeHistoryId);
                 Navigator.of(context).pop(true);
-               // descriptionController.clear();
-               // imagePaths.clear();
+                // descriptionController.clear();
+                // imagePaths.clear();
               },
               child: Text('Save'),
             ),
-          ]
-        );
-      },
-    );
-  }
+          ]);
+    },
+  );
+}
 
-
-Future <void> _selectAndSaveImages(ImageSource _imagesource ) async {
-   developer.log('imagePaths 1 Length ${imagePaths.length} ');
+Future<void> _selectAndSaveImages(ImageSource _imagesource) async {
+  developer.log('imagePaths 1 Length ${imagePaths.length} ');
 
   imagePaths.clear();
   imagePaths = [];
   selectedImages?.clear();
-  selectedImagePaths?.clear();
+//  selectedImagePaths?.clear();
   //selectedImage = null;
 
+  developer.log('imagePaths 2 Length ${imagePaths.length} ');
 
- developer.log('imagePaths 2 Length ${imagePaths.length} ');
-
- // selectedImages = await ImagePicker().pickMultiImage( );
- // XFile? selectedImage = await ImagePicker().pickImage(requestFullMetadata: true,
- //   maxHeight: 300,maxWidth: 300, preferredCameraDevice: CameraDevice.rear,
- //   source: ImageSource.camera);
+  // selectedImages = await ImagePicker().pickMultiImage( );
+  // XFile? selectedImage = await ImagePicker().pickImage(requestFullMetadata: true,
+  //   maxHeight: 300,maxWidth: 300, preferredCameraDevice: CameraDevice.rear,
+  //   source: ImageSource.camera);
   //XFile? selectedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
   XFile? selectedImage = await ImagePicker().pickImage(source: _imagesource);
   if (selectedImage != null) {
-      developer.log('selectedImage is not null ');
+    developer.log('selectedImage is not null ');
 
-  selectedImages?.add(selectedImage);
-  selectedImagePaths?.add(selectedImage.path);
+    selectedImages?.add(selectedImage);
+   // selectedImagePaths?.add(selectedImage.path);
   }
   developer.log('imagePaths 3 Length ${selectedImages?[0]} ');
   developer.log('imagePaths 4 Length $selectedImage ');
-  developer.log('imagePaths 3 Length ${selectedImagePaths?[0]} ');
+  //developer.log('imagePaths 3 Length ${selectedImagePaths?[0]} ');
+}
 
-  }
 Future<Reference> _saveImageToCloudStorage(XFile imageFile) async {
-
   String fileName = imageFile.name;
-  File? _image =  File(imageFile.path);
+  File? _image = File(imageFile.path);
 
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
-    UploadTask uploadTask = storageReference.putFile(_image);
+  Reference storageReference = FirebaseStorage.instance
+      .ref()
+      .child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
+  UploadTask uploadTask = storageReference.putFile(_image);
 
-    await uploadTask.whenComplete(() => print('Image uploaded'));
+  await uploadTask.whenComplete(() => print('Image uploaded'));
 
 //final storageRef = FirebaseStorage.instance.ref();
 
   Directory appDirectory = await getApplicationDocumentsDirectory();
- //String fileName = imageFile.path.split('/').last;
+  //String fileName = imageFile.path.split('/').last;
   String savedImagePath = '${appDirectory.path}/$fileName';
-  File(imageFile.path).copy(savedImagePath);  
+  File(imageFile.path).copy(savedImagePath);
   return storageReference;
 }
 
-Future<String> _saveImageToDirectory(XFile imageFile) async {
+// Future<String> _saveImageToDirectory(XFile imageFile) async {
+//   String fileName = imageFile.name;
+//   File? _image = File(imageFile.path);
 
-  String fileName = imageFile.name;
-  File? _image =  File(imageFile.path);
+//   Reference storageReference = FirebaseStorage.instance
+//       .ref()
+//       .child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
+//   UploadTask uploadTask = storageReference.putFile(_image);
 
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
-    UploadTask uploadTask = storageReference.putFile(_image);
+//   await uploadTask.whenComplete(() => print('Image uploaded'));
 
-    await uploadTask.whenComplete(() => print('Image uploaded'));
+// //final storageRef = FirebaseStorage.instance.ref();
 
-//final storageRef = FirebaseStorage.instance.ref();
+//   Directory appDirectory = await getApplicationDocumentsDirectory();
+//   //String fileName = imageFile.path.split('/').last;
+//   String savedImagePath = '${appDirectory.path}/$fileName';
+//   File(imageFile.path).copy(savedImagePath);
+//   return savedImagePath;
+// }
 
-  Directory appDirectory = await getApplicationDocumentsDirectory();
- //String fileName = imageFile.path.split('/').last;
-  String savedImagePath = '${appDirectory.path}/$fileName';
-  File(imageFile.path).copy(savedImagePath);  
-  return savedImagePath;
-}
-
-Future<void> _saveImagesToFirestore(    WriteBatch batch,
-    PlaceHistory placeHistory, DocumentReference<Object?> placeHistoryId) async {
-        if (selectedImages != null) {
+//Future<void> saveImagesToFirestore(    WriteBatch batch, PlaceHistory placeHistory, DocumentReference<Object?> placeHistoryId) async {
+Future<void> saveImagesToFirestore(
+    WriteBatch batch, DocumentReference<Object?> placeHistoryId) async {
+  if (selectedImages != null) {
     for (XFile imageFile in selectedImages!) {
-           // String imagePath = await _saveImageToDirectory(imageFile);
-            Reference imagePath = await _saveImageToCloudStorage(imageFile);
-            
+      // String imagePath = await _saveImageToDirectory(imageFile);
+      Reference imagePath = await _saveImageToCloudStorage(imageFile);
+
       imagePaths.add(imagePath.fullPath);
     }
-  } else
-  {
-      developer.log('selectedImages is null');
-
+  } else {
+    developer.log('selectedImages is null');
   }
   CollectionReference placehistoryref =
       FirebaseFirestore.instance.collection('placehistory');
 //final placehistoryRef = PlaceHistoryCollectionReference;
   developer.log('placehistory update before');
 
-
- batch.update(placeHistoryId, {
-  'rating': '5 Stars',
-   // 'poi': 'place of interest',
+  batch.update(placeHistoryId, {
+    'rating': '5 Stars',
+    // 'poi': 'place of interest',
     'description': descriptionController.text,
     'imagePaths': imagePaths
- });
-
+  });
 
   // await FirebaseFirestore.instance
   //     .collection('currentuser')
@@ -207,8 +204,4 @@ Future<void> _saveImagesToFirestore(    WriteBatch batch,
   selectedImages?.clear();
 
   developer.log('save imagePaths 1 Length ${imagePaths.length} ');
-
 }
-
-
-

@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,17 +16,27 @@ import 'package:gtk_flutter/model/users.dart';
 import 'package:gtk_flutter/screens/checkIn/userMapContainer.dart';
 import 'package:gtk_flutter/screens/checkIn/userSelectPhotos.dart';
 import 'package:gtk_flutter/src/temp.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
+import 'package:native_exif/native_exif.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../map/src/isocountry2.dart';
 import '../../state/applicationstate.dart';
 //import '../ActiveCountryPage.dart';
 import 'checkcountry.dart';
 import '../country/ActiveCountryPage.dart';
+
+List<XFile>? selectedImages = [];
+List<String> imagePaths = [];
+double? _latitude = 0.0;
+double? _longitude = 0.0;
+TextEditingController descriptionController = TextEditingController();
+
 
 Future saveLocation(
   BuildContext context,
@@ -37,289 +51,343 @@ Future saveLocation(
 
   developer.log(' SaveLocation ');
 
-  developer
-      .log(' ************* currentPlace ${currentPlace!.id} ************* ');
-
-  //final PermissionStatus status = await Permission.location.request();
-
-  LocationData? newPlace = await Location().getLocation();
-  double? _latitude = newPlace.latitude;
-  double? _longitude = newPlace.longitude;
-
-  String _userId = FirebaseAuth.instance.currentUser!.uid;
-  CurrentUser currentUser = CurrentUser(
-    id: FirebaseAuth.instance.currentUser!.uid,
-    userId: FirebaseAuth.instance.currentUser!.uid,
-    //    email: FirebaseAuth.instance.currentUser!.email,
-    //    displayname: FirebaseAuth.instance.currentUser!.displayName
-  );
-
-  FirestoreService firestoreService = FirestoreService();
-
-  // Future<String> _messageCurrentUser =
-  //     firestoreService.setCurrentUser(currentUser);
-  CurrentCountryCollectionReference countyRef =
-      currentuserRef.doc(currentUser.userId).country;
-  //"Tokyo","35.6839","139.7744"
-  // "New York","40.6943","-73.9249"
-  //"Mexico City","19.4333","-99.1333"
-// Beijing","39.9040","116.4075"
-// Jakarta","-6.2146","106.8451"
-
-// Rio de Janeiro
-//_latitude = -22.9068; 
-//_longitude = -43.1729;
-
-// Deli 
-//_latitude = 28.7041; 
-//_longitude = 77.1025;
-// Somalia 
-//_latitude = 5.1521; 
-//_longitude = 46.1996;
-
-// New York
-//_latitude = 40.6943; 
-//_longitude = -73.9249;
-
-// Seychelles 
-//_latitude = -4.6796; 
-//_longitude = 55.4920;
-
-// San Francisco 
-//_latitude = 37.7749; 
-//_longitude = -122.4194;
-//Rome
-//_latitude = 41.9028;
-//_longitude= 12.4964;
-
-// Darwin Australia 
-//_longitude= 130.8456;
-// _latitude = -12.4634;
-
-//Yorkshire  _longitude= -1.1439;
-// _latitude = 53.8108;
-// _longitude= -1.1439;
-
- // Leeds longitude= -1.5491;
-  // _latitude = 53.8008;
-
-
-//Madrid
- //_latitude = 40.416775;
-// _longitude= -3.703790;
-  //double
-  //_latitude = 35.6839;
-  //double
-  //_longitude = 139.7744;
-
-  //_latitude = 19.4333; // Mexico
-  //_longitude = -99.1333; // Mexico
- // _latitude = 48.856614; // French Fair 
- // _longitude = 2.3522219;
-
-// Empire State Builder _latitude = 40.74844162658724 _longitude = -73.98565918207169
-// London Eye _latitude =51.50318735304264 _longitude = -0.11944598989508606
-
-// Trafalgar Square _latitude = 51.50798872115172 _longitude = -0.12802451848983765
-
-// The Little Mermaid in Copenhagen, Denmark _latitude = 55.69289152978713 _longitude = 12.599126876148214
+ bool? photoLocation = await photoLocationPopupForm(context);
 
 
 
-   // _latitude = 48.8584; // eiffel tower 
-  //_longitude = 2.2945;
- // Empire State Building longitude= -73.9857; latitude = 40.7484
-  //_latitude = 1.290270; // Singapore Airport
-  //_longitude = 103.851959;
-  //_latitude = -6.2146;
-  // double
-  //_longitude = 106.8451;
+ bool? result = await popupForm(context);
 
-  // _latitude = 39.9040; //Beijing
-  // _longitude = 116.4075; //Beijing
-  // _latitude = 40.6943; //New York"
-  // _longitude = -73.9249;//New York"
 
-  //       _latitude = 51.50853; //London
-  // _longitude = -0.12574;//London
+  if (result!) {
+    developer.log('Form saved');
+    developer.log(' ************* currentPlace ${currentPlace!.id} ************* ');
+    developer.log(' selectedImages  ${selectedImages![0].path}  ');
 
-  //         _latitude = 55.95206; //Edinburgh
-  // _longitude = -3.19648;//Edinburgh
+ final exifData = await Exif.fromPath(selectedImages![0].path);
 
-  //double _latitude = -6.2146;
-  //double _longitude = 106.8451;
+    developer.log(' ************* exifData ************* ');
 
-  // if (loc.latitude != null && loc.longitude != null) {
-
-  await fetchNewPlace(_latitude, _longitude).then((value) async {
-    // int currentVisitNumber;
-    int newVisitNumber;
-
-    developer.log(
-        'Getting location for ${_latitude.toString()} , ${_longitude.toString()}');
-
-    newVisitNumber = currentPlace.visitnumber ?? 0;
-    //newVisitNumber = 0;
-
-    if (value.latitude != null && value.longitude != null) {
-      developer.log('newVisitNumber is $newVisitNumber');
-
-      mapController
-          ?.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                bearing: 270.0,
-                target: LatLng(
-                  value.latitude!,
-                  value.longitude!,
-                ),
-                tilt: 30.0,
-                zoom: 17.0,
-              ),
-            ),
-          )
-          .then((result) =>
-              print("mapController.animateCamera() returned $result"));
-    }
-
-    int distanceInMeters = Geolocator.distanceBetween(
-        currentPlace.latitude ?? value.latitude!,
-        currentPlace.longitude ?? value.longitude!,
-        value.latitude!,
-        value.longitude!).toInt();
-    developer.log('Discance in meters ${distanceInMeters.toString()}');
-    developer.log('CurrentCountry');
-
-    CurrentCountry newcountry = CurrentCountry(
-        countryCode: value.countryCode!,
-        countryName: value.countryName!,
-        userId: _userId);
-    developer.log('setCountry');
-
-    if ((currentPlace.countryCode == null) ||
-        (currentPlace.countryCode != value.countryCode!)) {
-      _newCountryCount = 1;
-      _newCountryCode = value.countryCode;
-      developer.log(
-          'New Country identified. CurrentPlace ${currentPlace.countryCode} NewPlace ${value.countryCode} ');
-
-      newVisitNumber++;
-
-      controllerConfetti.play();
-      playsound();
-    } else {
-      _newCountryCount = 0;
-      _newCountryCode = '';
-    }
-
-    developer.log('Region');
-    
-    developer.log('isoCountry2List Provider');
-
-   // List<IsoCountry2> isoCountry2List = Provider.of<ApplicationState>(context).IsoCountry2List;
+ if (exifData != null ) {
   
-    developer.log('isoCountry2List before');
+       ExifLatLong? latLong = await exifData.getLatLong();
+         _latitude = latLong!.latitude;
+         _longitude = latLong.longitude;
+         developer.log(' LatLong found lat: $_latitude long: $_longitude ');
+
+    
+     } else {
+         developer.log(' LatLong not found ');
+     }
+
+    //final PermissionStatus status = await Permission.location.request();
+
+    LocationData? newPlace = await Location().getLocation();
+
+    if (photoLocation == true) {
+  developer.log('photoLocation is true');
+} else {
+  developer.log('photoLocation is false');
+  _latitude = newPlace.latitude;
+  _longitude = newPlace.longitude;
+ // return; 
+}
+
+//    double? _latitude = newPlace.latitude;
+//    double? _longitude = newPlace.longitude;
 
 
-    String? _isoregionCode = IsoCountry2GetCode( isoCountryList, value.regionCode!);
-
-    developer.log('isoCountry2List before');
-// Check for null _isoregionCode
-    if (_isoregionCode == null) {
-    developer.log('_isoregionCode is null');
-    }
-    Region region = Region(
-        regionCode: _isoregionCode,
-        region: value.region!,
-        countryCode: value.countryCode!,
-        userId: _userId,
-        apiregionCode:  value.regionCode! 
-        );
-    developer.log('regionRef');
-
-    RegionCollectionReference regionRef =
-        countyRef.doc(newcountry.countryCode).region;
-
-    developer.log('PlaceHistory');
-    developer.log('showPopupForm before');
-
-    //showPopupForm(context);
-
-    developer.log('showPopupForm after2');
-
-    PlaceHistory newPlace = PlaceHistory(
-      userId: value.userId,
-      name: value.countryName,
-      location: value.countryName,
-      latitude: value.latitude,
-      distance: distanceInMeters.toDouble(),
-      longitude: value.longitude,
-      poi: value.poi,
-      streetAddress: value.streetAddress,
-      city: value.city,
-      countryName: value.countryName,
-      countryCode: value.countryCode,
-      postal: value.postal,
-      region: value.region,
-      apiregionCode: value.regionCode! ,
-      regionCode: _isoregionCode,
-      elevation: value.elevation,
-      timezone: value.timezone,
-      locationRaw: value.locationRaw,
-      timestamp: value.timestamp, // DateTime.now().millisecondsSinceEpoch,
-      arrivaldate: value.arrivaldate, // DateTime.now()
-      visitnumber: newVisitNumber,
-      //imagePaths: value.imagePaths,
+    String _userId = FirebaseAuth.instance.currentUser!.uid;
+    CurrentUser currentUser = CurrentUser(
+      id: FirebaseAuth.instance.currentUser!.uid,
+      userId: FirebaseAuth.instance.currentUser!.uid,
+      //    email: FirebaseAuth.instance.currentUser!.email,
+      //    displayname: FirebaseAuth.instance.currentUser!.displayName
     );
-    developer.log('PlaceHistoryCollectionReference');
 
-    PlaceHistoryCollectionReference placehistoryRef =
-        regionRef.doc(region.regionCode).placehistory;
-    developer.log('addPlaceHistory');
-    final batch = FirebaseFirestore.instance.batch();
-//final WriteBatch batch = firestore.batch();
+    FirestoreService firestoreService = FirestoreService();
 
-    await setCountry(batch, countyRef, newcountry);
-    await setRegion(batch, value.countryCode, regionRef, region);
+    // Future<String> _messageCurrentUser =
+    //     firestoreService.setCurrentUser(currentUser);
+    CurrentCountryCollectionReference countyRef =
+        currentuserRef.doc(currentUser.userId).country;
+    //"Tokyo","35.6839","139.7744"
+    // "New York","40.6943","-73.9249"
+    //"Mexico City","19.4333","-99.1333"
+    // Beijing","39.9040","116.4075"
+    // Jakarta","-6.2146","106.8451"
 
-    DocumentReference placehistoryDocRef =
-        await addPlaceHistory(batch, placehistoryRef, newPlace);
+    // Rio de Janeiro
+    //_latitude = -22.9068;
+    //_longitude = -43.1729;
 
-    developer.log('addPlaceHistory batch done DocumentReference placehistoryDocRef ');
+    // Deli
+    //_latitude = 28.7041;
+    //_longitude = 77.1025;
+    // Somalia
+    //_latitude = 5.1521;
+    //_longitude = 46.1996;
 
-    await _incrementStreak(batch, _newCountryCount, _newCountryCode,
-        newVisitNumber, distanceInMeters, value);
+    // New York
+    //_latitude = 40.6943;
+    //_longitude = -73.9249;
 
-    // //Future<dynamic> 
-    //  var cancelyesno = await 
-    //     showPopupForm(context, newPlace, placehistoryDocRef.id);
-    // developer.log('showPopupForm1 after results [$cancelyesno]');
+    // Seychelles
+    //_latitude = -4.6796;
+    //_longitude = 55.4920;
 
-//bool? result = await showPopupForm(context, newPlace, placehistoryDocRef.id);
+    // San Francisco
+    //_latitude = 37.7749;
+    //_longitude = -122.4194;
+    //Rome
+    //_latitude = 41.9028;
+    //_longitude= 12.4964;
 
-//Future<bool?> result =   showPopupForm(context, newPlace, placehistoryDocRef.id);
-bool? result =  await showPopupForm(context, batch ,newPlace,  placehistoryDocRef);
+    // Darwin Australia
+    //_longitude= 130.8456;
+    // _latitude = -12.4634;
+
+    //Yorkshire  _longitude= -1.1439;
+    // _latitude = 53.8108;
+    // _longitude= -1.1439;
+
+    // Leeds longitude= -1.5491;
+    // _latitude = 53.8008;
+
+    //Madrid
+    //_latitude = 40.416775;
+    // _longitude= -3.703790;
+    //double
+    //_latitude = 35.6839;
+    //double
+    //_longitude = 139.7744;
+
+    //_latitude = 19.4333; // Mexico
+    //_longitude = -99.1333; // Mexico
+    // _latitude = 48.856614; // French Fair
+    // _longitude = 2.3522219;
+
+    // Empire State Builder _latitude = 40.74844162658724 _longitude = -73.98565918207169
+    // London Eye _latitude =51.50318735304264 _longitude = -0.11944598989508606
+
+    // Trafalgar Square _latitude = 51.50798872115172 _longitude = -0.12802451848983765
+
+    // The Little Mermaid in Copenhagen, Denmark _latitude = 55.69289152978713 _longitude = 12.599126876148214
+
+    // _latitude = 48.8584; // eiffel tower 48.85845474720703, 2.294502761972394
+    //_longitude = 2.2945;
+    // Empire State Building longitude= -73.9857; latitude = 40.7484
+    //_latitude = 1.290270; // Singapore Airport
+    //_longitude = 103.851959;
+    //_latitude = -6.2146;
+    // double
+    //_longitude = 106.8451;
+
+    // _latitude = 39.9040; //Beijing
+    // _longitude = 116.4075; //Beijing
+    // _latitude = 40.6943; //New York"
+    // _longitude = -73.9249;//New York"
+
+    //       _latitude = 51.50853; //London
+    // _longitude = -0.12574;//London
+
+    //         _latitude = 55.95206; //Edinburgh
+    // _longitude = -3.19648;//Edinburgh
+
+    //double _latitude = -6.2146;
+    //double _longitude = 106.8451;
+
+    // if (loc.latitude != null && loc.longitude != null) {
+
+    await fetchNewPlace(_latitude, _longitude).then((value) async {
+      // int currentVisitNumber;
+      int newVisitNumber;
+
+      developer.log(
+          'Getting location for ${_latitude.toString()} , ${_longitude.toString()}');
+
+      newVisitNumber = currentPlace.visitnumber ?? 0;
+      //newVisitNumber = 0;
+
+      if (value.latitude != null && value.longitude != null) {
+        developer.log('newVisitNumber is $newVisitNumber');
+
+        mapController
+            ?.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(
+                  bearing: 270.0,
+                  target: LatLng(
+                    value.latitude!,
+                    value.longitude!,
+                  ),
+                  tilt: 30.0,
+                  zoom: 17.0,
+                ),
+              ),
+            )
+            .then((result) =>
+                print("mapController.animateCamera() returned $result"));
+      }
+
+      int distanceInMeters = Geolocator.distanceBetween(
+              currentPlace.latitude ?? value.latitude!,
+              currentPlace.longitude ?? value.longitude!,
+              value.latitude!,
+              value.longitude!)
+          .toInt();
+      developer.log('Discance in meters ${distanceInMeters.toString()}');
+      developer.log('CurrentCountry');
+
+      CurrentCountry newcountry = CurrentCountry(
+          countryCode: value.countryCode!,
+          countryName: value.countryName!,
+          userId: _userId);
+      developer.log('setCountry');
+
+      if ((currentPlace.countryCode == null) ||
+          (currentPlace.countryCode != value.countryCode!)) {
+        _newCountryCount = 1;
+        _newCountryCode = value.countryCode;
+        developer.log(
+            'New Country identified. CurrentPlace ${currentPlace.countryCode} NewPlace ${value.countryCode} ');
+
+        newVisitNumber++;
+
+        controllerConfetti.play();
+        playsound();
+      } else {
+        _newCountryCount = 0;
+        _newCountryCode = '';
+      }
+
+      developer.log('Region');
+
+      developer.log('isoCountry2List Provider');
+
+      // List<IsoCountry2> isoCountry2List = Provider.of<ApplicationState>(context).IsoCountry2List;
+
+      developer.log('isoCountry2List before');
+
+      String? _isoregionCode =
+          IsoCountry2GetCode(isoCountryList, value.regionCode!);
+
+      developer.log('isoCountry2List before');
+      // Check for null _isoregionCode
+      if (_isoregionCode == null) {
+        developer.log('_isoregionCode is null');
+      }
+      Region region = Region(
+          regionCode: _isoregionCode,
+          region: value.region!,
+          countryCode: value.countryCode!,
+          userId: _userId,
+          apiregionCode: value.regionCode!);
+      developer.log('regionRef');
+
+      RegionCollectionReference regionRef =
+          countyRef.doc(newcountry.countryCode).region;
+
+      developer.log('PlaceHistory');
+      developer.log('showPopupForm before');
+
+      //showPopupForm(context);
 
 
-        if (result == true) {
-          print('Form saved');
-        } else {
-          print('Form canceled');
-        }
-  developer.log(' waited for showPopupForm to complete Form');
+      developer.log('showPopupForm after2');
 
-    try {
-      // Commit the batch
-      await batch.commit();
-      print('Batch write successful');
-    } catch (e) {
-      print('Error AG performing batch write: $e');
-    }
-    developer.log('commit batch done');
+      PlaceHistory newPlace = PlaceHistory(
+        userId: value.userId,
+        name: value.countryName,
+        location: value.countryName,
+        latitude: value.latitude,
+        distance: distanceInMeters.toDouble(),
+        longitude: value.longitude,
+        poi: value.poi,
+        streetAddress: value.streetAddress,
+        city: value.city,
+        countryName: value.countryName,
+        countryCode: value.countryCode,
+        postal: value.postal,
+        region: value.region,
+        apiregionCode: value.regionCode!,
+        regionCode: _isoregionCode,
+        elevation: value.elevation,
+        timezone: value.timezone,
+        locationRaw: value.locationRaw,
+        timestamp: value.timestamp, // DateTime.now().millisecondsSinceEpoch,
+        arrivaldate: value.arrivaldate, // DateTime.now()
+        visitnumber: newVisitNumber,
+        //imagePaths: value.imagePaths,
+      );
+      developer.log('PlaceHistoryCollectionReference');
 
-    // showPopupForm(context, newPlace, placehistoryDocRef.id);
-  });
 
+      PlaceHistoryCollectionReference placehistoryRef =
+          regionRef.doc(region.regionCode).placehistory;
+      developer.log('addPlaceHistory');
+      final batch = FirebaseFirestore.instance.batch();
+      //final WriteBatch batch = firestore.batch();
+
+      await setCountry(batch, countyRef, newcountry);
+      await setRegion(batch, value.countryCode, regionRef, region);
+
+      DocumentReference placehistoryDocRef =
+          await addPlaceHistory(batch, placehistoryRef, newPlace);
+
+      developer.log(
+          'addPlaceHistory batch done DocumentReference placehistoryDocRef ');
+
+      await _incrementStreak(batch, _newCountryCount, _newCountryCode,
+          newVisitNumber, distanceInMeters, value);
+      developer.log('_incrementStreak done ');
+
+      // //Future<dynamic>
+      //  var cancelyesno = await
+      //     showPopupForm(context, newPlace, placehistoryDocRef.id);
+      // developer.log('showPopupForm1 after results [$cancelyesno]');
+
+      //bool? result = await showPopupForm(context, newPlace, placehistoryDocRef.id);
+
+      //Future<bool?> result =   showPopupForm(context, newPlace, placehistoryDocRef.id);
+      //bool? result =  await showPopupForm(context, batch ,newPlace,  placehistoryDocRef);
+     // bool? result = await showPopupForm(context, batch, placehistoryDocRef);
+
+      developer.log('saveImagesToFirestore before ');
+
+      void _saveImagesToFirestore = await saveImagesToFirestore(batch, placehistoryDocRef);
+      developer.log('saveImagesToFirestore done ');
+
+      // if (result == true) {
+      //   print('Form saved');
+      // } else {
+      //   print('Form canceled');
+      // }
+      //developer.log(' waited for showPopupForm to complete Form');
+
+      try {
+        // Commit the batch
+        await batch.commit();
+        print('Batch write successful');
+      } catch (e) {
+        print('Error AG performing batch write: $e');
+      }
+      developer.log('commit batch done');
+      developer.log('placehistory update after');
+       descriptionController.clear();
+       developer.log('save imagePaths 0 Length ${imagePaths.length} ');
+
+       imagePaths.clear();
+       imagePaths = [];
+       selectedImages?.clear();
+
+  developer.log('save imagePaths 1 Length ${imagePaths.length} ');
+
+      // showPopupForm(context, newPlace, placehistoryDocRef.id);
+    });
+  } else {
+    developer.log('Form canceled');
+    return;
+  }
   //await _updateStats(userTotals!);
 }
 
@@ -369,7 +437,8 @@ Future<void> _incrementStreak(
         'distancetotal': FieldValue.increment(distanceInMeters as num),
         'regioncount': FieldValue.increment(1),
         'placescount': FieldValue.increment(1),
-        'countryvisitlist': FieldValue.arrayUnion([place.countryCode! + '-' + newVisitNumber.toString()]),
+        'countryvisitlist': FieldValue.arrayUnion(
+            [place.countryCode! + '-' + newVisitNumber.toString()]),
       },
     );
 
@@ -380,8 +449,6 @@ Future<void> _incrementStreak(
           'countrycodelist': FieldValue.arrayUnion([newCountryCode]),
         },
       );
-
-
     }
   }
 }
@@ -427,36 +494,35 @@ Future<PlaceHistory> fetchNewPlace(double? latitude, double? longitude) async {
     Uri.parse(urlString),
   );
   developer.log(urlString, name: 'my.app.urlstring');
-_placeHistory.locationRaw = res.body;
+  _placeHistory.locationRaw = res.body;
   developer.log(res.body, name: 'my.app.category');
   jsonString = jsonDecode(res.body);
 
   developer.log(jsonString.toString(), name: 'my.app.jsonString');
-
-
 
   var features = jsonString['features'];
 
   for (var feature in features) {
     _placeHistory.streetAddress = feature['place_name'];
 
-   _placeHistory.poi = feature['text'];
+    _placeHistory.poi = feature['text'];
 
-   //_placeHistory.poi ='new poi';
+    //_placeHistory.poi ='new poi';
 
-  developer.log('placeHistory.poi  ${_placeHistory.poi }');
+    developer.log('placeHistory.poi  ${_placeHistory.poi}');
 
-  if (feature.isNotEmpty) {
-    Map<String, dynamic> properties = feature['properties'];
-    if (properties != null && properties.containsKey('category')) {
-      String categoryValue = properties['category'];
-      developer.log('categoryValue ${categoryValue}'); // Output: art gallery, art galleries, galleries, painting, art, gallery, tourism
+    if (feature.isNotEmpty) {
+      Map<String, dynamic> properties = feature['properties'];
+      if (properties != null && properties.containsKey('category')) {
+        String categoryValue = properties['category'];
+        developer.log(
+            'categoryValue ${categoryValue}'); // Output: art gallery, art galleries, galleries, painting, art, gallery, tourism
+      } else {
+        print('Category field is missing or empty');
+      }
     } else {
-      print('Category field is missing or empty');
+      print('No features found');
     }
-  } else {
-    print('No features found');
-  }
     var context = feature['context'];
 
     for (var item in context) {
@@ -481,11 +547,13 @@ _placeHistory.locationRaw = res.body;
           _placeHistory.region = item['text'];
         }
 
-        if ((_placeHistory.countryCode == 'countryCode') & (item['short_code'] != null)) {
+        if ((_placeHistory.countryCode == 'countryCode') &
+            (item['short_code'] != null)) {
           _placeHistory.countryCode = item['short_code'];
         }
 
-        if ((_placeHistory.countryName == 'countryName') & (item['text'] != null)) {
+        if ((_placeHistory.countryName == 'countryName') &
+            (item['text'] != null)) {
           _placeHistory.countryName = item['text'];
         }
 
@@ -532,10 +600,11 @@ void _showShareDialog(BuildContext context, PlaceHistory placeHistory) {
                         child: Text('SHARE', style: TextStyle(fontSize: 12)),
                         onPressed: () {
                           String flags = '';
-                         // for (var item in appState.tripHistory) {
-                         //   flags = flags + CountryFlag(item.countryCode!);
-                         // }
-                          for (var item in appState.userProfile!.countryvisitlist!) {
+                          // for (var item in appState.tripHistory) {
+                          //   flags = flags + CountryFlag(item.countryCode!);
+                          // }
+                          for (var item
+                              in appState.userProfile!.countryvisitlist!) {
                             flags = flags + CountryFlag(item);
                           }
                           FlutterShare.share(
@@ -570,14 +639,14 @@ Future<void> setCountry(
   var jsonString;
   jsonString = jsonDecode(res.body);
 
-
   developer.log(res.body, name: 'my.app.category');
 
-String? capital = jsonString.isNotEmpty && jsonString[0].containsKey('capital')
-    ? (jsonString[0]['capital'] as List<dynamic>).isNotEmpty
-        ? jsonString[0]['capital'][0].toString()
-        : null
-    : null;
+  String? capital =
+      jsonString.isNotEmpty && jsonString[0].containsKey('capital')
+          ? (jsonString[0]['capital'] as List<dynamic>).isNotEmpty
+              ? jsonString[0]['capital'][0].toString()
+              : null
+          : null;
 
   //if (jsonString[0]!.containsKey('capital')) {
   //  String capital = jsonString[0]['capital'][0];
@@ -585,7 +654,7 @@ String? capital = jsonString.isNotEmpty && jsonString[0].containsKey('capital')
   //       else
   //       capital = 'capital';
 
- // String capital = jsonString[0]['capital'][0];
+  // String capital = jsonString[0]['capital'][0];
   String subregion = jsonString[0]['subregion'];
   String region = jsonString[0]['region'];
   int population = jsonString[0]['population'];
@@ -670,7 +739,6 @@ Future<DocumentReference> addPlaceHistory(WriteBatch batch,
       .collection('placehistory')
       .doc();
 
-
 // Write new placehistory document
 
   batch.set(docRef, place.toJson());
@@ -678,3 +746,179 @@ Future<DocumentReference> addPlaceHistory(WriteBatch batch,
 
   return docRef;
 }
+
+/////// New Sequence  //////
+
+Future<bool?> popupForm(
+  BuildContext context,
+  //   WriteBatch batch,
+//DocumentReference<Object?> placeHistoryId
+) async {
+  return showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          title: Text('Trip Details'),
+          content:
+              // Text('Do you want to save the form?'),
+              Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: descriptionController,
+                decoration: InputDecoration(
+                  labelText: 'Thoughts',
+                ),
+              ),
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      await _selectAndSaveImages(ImageSource.gallery);
+                    },
+                    child: Text('Image From Gallery'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await _selectAndSaveImages(ImageSource.camera);
+                    },
+                    child: Text('Image From Camera'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+                descriptionController.clear();
+                developer
+                    .log('cancel imagePaths 1 Length ${imagePaths.length} ');
+                imagePaths.clear();
+                imagePaths = [];
+                selectedImages?.clear();
+
+                developer
+                    .log('cancel imagePaths 2 Length ${imagePaths.length} ');
+              },
+              child: Text('Cancel'),
+            ),
+             ElevatedButton(
+               onPressed: () async {
+                   Navigator.of(context).pop(true);
+            //     await _saveImagesToFirestore(batch, placeHistoryId);
+            //     Navigator.of(context).pop(true);
+            //     // descriptionController.clear();
+            //     // imagePaths.clear();
+              },
+               child: Text('Save'),
+             ),
+          ]);
+    },
+  );
+}
+
+Future<bool?> photoLocationPopupForm(
+  BuildContext context,
+  //   WriteBatch batch,
+//DocumentReference<Object?> placeHistoryId
+) async {
+  return showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          title: Text('Location Method'),
+          content: Text('Check-in by photo location?'),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text('Photo'),
+            ),
+             ElevatedButton(
+               onPressed: () async {
+                   Navigator.of(context).pop(false);
+              },
+               child: Text('Mobile'),
+             ),
+          ]);
+    },
+  );
+}
+
+
+
+Future<void> _selectAndSaveImages(ImageSource _imagesource) async {
+  developer.log('imagePaths 1 Length ${imagePaths.length} ');
+
+  imagePaths.clear();
+  imagePaths = [];
+  selectedImages?.clear();
+
+  developer.log('imagePaths 2 Length ${imagePaths.length} ');
+
+  XFile? selectedImage = await ImagePicker().pickImage(source: _imagesource);
+  if (selectedImage != null) {
+    developer.log('selectedImage is not null ');
+
+    selectedImages?.add(selectedImage);
+  }
+  developer.log('imagePaths 3 Length ${selectedImages?[0]} ');
+  developer.log('imagePaths 4 Length $selectedImage ');
+}
+
+Future<Reference> saveImageToCloudStorage(XFile imageFile) async {
+  String fileName = imageFile.name;
+  File? _image = File(imageFile.path);
+
+  Reference storageReference = FirebaseStorage.instance
+      .ref()
+      .child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
+  UploadTask uploadTask = storageReference.putFile(_image);
+
+  await uploadTask.whenComplete(() => print('Image uploaded'));
+
+//final storageRef = FirebaseStorage.instance.ref();
+
+  Directory appDirectory = await getApplicationDocumentsDirectory();
+  //String fileName = imageFile.path.split('/').last;
+  String savedImagePath = '${appDirectory.path}/$fileName';
+  File(imageFile.path).copy(savedImagePath);
+  return storageReference;
+}
+
+Future<void> saveImagesToFirestore(
+    WriteBatch batch, DocumentReference<Object?> placeHistoryId) async {
+
+    developer.log('saveImagesToFirestore');
+
+  if (selectedImages != null) {
+
+    developer.log(' selectedImages is not null ${selectedImages![0].path}   ');
+
+    for (XFile imageFile in selectedImages!) {
+
+    developer.log(' imageFile is not null ${imageFile.path}   ');
+
+      // String imagePath = await _saveImageToDirectory(imageFile);
+      Reference imagePath = await saveImageToCloudStorage(imageFile);
+
+      imagePaths.add(imagePath.fullPath);
+    }
+  } else {
+    developer.log('selectedImages is null');
+  }
+  CollectionReference placehistoryref =
+      FirebaseFirestore.instance.collection('placehistory');
+//final placehistoryRef = PlaceHistoryCollectionReference;
+  developer.log('placehistory update before');
+
+  batch.update(placeHistoryId, {
+    'rating': '5 Stars',
+    // 'poi': 'place of interest',
+    'description': descriptionController.text,
+    'imagePaths': imagePaths
+  });
+    }

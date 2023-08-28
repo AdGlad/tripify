@@ -6,7 +6,7 @@ import 'package:gtk_flutter/screens/country/countryCard.dart';
 import 'package:gtk_flutter/screens/country/countryPage.dart';
 import 'package:provider/provider.dart';
 
-import '../../map/countriesMapboxState.dart';
+import '../checkIn/countriesMapboxState.dart';
 import '../../model/placehistory.dart';
 import '../../state/applicationstate.dart';
 

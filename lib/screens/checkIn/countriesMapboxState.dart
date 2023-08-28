@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
 
-import '../state/applicationstate.dart';
+import '../../state/applicationstate.dart';
 import 'dart:developer' as developer;
 
 //import 'main.dart';
