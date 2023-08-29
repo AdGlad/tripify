@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +25,7 @@ import 'package:native_exif/native_exif.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../map/src/isocountry2.dart';
+import '../../model/poi-to-visit.dart';
 import '../../state/applicationstate.dart';
 //import '../ActiveCountryPage.dart';
 import 'checkcountry.dart';
@@ -37,64 +37,58 @@ double? _latitude = 0.0;
 double? _longitude = 0.0;
 TextEditingController descriptionController = TextEditingController();
 
-
 Future saveLocation(
   BuildContext context,
   List<IsoCountry2> isoCountryList,
   PlaceHistory? currentPlace,
   UserProfile? userProfile,
+  List<Poi> poiList,
   //  UserTotals? userTotals,
   //  MapboxMapController? locationcontroller
 ) async {
+  selectedImages = [];
+  imagePaths = [];
   int _newCountryCount = 0;
   String? _newCountryCode = '';
 
   developer.log(' SaveLocation ');
 
- bool? photoLocation = await photoLocationPopupForm(context);
+  bool? userPhotoLocation = await photoLocationPopupForm(context);
 
+  bool? saveform = await popupForm(context);
 
-
- bool? result = await popupForm(context);
-
-
-  if (result!) {
+  if (saveform!) {
     developer.log('Form saved');
-    developer.log(' ************* currentPlace ${currentPlace!.id} ************* ');
-    developer.log(' selectedImages  ${selectedImages![0].path}  ');
-
- final exifData = await Exif.fromPath(selectedImages![0].path);
-
-    developer.log(' ************* exifData ************* ');
-
- if (exifData != null ) {
-  
-       ExifLatLong? latLong = await exifData.getLatLong();
-         _latitude = latLong!.latitude;
-         _longitude = latLong.longitude;
-         developer.log(' LatLong found lat: $_latitude long: $_longitude ');
-
-    
-     } else {
-         developer.log(' LatLong not found ');
-     }
+    developer
+        .log(' ************* currentPlace ${currentPlace!.id} ************* ');
 
     //final PermissionStatus status = await Permission.location.request();
 
     LocationData? newPlace = await Location().getLocation();
 
-    if (photoLocation == true) {
-  developer.log('photoLocation is true');
-} else {
-  developer.log('photoLocation is false');
-  _latitude = newPlace.latitude;
-  _longitude = newPlace.longitude;
- // return; 
-}
+    if (userPhotoLocation == true) {
+      developer.log(' selectedImages  ${selectedImages![0].path}  ');
+
+      developer.log('photoLocation is true');
+      Exif exifData = await Exif.fromPath(selectedImages![0].path);
+      developer.log(' ************* exifData ************* ');
+      if (exifData != null) {
+        ExifLatLong? latLong = await exifData.getLatLong();
+        _latitude = latLong!.latitude;
+        _longitude = latLong.longitude;
+        developer.log(' LatLong found lat: $_latitude long: $_longitude ');
+      } else {
+        developer.log(' LatLong not found ');
+      }
+    } else {
+      developer.log('photoLocation is false');
+      _latitude = newPlace.latitude;
+      _longitude = newPlace.longitude;
+      // return;
+    }
 
 //    double? _latitude = newPlace.latitude;
 //    double? _longitude = newPlace.longitude;
-
 
     String _userId = FirebaseAuth.instance.currentUser!.uid;
     CurrentUser currentUser = CurrentUser(
@@ -167,14 +161,16 @@ Future saveLocation(
     // _longitude = 2.3522219;
 
     // Empire State Builder _latitude = 40.74844162658724 _longitude = -73.98565918207169
+     _latitude = 40.74844162658724 ;
+     _longitude = -73.98565918207169;
     // London Eye _latitude =51.50318735304264 _longitude = -0.11944598989508606
 
     // Trafalgar Square _latitude = 51.50798872115172 _longitude = -0.12802451848983765
 
     // The Little Mermaid in Copenhagen, Denmark _latitude = 55.69289152978713 _longitude = 12.599126876148214
 
-    // _latitude = 48.8584; // eiffel tower 48.85845474720703, 2.294502761972394
-    //_longitude = 2.2945;
+    // _latitude = 48.85845474720703; // eiffel tower
+    //_longitude = 2.294502761972394;
     // Empire State Building longitude= -73.9857; latitude = 40.7484
     //_latitude = 1.290270; // Singapore Airport
     //_longitude = 103.851959;
@@ -292,7 +288,6 @@ Future saveLocation(
 
       //showPopupForm(context);
 
-
       developer.log('showPopupForm after2');
 
       PlaceHistory newPlace = PlaceHistory(
@@ -320,7 +315,6 @@ Future saveLocation(
         //imagePaths: value.imagePaths,
       );
       developer.log('PlaceHistoryCollectionReference');
-
 
       PlaceHistoryCollectionReference placehistoryRef =
           regionRef.doc(region.regionCode).placehistory;
@@ -350,12 +344,16 @@ Future saveLocation(
 
       //Future<bool?> result =   showPopupForm(context, newPlace, placehistoryDocRef.id);
       //bool? result =  await showPopupForm(context, batch ,newPlace,  placehistoryDocRef);
-     // bool? result = await showPopupForm(context, batch, placehistoryDocRef);
+      // bool? result = await showPopupForm(context, batch, placehistoryDocRef);
 
       developer.log('saveImagesToFirestore before ');
 
-      void _saveImagesToFirestore = await saveImagesToFirestore(batch, placehistoryDocRef);
+      void _saveImagesToFirestore =
+          await saveImagesToFirestore(batch, placehistoryDocRef);
       developer.log('saveImagesToFirestore done ');
+
+      void _check_poi =
+          await check_poi(batch, newPlace, placehistoryDocRef, poiList);
 
       // if (result == true) {
       //   print('Form saved');
@@ -373,14 +371,14 @@ Future saveLocation(
       }
       developer.log('commit batch done');
       developer.log('placehistory update after');
-       descriptionController.clear();
-       developer.log('save imagePaths 0 Length ${imagePaths.length} ');
+      descriptionController.clear();
+      developer.log('save imagePaths 0 Length ${imagePaths.length} ');
 
-       imagePaths.clear();
-       imagePaths = [];
-       selectedImages?.clear();
+      imagePaths.clear();
+      imagePaths = [];
+      selectedImages?.clear();
 
-  developer.log('save imagePaths 1 Length ${imagePaths.length} ');
+      developer.log('save imagePaths 1 Length ${imagePaths.length} ');
 
       // showPopupForm(context, newPlace, placehistoryDocRef.id);
     });
@@ -804,16 +802,16 @@ Future<bool?> popupForm(
               },
               child: Text('Cancel'),
             ),
-             ElevatedButton(
-               onPressed: () async {
-                   Navigator.of(context).pop(true);
-            //     await _saveImagesToFirestore(batch, placeHistoryId);
-            //     Navigator.of(context).pop(true);
-            //     // descriptionController.clear();
-            //     // imagePaths.clear();
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop(true);
+                //     await _saveImagesToFirestore(batch, placeHistoryId);
+                //     Navigator.of(context).pop(true);
+                //     // descriptionController.clear();
+                //     // imagePaths.clear();
               },
-               child: Text('Save'),
-             ),
+              child: Text('Save'),
+            ),
           ]);
     },
   );
@@ -837,18 +835,16 @@ Future<bool?> photoLocationPopupForm(
               },
               child: Text('Photo'),
             ),
-             ElevatedButton(
-               onPressed: () async {
-                   Navigator.of(context).pop(false);
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop(false);
               },
-               child: Text('Mobile'),
-             ),
+              child: Text('Mobile'),
+            ),
           ]);
     },
   );
 }
-
-
 
 Future<void> _selectAndSaveImages(ImageSource _imagesource) async {
   developer.log('imagePaths 1 Length ${imagePaths.length} ');
@@ -865,8 +861,8 @@ Future<void> _selectAndSaveImages(ImageSource _imagesource) async {
 
     selectedImages?.add(selectedImage);
   }
-  developer.log('imagePaths 3 Length ${selectedImages?[0]} ');
-  developer.log('imagePaths 4 Length $selectedImage ');
+  // developer.log('imagePaths 3 Length ${selectedImages?[0]} ');
+  // developer.log('imagePaths 4 Length $selectedImage ');
 }
 
 Future<Reference> saveImageToCloudStorage(XFile imageFile) async {
@@ -889,18 +885,15 @@ Future<Reference> saveImageToCloudStorage(XFile imageFile) async {
   return storageReference;
 }
 
-Future<void> saveImagesToFirestore(
+Future<void> saveImagesToFirestore(  
     WriteBatch batch, DocumentReference<Object?> placeHistoryId) async {
+  developer.log('saveImagesToFirestore');
 
-    developer.log('saveImagesToFirestore');
-
-  if (selectedImages != null) {
-
+  if (selectedImages!.isNotEmpty) {
     developer.log(' selectedImages is not null ${selectedImages![0].path}   ');
 
     for (XFile imageFile in selectedImages!) {
-
-    developer.log(' imageFile is not null ${imageFile.path}   ');
+      developer.log(' imageFile is not null ${imageFile.path}   ');
 
       // String imagePath = await _saveImageToDirectory(imageFile);
       Reference imagePath = await saveImageToCloudStorage(imageFile);
@@ -921,4 +914,44 @@ Future<void> saveImagesToFirestore(
     'description': descriptionController.text,
     'imagePaths': imagePaths
   });
+}
+
+Future<void>? check_poi(WriteBatch batch, PlaceHistory newPlace,
+    DocumentReference<Object?> placeHistoryId, List<Poi> poiList) {
+    developer.log('In check_poi');
+
+  //For loop for each appState.poiList
+  for (Poi poi in poiList) {
+    developer.log('No Match ${poi.name}');
+
+        double distanceInMeters = Geolocator.distanceBetween(
+            newPlace.latitude ?? 0.0,
+            newPlace.longitude ?? 0.0,
+            poi.latitude!,
+            poi.longitude!);
+
+    // Compare distance between two lat long points
+    if (distanceInMeters <= 1000) {
+      // Match
+      developer.log('Match ${poi.name} Distance $distanceInMeters');
+    } else {
+      // No Match
+      developer.log('No Match ${poi.name}  $distanceInMeters');
     }
+
+    // if (newPlace.poi == poi.poi) {
+    //   batch.update(placeHistoryId, {
+    //     'poi': poi.poi,
+    //     'rating': poi.rating,
+    //     'description': poi.description,
+    //   });
+    // }
+  }
+  ;
+
+  // if newPlace.poi == appState.poiList[i].poi
+  //    batch.update(placeHistoryId, {
+  //    'poi': appState.poiList[i].poi,
+  //    'rating': appState.poiList[i].rating,
+  //    'description': appState.poiList[i].description,
+}

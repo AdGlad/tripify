@@ -30,9 +30,19 @@ class PoiToVisit {
 class Poi{
   Poi({
     required this.poiId,
+     this.latitude,
+     this.longitude,
      this.geometry,
      this.id,
      this.properties,
+     this.category,
+     this.poiclass,
+     this.iso_3166_1,
+     this.iso_3166_2,
+     this.maki,
+     this.name,
+     this.type,
+     
   });
 
   factory Poi.fromJson(Map<String, Object?> json) =>
@@ -40,9 +50,18 @@ class Poi{
 
   @Id()
   final String poiId;
+  double? latitude;
+  double? longitude;
   Map? geometry;
   num? id;
   Map? properties;
+  String? category;
+  String? poiclass;
+  String? iso_3166_1;
+  String? iso_3166_2;
+  String? maki;
+  String? name;
+  String? type;
 
 
   Map<String, Object?> toJson() => _$PoiToJson(this);

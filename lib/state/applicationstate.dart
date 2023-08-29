@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 //        EmailAuthProvider,
 //        PhoneAuthProvider; // new
 import 'package:gtk_flutter/model/placehistory.dart';
+import 'package:gtk_flutter/model/poi-to-visit.dart';
 import 'package:gtk_flutter/model/users.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../firebase_options.dart';
@@ -50,6 +51,8 @@ class ApplicationState extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? _placeHistorySubscription;
   StreamSubscription<QuerySnapshot>? _userRegionListSubscription;
   StreamSubscription<QuerySnapshot>? _friendSubscription;
+  StreamSubscription<QuerySnapshot>? _poiListsSubscription;
+  StreamSubscription<QuerySnapshot>? _poiSubscription;
 
   List<UserProfile> _users = [];
   List<UserProfile> get users => _users;
@@ -65,6 +68,9 @@ class ApplicationState extends ChangeNotifier {
 
   UserProfile? _userProfile;
   UserProfile? get userProfile => _userProfile;
+
+  List<Poi> _poiList = [];
+  List<Poi> get poiList => _poiList;
 
 //  UserTotals _userTotals = UserTotals();
 //  UserTotals get userTotals => _userTotals;
@@ -171,6 +177,7 @@ class ApplicationState extends ChangeNotifier {
         listenForCurrrentPlace(FirebaseAuth.instance.currentUser!.uid);
         listenForPlaceHistory(FirebaseAuth.instance.currentUser!.uid);
         listenForAllFriends(FirebaseAuth.instance.currentUser!.uid);
+        listenForAllPois();
 
         notifyListeners();
 
@@ -546,10 +553,12 @@ class ApplicationState extends ChangeNotifier {
         int timeInMillis = document.data()['timestamp'] as int;
         DateTime currentArrivaldate =
             DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+        developer.log('listenForCurrrentPlace In For loop ');
 
         final List<dynamic> imagePathList =
             document.data()['imagePaths'] ?? <dynamic>[];
         final List<String> imagePath = imagePathList.cast<String>().toList();
+
         _currentPlace = PlaceHistory(
             userId: FirebaseAuth.instance.currentUser!.uid,
             name: document.data()['name'] as String?,
@@ -644,27 +653,100 @@ class ApplicationState extends ChangeNotifier {
         .orderBy('friendNickname', descending: true)
         .snapshots()
         .listen((snapshot) {
-      _users = [];
+      _friendList = [];
 
       for (final document in snapshot.docs) {
         _friendList.add(Friend(
             id: document.id,
             userId: document.data()['userId'] ?? 'userId',
             friendId: document.data()['friendId'] ?? 'friendId',
-            friendNickname: document.data()['friendNickname'] ?? 'friendNickname',
+            friendNickname:
+                document.data()['friendNickname'] ?? 'friendNickname',
             friendEmail: document.data()['friendEmail'] ?? 'friendEmail',
             friendAvatar: document.data()['friendAvatar'] ?? 'friendAvatar',
             status: document.data()['status'] ?? 'status'));
 
-
-            developer.log('listenForAllFriends adding friend ${document.data()['friendId']} ');
-
-
+        developer.log(
+            'listenForAllFriends adding friend ${document.data()['friendId']} ');
       }
 
       developer.log('listenForAllFriends end ');
     });
     notifyListeners();
+
+    // return users;
+  }
+
+  listenForAllPois() {
+    // List<UserProfile> users = [];
+    developer.log('listenForAllPois start ');
+    _poiList = [];
+     _poiListsSubscription = FirebaseFirestore.instance
+         .collection('poi-to-visit')
+       //  .doc('top100places')
+       //  .collection('poi')
+       //  .orderBy('description', descending: true)
+         .snapshots()
+         .listen((snapshot) {
+       for (final poiGroupDoc in snapshot.docs) {
+        // developer
+        //     .log('poi-to-visit desc ${poiGroupDoc.data()['description']} ');
+        // developer.log('poi-to-visit id ${poiGroupDoc.id}');
+
+        //_poiSubscription = FirebaseFirestore.instance
+       FirebaseFirestore.instance
+           .collection('poi-to-visit')
+           // .collection('poi-to-visit')
+             .doc(poiGroupDoc.id)
+           //  .doc('top100places')
+              .collection('poi')
+          //   .where('id', isEqualTo: 'Eiffel Tower')
+        //    .orderBy('description', descending: true)
+           .snapshots()
+            .listen((poisnapshot) {
+          for (final poiDoc in poisnapshot.docs) {
+            developer.log('poiDoc id ${poiDoc.id}');
+            developer.log('poiDoc in');
+
+            _poiList.add(Poi(poiId: poiDoc.data()['properties']['name'],
+                geometry: poiDoc.data()['geometry'],
+                id: poiDoc.data()['id'],
+                properties: poiDoc.data()['properties'],
+                category: poiDoc.data()['properties']['category_en'],
+                poiclass: poiDoc.data()['properties']['class'],
+                iso_3166_1: poiDoc.data()['properties']['iso_3166_1'],
+                iso_3166_2: poiDoc.data()['properties']['iso_3166_2'],
+                maki: poiDoc.data()['properties']['maki'],
+                name: poiDoc.data()['properties']['name'],
+                type: poiDoc.data()['properties']['type'],
+                longitude: poiDoc.data()['geometry']['coordinates'][0],
+                latitude: poiDoc.data()['geometry']['coordinates'][1],
+                ));
+
+            developer.log('******************************************');
+
+            //  developer.log('poi-to-visit id ${poiGroupDoc.id}');
+
+            // developer
+            //     .log('pois details ${poiDoc.data()['properties']['class']} ');
+            // developer.log(
+            //     'pois details ${poiDoc.data()['properties']['category_en']} ');
+            // developer.log(
+            //     'pois details ${poiDoc.data()['properties']['iso_3166_1']} ');
+            // developer.log('pois details ${poiDoc.id} ');
+            // developer.log(
+            //     'pois details ${poiDoc.data()['geometry']['coordinates'][0]} ');
+            // developer.log(
+            //     'pois details ${poiDoc.data()['geometry']['coordinates'][1]} ');
+          }
+        }
+        );
+      }
+
+      developer.log('listenForAllFriends end ');
+    }
+    );
+   // notifyListeners();
 
     // return users;
   }
