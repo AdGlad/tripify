@@ -7787,6 +7787,9 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
       countryvisitlist: (json['countryvisitlist'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      poi: (json['poi'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
+          .toList(),
     );
 
 const _$UserProfileFieldMap = <String, String>{
@@ -7818,6 +7821,7 @@ const _$UserProfileFieldMap = <String, String>{
   'lastRecordedDate': 'lastRecordedDate',
   'countrycodelist': 'countrycodelist',
   'countryvisitlist': 'countryvisitlist',
+  'poi': 'poi',
 };
 
 Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
@@ -7852,6 +7856,7 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
           instance.lastRecordedDate, const FirestoreDateTimeConverter().toJson),
       'countrycodelist': instance.countrycodelist,
       'countryvisitlist': instance.countryvisitlist,
+      'poi': instance.poi,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

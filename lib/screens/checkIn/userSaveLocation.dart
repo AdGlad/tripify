@@ -60,7 +60,7 @@ Future saveLocation(
   if (saveform!) {
     developer.log('Form saved');
     developer
-        .log(' ************* currentPlace ${currentPlace!.id} ************* ');
+        .log(' ************* currentPlace ${currentPlace?.id} ************* ');
 
     //final PermissionStatus status = await Permission.location.request();
 
@@ -161,16 +161,16 @@ Future saveLocation(
     // _longitude = 2.3522219;
 
     // Empire State Builder _latitude = 40.74844162658724 _longitude = -73.98565918207169
-     _latitude = 40.74844162658724 ;
-     _longitude = -73.98565918207169;
+     //_latitude = 40.74844162658724 ;
+     //_longitude = -73.98565918207169;
     // London Eye _latitude =51.50318735304264 _longitude = -0.11944598989508606
 
     // Trafalgar Square _latitude = 51.50798872115172 _longitude = -0.12802451848983765
 
     // The Little Mermaid in Copenhagen, Denmark _latitude = 55.69289152978713 _longitude = 12.599126876148214
 
-    // _latitude = 48.85845474720703; // eiffel tower
-    //_longitude = 2.294502761972394;
+     _latitude = 48.85845474720703; // eiffel tower
+    _longitude = 2.294502761972394;
     // Empire State Building longitude= -73.9857; latitude = 40.7484
     //_latitude = 1.290270; // Singapore Airport
     //_longitude = 103.851959;
@@ -201,7 +201,7 @@ Future saveLocation(
       developer.log(
           'Getting location for ${_latitude.toString()} , ${_longitude.toString()}');
 
-      newVisitNumber = currentPlace.visitnumber ?? 0;
+      newVisitNumber = currentPlace?.visitnumber ?? 0;
       //newVisitNumber = 0;
 
       if (value.latitude != null && value.longitude != null) {
@@ -226,8 +226,8 @@ Future saveLocation(
       }
 
       int distanceInMeters = Geolocator.distanceBetween(
-              currentPlace.latitude ?? value.latitude!,
-              currentPlace.longitude ?? value.longitude!,
+              currentPlace?.latitude ?? value.latitude!,
+              currentPlace?.longitude ?? value.longitude!,
               value.latitude!,
               value.longitude!)
           .toInt();
@@ -240,12 +240,12 @@ Future saveLocation(
           userId: _userId);
       developer.log('setCountry');
 
-      if ((currentPlace.countryCode == null) ||
-          (currentPlace.countryCode != value.countryCode!)) {
+      if ((currentPlace?.countryCode == null) ||
+          (currentPlace?.countryCode != value.countryCode!)) {
         _newCountryCount = 1;
         _newCountryCode = value.countryCode;
         developer.log(
-            'New Country identified. CurrentPlace ${currentPlace.countryCode} NewPlace ${value.countryCode} ');
+            'New Country identified. CurrentPlace ${currentPlace?.countryCode} NewPlace ${value.countryCode} ');
 
         newVisitNumber++;
 
@@ -331,9 +331,9 @@ Future saveLocation(
       developer.log(
           'addPlaceHistory batch done DocumentReference placehistoryDocRef ');
 
-      await _incrementStreak(batch, _newCountryCount, _newCountryCode,
-          newVisitNumber, distanceInMeters, value);
-      developer.log('_incrementStreak done ');
+      // await _incrementStreak(batch, _newCountryCount, _newCountryCode,
+      //     newVisitNumber, distanceInMeters, value);
+      // developer.log('_incrementStreak done ');
 
       // //Future<dynamic>
       //  var cancelyesno = await
@@ -354,6 +354,10 @@ Future saveLocation(
 
       void _check_poi =
           await check_poi(batch, newPlace, placehistoryDocRef, poiList);
+
+      await _incrementStreak(batch, _newCountryCount, _newCountryCode,
+          newVisitNumber, distanceInMeters, value);
+      developer.log('_incrementStreak done ');
 
       // if (result == true) {
       //   print('Form saved');
@@ -917,12 +921,15 @@ Future<void> saveImagesToFirestore(
 }
 
 Future<void>? check_poi(WriteBatch batch, PlaceHistory newPlace,
-    DocumentReference<Object?> placeHistoryId, List<Poi> poiList) {
+    DocumentReference<Object?> placeHistoryId, List<Poi> poiList) async {
     developer.log('In check_poi');
-
+final userdocRef = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid);
+final docSnapshot = await userdocRef.get();
   //For loop for each appState.poiList
   for (Poi poi in poiList) {
-    developer.log('No Match ${poi.name}');
+    developer.log('In poiList for loop for ${poi.name}');
 
         double distanceInMeters = Geolocator.distanceBetween(
             newPlace.latitude ?? 0.0,
@@ -931,27 +938,45 @@ Future<void>? check_poi(WriteBatch batch, PlaceHistory newPlace,
             poi.longitude!);
 
     // Compare distance between two lat long points
-    if (distanceInMeters <= 1000) {
+    if (distanceInMeters <= (poi.poiRadius??1000.toDouble())) {
       // Match
-      developer.log('Match ${poi.name} Distance $distanceInMeters');
+      developer.log('Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius??1000}');
+
+      batch.update(placeHistoryId, {
+        'poiId': poi.id,
+        'poiName': poi.name,
+        'poiGroupIds': FieldValue.arrayUnion(
+            [poi.groupId!]),
+      });
+
+ if (docSnapshot.exists) {
+    developer.log('docSnapshot exists}');
+    Map<String, dynamic> poiMap = {
+        "id": poi.id,
+         "poiId": poi.poiId,
+        "name": poi.name,
+        "category": poi.category,
+        "maki": poi.maki,
+        "groupId": poi.groupId
+    };
+
+    batch.update(
+      userdocRef,
+      { "poi": FieldValue.arrayUnion(
+          [poiMap]),
+      },
+    );
+ }
+
+
+
+
     } else {
       // No Match
-      developer.log('No Match ${poi.name}  $distanceInMeters');
+      developer.log('No Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius??1000}');
     }
 
-    // if (newPlace.poi == poi.poi) {
-    //   batch.update(placeHistoryId, {
-    //     'poi': poi.poi,
-    //     'rating': poi.rating,
-    //     'description': poi.description,
-    //   });
-    // }
-  }
-  ;
 
-  // if newPlace.poi == appState.poiList[i].poi
-  //    batch.update(placeHistoryId, {
-  //    'poi': appState.poiList[i].poi,
-  //    'rating': appState.poiList[i].rating,
-  //    'description': appState.poiList[i].description,
+
+}
 }

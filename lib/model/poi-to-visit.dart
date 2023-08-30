@@ -42,6 +42,9 @@ class Poi{
      this.maki,
      this.name,
      this.type,
+     this.imagePath,
+     this.poiRadius,
+     this.groupId,
      
   });
 
@@ -62,6 +65,10 @@ class Poi{
   String? maki;
   String? name;
   String? type;
+  String? imagePath;
+  num? poiRadius;
+  String? groupId;
+
 
 
   Map<String, Object?> toJson() => _$PoiToJson(this);

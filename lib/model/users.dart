@@ -42,6 +42,7 @@ class UserProfile {
     this.latestregionCode,
     this.countrycodelist,
     this.countryvisitlist,
+    this.poi,
   });
 
   factory UserProfile.fromJson(Map<String, Object?> json) =>
@@ -78,6 +79,7 @@ class UserProfile {
   DateTime? lastRecordedDate;
   List<String>? countrycodelist;
   List<String>? countryvisitlist;
+  List<Map<String, dynamic>>? poi;
 
 
 

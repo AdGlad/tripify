@@ -168,6 +168,9 @@ class PlaceHistory {
       this.description,
     this.rating,
     this.poi,
+    this.poiId,
+    this.poiName,
+    this.poiGroupIds,
     this.imagePaths,
     this.locationRaw
       });
@@ -204,6 +207,10 @@ class PlaceHistory {
   String? description;
   String? rating;
   String? poi;
+  num? poiId;
+  String? poiName;
+  List<String>? poiGroupIds;
+
   String? locationRaw;
   List<String>? imagePaths;
 

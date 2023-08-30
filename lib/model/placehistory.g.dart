@@ -6133,6 +6133,12 @@ abstract class PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue ratingFieldValue,
     String? poi,
     FieldValue poiFieldValue,
+    num? poiId,
+    FieldValue poiIdFieldValue,
+    String? poiName,
+    FieldValue poiNameFieldValue,
+    List<String>? poiGroupIds,
+    FieldValue poiGroupIdsFieldValue,
     String? locationRaw,
     FieldValue locationRawFieldValue,
     List<String>? imagePaths,
@@ -6188,6 +6194,12 @@ abstract class PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue ratingFieldValue,
     String? poi,
     FieldValue poiFieldValue,
+    num? poiId,
+    FieldValue poiIdFieldValue,
+    String? poiName,
+    FieldValue poiNameFieldValue,
+    List<String>? poiGroupIds,
+    FieldValue poiGroupIdsFieldValue,
     String? locationRaw,
     FieldValue locationRawFieldValue,
     List<String>? imagePaths,
@@ -6273,6 +6285,12 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue? ratingFieldValue,
     Object? poi = _sentinel,
     FieldValue? poiFieldValue,
+    Object? poiId = _sentinel,
+    FieldValue? poiIdFieldValue,
+    Object? poiName = _sentinel,
+    FieldValue? poiNameFieldValue,
+    Object? poiGroupIds = _sentinel,
+    FieldValue? poiGroupIdsFieldValue,
     Object? locationRaw = _sentinel,
     FieldValue? locationRawFieldValue,
     Object? imagePaths = _sentinel,
@@ -6367,6 +6385,18 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
       "Cannot specify both poi and poiFieldValue",
     );
     assert(
+      poiId == _sentinel || poiIdFieldValue == null,
+      "Cannot specify both poiId and poiIdFieldValue",
+    );
+    assert(
+      poiName == _sentinel || poiNameFieldValue == null,
+      "Cannot specify both poiName and poiNameFieldValue",
+    );
+    assert(
+      poiGroupIds == _sentinel || poiGroupIdsFieldValue == null,
+      "Cannot specify both poiGroupIds and poiGroupIdsFieldValue",
+    );
+    assert(
       locationRaw == _sentinel || locationRawFieldValue == null,
       "Cannot specify both locationRaw and locationRawFieldValue",
     );
@@ -6459,6 +6489,17 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
         _$PlaceHistoryFieldMap['rating']!: ratingFieldValue,
       if (poi != _sentinel) _$PlaceHistoryFieldMap['poi']!: poi as String?,
       if (poiFieldValue != null) _$PlaceHistoryFieldMap['poi']!: poiFieldValue,
+      if (poiId != _sentinel) _$PlaceHistoryFieldMap['poiId']!: poiId as num?,
+      if (poiIdFieldValue != null)
+        _$PlaceHistoryFieldMap['poiId']!: poiIdFieldValue,
+      if (poiName != _sentinel)
+        _$PlaceHistoryFieldMap['poiName']!: poiName as String?,
+      if (poiNameFieldValue != null)
+        _$PlaceHistoryFieldMap['poiName']!: poiNameFieldValue,
+      if (poiGroupIds != _sentinel)
+        _$PlaceHistoryFieldMap['poiGroupIds']!: poiGroupIds as List<String>?,
+      if (poiGroupIdsFieldValue != null)
+        _$PlaceHistoryFieldMap['poiGroupIds']!: poiGroupIdsFieldValue,
       if (locationRaw != _sentinel)
         _$PlaceHistoryFieldMap['locationRaw']!: locationRaw as String?,
       if (locationRawFieldValue != null)
@@ -6518,6 +6559,12 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
     FieldValue? ratingFieldValue,
     Object? poi = _sentinel,
     FieldValue? poiFieldValue,
+    Object? poiId = _sentinel,
+    FieldValue? poiIdFieldValue,
+    Object? poiName = _sentinel,
+    FieldValue? poiNameFieldValue,
+    Object? poiGroupIds = _sentinel,
+    FieldValue? poiGroupIdsFieldValue,
     Object? locationRaw = _sentinel,
     FieldValue? locationRawFieldValue,
     Object? imagePaths = _sentinel,
@@ -6612,6 +6659,18 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
       "Cannot specify both poi and poiFieldValue",
     );
     assert(
+      poiId == _sentinel || poiIdFieldValue == null,
+      "Cannot specify both poiId and poiIdFieldValue",
+    );
+    assert(
+      poiName == _sentinel || poiNameFieldValue == null,
+      "Cannot specify both poiName and poiNameFieldValue",
+    );
+    assert(
+      poiGroupIds == _sentinel || poiGroupIdsFieldValue == null,
+      "Cannot specify both poiGroupIds and poiGroupIdsFieldValue",
+    );
+    assert(
       locationRaw == _sentinel || locationRawFieldValue == null,
       "Cannot specify both locationRaw and locationRawFieldValue",
     );
@@ -6704,6 +6763,17 @@ class _$PlaceHistoryDocumentReference extends FirestoreDocumentReference<
         _$PlaceHistoryFieldMap['rating']!: ratingFieldValue,
       if (poi != _sentinel) _$PlaceHistoryFieldMap['poi']!: poi as String?,
       if (poiFieldValue != null) _$PlaceHistoryFieldMap['poi']!: poiFieldValue,
+      if (poiId != _sentinel) _$PlaceHistoryFieldMap['poiId']!: poiId as num?,
+      if (poiIdFieldValue != null)
+        _$PlaceHistoryFieldMap['poiId']!: poiIdFieldValue,
+      if (poiName != _sentinel)
+        _$PlaceHistoryFieldMap['poiName']!: poiName as String?,
+      if (poiNameFieldValue != null)
+        _$PlaceHistoryFieldMap['poiName']!: poiNameFieldValue,
+      if (poiGroupIds != _sentinel)
+        _$PlaceHistoryFieldMap['poiGroupIds']!: poiGroupIds as List<String>?,
+      if (poiGroupIdsFieldValue != null)
+        _$PlaceHistoryFieldMap['poiGroupIds']!: poiGroupIdsFieldValue,
       if (locationRaw != _sentinel)
         _$PlaceHistoryFieldMap['locationRaw']!: locationRaw as String?,
       if (locationRawFieldValue != null)
@@ -7055,6 +7125,39 @@ abstract class PlaceHistoryQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
+  PlaceHistoryQuery wherePoiId({
+    num? isEqualTo,
+    num? isNotEqualTo,
+    num? isLessThan,
+    num? isLessThanOrEqualTo,
+    num? isGreaterThan,
+    num? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<num?>? whereIn,
+    List<num?>? whereNotIn,
+  });
+  PlaceHistoryQuery wherePoiName({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  PlaceHistoryQuery wherePoiGroupIds({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  });
   PlaceHistoryQuery whereLocationRaw({
     String? isEqualTo,
     String? isNotEqualTo,
@@ -7348,6 +7451,42 @@ abstract class PlaceHistoryQuery
     String? startAfter,
     String? endAt,
     String? endBefore,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  });
+
+  PlaceHistoryQuery orderByPoiId({
+    bool descending = false,
+    num? startAt,
+    num? startAfter,
+    num? endAt,
+    num? endBefore,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  });
+
+  PlaceHistoryQuery orderByPoiName({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  });
+
+  PlaceHistoryQuery orderByPoiGroupIds({
+    bool descending = false,
+    List<String>? startAt,
+    List<String>? startAfter,
+    List<String>? endAt,
+    List<String>? endBefore,
     PlaceHistoryDocumentSnapshot? startAtDocument,
     PlaceHistoryDocumentSnapshot? endAtDocument,
     PlaceHistoryDocumentSnapshot? endBeforeDocument,
@@ -8193,6 +8332,93 @@ class _$PlaceHistoryQuery
         isNull: isNull,
         whereIn: whereIn,
         whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery wherePoiId({
+    num? isEqualTo,
+    num? isNotEqualTo,
+    num? isLessThan,
+    num? isLessThanOrEqualTo,
+    num? isGreaterThan,
+    num? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<num?>? whereIn,
+    List<num?>? whereNotIn,
+  }) {
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PlaceHistoryFieldMap['poiId']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery wherePoiName({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PlaceHistoryFieldMap['poiName']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery wherePoiGroupIds({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  }) {
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PlaceHistoryFieldMap['poiGroupIds']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
       ),
       $queryCursor: $queryCursor,
     );
@@ -9919,6 +10145,223 @@ class _$PlaceHistoryQuery
     );
   }
 
+  PlaceHistoryQuery orderByPoiId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$PlaceHistoryFieldMap['poiId']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery orderByPoiName({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$PlaceHistoryFieldMap['poiName']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  PlaceHistoryQuery orderByPoiGroupIds({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PlaceHistoryDocumentSnapshot? startAtDocument,
+    PlaceHistoryDocumentSnapshot? endAtDocument,
+    PlaceHistoryDocumentSnapshot? endBeforeDocument,
+    PlaceHistoryDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$PlaceHistoryFieldMap['poiGroupIds']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PlaceHistoryQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
   PlaceHistoryQuery orderByLocationRaw({
     bool descending = false,
     Object? startAt = _sentinel,
@@ -10325,6 +10768,11 @@ PlaceHistory _$PlaceHistoryFromJson(Map<String, dynamic> json) => PlaceHistory(
       description: json['description'] as String?,
       rating: json['rating'] as String?,
       poi: json['poi'] as String?,
+      poiId: json['poiId'] as num?,
+      poiName: json['poiName'] as String?,
+      poiGroupIds: (json['poiGroupIds'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       imagePaths: (json['imagePaths'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -10355,6 +10803,9 @@ const _$PlaceHistoryFieldMap = <String, String>{
   'description': 'description',
   'rating': 'rating',
   'poi': 'poi',
+  'poiId': 'poiId',
+  'poiName': 'poiName',
+  'poiGroupIds': 'poiGroupIds',
   'locationRaw': 'locationRaw',
   'imagePaths': 'imagePaths',
 };
@@ -10385,6 +10836,9 @@ Map<String, dynamic> _$PlaceHistoryToJson(PlaceHistory instance) =>
       'description': instance.description,
       'rating': instance.rating,
       'poi': instance.poi,
+      'poiId': instance.poiId,
+      'poiName': instance.poiName,
+      'poiGroupIds': instance.poiGroupIds,
       'locationRaw': instance.locationRaw,
       'imagePaths': instance.imagePaths,
     };

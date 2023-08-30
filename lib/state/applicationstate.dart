@@ -709,8 +709,10 @@ class ApplicationState extends ChangeNotifier {
             developer.log('poiDoc in');
 
             _poiList.add(Poi(poiId: poiDoc.data()['properties']['name'],
+                groupId: poiGroupDoc.id,
                 geometry: poiDoc.data()['geometry'],
                 id: poiDoc.data()['id'],
+                poiRadius: poiDoc.data()['poiRadius']??0,
                 properties: poiDoc.data()['properties'],
                 category: poiDoc.data()['properties']['category_en'],
                 poiclass: poiDoc.data()['properties']['class'],

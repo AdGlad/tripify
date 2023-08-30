@@ -938,6 +938,12 @@ abstract class PoiDocumentReference
     FieldValue nameFieldValue,
     String? type,
     FieldValue typeFieldValue,
+    String? imagePath,
+    FieldValue imagePathFieldValue,
+    num? poiRadius,
+    FieldValue poiRadiusFieldValue,
+    String? groupId,
+    FieldValue groupIdFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -965,6 +971,12 @@ abstract class PoiDocumentReference
     FieldValue nameFieldValue,
     String? type,
     FieldValue typeFieldValue,
+    String? imagePath,
+    FieldValue imagePathFieldValue,
+    num? poiRadius,
+    FieldValue poiRadiusFieldValue,
+    String? groupId,
+    FieldValue groupIdFieldValue,
   });
 }
 
@@ -1022,6 +1034,12 @@ class _$PoiDocumentReference
     FieldValue? nameFieldValue,
     Object? type = _sentinel,
     FieldValue? typeFieldValue,
+    Object? imagePath = _sentinel,
+    FieldValue? imagePathFieldValue,
+    Object? poiRadius = _sentinel,
+    FieldValue? poiRadiusFieldValue,
+    Object? groupId = _sentinel,
+    FieldValue? groupIdFieldValue,
   }) async {
     assert(
       latitude == _sentinel || latitudeFieldValue == null,
@@ -1063,6 +1081,18 @@ class _$PoiDocumentReference
       type == _sentinel || typeFieldValue == null,
       "Cannot specify both type and typeFieldValue",
     );
+    assert(
+      imagePath == _sentinel || imagePathFieldValue == null,
+      "Cannot specify both imagePath and imagePathFieldValue",
+    );
+    assert(
+      poiRadius == _sentinel || poiRadiusFieldValue == null,
+      "Cannot specify both poiRadius and poiRadiusFieldValue",
+    );
+    assert(
+      groupId == _sentinel || groupIdFieldValue == null,
+      "Cannot specify both groupId and groupIdFieldValue",
+    );
     final json = {
       if (latitude != _sentinel)
         _$PoiFieldMap['latitude']!: latitude as double?,
@@ -1096,6 +1126,17 @@ class _$PoiDocumentReference
       if (nameFieldValue != null) _$PoiFieldMap['name']!: nameFieldValue,
       if (type != _sentinel) _$PoiFieldMap['type']!: type as String?,
       if (typeFieldValue != null) _$PoiFieldMap['type']!: typeFieldValue,
+      if (imagePath != _sentinel)
+        _$PoiFieldMap['imagePath']!: imagePath as String?,
+      if (imagePathFieldValue != null)
+        _$PoiFieldMap['imagePath']!: imagePathFieldValue,
+      if (poiRadius != _sentinel)
+        _$PoiFieldMap['poiRadius']!: poiRadius as num?,
+      if (poiRadiusFieldValue != null)
+        _$PoiFieldMap['poiRadius']!: poiRadiusFieldValue,
+      if (groupId != _sentinel) _$PoiFieldMap['groupId']!: groupId as String?,
+      if (groupIdFieldValue != null)
+        _$PoiFieldMap['groupId']!: groupIdFieldValue,
     };
 
     return reference.update(json);
@@ -1123,6 +1164,12 @@ class _$PoiDocumentReference
     FieldValue? nameFieldValue,
     Object? type = _sentinel,
     FieldValue? typeFieldValue,
+    Object? imagePath = _sentinel,
+    FieldValue? imagePathFieldValue,
+    Object? poiRadius = _sentinel,
+    FieldValue? poiRadiusFieldValue,
+    Object? groupId = _sentinel,
+    FieldValue? groupIdFieldValue,
   }) {
     assert(
       latitude == _sentinel || latitudeFieldValue == null,
@@ -1164,6 +1211,18 @@ class _$PoiDocumentReference
       type == _sentinel || typeFieldValue == null,
       "Cannot specify both type and typeFieldValue",
     );
+    assert(
+      imagePath == _sentinel || imagePathFieldValue == null,
+      "Cannot specify both imagePath and imagePathFieldValue",
+    );
+    assert(
+      poiRadius == _sentinel || poiRadiusFieldValue == null,
+      "Cannot specify both poiRadius and poiRadiusFieldValue",
+    );
+    assert(
+      groupId == _sentinel || groupIdFieldValue == null,
+      "Cannot specify both groupId and groupIdFieldValue",
+    );
     final json = {
       if (latitude != _sentinel)
         _$PoiFieldMap['latitude']!: latitude as double?,
@@ -1197,6 +1256,17 @@ class _$PoiDocumentReference
       if (nameFieldValue != null) _$PoiFieldMap['name']!: nameFieldValue,
       if (type != _sentinel) _$PoiFieldMap['type']!: type as String?,
       if (typeFieldValue != null) _$PoiFieldMap['type']!: typeFieldValue,
+      if (imagePath != _sentinel)
+        _$PoiFieldMap['imagePath']!: imagePath as String?,
+      if (imagePathFieldValue != null)
+        _$PoiFieldMap['imagePath']!: imagePathFieldValue,
+      if (poiRadius != _sentinel)
+        _$PoiFieldMap['poiRadius']!: poiRadius as num?,
+      if (poiRadiusFieldValue != null)
+        _$PoiFieldMap['poiRadius']!: poiRadiusFieldValue,
+      if (groupId != _sentinel) _$PoiFieldMap['groupId']!: groupId as String?,
+      if (groupIdFieldValue != null)
+        _$PoiFieldMap['groupId']!: groupIdFieldValue,
     };
 
     transaction.update(reference, json);
@@ -1407,6 +1477,39 @@ abstract class PoiQuery implements QueryReference<Poi, PoiQuerySnapshot> {
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
+  PoiQuery whereImagePath({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  PoiQuery wherePoiRadius({
+    num? isEqualTo,
+    num? isNotEqualTo,
+    num? isLessThan,
+    num? isLessThanOrEqualTo,
+    num? isGreaterThan,
+    num? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<num?>? whereIn,
+    List<num?>? whereNotIn,
+  });
+  PoiQuery whereGroupId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
 
   PoiQuery orderByDocumentId({
     bool descending = false,
@@ -1529,6 +1632,42 @@ abstract class PoiQuery implements QueryReference<Poi, PoiQuerySnapshot> {
   });
 
   PoiQuery orderByType({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    PoiDocumentSnapshot? startAtDocument,
+    PoiDocumentSnapshot? endAtDocument,
+    PoiDocumentSnapshot? endBeforeDocument,
+    PoiDocumentSnapshot? startAfterDocument,
+  });
+
+  PoiQuery orderByImagePath({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    PoiDocumentSnapshot? startAtDocument,
+    PoiDocumentSnapshot? endAtDocument,
+    PoiDocumentSnapshot? endBeforeDocument,
+    PoiDocumentSnapshot? startAfterDocument,
+  });
+
+  PoiQuery orderByPoiRadius({
+    bool descending = false,
+    num? startAt,
+    num? startAfter,
+    num? endAt,
+    num? endBefore,
+    PoiDocumentSnapshot? startAtDocument,
+    PoiDocumentSnapshot? endAtDocument,
+    PoiDocumentSnapshot? endBeforeDocument,
+    PoiDocumentSnapshot? startAfterDocument,
+  });
+
+  PoiQuery orderByGroupId({
     bool descending = false,
     String? startAt,
     String? startAfter,
@@ -1993,6 +2132,93 @@ class _$PoiQuery extends QueryReference<Poi, PoiQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$PoiFieldMap['type']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PoiQuery whereImagePath({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$PoiQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PoiFieldMap['imagePath']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PoiQuery wherePoiRadius({
+    num? isEqualTo,
+    num? isNotEqualTo,
+    num? isLessThan,
+    num? isLessThanOrEqualTo,
+    num? isGreaterThan,
+    num? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<num?>? whereIn,
+    List<num?>? whereNotIn,
+  }) {
+    return _$PoiQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PoiFieldMap['poiRadius']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  PoiQuery whereGroupId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$PoiQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$PoiFieldMap['groupId']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -2799,6 +3025,222 @@ class _$PoiQuery extends QueryReference<Poi, PoiQuerySnapshot>
     );
   }
 
+  PoiQuery orderByImagePath({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PoiDocumentSnapshot? startAtDocument,
+    PoiDocumentSnapshot? endAtDocument,
+    PoiDocumentSnapshot? endBeforeDocument,
+    PoiDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$PoiFieldMap['imagePath']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PoiQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  PoiQuery orderByPoiRadius({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PoiDocumentSnapshot? startAtDocument,
+    PoiDocumentSnapshot? endAtDocument,
+    PoiDocumentSnapshot? endBeforeDocument,
+    PoiDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$PoiFieldMap['poiRadius']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PoiQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  PoiQuery orderByGroupId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    PoiDocumentSnapshot? startAtDocument,
+    PoiDocumentSnapshot? endAtDocument,
+    PoiDocumentSnapshot? endBeforeDocument,
+    PoiDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$PoiFieldMap['groupId']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$PoiQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
   @override
   bool operator ==(Object other) {
     return other is _$PoiQuery &&
@@ -2925,6 +3367,9 @@ Poi _$PoiFromJson(Map<String, dynamic> json) => Poi(
       maki: json['maki'] as String?,
       name: json['name'] as String?,
       type: json['type'] as String?,
+      imagePath: json['imagePath'] as String?,
+      poiRadius: json['poiRadius'] as num?,
+      groupId: json['groupId'] as String?,
     );
 
 const _$PoiFieldMap = <String, String>{
@@ -2941,6 +3386,9 @@ const _$PoiFieldMap = <String, String>{
   'maki': 'maki',
   'name': 'name',
   'type': 'type',
+  'imagePath': 'imagePath',
+  'poiRadius': 'poiRadius',
+  'groupId': 'groupId',
 };
 
 Map<String, dynamic> _$PoiToJson(Poi instance) => <String, dynamic>{
@@ -2957,4 +3405,7 @@ Map<String, dynamic> _$PoiToJson(Poi instance) => <String, dynamic>{
       'maki': instance.maki,
       'name': instance.name,
       'type': instance.type,
+      'imagePath': instance.imagePath,
+      'poiRadius': instance.poiRadius,
+      'groupId': instance.groupId,
     };
