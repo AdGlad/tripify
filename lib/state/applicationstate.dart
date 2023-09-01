@@ -555,6 +555,9 @@ class ApplicationState extends ChangeNotifier {
             DateTime.fromMillisecondsSinceEpoch(timeInMillis);
         developer.log('listenForCurrrentPlace In For loop ');
 
+        final List<dynamic> poiGroupIdList =
+            document.data()['poiGroupIds'] ?? <dynamic>[];
+        final List<String> poiGroupIds = poiGroupIdList.cast<String>().toList();
         final List<dynamic> imagePathList =
             document.data()['imagePaths'] ?? <dynamic>[];
         final List<String> imagePath = imagePathList.cast<String>().toList();
@@ -577,6 +580,10 @@ class ApplicationState extends ChangeNotifier {
             description: document.data()['description'] as String?,
             rating: document.data()['rating'] as String?,
             poi: document.data()['poi'] as String?,
+            poiId: document.data()['poiId'] as num?,
+            poiName: document.data()['poiName'] as String?,
+            poiGroupIds: poiGroupIds,
+
             //imagePaths: document.data()['imagePaths'] as List<String>?,
             imagePaths: imagePath,
             arrivaldate: currentArrivaldate);

@@ -161,16 +161,16 @@ Future saveLocation(
     // _longitude = 2.3522219;
 
     // Empire State Builder _latitude = 40.74844162658724 _longitude = -73.98565918207169
-     //_latitude = 40.74844162658724 ;
-     //_longitude = -73.98565918207169;
+    //_latitude = 40.74844162658724 ;
+    //_longitude = -73.98565918207169;
     // London Eye _latitude =51.50318735304264 _longitude = -0.11944598989508606
 
     // Trafalgar Square _latitude = 51.50798872115172 _longitude = -0.12802451848983765
 
     // The Little Mermaid in Copenhagen, Denmark _latitude = 55.69289152978713 _longitude = 12.599126876148214
 
-     _latitude = 48.85845474720703; // eiffel tower
-    _longitude = 2.294502761972394;
+    //_latitude = 48.85845474720703; // eiffel tower
+    //_longitude = 2.294502761972394;
     // Empire State Building longitude= -73.9857; latitude = 40.7484
     //_latitude = 1.290270; // Singapore Airport
     //_longitude = 103.851959;
@@ -352,8 +352,8 @@ Future saveLocation(
           await saveImagesToFirestore(batch, placehistoryDocRef);
       developer.log('saveImagesToFirestore done ');
 
-      void _check_poi =
-          await check_poi(batch, newPlace, placehistoryDocRef, poiList);
+      void _check_poi = await check_poi(
+          context, batch, newPlace, placehistoryDocRef, poiList);
 
       await _incrementStreak(batch, _newCountryCount, _newCountryCode,
           newVisitNumber, distanceInMeters, value);
@@ -574,19 +574,21 @@ void _showShareDialog(BuildContext context, PlaceHistory placeHistory) {
           child: Consumer<ApplicationState>(
               builder: (context, appState, _) => AlertDialog(
                     title: Text(
-                        style: TextStyle(fontSize: 12), 'Location Details'),
+                        style: TextStyle(fontSize: 12),
+                        appState.currentPlace!.poiGroupIds![0]),
                     content: Column(
                       children: [
                         Text(
+                            // appState.currentPlace!.poiName!,
                             style: TextStyle(fontSize: 12),
-                            placeHistory.streetAddress!),
-                        Text(
-                            style: TextStyle(fontSize: 12),
+
+                            //  placeHistory.streetAddress!),
+                            //  style: TextStyle(fontSize: 12),
 
                             //  'Region: ${appState.currentPlace?.region} \n Country: ${CountryFlag(appState.currentPlace!.location!)}   ${CountryFlag(appState.currentPlace!.countryCode!)}'),
 
                             //    'Do you want to share your streak of $_currentStreak days?'),
-                            'Share location with friends?'),
+                            'Woo Hoo! Share with friends?'),
                       ],
                     ),
                     //    'Share location with friends? ${appState.currentPlace?.location} ?'),
@@ -616,7 +618,8 @@ void _showShareDialog(BuildContext context, PlaceHistory placeHistory) {
                                 //  'Tripify: I have a $_currentStreak day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
                                 // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
                                 // 'Tripify: I have a ${appState.userProfile?.currentstreak} day streak! \n Travelled ${appState.userTotals.DistanceTotal} Kms\n visited ${appState.userTotals.CountryCount} countries \n $flags',
-                                'Tripify: Hi, I am visiting ${appState.currentPlace?.region} in ${appState.currentPlace?.name} ${CountryFlag(appState.currentPlace!.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
+                                // 'Tripify: Hi, I am visiting ${appState.currentPlace?.region} in ${appState.currentPlace?.name} ${CountryFlag(appState.currentPlace!.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
+                                'Tripify: Hi, I am visiting ${appState.currentPlace?.poiName} in ${appState.currentPlace?.name} ${CountryFlag(appState.currentPlace!.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
                             chooserTitle: 'Share on social media',
                           );
                           // TODO: Implement share functionality
@@ -889,7 +892,7 @@ Future<Reference> saveImageToCloudStorage(XFile imageFile) async {
   return storageReference;
 }
 
-Future<void> saveImagesToFirestore(  
+Future<void> saveImagesToFirestore(
     WriteBatch batch, DocumentReference<Object?> placeHistoryId) async {
   developer.log('saveImagesToFirestore');
 
@@ -920,63 +923,95 @@ Future<void> saveImagesToFirestore(
   });
 }
 
-Future<void>? check_poi(WriteBatch batch, PlaceHistory newPlace,
-    DocumentReference<Object?> placeHistoryId, List<Poi> poiList) async {
-    developer.log('In check_poi');
-final userdocRef = FirebaseFirestore.instance
+Future<void>? check_poi(
+    BuildContext context,
+    WriteBatch batch,
+    PlaceHistory newPlace,
+    DocumentReference<Object?> placeHistoryId,
+    List<Poi> poiList) async {
+  developer.log('In check_poi');
+  final userdocRef = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid);
-final docSnapshot = await userdocRef.get();
+  final docSnapshot = await userdocRef.get();
   //For loop for each appState.poiList
   for (Poi poi in poiList) {
     developer.log('In poiList for loop for ${poi.name}');
 
-        double distanceInMeters = Geolocator.distanceBetween(
-            newPlace.latitude ?? 0.0,
-            newPlace.longitude ?? 0.0,
-            poi.latitude!,
-            poi.longitude!);
+    double distanceInMeters = Geolocator.distanceBetween(
+        newPlace.latitude ?? 0.0,
+        newPlace.longitude ?? 0.0,
+        poi.latitude!,
+        poi.longitude!);
 
     // Compare distance between two lat long points
-    if (distanceInMeters <= (poi.poiRadius??1000.toDouble())) {
+    if (distanceInMeters <= (poi.poiRadius ?? 1000.toDouble())) {
       // Match
-      developer.log('Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius??1000}');
+      developer.log(
+          'Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius ?? 1000}');
+
+      controllerConfettiGold.play();
+      playsound();
 
       batch.update(placeHistoryId, {
         'poiId': poi.id,
         'poiName': poi.name,
-        'poiGroupIds': FieldValue.arrayUnion(
-            [poi.groupId!]),
+        'poiGroupIds': FieldValue.arrayUnion([poi.groupId!]),
       });
 
- if (docSnapshot.exists) {
-    developer.log('docSnapshot exists}');
-    Map<String, dynamic> poiMap = {
-        "id": poi.id,
-         "poiId": poi.poiId,
-        "name": poi.name,
-        "category": poi.category,
-        "maki": poi.maki,
-        "groupId": poi.groupId
-    };
 
-    batch.update(
-      userdocRef,
-      { "poi": FieldValue.arrayUnion(
-          [poiMap]),
-      },
-    );
- }
+final snackBar =  SnackBar(
+  duration: Duration(seconds: 10),
+  backgroundColor: Color.fromARGB(255, 4, 153, 233),
+              content: Text(
+                  style: TextStyle(fontSize: 20),
+                  'Woo Hoo. Bucket List Location!  ${poi.groupId ?? 'poiGroupId'}. Share with friends?'),
+              action: SnackBarAction(
+                label: 'SHARE',
+                onPressed: () {
+                  FlutterShare.share(
+                    //  title: 'My Streak',
+                    title: 'My Location',
+                    text:
+                        'Tripify: Hi, I am visiting ${poi.name} in ${newPlace.city} ${CountryFlag(newPlace.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
+                    chooserTitle: 'Share on social media',
+                  );
+                  Navigator.of(context).pop();
+                },
+              )
+              //],
+              );
 
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
+     // _showShareTopLocation(
+    //      context, newPlace, poi.name, poi.category, poi.groupId);
 
+      if (docSnapshot.exists) {
+        developer.log('docSnapshot exists}');
+        Map<String, dynamic> poiMap = {
+          "id": poi.id,
+          "poiId": poi.poiId,
+          "name": poi.name,
+          "category": poi.category,
+          "maki": poi.maki,
+          "groupId": poi.groupId
+        };
 
+        batch.update(
+          userdocRef,
+          {
+            "poi": FieldValue.arrayUnion([poiMap]),
+          },
+        );
+      }
     } else {
       // No Match
-      developer.log('No Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius??1000}');
+      developer.log(
+          'No Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius ?? 1000}');
     }
-
-
-
+  }
 }
-}
+
+
+ 

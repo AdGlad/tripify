@@ -31,7 +31,9 @@ class CheckCountry extends StatefulWidget {
   @override
   State<CheckCountry> createState() => _CheckCountryState();
 }
-  late ConfettiController controllerConfetti;
+
+late ConfettiController controllerConfetti;
+late ConfettiController controllerConfettiGold;
 
 class _CheckCountryState extends State<CheckCountry> {
   @override
@@ -45,7 +47,7 @@ class _CheckCountryState extends State<CheckCountry> {
     });
 
     getLocation();
-    
+
     BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       request: AdRequest(),
@@ -75,12 +77,15 @@ class _CheckCountryState extends State<CheckCountry> {
   void initController() {
     controllerConfetti =
         ConfettiController(duration: const Duration(seconds: 3));
+    controllerConfettiGold =
+        ConfettiController(duration: const Duration(seconds: 3));
   }
 
   @override
   void dispose() {
     // dispose the controller
     controllerConfetti.dispose();
+    controllerConfettiGold.dispose();
     super.dispose();
     _bannerAd?.dispose();
   }
@@ -90,9 +95,6 @@ class _CheckCountryState extends State<CheckCountry> {
   LocationData? newPlace;
   Location _location = Location();
   LatLng? _newLatLng;
-  
-  
-
 
   void getLocation() async {
     try {
@@ -106,10 +108,8 @@ class _CheckCountryState extends State<CheckCountry> {
     }
   }
 
- 
   BannerAd? _bannerAd;
 
-  
   Future<void> shareFile() async {
     final result = await FilePicker.platform.pickFiles();
     if (result == null || result.files.isEmpty) return null;
@@ -144,19 +144,17 @@ class _CheckCountryState extends State<CheckCountry> {
   @override
   Widget build(BuildContext context) {
     return Container(
-            //  color: Color.fromARGB(255, 49, 52, 59),
+      //  color: Color.fromARGB(255, 49, 52, 59),
 
       child: Consumer<ApplicationState>(
         builder: (context, appState, _) => Center(
           child: Stack(
-                     
-
             children: <Widget>[
               Center(
-                
                 child: Column(
-                  children: [ 
-                    Expanded(flex: 2,
+                  children: [
+                    Expanded(
+                      flex: 2,
                       child: Container(
                         child: (_bannerAd != null)
                             ? Align(
@@ -170,34 +168,88 @@ class _CheckCountryState extends State<CheckCountry> {
                             : Text('No Ad'),
                       ),
                     ),
-                    Expanded(flex: 1,  child: UserStreakContainer(context, appState.userProfile)),
-                    Expanded( flex: 2,child: UserCntryContainer(context, appState.userProfile, appState)),
-                   Expanded(flex: 12,child:  (appState.userProfile != null && appState.userProfile?.latestlatitude !=null) ?  UserMapContainer(context, appState.userProfile) : Container()),
-                   Expanded(flex: 2,child: UserLocationContainer( context, appState?.userProfile , appState )),
-                    Expanded(flex: 2,child: CheckInContainer(context: context, appState: appState , user: appState.userProfile)),
-                          // Spacer(),
-                     Container(
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: 
-                        
-                        ConfettiWidget(
-                          confettiController: controllerConfetti,
-                          blastDirectionality: BlastDirectionality.explosive,
-                          createParticlePath: drawStar,
-                          blastDirection: -pi / 2,
-                          maxBlastForce: 30,
-                          minBlastForce: 10,
-                          emissionFrequency: 0.03,
-                          numberOfParticles: 50,
-                          gravity: 0.1,
-                        ),
-                        
-                      ),
-                     )
+                    Expanded(
+                        flex: 1,
+                        child:
+                            UserStreakContainer(context, appState.userProfile)),
+                    Expanded(
+                        flex: 2,
+                        child: UserCntryContainer(
+                            context, appState.userProfile, appState)),
+                    Expanded(
+                        flex: 12,
+                        child: (appState.userProfile != null &&
+                                appState.userProfile?.latestlatitude != null)
+                            ? UserMapContainer(context, appState.userProfile)
+                            : Container()),
+                    Expanded(
+                        flex: 2,
+                        child: UserLocationContainer(
+                            context, appState?.userProfile, appState)),
+                    Expanded(
+                        flex: 2,
+                        child: CheckInContainer(
+                            context: context,
+                            appState: appState,
+                            user: appState.userProfile)),
+                    // Spacer(),
+                    //  Container(
+                    //   child: Align(
+                    //     alignment: Alignment.topCenter,
+                    //     child:
+
+                    //     ConfettiWidget(
+                    //       confettiController: controllerConfetti,
+                    //       blastDirectionality: BlastDirectionality.explosive,
+                    //       createParticlePath: drawStar,
+                    //       blastDirection: -pi / 2,
+                    //       maxBlastForce: 30,
+                    //       minBlastForce: 10,
+                    //       emissionFrequency: 0.03,
+                    //       numberOfParticles: 50,
+                    //       gravity: 0.1,
+                    //     ),
+
+                    //   ),
+                    //  )
                   ], // here
                 ),
-              ), //Listview
+              ),
+              Container(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: ConfettiWidget(
+                    confettiController: controllerConfetti,
+                    blastDirectionality: BlastDirectionality.explosive,
+                    createParticlePath: drawStar,
+                    blastDirection: -pi / 2,
+                    maxBlastForce: 30,
+                    minBlastForce: 10,
+                    emissionFrequency: 0.03,
+                    numberOfParticles: 50,
+                    gravity: 0.1,
+                  ),
+                ),
+              ), 
+              Container(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: ConfettiWidget(
+                    confettiController: controllerConfettiGold,
+                    blastDirectionality: BlastDirectionality.explosive,
+                    createParticlePath: drawStar,
+                    blastDirection: -pi / 2,
+                    maxBlastForce: 30,
+                    minBlastForce: 10,
+                    emissionFrequency: 0.03,
+                    numberOfParticles: 500,
+                    gravity: 0.1,
+                   // colors: [Colors.yellow,const Color.fromARGB(255, 245, 140, 4),Color.fromARGB(255, 218, 194, 8)] // Confetti colors (gold)
+                    colors: [Color.fromARGB(255, 218, 194, 8)] // Confetti colors (gold)
+
+                  ),
+                ),
+              ), ///Listview
             ],
           ), //stack
         ),
