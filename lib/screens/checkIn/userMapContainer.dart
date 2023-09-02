@@ -32,17 +32,17 @@ Container UserMapContainer(BuildContext context, UserProfile? user
         //  url: "mapbox://mapbox.mapbox-streets_v8",
         ));
 
-    controller.addLayer(
-        sourceId,
-        layerId,
-        FillLayerProperties(
-          fillColor: '#F96167', //Coral #F96167
-          fillOpacity: 0.2,
-        ),
-        sourceLayer: "country_boundaries",
-       // sourceLayer: "poi_label",
-        // filter: _filter
-       filter: _filter);
+    // controller.addLayer(
+    //     sourceId,
+    //     layerId,
+    //     FillLayerProperties(
+    //       fillColor: '#F96167', //Coral #F96167
+    //       fillOpacity: 0.2,
+    //     ),
+    //     sourceLayer: "country_boundaries",
+    //    // sourceLayer: "poi_label",
+    //     // filter: _filter
+    //    filter: _filter);
 
     Future<Uint8List> loadMarkerImage() async {
       var byteData = await rootBundle.load("assets/Quokka-PNG-Pic.png");

@@ -23,8 +23,8 @@ Container UserLocationContainer(
       child: Card(
         color: Color.fromARGB(255, 49, 52, 59),
         elevation: 8.0,
-        margin: EdgeInsets.all(2.0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: EdgeInsets.all(1.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         child: Container(
           alignment: Alignment.topLeft,
           child: Row(
@@ -41,43 +41,49 @@ Container UserLocationContainer(
               //     : Text('', style: TextStyle(fontSize: 10)),
               //   ),
               Expanded(
-                child: FittedBox(
-                  child: Column(
+                child: 
+                FittedBox(
+                  child: 
+                  Column(
                     children: [
                       Container(
                         margin: EdgeInsets.all(5.0),
                         child: Row(
                           children: [
-                            (appState?.currentPlace != null)
-                                ? Text(appState?.currentPlace?.countryName??'countryName',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w700,
-                                    ))
-                                : Text('', style: TextStyle(fontSize: 20)),
-                            Text(': ', style: TextStyle(fontSize: 20)),
-                            (appState?.currentPlace != null)
-                                ? Text(appState?.currentPlace?.region??'Region',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w700,
-                                    ))
-                                : Text('', style: TextStyle(fontSize: 20)),
+                            // (appState?.currentPlace != null)
+                            //     ? 
+                                // Text(appState?.currentPlace?.countryName??'countryName',
+                                //     textAlign: TextAlign.left,
+                                //     style: TextStyle(
+                                //       color: Colors.white,
+                                //       fontSize: 20.0,
+                                //       fontWeight: FontWeight.w700,
+                                //     ))
+                                // : Text('', style: TextStyle(fontSize: 20)),
+                            // Text(': ', style: TextStyle(fontSize: 20)),
+                            // (appState?.currentPlace != null)
+                            //     ? Text(appState?.currentPlace?.region??'Region',
+                            //         textAlign: TextAlign.left,
+                            //         style: TextStyle(
+                            //           color: Colors.white,
+                            //           fontSize: 20.0,
+                            //           fontWeight: FontWeight.w700,
+                            //         ))
+                            //     : Text('', style: TextStyle(fontSize: 20)),
                           ],
                         ),
                       ),
                       (appState?.currentPlace != null)
-                          ? Text(appState?.currentPlace?.streetAddress??'streetAddress',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w700,
-                              ))
+                          ? Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text(appState?.currentPlace?.streetAddress??'streetAddress',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w700,
+                                )),
+                          )
                           : Text('', style: TextStyle(fontSize: 20)),
                     ],
                   ),

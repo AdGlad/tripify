@@ -177,17 +177,18 @@ class _CheckCountryState extends State<CheckCountry> {
                         child: UserCntryContainer(
                             context, appState.userProfile, appState)),
                     Expanded(
+                        flex: 2,
+                        child: UserLocationContainer(
+                            context, appState?.userProfile, appState)),
+                    Expanded(
                         flex: 12,
                         child: (appState.userProfile != null &&
                                 appState.userProfile?.latestlatitude != null)
                             ? UserMapContainer(context, appState.userProfile)
                             : Container()),
+
                     Expanded(
-                        flex: 2,
-                        child: UserLocationContainer(
-                            context, appState?.userProfile, appState)),
-                    Expanded(
-                        flex: 2,
+                        flex: 4,
                         child: CheckInContainer(
                             context: context,
                             appState: appState,

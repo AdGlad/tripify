@@ -14,7 +14,7 @@ Container UserStreakContainer(BuildContext context, UserProfile? user   )
                             borderRadius: BorderRadius.circular(10)),
                         child: Center(
                           child: Padding(
-                            padding: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.all(1.0),
                             child: FittedBox(
                               fit: BoxFit.fill,
 
