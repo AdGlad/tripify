@@ -43,14 +43,15 @@ Container UserCntryContainer(
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   reverse: false,
-                  itemCount: (appState.userProfile?.countryvisitlist?.length)??0,
+                //  itemCount: (appState.userProfile?.countryvisitlist?.length)??0,
+                itemCount: (appState.userProfile?.countrycodelist?.length)??0,
                   itemBuilder: (BuildContext context, int index) {
                     return FittedBox(
                       fit: BoxFit.fill,
                       //                    fit: BoxFit.scaleDown,
 
                       child: Text(
-                        CountryFlag(appState.userProfile?.countryvisitlist![index].substring(0,2)??'au'),
+                        CountryFlag(appState.userProfile?.countrycodelist![index].substring(0,2)??'au'),
                         style: TextStyle(fontSize: 25),
                       ),
                     );
