@@ -11,6 +11,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../src/firebaseImage.dart';
+import 'country/ActiveCountryPage.dart';
 
 class PlaceHistoryListPage extends StatefulWidget {
   final String countrycode;
@@ -140,182 +141,145 @@ Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
     child: Column(
       children: [
         Container(
+          alignment: Alignment.topCenter,
           margin: EdgeInsets.all(2),
           child: Column(
-            // verticalDirection: VerticalDirection.up,
-            //  mainAxisAlignment: MainAxisAlignment.center,
-            // alignment: Alignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                currentPlaceHistory.region!,
+              Text( CountryFlag(currentPlaceHistory.countryCode!)+
+                currentPlaceHistory.region! + ' ' +currentPlaceHistory.city!,
                 style: TextStyle(
                   color: Color.fromARGB(255, 26, 173, 182),
                   fontSize: 15.0,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Text(currentPlaceHistory.city!,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w700,
-                  )),
+               Text(currentPlaceHistory.poi!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w700,
+                          )),
 
-              // Padding(
-              //     padding: EdgeInsets.all(16.0),
-              //     child: Text(
-              //       CountryFlag(country.countryCode),
-              //       style: TextStyle(fontSize: 50),
-              //     )
-              //     //  Image.network(
-              //     //   image,
-              //     //   height: MediaQuery.of(context).size.width * (3 / 4),
-              //     //   width: MediaQuery.of(context).size.width,
-              //     // ),
+Text(
+                          currentPlaceHistory.arrivaldate != null
+                              ?
+                               //'Arrival Date: ' +
+                
+                                  (DateFormat('dd MMMM yyyy hh:mm a ')
+                                      .format(currentPlaceHistory.arrivaldate!))
+                              : 'No arrival date',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w700,
+                          )),
 
               //     ),
-              Container(
+              (currentPlaceHistory!.imagePaths!.length > 0) ? Container(
                 margin: EdgeInsets.all(5),
-                child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
+                child:  Stack(
+                   //     alignment: Alignment.center,
                   children: [
-                    Text(currentPlaceHistory.streetAddress!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w700,
-                        )),
+                                      Container(
+                        height: 200,
+                        child:
+                            //                        ListView.builder(
+                            //   itemCount: currentPlaceHistory.imagePaths?.length,
+                            //   itemBuilder: (context, index) {
+                            //     return FutureBuilder(
+                            //       future: _storageReference.child(currentPlaceHistory.imagePaths![index]).getDownloadURL(),
+                            //       builder: (context, snapshot) {
+                            //         if (snapshot.connectionState == ConnectionState.waiting) {
+                            //           return CircularProgressIndicator();
+                            //         } else if (snapshot.hasError) {
+                            //           return Text('Error: ${snapshot.error}');
+                            //         } else if (snapshot.hasData) {
+                            //           String imageUrl = snapshot.data.toString();
+                            //           return ListTile(
+                            //             title: Text('Image ${index + 1}'),
+                            //             leading: Image.network(imageUrl),
+                            //           );
+                            //         } else {
+                            //           return Text('No image available.');
+                            //         }
+                            //       },
+                            //     );
+                            //   },
+                            // ),
+                            // ListView.builder(
+                            //     scrollDirection: Axis.horizontal,
+                            //     itemCount: currentPlaceHistory.imagePaths?.length,
+                            //     itemBuilder: (context, index) {
+                            //       return Padding(
+                            //         padding: EdgeInsets.all(8.0),
+                            //         child:
+                            //         currentPlaceHistory.imagePaths?[index] != null ?
+                            //         Image.file(File(currentPlaceHistory.imagePaths![index]))
+                            //              : Text(' '),
+                            //       );
+                            //     }),
+                            ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: currentPlaceHistory.imagePaths?.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    height: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: currentPlaceHistory
+                                                  .imagePaths?[index] !=
+                                              null
+                                          ? FirebaseImage(
+                                              storagePath: currentPlaceHistory
+                                                  .imagePaths![index])
+                                          : Text(' '),
+                                    ),
+                                  );
+                                }),
+                      ),
+                    Column(
+                    //crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Text(currentPlaceHistory.streetAddress!,
+                      //     textAlign: TextAlign.center,
+                      //     style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: 15.0,
+                      //       fontWeight: FontWeight.w700,
+                      //     )),
+                
+                      // Text(
+                      //     currentPlaceHistory.arrivaldate != null
+                      //         ?
+                      //          //'Arrival Date: ' +
+                
+                      //             (DateFormat('dd MMMM yyyy hh:mm a ')
+                      //                 .format(currentPlaceHistory.arrivaldate!))
+                      //         : 'No arrival date',
+                      //     textAlign: TextAlign.center,
+                      //     style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: 15.0,
+                      //       fontWeight: FontWeight.w700,
+                      //     )),
 
-                    Text(
-                        currentPlaceHistory.arrivaldate != null
-                            ? 'Arrival Date: ' +
-                                (DateFormat('hh:mm a dd MMM yy')
-                                    .format(currentPlaceHistory.arrivaldate!))
-                            : 'No arrival date',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w700,
-                        )),
-                    // Center Row in middle
-                    Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center, // Center row horizontally
-                      children: [
-                        Text('Visit No. : ${currentPlaceHistory.visitnumber}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w700,
-                            )),
-                        Text(
-                            currentPlaceHistory.distance != null
-                                ? '  Distance: ${currentPlaceHistory.distance!.toStringAsFixed(0)}}'
-                                : 'no distance',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w700,
-                            )),
-                      ],
-                    ),
+                                          ],
+                  ),
 
-                    Row(
-                                  mainAxisAlignment: MainAxisAlignment.center, // Center row horizontally
-
-                      children: [
-                        Text('Lat : ${currentPlaceHistory.latitude!.toStringAsFixed(4)}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w700,
-                            )),
-                                               Text('  Lng : ${currentPlaceHistory.longitude!.toStringAsFixed(4)}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w700,
-                        )),
-                      ],
-                    ),
- 
-                    Text(
-                        currentPlaceHistory.description != null
-                            ? 'Diary : ${currentPlaceHistory.description}'
-                            : 'Diary : ',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w700,
-                        )),
-                    Container(
-                      height: 100,
-                      child:
-                          //                        ListView.builder(
-                          //   itemCount: currentPlaceHistory.imagePaths?.length,
-                          //   itemBuilder: (context, index) {
-                          //     return FutureBuilder(
-                          //       future: _storageReference.child(currentPlaceHistory.imagePaths![index]).getDownloadURL(),
-                          //       builder: (context, snapshot) {
-                          //         if (snapshot.connectionState == ConnectionState.waiting) {
-                          //           return CircularProgressIndicator();
-                          //         } else if (snapshot.hasError) {
-                          //           return Text('Error: ${snapshot.error}');
-                          //         } else if (snapshot.hasData) {
-                          //           String imageUrl = snapshot.data.toString();
-                          //           return ListTile(
-                          //             title: Text('Image ${index + 1}'),
-                          //             leading: Image.network(imageUrl),
-                          //           );
-                          //         } else {
-                          //           return Text('No image available.');
-                          //         }
-                          //       },
-                          //     );
-                          //   },
-                          // ),
-                          // ListView.builder(
-                          //     scrollDirection: Axis.horizontal,
-                          //     itemCount: currentPlaceHistory.imagePaths?.length,
-                          //     itemBuilder: (context, index) {
-                          //       return Padding(
-                          //         padding: EdgeInsets.all(8.0),
-                          //         child:
-                          //         currentPlaceHistory.imagePaths?[index] != null ?
-                          //         Image.file(File(currentPlaceHistory.imagePaths![index]))
-                          //              : Text(' '),
-                          //       );
-                          //     }),
-                          ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: currentPlaceHistory.imagePaths?.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  height: 100,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: currentPlaceHistory
-                                                .imagePaths?[index] !=
-                                            null
-                                        ? FirebaseImage(
-                                            storagePath: currentPlaceHistory
-                                                .imagePaths![index])
-                                        : Text(' '),
-                                  ),
-                                );
-                              }),
-                    )
-                  ],
+                  ]
                 ),
-              )
+              ): Text(''),
+                                    Text( ' ${currentPlaceHistory.description}'
+                            ,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w700,
+                          )),
             ],
           ),
         ),
