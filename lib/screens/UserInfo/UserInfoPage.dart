@@ -1,15 +1,25 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gtk_flutter/screens/UserInfo/UserStatsContainer.dart';
 import 'package:gtk_flutter/screens/findfriendpage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 //import 'package:toggle_switch/toggle_switch.dart';
 import '../../src/acceptfriendrequests.dart';
+import '../../src/firebaseImage.dart';
 import '../poiToVisitList.dart';
 import 'listfriends.dart';
 import '../../state/applicationstate.dart';
+import 'dart:developer' as developer;
 
+
+String? _avatar ;
+File? _avatarFile;
 //import 'package:firebase_storage/firebase_storage.dart';
 Widget buildCard(
     int? amount, String unitofmeasure, IconData icon, String description) {
@@ -130,6 +140,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
         // set({
         // 'userId': FirebaseAuth.instance.currentUser!.uid,
         'nickname': _nicknameController.text.toLowerCase(),
+        'avatar': _avatar,
         //   'email': _email,
         // 'age': int.parse(_ageController.text),
         //   'friend': _friendable,
@@ -158,15 +169,29 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 padding: EdgeInsets.all(5),
                 children: [
                   Center(
-                    child: CircleAvatar(
-                      radius: 40.0,
-                      backgroundImage: _avatar == null
-                          ? null //FileImage(_imageFile)
-                          : _avatar != null
-                              ? NetworkImage(_avatar!)
-                              : null,
+                    child: GestureDetector(
+                      onTap: () async {
+                        // Add your onTap logic here
+                        print('CircleAvatar tapped!');
+                         XFile?  avatarXFile= await selectAndSaveImages(ImageSource.gallery);
+                         Reference imagePath = await saveImageToCloudStorage(avatarXFile!);
+                         _avatar = imagePath.fullPath;
+                         _avatarFile = await getImageFile(_avatar!);
+
+                        developer.log(' imageFile is not null ${imagePath.fullPath}   ');
+                        _saveUserInfo();
+                      },
+                      child: 
+                         //   FirebaseImage(storagePath: appState.userProfile!.avatar!),
+                         CircleAvatar(
+                          radius: 40.0,
+
+                    backgroundImage:  FileImage(_avatarFile!)
+                    //   backgroundImage:  (FirebaseImage(storagePath: appState.userProfile!.avatar!) as ImageProvider),
+                         )
                     ),
                   ),
+
                   SizedBox(height: 16.0),
                   TextFormField(
                     // onChanged: ,
@@ -393,7 +418,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                         //   Navigator.pushNamed(context, 'findfriends');
                         //  Navigator.push(context, '/findfriends');
                       },
-                      child: Text('Bucket List '),
+                      child: Text('Top Locations'),
                     ),
                   ),
                   // Container(
@@ -588,3 +613,63 @@ class _UserInfoPageState extends State<UserInfoPage> {
 //   // }
 
 // }
+
+Future<XFile?> selectAndSaveImages(ImageSource _imagesource) async {
+
+  XFile? selectedImage = await ImagePicker().pickImage(source: _imagesource);
+  if (selectedImage != null) {
+    developer.log('selectedImage is not null ');
+
+    return selectedImage;
+  }
+  // developer.log('imagePaths 3 Length ${selectedImages?[0]} ');
+  // developer.log('imagePaths 4 Length $selectedImage ');
+}
+
+Future<Reference> saveImageToCloudStorage(XFile imageFile) async {
+  String fileName = imageFile.name;
+  File? _image = File(imageFile.path);
+
+  Reference storageReference = FirebaseStorage.instance
+      .ref()
+      .child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
+  UploadTask uploadTask = storageReference.putFile(_image);
+
+  await uploadTask.whenComplete(() => print('Image uploaded'));
+
+//final storageRef = FirebaseStorage.instance.ref();
+
+  Directory appDirectory = await getApplicationDocumentsDirectory();
+  //String fileName = imageFile.path.split('/').last;
+  String savedImagePath = '${appDirectory.path}/$fileName';
+  File(imageFile.path).copy(savedImagePath);
+  return storageReference;
+
+}
+
+
+
+  Future<File?> getImageFile(String storagePath) async {
+    final tempDir = await getTemporaryDirectory();
+    final fileName = storagePath.split('/').last;
+    final file = File('${tempDir.path}/$fileName');
+
+    // If the file do not exists try to download
+    if (!file.existsSync()) {
+      try {
+        file.create(recursive: true);
+        await FirebaseStorage.instance.ref(storagePath).writeToFile(file);
+      } catch (e) {
+        // If there is an error delete the created file
+        await file.delete(recursive: true);
+        return null;
+      }
+    }
+    return file;
+  }
+
+
+
+ 
+   
+

@@ -38,6 +38,7 @@ Widget PoitCard(Poi poi, BuildContext context) {
                           fontSize: 15.0,
                           fontWeight: FontWeight.w700,
                         )),
+                        Icon(Icons.star_border, color: Colors.white, size: 25), 
                   ],
                 ),
               )

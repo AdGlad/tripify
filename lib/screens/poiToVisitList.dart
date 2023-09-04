@@ -1,8 +1,10 @@
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/screens/poiList.dart';
+import 'package:provider/provider.dart';
 
 import '../model/poi-to-visit.dart';
+import '../state/applicationstate.dart';
 import 'country/poiToVisitCard.dart';
 
  class PoiToVisitList extends StatefulWidget {
@@ -19,7 +21,7 @@ class _PoiToVisitListState extends State<PoiToVisitList> {
     
     Scaffold(
       appBar: AppBar(
-        title: const Text('Bucket List'),
+        title: const Text('Top Locations'),
       ),
       body:
     FirestoreBuilder<PoiToVisitQuerySnapshot>(
@@ -31,7 +33,11 @@ class _PoiToVisitListState extends State<PoiToVisitList> {
         // Access the QuerySnapshot
         PoiToVisitQuerySnapshot querySnapshot = snapshot.requireData;
 
-        return ListView.builder(
+        return 
+        Container(
+          child: Consumer<ApplicationState>(
+              builder: (context, appState, _) => 
+        ListView.builder(
           itemCount: querySnapshot.docs.length,
           itemBuilder: (context, index) {
             // Access the User instance
@@ -43,13 +49,16 @@ class _PoiToVisitListState extends State<PoiToVisitList> {
                     context,
                     MaterialPageRoute(
                                   builder: (context) => PoiList(
-                                  poiToVisit: poiToVisit)
+                                  poiToVisit: poiToVisit,
+                                  )
                             ),
                   );
             }
                   );
           },
-        );
+        )
+          ));
+          
       }
     ));
   }

@@ -10,7 +10,7 @@ class FirebaseImage extends StatefulWidget {
   FirebaseImage({
     required this.storagePath,
   }) : super(key: Key(storagePath));
-
+  
   @override
   State<FirebaseImage> createState() => _FirebaseImageState();
 }
@@ -20,9 +20,11 @@ class _FirebaseImageState extends State<FirebaseImage> {
 
   @override
   void initState() {
+    
     init();
     super.initState();
   }
+
 
   Future<void> init() async {
     final imageFile = await getImageFile();
@@ -63,5 +65,13 @@ class _FirebaseImageState extends State<FirebaseImage> {
       width: 300,
       height: 300,
     );
+
+    
   }
 }
+
+
+
+
+
+

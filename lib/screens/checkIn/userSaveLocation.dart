@@ -77,7 +77,7 @@ Future savePhotoLocation(
   bool _mobileLocation = false;
   DateTime _arrivaldate = DateTime.now();;
   developer.log(' savePhotoLocation ');
-  await _selectAndSaveImages(ImageSource.gallery);
+  await selectAndSaveImages(ImageSource.gallery);
   Exif exifData = await Exif.fromPath(selectedImages![0].path);
   developer.log(' ************* exifData ************* ');
 
@@ -787,7 +787,7 @@ Future<bool?> popupForm(
                       elevation: 5,
                     ),
                     onPressed: () async {
-                      await _selectAndSaveImages(ImageSource.gallery);
+                      await selectAndSaveImages(ImageSource.gallery);
                     },
                     child: Text('Gallery'),
                   ),
@@ -797,7 +797,7 @@ Future<bool?> popupForm(
                       elevation: 5,
                     ),
                     onPressed: () async {
-                      await _selectAndSaveImages(ImageSource.camera);
+                      await selectAndSaveImages(ImageSource.camera);
                     },
                     child: Text('Camera'),
                   ),
@@ -866,7 +866,7 @@ Future<bool?> photoLocationPopupForm(
   );
 }
 
-Future<void> _selectAndSaveImages(ImageSource _imagesource) async {
+Future<void> selectAndSaveImages(ImageSource _imagesource) async {
   developer.log('imagePaths 1 Length ${imagePaths.length} ');
 
   imagePaths.clear();

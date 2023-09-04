@@ -8,6 +8,7 @@ import 'country/poiCard.dart';
 
 class PoiList extends StatefulWidget {
   PoiToVisit poiToVisit;
+  
   //   String groupId;
 
   PoiList({required this.poiToVisit});

@@ -178,7 +178,7 @@ Text(
                           )),
 
               //     ),
-              (currentPlaceHistory!.imagePaths!.length > 0) ? Container(
+              (  currentPlaceHistory.imagePaths != null  &&  currentPlaceHistory.imagePaths!.length > 0) ? Container(
                 margin: EdgeInsets.all(5),
                 child:  Stack(
                    //     alignment: Alignment.center,
