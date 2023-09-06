@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+//import 'dart:js_interop';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -41,6 +42,8 @@ TextEditingController descriptionController = TextEditingController();
 
 Future saveMobileLocation(
   BuildContext context,
+  double latitude,
+  double longitude,
   List<IsoCountry2> isoCountryList,
   PlaceHistory? currentPlace,
   UserProfile? userProfile,
@@ -51,14 +54,21 @@ Future saveMobileLocation(
   bool _mobileLocation = true;
   developer.log(' SaveMobileLocation ');
 
-  LocationData? newPlace = await Location().getLocation();
+ // LocationData? newPlace = await Location().getLocation();
 
   developer.log('photoLocation is false');
-  _latitude = newPlace.latitude;
-  _longitude = newPlace.longitude;
+  //_latitude = newPlace.latitude;
+  //_longitude = newPlace.longitude;
+
+
+// Empire State Building Lon -73.98565918207169 Lat 40.74844162658724
+_longitude =-73.98565918207169;
+_latitude  = 40.74844162658724;
+
+
 
   await saveLocation(context, isoCountryList, currentPlace, userProfile,
-      poiList, _latitude, _longitude,DateTime.now(), _mobileLocation
+      poiList, latitude, longitude, DateTime.now(), _mobileLocation
       //  UserTotals? userTotals,
       //  MapboxMapController? locationcontroller
       );
@@ -75,7 +85,8 @@ Future savePhotoLocation(
 ) async {
   Map<String, Object>? _exifData;
   bool _mobileLocation = false;
-  DateTime _arrivaldate = DateTime.now();;
+  DateTime _arrivaldate = DateTime.now();
+  ;
   developer.log(' savePhotoLocation ');
   await selectAndSaveImages(ImageSource.gallery);
   Exif exifData = await Exif.fromPath(selectedImages![0].path);
@@ -183,7 +194,7 @@ Future saveLocation(
               print("mapController.animateCamera() returned $result"));
     }
 
-    int  distanceInMeters = Geolocator.distanceBetween(
+    int distanceInMeters = Geolocator.distanceBetween(
             currentPlace?.latitude ?? newPlaceHistory.latitude!,
             currentPlace?.longitude ?? newPlaceHistory.longitude!,
             newPlaceHistory.latitude!,
@@ -204,17 +215,16 @@ Future saveLocation(
     if ((userProfile!.countrycodelist!.isEmpty) ||
         (userProfile.countrycodelist!.contains(newPlaceHistory.countryCode) !=
             true)) {
-       _newCountryCount = 1;
+      _newCountryCount = 1;
       _newCountryCode = newPlaceHistory.countryCode;
       developer.log(
           'New Country identified. CurrentPlace ${currentPlace?.countryCode} NewPlace ${newPlaceHistory.countryCode} ');
 
-
       controllerConfetti.play();
       playsound();
     } else {
-          _newCountryCount = 0;
-          _newCountryCode = '';
+      _newCountryCount = 0;
+      _newCountryCode = '';
     }
     // }
     developer.log('isoCountry2List before');
@@ -269,33 +279,23 @@ Future saveLocation(
         await saveImagesToFirestore(batch, placehistoryDocRef);
     developer.log('saveImagesToFirestore done ');
 
-    void _check_poi = await check_poi(
-        context, batch, newPlaceHistory, placehistoryDocRef, poiList);
+    void _checkPoi = await checkPoi(
+        context, batch, newPlaceHistory, placehistoryDocRef, poiList, userProfile );
 
-    developer.log('newPlaceHistory.arrivaldate ${newPlaceHistory.arrivaldate} ');
+    developer
+        .log('newPlaceHistory.arrivaldate ${newPlaceHistory.arrivaldate} ');
     developer.log('currentPlace!.arrivaldate ${currentPlace!.arrivaldate} ');
-    if (newPlaceHistory.arrivaldate!.isAfter(currentPlace!.arrivaldate!))
-    {
+    if (newPlaceHistory.arrivaldate!.isAfter(currentPlace!.arrivaldate!)) {
       _latestLocation = true;
-
+    } else {
+      _latestLocation = false;
     }
-    else
-    {
-     _latestLocation = false;
 
-    }
-   
     developer.log('_latestLocation = ${_latestLocation.toString()} ');
 
+    await _incrementStreak(batch, _newCountryCount, _newCountryCode,
+        distanceInMeters, newPlaceHistory, _latestLocation);
 
-    await _incrementStreak(
-        batch,
-        _newCountryCount,
-        _newCountryCode,
-        distanceInMeters,
-        newPlaceHistory,
-        _latestLocation);
- 
     developer.log('_incrementStreak done ');
 
     // if (result == true) {
@@ -361,44 +361,44 @@ Future<void> _incrementStreak(
     }
 
     if (latestLocation == true) {
-          developer.log('full latestLocation = ${latestLocation.toString()} ');
+      developer.log('full latestLocation = ${latestLocation.toString()} ');
 
-    batch.update(
-      userdocRef,
-      {
-        'lastRecordedDate': DateTime.now(),
-        'currentstreak': FieldValue.increment(newStreak),
-        'latestlongitude': place.longitude,
-        'latestlatitude': place.latitude,
-        'lateststreetAddress': place.streetAddress,
-        'latestcountryName': place.countryName,
-        'latestcountryCode': place.countryCode,
-        'latestpostal': place.postal,
-        'latestregion': place.region,
-        'latestregionCode': place.regionCode,
-        'countrycount': FieldValue.increment(newCountryCount as num),
-        'distancetotal': FieldValue.increment(distanceInMeters as num),
-        'regioncount': FieldValue.increment(1),
-        'placescount': FieldValue.increment(1),
-        //   'countryvisitlist': FieldValue.arrayUnion(
-        //        [place.countryCode! + '-' + newVisitNumber.toString()]),
-      },
-    );
+      batch.update(
+        userdocRef,
+        {
+          'lastRecordedDate': DateTime.now(),
+          'currentstreak': FieldValue.increment(newStreak),
+          'latestlongitude': place.longitude,
+          'latestlatitude': place.latitude,
+          'lateststreetAddress': place.streetAddress,
+          'latestcountryName': place.countryName,
+          'latestcountryCode': place.countryCode,
+          'latestpostal': place.postal,
+          'latestregion': place.region,
+          'latestregionCode': place.regionCode,
+          'countrycount': FieldValue.increment(newCountryCount as num),
+          'distancetotal': FieldValue.increment(distanceInMeters as num),
+          'regioncount': FieldValue.increment(1),
+          'placescount': FieldValue.increment(1),
+          //   'countryvisitlist': FieldValue.arrayUnion(
+          //        [place.countryCode! + '-' + newVisitNumber.toString()]),
+        },
+      );
     } else {
-    developer.log('less latestLocation = ${latestLocation.toString()} ');
+      developer.log('less latestLocation = ${latestLocation.toString()} ');
 
-          batch.update(
-      userdocRef,
-      {
-        'currentstreak': FieldValue.increment(newStreak),
-        'countrycount': FieldValue.increment(newCountryCount as num),
-      //  'distancetotal': FieldValue.increment(distanceInMeters as num),
-        'regioncount': FieldValue.increment(1),
-        'placescount': FieldValue.increment(1),
-        //   'countryvisitlist': FieldValue.arrayUnion(
-        //        [place.countryCode! + '-' + newVisitNumber.toString()]),
-      },
-    );
+      batch.update(
+        userdocRef,
+        {
+          'currentstreak': FieldValue.increment(newStreak),
+          'countrycount': FieldValue.increment(newCountryCount as num),
+          //  'distancetotal': FieldValue.increment(distanceInMeters as num),
+          'regioncount': FieldValue.increment(1),
+          'placescount': FieldValue.increment(1),
+          //   'countryvisitlist': FieldValue.arrayUnion(
+          //        [place.countryCode! + '-' + newVisitNumber.toString()]),
+        },
+      );
     }
 
     if (newCountryCode != null && newCountryCode.isNotEmpty) {
@@ -722,7 +722,8 @@ Future<bool?> popupForm(
     builder: (BuildContext context) {
       descriptionController.text = 'Visting ${newPlaceHistory.poi}';
       return AlertDialog(
-          title: Text(CountryFlag(newPlaceHistory.countryCode!) + ' ${newPlaceHistory.countryName} ' +
+          title: Text(CountryFlag(newPlaceHistory.countryCode!) +
+              ' ${newPlaceHistory.countryName} ' +
               ' ${newPlaceHistory.city}'),
           content:
               // Text('Do you want to save the form?'),
@@ -767,42 +768,46 @@ Future<bool?> popupForm(
                   ),
                 ),
               ),
-               mobileLocation ? Container(
-                  alignment: Alignment.centerLeft,
-                  //   padding: EdgeInsets.all(5.0),
-                  //  margin: EdgeInsets.all(5.0) ,
-                  child: Text(' Select Photo',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w700,
-                      ))) : Text(''),
-              mobileLocation ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orangeAccent,
-                      elevation: 5,
-                    ),
-                    onPressed: () async {
-                      await selectAndSaveImages(ImageSource.gallery);
-                    },
-                    child: Text('Gallery'),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orangeAccent,
-                      elevation: 5,
-                    ),
-                    onPressed: () async {
-                      await selectAndSaveImages(ImageSource.camera);
-                    },
-                    child: Text('Camera'),
-                  ),
-                ],
-              ) : Text(''),
+              mobileLocation
+                  ? Container(
+                      alignment: Alignment.centerLeft,
+                      //   padding: EdgeInsets.all(5.0),
+                      //  margin: EdgeInsets.all(5.0) ,
+                      child: Text(' Select Photo',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.blueAccent,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          )))
+                  : Text(''),
+              mobileLocation
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orangeAccent,
+                            elevation: 5,
+                          ),
+                          onPressed: () async {
+                            await selectAndSaveImages(ImageSource.gallery);
+                          },
+                          child: Text('Gallery'),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orangeAccent,
+                            elevation: 5,
+                          ),
+                          onPressed: () async {
+                            await selectAndSaveImages(ImageSource.camera);
+                          },
+                          child: Text('Camera'),
+                        ),
+                      ],
+                    )
+                  : Text(''),
             ],
           ),
           // ),
@@ -936,19 +941,38 @@ Future<void> saveImagesToFirestore(
   });
 }
 
-Future<void>? check_poi(
+Future<void>? checkPoi(
     BuildContext context,
     WriteBatch batch,
     PlaceHistory newPlace,
     DocumentReference<Object?> placeHistoryId,
-    List<Poi> poiList) async {
-  developer.log('In check_poi');
+    List<Poi> poiList,
+    UserProfile userProfile) async {
+  developer.log('In checkPoi');
   final userdocRef = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid);
   final docSnapshot = await userdocRef.get();
   //For loop for each appState.poiList
   for (Poi poi in poiList) {
+
+
+   for ( Map poiuser in userProfile.poi! ) {
+
+      if (poiuser['name'] == poi.name)   
+  {
+         developer.log('Already visited for ${poi.name}');
+              controllerConfettiGold.play();
+      playsound();
+
+ } else
+ {
+           developer.log('Not Already visited for ${poi.name}');
+
+ }
+   }      
+
+
     developer.log('In poiList for loop for ${poi.name}');
 
     double distanceInMeters = Geolocator.distanceBetween(
@@ -963,8 +987,7 @@ Future<void>? check_poi(
       developer.log(
           'Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius ?? 1000}');
 
-      controllerConfettiGold.play();
-      playsound();
+ 
 
       batch.update(placeHistoryId, {
         'poiId': poi.id,
@@ -1001,12 +1024,22 @@ Future<void>? check_poi(
 
       if (docSnapshot.exists) {
         developer.log('docSnapshot exists}');
+
         Map<String, dynamic> poiMap = {
-          "id": poi.id,
           "poiId": poi.poiId,
-          "name": poi.name,
+          "latitude": poi.latitude,
+          "longitude": poi.longitude,
+          "geometry": poi.geometry,
+          "id": poi.id,
+          "properties": poi.properties,
           "category": poi.category,
+          "iso_3166_1": poi.iso_3166_1,
+          "iso_3166_2": poi.iso_3166_2,
+          "name": poi.name,
           "maki": poi.maki,
+          "type": poi.type,
+          "imagePath": poi.imagePath,
+          "poiRadius": poi.poiRadius,
           "groupId": poi.groupId
         };
 

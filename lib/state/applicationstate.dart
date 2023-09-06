@@ -53,6 +53,7 @@ class ApplicationState extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? _friendSubscription;
   StreamSubscription<QuerySnapshot>? _poiListsSubscription;
   StreamSubscription<QuerySnapshot>? _poiSubscription;
+  
 
   List<UserProfile> _users = [];
   List<UserProfile> get users => _users;
@@ -371,15 +372,19 @@ class ApplicationState extends ChangeNotifier {
             userData['latestregion'] as String? ?? 'latestregion';
         _userProfile?.latestregionCode =
             userData['latestregionCode'] as String? ?? 'latestregionCode';
-
         List<dynamic>? _countryListData = userData['countrycodelist'] ?? [];
         _userProfile?.countrycodelist =
             _countryListData?.map((e) => e.toString()).toList();
 
+
+        List<Map<String, dynamic>> poiList = List<Map<String, dynamic>>.from(userData['poi']);
+        _userProfile?.poi =poiList;
+        
         List<dynamic>? _countryvisitListData =
             userData['countryvisitlist'] ?? [];
         _userProfile?.countryvisitlist =
             _countryvisitListData?.map((e) => e.toString()).toList();
+
 
         // _userProfile?.lastRecordedDate = userData['lastRecordedDate'].toDate()
         //     as DateTime?; //  ?? DateTime.now();

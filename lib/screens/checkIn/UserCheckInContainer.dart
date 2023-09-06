@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gtk_flutter/model/users.dart';
 import 'package:gtk_flutter/screens/checkIn/userSaveLocation.dart';
 import '../../state/applicationstate.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:developer' as developer;
+
 
 class CheckInContainer extends StatefulWidget {
   final BuildContext context;
@@ -18,6 +21,9 @@ class CheckInContainer extends StatefulWidget {
 class _CheckInContainerState extends State<CheckInContainer> {
   bool _isLoadingPhoto = false;
   bool _isLoadingLocation = false;
+  GeolocatorPlatform _geolocator = GeolocatorPlatform.instance;
+  late Stream<Position> _locationStream;
+  late Position _currentPosition;
 
   void _toggleLoadingPhoto() {
     setState(() {
@@ -29,6 +35,39 @@ class _CheckInContainerState extends State<CheckInContainer> {
       _isLoadingLocation = !_isLoadingLocation;
     });
   }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start monitoring location changes when the widget is initialized.
+    _startLocationUpdates();
+  }
+
+  void _startLocationUpdates() {
+    _locationStream = _geolocator.getPositionStream();
+    _locationStream.listen((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    });
+
+    // Also, listen for changes in location services authorization.
+    _geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+      if (status == ServiceStatus.enabled) {
+        // Location services are enabled, you can continue tracking.
+      } else {
+        // Location services are disabled or restricted, handle accordingly.
+      }
+    });
+  }
+
+
+
+
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,8 +103,13 @@ mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         // await showPopupForm(context);
               
                         _toggleLoadingLocation();
+
+                        developer.log('_currentPosition.latitude ${_currentPosition.latitude}');
+
                         await saveMobileLocation(
                             context,
+                            _currentPosition.latitude,
+                            _currentPosition.longitude,
                             widget.appState!.IsoCountry2List,
                             widget.appState!.currentPlace,
                             widget.appState!.userProfile,
