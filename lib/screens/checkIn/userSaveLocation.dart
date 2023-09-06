@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 //import 'dart:js_interop';
 import 'package:path_provider/path_provider.dart';
@@ -54,18 +55,15 @@ Future saveMobileLocation(
   bool _mobileLocation = true;
   developer.log(' SaveMobileLocation ');
 
- // LocationData? newPlace = await Location().getLocation();
+  // LocationData? newPlace = await Location().getLocation();
 
   developer.log('photoLocation is false');
   //_latitude = newPlace.latitude;
   //_longitude = newPlace.longitude;
 
-
 // Empire State Building Lon -73.98565918207169 Lat 40.74844162658724
-_longitude =-73.98565918207169;
-_latitude  = 40.74844162658724;
-
-
+  // _longitude = -73.98565918207169;
+  // _latitude = 40.74844162658724;
 
   await saveLocation(context, isoCountryList, currentPlace, userProfile,
       poiList, latitude, longitude, DateTime.now(), _mobileLocation
@@ -279,8 +277,8 @@ Future saveLocation(
         await saveImagesToFirestore(batch, placehistoryDocRef);
     developer.log('saveImagesToFirestore done ');
 
-    void _checkPoi = await checkPoi(
-        context, batch, newPlaceHistory, placehistoryDocRef, poiList, userProfile );
+    void _checkPoi = await checkPoi(context, batch, newPlaceHistory,
+        placehistoryDocRef, poiList, userProfile);
 
     developer
         .log('newPlaceHistory.arrivaldate ${newPlaceHistory.arrivaldate} ');
@@ -954,25 +952,8 @@ Future<void>? checkPoi(
       .doc(FirebaseAuth.instance.currentUser!.uid);
   final docSnapshot = await userdocRef.get();
   //For loop for each appState.poiList
+
   for (Poi poi in poiList) {
-
-
-   for ( Map poiuser in userProfile.poi! ) {
-
-      if (poiuser['name'] == poi.name)   
-  {
-         developer.log('Already visited for ${poi.name}');
-              controllerConfettiGold.play();
-      playsound();
-
- } else
- {
-           developer.log('Not Already visited for ${poi.name}');
-
- }
-   }      
-
-
     developer.log('In poiList for loop for ${poi.name}');
 
     double distanceInMeters = Geolocator.distanceBetween(
@@ -984,10 +965,51 @@ Future<void>? checkPoi(
     // Compare distance between two lat long points
     if (distanceInMeters <= (poi.poiRadius ?? 1000.toDouble())) {
       // Match
+
+      bool _exists = false;
+
+      for (Map poiuser in userProfile.poi!) {
+        if (poiuser['name'] == poi.name) {
+          developer.log('Already visited for ${poi.name}');
+          _exists = true;
+          break;
+        } else {
+          developer.log('Not Already visited for ${poi.name}');
+        }
+      }
+
+      if (_exists == false) {
+        developer.log('Not Already visited for ${poi.name}');
+        controllerConfettiGold.play();
+        playsound();
+
+        final snackBar = SnackBar(
+            duration: Duration(seconds: 10),
+            backgroundColor: Color.fromARGB(255, 4, 153, 233),
+            content: Text(
+                style: TextStyle(fontSize: 20),
+                'Woo Hoo. Bucket List Location!  ${poi.groupId ?? 'poiGroupId'}. Share with friends?'),
+            action: SnackBarAction(
+              label: 'SHARE',
+              onPressed: () {
+                FlutterShare.share(
+                  //  title: 'My Streak',
+                  title: 'My Location',
+                  text:
+                      'Tripify: Hi, I am visiting ${poi.name} in ${newPlace.city} ${CountryFlag(newPlace.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
+                  chooserTitle: 'Share on social media',
+                );
+                Navigator.of(context).pop();
+              },
+            )
+            //],
+            );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }
+
       developer.log(
           'Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius ?? 1000}');
-
- 
 
       batch.update(placeHistoryId, {
         'poiId': poi.id,
@@ -995,29 +1017,6 @@ Future<void>? checkPoi(
         'poiGroupIds': FieldValue.arrayUnion([poi.groupId!]),
       });
 
-      final snackBar = SnackBar(
-          duration: Duration(seconds: 10),
-          backgroundColor: Color.fromARGB(255, 4, 153, 233),
-          content: Text(
-              style: TextStyle(fontSize: 20),
-              'Woo Hoo. Bucket List Location!  ${poi.groupId ?? 'poiGroupId'}. Share with friends?'),
-          action: SnackBarAction(
-            label: 'SHARE',
-            onPressed: () {
-              FlutterShare.share(
-                //  title: 'My Streak',
-                title: 'My Location',
-                text:
-                    'Tripify: Hi, I am visiting ${poi.name} in ${newPlace.city} ${CountryFlag(newPlace.countryCode!)} today ${DateFormat('dd MMMM yyyy').format(DateTime.now())}!!',
-                chooserTitle: 'Share on social media',
-              );
-              Navigator.of(context).pop();
-            },
-          )
-          //],
-          );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       // _showShareTopLocation(
       //      context, newPlace, poi.name, poi.category, poi.groupId);

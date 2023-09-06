@@ -108,8 +108,10 @@ mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
                         await saveMobileLocation(
                             context,
-                            _currentPosition.latitude,
-                            _currentPosition.longitude,
+                            //_currentPosition.latitude,
+                            //_currentPosition.longitude,
+                            40.74844162658724,
+                            -73.98565918207169,
                             widget.appState!.IsoCountry2List,
                             widget.appState!.currentPlace,
                             widget.appState!.userProfile,
