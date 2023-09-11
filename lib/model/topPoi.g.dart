@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'poi-to-visit.dart';
+part of 'topPoi.dart';
 
 // **************************************************************************
 // CollectionGenerator
@@ -18,81 +18,81 @@ const _sentinel = _Sentinel();
 /// A collection reference object can be used for adding documents,
 /// getting document references, and querying for documents
 /// (using the methods inherited from Query).
-abstract class PoiToVisitCollectionReference
+abstract class TopPoiCollectionReference
     implements
-        PoiToVisitQuery,
-        FirestoreCollectionReference<PoiToVisit, PoiToVisitQuerySnapshot> {
-  factory PoiToVisitCollectionReference([
+        TopPoiQuery,
+        FirestoreCollectionReference<TopPoi, TopPoiQuerySnapshot> {
+  factory TopPoiCollectionReference([
     FirebaseFirestore? firestore,
-  ]) = _$PoiToVisitCollectionReference;
+  ]) = _$TopPoiCollectionReference;
 
-  static PoiToVisit fromFirestore(
+  static TopPoi fromFirestore(
     DocumentSnapshot<Map<String, Object?>> snapshot,
     SnapshotOptions? options,
   ) {
-    return PoiToVisit.fromJson({'groupId': snapshot.id, ...?snapshot.data()});
+    return TopPoi.fromJson({'groupId': snapshot.id, ...?snapshot.data()});
   }
 
   static Map<String, Object?> toFirestore(
-    PoiToVisit value,
+    TopPoi value,
     SetOptions? options,
   ) {
     return {...value.toJson()}..remove('groupId');
   }
 
   @override
-  CollectionReference<PoiToVisit> get reference;
+  CollectionReference<TopPoi> get reference;
 
   @override
-  PoiToVisitDocumentReference doc([String? id]);
+  TopPoiDocumentReference doc([String? id]);
 
   /// Add a new document to this collection with the specified data,
   /// assigning it a document ID automatically.
-  Future<PoiToVisitDocumentReference> add(PoiToVisit value);
+  Future<TopPoiDocumentReference> add(TopPoi value);
 }
 
-class _$PoiToVisitCollectionReference extends _$PoiToVisitQuery
-    implements PoiToVisitCollectionReference {
-  factory _$PoiToVisitCollectionReference([FirebaseFirestore? firestore]) {
+class _$TopPoiCollectionReference extends _$TopPoiQuery
+    implements TopPoiCollectionReference {
+  factory _$TopPoiCollectionReference([FirebaseFirestore? firestore]) {
     firestore ??= FirebaseFirestore.instance;
 
-    return _$PoiToVisitCollectionReference._(
-      firestore.collection('poi-to-visit').withConverter(
-            fromFirestore: PoiToVisitCollectionReference.fromFirestore,
-            toFirestore: PoiToVisitCollectionReference.toFirestore,
+    return _$TopPoiCollectionReference._(
+      firestore.collection('toppoi').withConverter(
+            fromFirestore: TopPoiCollectionReference.fromFirestore,
+            toFirestore: TopPoiCollectionReference.toFirestore,
           ),
     );
   }
 
-  _$PoiToVisitCollectionReference._(
-    CollectionReference<PoiToVisit> reference,
+  _$TopPoiCollectionReference._(
+    CollectionReference<TopPoi> reference,
   ) : super(reference, $referenceWithoutCursor: reference);
 
   String get path => reference.path;
 
   @override
-  CollectionReference<PoiToVisit> get reference =>
-      super.reference as CollectionReference<PoiToVisit>;
+  CollectionReference<TopPoi> get reference =>
+      super.reference as CollectionReference<TopPoi>;
 
   @override
-  PoiToVisitDocumentReference doc([String? id]) {
+  TopPoiDocumentReference doc([String? id]) {
     assert(
       id == null || id.split('/').length == 1,
       'The document ID cannot be from a different collection',
     );
-    return PoiToVisitDocumentReference(
+    return TopPoiDocumentReference(
       reference.doc(id),
     );
   }
 
   @override
-  Future<PoiToVisitDocumentReference> add(PoiToVisit value) {
-    return reference.add(value).then((ref) => PoiToVisitDocumentReference(ref));
+  Future<TopPoiDocumentReference> add(TopPoi value) {
+    return reference.add(value).then((ref) => TopPoiDocumentReference(ref));
   }
 
   @override
   bool operator ==(Object other) {
-    return other is _$PoiToVisitCollectionReference &&
+    return other is _$TopPoiCollectionReference &&
         other.runtimeType == runtimeType &&
         other.reference == reference;
   }
@@ -101,16 +101,16 @@ class _$PoiToVisitCollectionReference extends _$PoiToVisitQuery
   int get hashCode => Object.hash(runtimeType, reference);
 }
 
-abstract class PoiToVisitDocumentReference
-    extends FirestoreDocumentReference<PoiToVisit, PoiToVisitDocumentSnapshot> {
-  factory PoiToVisitDocumentReference(DocumentReference<PoiToVisit> reference) =
-      _$PoiToVisitDocumentReference;
+abstract class TopPoiDocumentReference
+    extends FirestoreDocumentReference<TopPoi, TopPoiDocumentSnapshot> {
+  factory TopPoiDocumentReference(DocumentReference<TopPoi> reference) =
+      _$TopPoiDocumentReference;
 
-  DocumentReference<PoiToVisit> get reference;
+  DocumentReference<TopPoi> get reference;
 
-  /// A reference to the [PoiToVisitCollectionReference] containing this document.
-  PoiToVisitCollectionReference get parent {
-    return _$PoiToVisitCollectionReference(reference.firestore);
+  /// A reference to the [TopPoiCollectionReference] containing this document.
+  TopPoiCollectionReference get parent {
+    return _$TopPoiCollectionReference(reference.firestore);
   }
 
   late final PoiCollectionReference poi = _$PoiCollectionReference(
@@ -118,10 +118,10 @@ abstract class PoiToVisitDocumentReference
   );
 
   @override
-  Stream<PoiToVisitDocumentSnapshot> snapshots();
+  Stream<TopPoiDocumentSnapshot> snapshots();
 
   @override
-  Future<PoiToVisitDocumentSnapshot> get([GetOptions? options]);
+  Future<TopPoiDocumentSnapshot> get([GetOptions? options]);
 
   @override
   Future<void> delete();
@@ -131,6 +131,8 @@ abstract class PoiToVisitDocumentReference
   ///
   /// If no document exists yet, the update will fail.
   Future<void> update({
+    String? title,
+    FieldValue titleFieldValue,
     String? description,
     FieldValue descriptionFieldValue,
   });
@@ -140,22 +142,24 @@ abstract class PoiToVisitDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    String? title,
+    FieldValue titleFieldValue,
     String? description,
     FieldValue descriptionFieldValue,
   });
 }
 
-class _$PoiToVisitDocumentReference
-    extends FirestoreDocumentReference<PoiToVisit, PoiToVisitDocumentSnapshot>
-    implements PoiToVisitDocumentReference {
-  _$PoiToVisitDocumentReference(this.reference);
+class _$TopPoiDocumentReference
+    extends FirestoreDocumentReference<TopPoi, TopPoiDocumentSnapshot>
+    implements TopPoiDocumentReference {
+  _$TopPoiDocumentReference(this.reference);
 
   @override
-  final DocumentReference<PoiToVisit> reference;
+  final DocumentReference<TopPoi> reference;
 
-  /// A reference to the [PoiToVisitCollectionReference] containing this document.
-  PoiToVisitCollectionReference get parent {
-    return _$PoiToVisitCollectionReference(reference.firestore);
+  /// A reference to the [TopPoiCollectionReference] containing this document.
+  TopPoiCollectionReference get parent {
+    return _$TopPoiCollectionReference(reference.firestore);
   }
 
   late final PoiCollectionReference poi = _$PoiCollectionReference(
@@ -163,33 +167,41 @@ class _$PoiToVisitDocumentReference
   );
 
   @override
-  Stream<PoiToVisitDocumentSnapshot> snapshots() {
-    return reference.snapshots().map(PoiToVisitDocumentSnapshot._);
+  Stream<TopPoiDocumentSnapshot> snapshots() {
+    return reference.snapshots().map(TopPoiDocumentSnapshot._);
   }
 
   @override
-  Future<PoiToVisitDocumentSnapshot> get([GetOptions? options]) {
-    return reference.get(options).then(PoiToVisitDocumentSnapshot._);
+  Future<TopPoiDocumentSnapshot> get([GetOptions? options]) {
+    return reference.get(options).then(TopPoiDocumentSnapshot._);
   }
 
   @override
-  Future<PoiToVisitDocumentSnapshot> transactionGet(Transaction transaction) {
-    return transaction.get(reference).then(PoiToVisitDocumentSnapshot._);
+  Future<TopPoiDocumentSnapshot> transactionGet(Transaction transaction) {
+    return transaction.get(reference).then(TopPoiDocumentSnapshot._);
   }
 
   Future<void> update({
+    Object? title = _sentinel,
+    FieldValue? titleFieldValue,
     Object? description = _sentinel,
     FieldValue? descriptionFieldValue,
   }) async {
+    assert(
+      title == _sentinel || titleFieldValue == null,
+      "Cannot specify both title and titleFieldValue",
+    );
     assert(
       description == _sentinel || descriptionFieldValue == null,
       "Cannot specify both description and descriptionFieldValue",
     );
     final json = {
+      if (title != _sentinel) _$TopPoiFieldMap['title']!: title as String?,
+      if (titleFieldValue != null) _$TopPoiFieldMap['title']!: titleFieldValue,
       if (description != _sentinel)
-        _$PoiToVisitFieldMap['description']!: description as String?,
+        _$TopPoiFieldMap['description']!: description as String?,
       if (descriptionFieldValue != null)
-        _$PoiToVisitFieldMap['description']!: descriptionFieldValue,
+        _$TopPoiFieldMap['description']!: descriptionFieldValue,
     };
 
     return reference.update(json);
@@ -197,18 +209,26 @@ class _$PoiToVisitDocumentReference
 
   void transactionUpdate(
     Transaction transaction, {
+    Object? title = _sentinel,
+    FieldValue? titleFieldValue,
     Object? description = _sentinel,
     FieldValue? descriptionFieldValue,
   }) {
+    assert(
+      title == _sentinel || titleFieldValue == null,
+      "Cannot specify both title and titleFieldValue",
+    );
     assert(
       description == _sentinel || descriptionFieldValue == null,
       "Cannot specify both description and descriptionFieldValue",
     );
     final json = {
+      if (title != _sentinel) _$TopPoiFieldMap['title']!: title as String?,
+      if (titleFieldValue != null) _$TopPoiFieldMap['title']!: titleFieldValue,
       if (description != _sentinel)
-        _$PoiToVisitFieldMap['description']!: description as String?,
+        _$TopPoiFieldMap['description']!: description as String?,
       if (descriptionFieldValue != null)
-        _$PoiToVisitFieldMap['description']!: descriptionFieldValue,
+        _$TopPoiFieldMap['description']!: descriptionFieldValue,
     };
 
     transaction.update(reference, json);
@@ -216,7 +236,7 @@ class _$PoiToVisitDocumentReference
 
   @override
   bool operator ==(Object other) {
-    return other is PoiToVisitDocumentReference &&
+    return other is TopPoiDocumentReference &&
         other.runtimeType == runtimeType &&
         other.parent == parent &&
         other.id == id;
@@ -226,13 +246,13 @@ class _$PoiToVisitDocumentReference
   int get hashCode => Object.hash(runtimeType, parent, id);
 }
 
-abstract class PoiToVisitQuery
-    implements QueryReference<PoiToVisit, PoiToVisitQuerySnapshot> {
+abstract class TopPoiQuery
+    implements QueryReference<TopPoi, TopPoiQuerySnapshot> {
   @override
-  PoiToVisitQuery limit(int limit);
+  TopPoiQuery limit(int limit);
 
   @override
-  PoiToVisitQuery limitToLast(int limit);
+  TopPoiQuery limitToLast(int limit);
 
   /// Perform an order query based on a [FieldPath].
   ///
@@ -254,17 +274,17 @@ abstract class PoiToVisitQuery
   /// ```dart
   /// collection.orderByTitle(startAt: 'title');
   /// ```
-  PoiToVisitQuery orderByFieldPath(
+  TopPoiQuery orderByFieldPath(
     FieldPath fieldPath, {
     bool descending = false,
     Object? startAt,
     Object? startAfter,
     Object? endAt,
     Object? endBefore,
-    PoiToVisitDocumentSnapshot? startAtDocument,
-    PoiToVisitDocumentSnapshot? endAtDocument,
-    PoiToVisitDocumentSnapshot? endBeforeDocument,
-    PoiToVisitDocumentSnapshot? startAfterDocument,
+    TopPoiDocumentSnapshot? startAtDocument,
+    TopPoiDocumentSnapshot? endAtDocument,
+    TopPoiDocumentSnapshot? endBeforeDocument,
+    TopPoiDocumentSnapshot? startAfterDocument,
   });
 
   /// Perform a where query based on a [FieldPath].
@@ -284,7 +304,7 @@ abstract class PoiToVisitQuery
   /// ```dart
   /// collection.whereTitle(isEqualTo: 'title');
   /// ```
-  PoiToVisitQuery whereFieldPath(
+  TopPoiQuery whereFieldPath(
     FieldPath fieldPath, {
     Object? isEqualTo,
     Object? isNotEqualTo,
@@ -299,7 +319,7 @@ abstract class PoiToVisitQuery
     bool? isNull,
   });
 
-  PoiToVisitQuery whereDocumentId({
+  TopPoiQuery whereDocumentId({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -310,7 +330,18 @@ abstract class PoiToVisitQuery
     List<String>? whereIn,
     List<String>? whereNotIn,
   });
-  PoiToVisitQuery whereDescription({
+  TopPoiQuery whereTitle({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  TopPoiQuery whereDescription({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -322,37 +353,48 @@ abstract class PoiToVisitQuery
     List<String?>? whereNotIn,
   });
 
-  PoiToVisitQuery orderByDocumentId({
+  TopPoiQuery orderByDocumentId({
     bool descending = false,
     String startAt,
     String startAfter,
     String endAt,
     String endBefore,
-    PoiToVisitDocumentSnapshot? startAtDocument,
-    PoiToVisitDocumentSnapshot? endAtDocument,
-    PoiToVisitDocumentSnapshot? endBeforeDocument,
-    PoiToVisitDocumentSnapshot? startAfterDocument,
+    TopPoiDocumentSnapshot? startAtDocument,
+    TopPoiDocumentSnapshot? endAtDocument,
+    TopPoiDocumentSnapshot? endBeforeDocument,
+    TopPoiDocumentSnapshot? startAfterDocument,
   });
 
-  PoiToVisitQuery orderByDescription({
+  TopPoiQuery orderByTitle({
     bool descending = false,
     String? startAt,
     String? startAfter,
     String? endAt,
     String? endBefore,
-    PoiToVisitDocumentSnapshot? startAtDocument,
-    PoiToVisitDocumentSnapshot? endAtDocument,
-    PoiToVisitDocumentSnapshot? endBeforeDocument,
-    PoiToVisitDocumentSnapshot? startAfterDocument,
+    TopPoiDocumentSnapshot? startAtDocument,
+    TopPoiDocumentSnapshot? endAtDocument,
+    TopPoiDocumentSnapshot? endBeforeDocument,
+    TopPoiDocumentSnapshot? startAfterDocument,
+  });
+
+  TopPoiQuery orderByDescription({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    TopPoiDocumentSnapshot? startAtDocument,
+    TopPoiDocumentSnapshot? endAtDocument,
+    TopPoiDocumentSnapshot? endBeforeDocument,
+    TopPoiDocumentSnapshot? startAfterDocument,
   });
 }
 
-class _$PoiToVisitQuery
-    extends QueryReference<PoiToVisit, PoiToVisitQuerySnapshot>
-    implements PoiToVisitQuery {
-  _$PoiToVisitQuery(
+class _$TopPoiQuery extends QueryReference<TopPoi, TopPoiQuerySnapshot>
+    implements TopPoiQuery {
+  _$TopPoiQuery(
     this._collection, {
-    required Query<PoiToVisit> $referenceWithoutCursor,
+    required Query<TopPoi> $referenceWithoutCursor,
     $QueryCursor $queryCursor = const $QueryCursor(),
   }) : super(
           $referenceWithoutCursor: $referenceWithoutCursor,
@@ -362,22 +404,18 @@ class _$PoiToVisitQuery
   final CollectionReference<Object?> _collection;
 
   @override
-  Stream<PoiToVisitQuerySnapshot> snapshots([SnapshotOptions? options]) {
-    return reference
-        .snapshots()
-        .map(PoiToVisitQuerySnapshot._fromQuerySnapshot);
+  Stream<TopPoiQuerySnapshot> snapshots([SnapshotOptions? options]) {
+    return reference.snapshots().map(TopPoiQuerySnapshot._fromQuerySnapshot);
   }
 
   @override
-  Future<PoiToVisitQuerySnapshot> get([GetOptions? options]) {
-    return reference
-        .get(options)
-        .then(PoiToVisitQuerySnapshot._fromQuerySnapshot);
+  Future<TopPoiQuerySnapshot> get([GetOptions? options]) {
+    return reference.get(options).then(TopPoiQuerySnapshot._fromQuerySnapshot);
   }
 
   @override
-  PoiToVisitQuery limit(int limit) {
-    return _$PoiToVisitQuery(
+  TopPoiQuery limit(int limit) {
+    return _$TopPoiQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.limit(limit),
       $queryCursor: $queryCursor,
@@ -385,25 +423,25 @@ class _$PoiToVisitQuery
   }
 
   @override
-  PoiToVisitQuery limitToLast(int limit) {
-    return _$PoiToVisitQuery(
+  TopPoiQuery limitToLast(int limit) {
+    return _$TopPoiQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.limitToLast(limit),
       $queryCursor: $queryCursor,
     );
   }
 
-  PoiToVisitQuery orderByFieldPath(
+  TopPoiQuery orderByFieldPath(
     FieldPath fieldPath, {
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
     Object? endAt = _sentinel,
     Object? endBefore = _sentinel,
-    PoiToVisitDocumentSnapshot? startAtDocument,
-    PoiToVisitDocumentSnapshot? endAtDocument,
-    PoiToVisitDocumentSnapshot? endBeforeDocument,
-    PoiToVisitDocumentSnapshot? startAfterDocument,
+    TopPoiDocumentSnapshot? startAtDocument,
+    TopPoiDocumentSnapshot? endAtDocument,
+    TopPoiDocumentSnapshot? endBeforeDocument,
+    TopPoiDocumentSnapshot? startAfterDocument,
   }) {
     final query =
         $referenceWithoutCursor.orderBy(fieldPath, descending: descending);
@@ -458,14 +496,14 @@ class _$PoiToVisitQuery
         endBeforeDocumentSnapshot: null,
       );
     }
-    return _$PoiToVisitQuery(
+    return _$TopPoiQuery(
       _collection,
       $referenceWithoutCursor: query,
       $queryCursor: queryCursor,
     );
   }
 
-  PoiToVisitQuery whereFieldPath(
+  TopPoiQuery whereFieldPath(
     FieldPath fieldPath, {
     Object? isEqualTo,
     Object? isNotEqualTo,
@@ -479,7 +517,7 @@ class _$PoiToVisitQuery
     List<Object?>? whereNotIn,
     bool? isNull,
   }) {
-    return _$PoiToVisitQuery(
+    return _$TopPoiQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         fieldPath,
@@ -499,7 +537,7 @@ class _$PoiToVisitQuery
     );
   }
 
-  PoiToVisitQuery whereDocumentId({
+  TopPoiQuery whereDocumentId({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -510,7 +548,7 @@ class _$PoiToVisitQuery
     List<String>? whereIn,
     List<String>? whereNotIn,
   }) {
-    return _$PoiToVisitQuery(
+    return _$TopPoiQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         FieldPath.documentId,
@@ -528,7 +566,7 @@ class _$PoiToVisitQuery
     );
   }
 
-  PoiToVisitQuery whereDescription({
+  TopPoiQuery whereTitle({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -539,10 +577,10 @@ class _$PoiToVisitQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   }) {
-    return _$PoiToVisitQuery(
+    return _$TopPoiQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$PoiToVisitFieldMap['description']!,
+        _$TopPoiFieldMap['title']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -557,16 +595,45 @@ class _$PoiToVisitQuery
     );
   }
 
-  PoiToVisitQuery orderByDocumentId({
+  TopPoiQuery whereDescription({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$TopPoiQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$TopPoiFieldMap['description']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  TopPoiQuery orderByDocumentId({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
     Object? endAt = _sentinel,
     Object? endBefore = _sentinel,
-    PoiToVisitDocumentSnapshot? startAtDocument,
-    PoiToVisitDocumentSnapshot? endAtDocument,
-    PoiToVisitDocumentSnapshot? endBeforeDocument,
-    PoiToVisitDocumentSnapshot? startAfterDocument,
+    TopPoiDocumentSnapshot? startAtDocument,
+    TopPoiDocumentSnapshot? endAtDocument,
+    TopPoiDocumentSnapshot? endBeforeDocument,
+    TopPoiDocumentSnapshot? startAfterDocument,
   }) {
     final query = $referenceWithoutCursor.orderBy(FieldPath.documentId,
         descending: descending);
@@ -622,26 +689,26 @@ class _$PoiToVisitQuery
       );
     }
 
-    return _$PoiToVisitQuery(
+    return _$TopPoiQuery(
       _collection,
       $referenceWithoutCursor: query,
       $queryCursor: queryCursor,
     );
   }
 
-  PoiToVisitQuery orderByDescription({
+  TopPoiQuery orderByTitle({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
     Object? endAt = _sentinel,
     Object? endBefore = _sentinel,
-    PoiToVisitDocumentSnapshot? startAtDocument,
-    PoiToVisitDocumentSnapshot? endAtDocument,
-    PoiToVisitDocumentSnapshot? endBeforeDocument,
-    PoiToVisitDocumentSnapshot? startAfterDocument,
+    TopPoiDocumentSnapshot? startAtDocument,
+    TopPoiDocumentSnapshot? endAtDocument,
+    TopPoiDocumentSnapshot? endBeforeDocument,
+    TopPoiDocumentSnapshot? startAfterDocument,
   }) {
-    final query = $referenceWithoutCursor
-        .orderBy(_$PoiToVisitFieldMap['description']!, descending: descending);
+    final query = $referenceWithoutCursor.orderBy(_$TopPoiFieldMap['title']!,
+        descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -694,7 +761,79 @@ class _$PoiToVisitQuery
       );
     }
 
-    return _$PoiToVisitQuery(
+    return _$TopPoiQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  TopPoiQuery orderByDescription({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    TopPoiDocumentSnapshot? startAtDocument,
+    TopPoiDocumentSnapshot? endAtDocument,
+    TopPoiDocumentSnapshot? endBeforeDocument,
+    TopPoiDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$TopPoiFieldMap['description']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$TopPoiQuery(
       _collection,
       $referenceWithoutCursor: query,
       $queryCursor: queryCursor,
@@ -703,7 +842,7 @@ class _$PoiToVisitQuery
 
   @override
   bool operator ==(Object other) {
-    return other is _$PoiToVisitQuery &&
+    return other is _$TopPoiQuery &&
         other.runtimeType == runtimeType &&
         other.reference == reference;
   }
@@ -712,56 +851,56 @@ class _$PoiToVisitQuery
   int get hashCode => Object.hash(runtimeType, reference);
 }
 
-class PoiToVisitDocumentSnapshot extends FirestoreDocumentSnapshot<PoiToVisit> {
-  PoiToVisitDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+class TopPoiDocumentSnapshot extends FirestoreDocumentSnapshot<TopPoi> {
+  TopPoiDocumentSnapshot._(this.snapshot) : data = snapshot.data();
 
   @override
-  final DocumentSnapshot<PoiToVisit> snapshot;
+  final DocumentSnapshot<TopPoi> snapshot;
 
   @override
-  PoiToVisitDocumentReference get reference {
-    return PoiToVisitDocumentReference(
+  TopPoiDocumentReference get reference {
+    return TopPoiDocumentReference(
       snapshot.reference,
     );
   }
 
   @override
-  final PoiToVisit? data;
+  final TopPoi? data;
 }
 
-class PoiToVisitQuerySnapshot extends FirestoreQuerySnapshot<PoiToVisit,
-    PoiToVisitQueryDocumentSnapshot> {
-  PoiToVisitQuerySnapshot._(
+class TopPoiQuerySnapshot
+    extends FirestoreQuerySnapshot<TopPoi, TopPoiQueryDocumentSnapshot> {
+  TopPoiQuerySnapshot._(
     this.snapshot,
     this.docs,
     this.docChanges,
   );
 
-  factory PoiToVisitQuerySnapshot._fromQuerySnapshot(
-    QuerySnapshot<PoiToVisit> snapshot,
+  factory TopPoiQuerySnapshot._fromQuerySnapshot(
+    QuerySnapshot<TopPoi> snapshot,
   ) {
-    final docs = snapshot.docs.map(PoiToVisitQueryDocumentSnapshot._).toList();
+    final docs = snapshot.docs.map(TopPoiQueryDocumentSnapshot._).toList();
 
     final docChanges = snapshot.docChanges.map((change) {
       return _decodeDocumentChange(
         change,
-        PoiToVisitDocumentSnapshot._,
+        TopPoiDocumentSnapshot._,
       );
     }).toList();
 
-    return PoiToVisitQuerySnapshot._(
+    return TopPoiQuerySnapshot._(
       snapshot,
       docs,
       docChanges,
     );
   }
 
-  static FirestoreDocumentChange<PoiToVisitDocumentSnapshot>
+  static FirestoreDocumentChange<TopPoiDocumentSnapshot>
       _decodeDocumentChange<T>(
     DocumentChange<T> docChange,
-    PoiToVisitDocumentSnapshot Function(DocumentSnapshot<T> doc) decodeDoc,
+    TopPoiDocumentSnapshot Function(DocumentSnapshot<T> doc) decodeDoc,
   ) {
-    return FirestoreDocumentChange<PoiToVisitDocumentSnapshot>(
+    return FirestoreDocumentChange<TopPoiDocumentSnapshot>(
       type: docChange.type,
       oldIndex: docChange.oldIndex,
       newIndex: docChange.newIndex,
@@ -769,29 +908,28 @@ class PoiToVisitQuerySnapshot extends FirestoreQuerySnapshot<PoiToVisit,
     );
   }
 
-  final QuerySnapshot<PoiToVisit> snapshot;
+  final QuerySnapshot<TopPoi> snapshot;
 
   @override
-  final List<PoiToVisitQueryDocumentSnapshot> docs;
+  final List<TopPoiQueryDocumentSnapshot> docs;
 
   @override
-  final List<FirestoreDocumentChange<PoiToVisitDocumentSnapshot>> docChanges;
+  final List<FirestoreDocumentChange<TopPoiDocumentSnapshot>> docChanges;
 }
 
-class PoiToVisitQueryDocumentSnapshot
-    extends FirestoreQueryDocumentSnapshot<PoiToVisit>
-    implements PoiToVisitDocumentSnapshot {
-  PoiToVisitQueryDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+class TopPoiQueryDocumentSnapshot extends FirestoreQueryDocumentSnapshot<TopPoi>
+    implements TopPoiDocumentSnapshot {
+  TopPoiQueryDocumentSnapshot._(this.snapshot) : data = snapshot.data();
 
   @override
-  final QueryDocumentSnapshot<PoiToVisit> snapshot;
+  final QueryDocumentSnapshot<TopPoi> snapshot;
 
   @override
-  final PoiToVisit data;
+  final TopPoi data;
 
   @override
-  PoiToVisitDocumentReference get reference {
-    return PoiToVisitDocumentReference(snapshot.reference);
+  TopPoiDocumentReference get reference {
+    return TopPoiDocumentReference(snapshot.reference);
   }
 }
 
@@ -801,7 +939,7 @@ class PoiToVisitQueryDocumentSnapshot
 abstract class PoiCollectionReference
     implements PoiQuery, FirestoreCollectionReference<Poi, PoiQuerySnapshot> {
   factory PoiCollectionReference(
-    DocumentReference<PoiToVisit> parent,
+    DocumentReference<TopPoi> parent,
   ) = _$PoiCollectionReference;
 
   static Poi fromFirestore(
@@ -821,8 +959,8 @@ abstract class PoiCollectionReference
   @override
   CollectionReference<Poi> get reference;
 
-  /// A reference to the containing [PoiToVisitDocumentReference] if this is a subcollection.
-  PoiToVisitDocumentReference get parent;
+  /// A reference to the containing [TopPoiDocumentReference] if this is a subcollection.
+  TopPoiDocumentReference get parent;
 
   @override
   PoiDocumentReference doc([String? id]);
@@ -835,10 +973,10 @@ abstract class PoiCollectionReference
 class _$PoiCollectionReference extends _$PoiQuery
     implements PoiCollectionReference {
   factory _$PoiCollectionReference(
-    DocumentReference<PoiToVisit> parent,
+    DocumentReference<TopPoi> parent,
   ) {
     return _$PoiCollectionReference._(
-      PoiToVisitDocumentReference(parent),
+      TopPoiDocumentReference(parent),
       parent.collection('poi').withConverter(
             fromFirestore: PoiCollectionReference.fromFirestore,
             toFirestore: PoiCollectionReference.toFirestore,
@@ -852,7 +990,7 @@ class _$PoiCollectionReference extends _$PoiQuery
   ) : super(reference, $referenceWithoutCursor: reference);
 
   @override
-  final PoiToVisitDocumentReference parent;
+  final TopPoiDocumentReference parent;
 
   String get path => reference.path;
 
@@ -897,9 +1035,9 @@ abstract class PoiDocumentReference
   /// A reference to the [PoiCollectionReference] containing this document.
   PoiCollectionReference get parent {
     return _$PoiCollectionReference(
-      reference.parent.parent!.withConverter<PoiToVisit>(
-        fromFirestore: PoiToVisitCollectionReference.fromFirestore,
-        toFirestore: PoiToVisitCollectionReference.toFirestore,
+      reference.parent.parent!.withConverter<TopPoi>(
+        fromFirestore: TopPoiCollectionReference.fromFirestore,
+        toFirestore: TopPoiCollectionReference.toFirestore,
       ),
     );
   }
@@ -991,9 +1129,9 @@ class _$PoiDocumentReference
   /// A reference to the [PoiCollectionReference] containing this document.
   PoiCollectionReference get parent {
     return _$PoiCollectionReference(
-      reference.parent.parent!.withConverter<PoiToVisit>(
-        fromFirestore: PoiToVisitCollectionReference.fromFirestore,
-        toFirestore: PoiToVisitCollectionReference.toFirestore,
+      reference.parent.parent!.withConverter<TopPoi>(
+        fromFirestore: TopPoiCollectionReference.fromFirestore,
+        toFirestore: TopPoiCollectionReference.toFirestore,
       ),
     );
   }
@@ -3337,19 +3475,21 @@ class PoiQueryDocumentSnapshot extends FirestoreQueryDocumentSnapshot<Poi>
 // JsonSerializableGenerator
 // **************************************************************************
 
-PoiToVisit _$PoiToVisitFromJson(Map<String, dynamic> json) => PoiToVisit(
+TopPoi _$TopPoiFromJson(Map<String, dynamic> json) => TopPoi(
       groupId: json['groupId'] as String,
+      title: json['title'] as String?,
       description: json['description'] as String?,
     );
 
-const _$PoiToVisitFieldMap = <String, String>{
+const _$TopPoiFieldMap = <String, String>{
   'groupId': 'groupId',
+  'title': 'title',
   'description': 'description',
 };
 
-Map<String, dynamic> _$PoiToVisitToJson(PoiToVisit instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TopPoiToJson(TopPoi instance) => <String, dynamic>{
       'groupId': instance.groupId,
+      'title': instance.title,
       'description': instance.description,
     };
 

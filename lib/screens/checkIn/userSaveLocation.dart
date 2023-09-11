@@ -27,7 +27,7 @@ import 'package:native_exif/native_exif.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../map/src/isocountry2.dart';
-import '../../model/poi-to-visit.dart';
+import '../../model/topPoi.dart';
 import '../../state/applicationstate.dart';
 //import '../ActiveCountryPage.dart';
 import 'checkcountry.dart';
@@ -254,6 +254,8 @@ Future saveLocation(
     newPlaceHistory.apiregionCode = newPlaceHistory.regionCode!;
     newPlaceHistory.regionCode = _isoregionCode;
     newPlaceHistory.visitnumber = newVisitNumber;
+    newPlaceHistory.arrivaldate = arrivaldate;
+
 
     developer.log('PlaceHistoryCollectionReference');
 
@@ -274,7 +276,7 @@ Future saveLocation(
     developer.log('saveImagesToFirestore before ');
 
     void _saveImagesToFirestore =
-        await saveImagesToFirestore(batch, placehistoryDocRef);
+        await saveImagesToFirestore(batch,newPlaceHistory, placehistoryDocRef);
     developer.log('saveImagesToFirestore done ');
 
     void _checkPoi = await checkPoi(context, batch, newPlaceHistory,
@@ -909,7 +911,7 @@ Future<Reference> saveImageToCloudStorage(XFile imageFile) async {
 }
 
 Future<void> saveImagesToFirestore(
-    WriteBatch batch, DocumentReference<Object?> placeHistoryId) async {
+    WriteBatch batch,  PlaceHistory     newPlaceHistory, DocumentReference<Object?> placeHistoryId) async {
   developer.log('saveImagesToFirestore');
 
   if (selectedImages!.isNotEmpty) {
@@ -937,6 +939,12 @@ Future<void> saveImagesToFirestore(
     'description': descriptionController.text,
     'imagePaths': imagePaths
   });
+
+    newPlaceHistory.apiregionCode = newPlaceHistory.regionCode!;
+    newPlaceHistory.imagePaths = imagePaths;
+    newPlaceHistory.description = descriptionController.text;
+
+
 }
 
 Future<void>? checkPoi(
@@ -947,6 +955,7 @@ Future<void>? checkPoi(
     List<Poi> poiList,
     UserProfile userProfile) async {
   developer.log('In checkPoi');
+  String _poiName;
   final userdocRef = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid);
@@ -964,22 +973,21 @@ Future<void>? checkPoi(
 
     // Compare distance between two lat long points
     if (distanceInMeters <= (poi.poiRadius ?? 1000.toDouble())) {
-      // Match
-
+      // Match      
       bool _exists = false;
 
       for (Map poiuser in userProfile.poi!) {
         if (poiuser['name'] == poi.name) {
-          developer.log('Already visited for ${poi.name}');
+          developer.log('Already visited saved for ${poi.name}');
           _exists = true;
           break;
         } else {
-          developer.log('Not Already visited for ${poi.name}');
+          developer.log('Not Already visited saved for ${poi.name}');
         }
       }
 
       if (_exists == false) {
-        developer.log('Not Already visited for ${poi.name}');
+        developer.log('Not Already visited  savedfor ${poi.name}');
         controllerConfettiGold.play();
         playsound();
 
@@ -1006,7 +1014,7 @@ Future<void>? checkPoi(
             );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-      }
+      } 
 
       developer.log(
           'Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius ?? 1000}');
@@ -1025,6 +1033,12 @@ Future<void>? checkPoi(
         developer.log('docSnapshot exists}');
 
         Map<String, dynamic> poiMap = {
+          "placeHistoryId": placeHistoryId.id,
+           "placeHistoryCountry": newPlace.countryCode,
+          "placeHistoryRegion": newPlace.regionCode,
+         "placeHistoryarrivaldate": newPlace.arrivaldate,
+          "placeHistorydescription": newPlace.description,
+          "placeHistoryimagePaths": newPlace.imagePaths,
           "poiId": poi.poiId,
           "latitude": poi.latitude,
           "longitude": poi.longitude,

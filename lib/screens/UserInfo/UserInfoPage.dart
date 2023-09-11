@@ -1,4 +1,5 @@
 import 'dart:io';
+//import 'dart:js_interop';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +13,14 @@ import 'package:provider/provider.dart';
 //import 'package:toggle_switch/toggle_switch.dart';
 import '../../src/acceptfriendrequests.dart';
 import '../../src/firebaseImage.dart';
-import '../poiToVisitList.dart';
+import '../topPoi.dart';
 import 'listfriends.dart';
 import '../../state/applicationstate.dart';
 import 'dart:developer' as developer;
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 
-String? _avatar ;
+String? _avatar;
 File? _avatarFile;
 //import 'package:firebase_storage/firebase_storage.dart';
 Widget buildCard(
@@ -57,6 +59,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   @override
   void initState() {
+    //  File? _avatarFile = await getImageFile(applicationState.userProfile!.avatar!);
+
     super.initState();
     // getUserInfo();
     // _nicknameController.text = "Adam";
@@ -156,6 +160,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
         Provider.of<ApplicationState>(context, listen: true);
     _nicknameController.text =
         applicationState.userProfile!.nickname!.toLowerCase();
+
     return Container(
       child: Consumer<ApplicationState>(
         builder: (context, appState, _) => Center(
@@ -166,37 +171,30 @@ class _UserInfoPageState extends State<UserInfoPage> {
             body: Form(
               key: _formKey,
               child: ListView(
-                padding: EdgeInsets.all(5),
+                //     padding: EdgeInsets.all(5),
                 children: [
                   Center(
                     child: GestureDetector(
-                      onTap: () async {
-                        // Add your onTap logic here
-                        print('CircleAvatar tapped!');
-                         XFile?  avatarXFile= await selectAndSaveImages(ImageSource.gallery);
-                         Reference imagePath = await saveImageToCloudStorage(avatarXFile!);
-                         _avatar = imagePath.fullPath;
-                         _avatarFile = await getImageFile(_avatar!);
+                        onTap: () async {
+                          // Add your onTap logic here
+                          print('CircleAvatar tapped!');
+                          XFile? avatarXFile =
+                              await selectAndSaveImages(ImageSource.gallery);
+                          Reference imagePath =
+                              await saveImageToCloudStorage(avatarXFile!);
+                          _avatar = imagePath.fullPath;
+                          //_avatarFile = await getImageFile(_avatar!);
+                          developer.log(
+                              ' imageFile is not null ${imagePath.fullPath}   ');
+                          _saveUserInfo();
+                        },
+child:  AvatarImage(storagePath:applicationState.userProfile!.avatar!)
 
-                        developer.log(' imageFile is not null ${imagePath.fullPath}   ');
-                        _saveUserInfo();
-                      },
-                      child: 
-                         //   FirebaseImage(storagePath: appState.userProfile!.avatar!),
-                         CircleAvatar(
-                          radius: 40.0,
-
-                    backgroundImage:  FileImage(_avatarFile!)
-                    //   backgroundImage:  (FirebaseImage(storagePath: appState.userProfile!.avatar!) as ImageProvider),
-                         )
-                    ),
+                        ),
                   ),
 
                   SizedBox(height: 16.0),
                   TextFormField(
-                    // onChanged: ,
-                    //  initialValue: "adam",
-                    //  initialValue: appState.userProfile?.nickname,
                     controller: _nicknameController,
                     decoration: InputDecoration(
                         labelText: 'Enter Nickname in lower case'),
@@ -408,7 +406,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PoiToVisitList(),
+                            builder: (context) => TopPoiList(),
                           ),
                         );
 
@@ -421,91 +419,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       child: Text('Top Locations'),
                     ),
                   ),
-                  // Container(
-                  //   padding: EdgeInsets.all(16.0),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                  //     children: [
-                  //       Text(
-                  //         'Title',
-                  //         style:
-                  //             TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  //       ),
-                  //       SizedBox(height: 16.0),
-                  //       Row(
-                  //         children: [
-                  //           Expanded(
-                  //             child: Container(
-                  //               color: Colors.blue,
-                  //               height: 100.0,
-                  //               child: Center(
-                  //                 child: Text(
-                  //                   'Sub Container 1',
-                  //                   style: TextStyle(
-                  //                     fontSize: 16.0,
-                  //                     color: Colors.white,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           SizedBox(width: 16.0),
-                  //           Expanded(
-                  //             child: Container(
-                  //               color: Colors.green,
-                  //               height: 100.0,
-                  //               child: Center(
-                  //                 child: Text(
-                  //                   'Sub Container 2',
-                  //                   style: TextStyle(
-                  //                     fontSize: 16.0,
-                  //                     color: Colors.white,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       SizedBox(height: 16.0),
-                  //       Row(
-                  //         children: [
-                  //           Expanded(
-                  //             child: Container(
-                  //               color: Colors.yellow,
-                  //               height: 100.0,
-                  //               child: Center(
-                  //                 child: Text(
-                  //                   'Sub Container 3',
-                  //                   style: TextStyle(
-                  //                     fontSize: 16.0,
-                  //                     color: Colors.black,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           SizedBox(width: 16.0),
-                  //           Expanded(
-                  //             child: Container(
-                  //               color: Colors.orange,
-                  //               height: 100.0,
-                  //               child: Center(
-                  //                 child: Text(
-                  //                   'Sub Container 4',
-                  //                   style: TextStyle(
-                  //                     fontSize: 16.0,
-                  //                     color: Colors.white,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  // )
                 ],
               ),
             ),
@@ -515,107 +428,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 }
-// class NicknamePage extends StatefulWidget {
-//   const NicknamePage({super.key});
-
-//   @override
-//   _NicknamePageState createState() => _NicknamePageState();
-// }
-
-// class _NicknamePageState extends State<NicknamePage> {
-//   final _formKey = GlobalKey<FormState>();
-//   final _nicknameController = TextEditingController();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _getNickname();
-//   }
-
-//   Future<void> _getNickname() async {
-//     final user = FirebaseAuth.instance.currentUser;
-//     final nickname = await FirebaseFirestore.instance
-//         .collection('users')
-//         .doc(user!.uid)
-//         .get()
-//         .then((doc) => doc.data()?['nickname']);
-//     setState(() {
-//       _nicknameController.text = nickname ?? '';
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Set Nickname'),
-//       ),
-//       body: Form(
-//         key: _formKey,
-//         child: Padding(
-//           padding: EdgeInsets.all(16.0),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.stretch,
-//             children: [
-//               TextFormField(
-//                 controller: _nicknameController,
-//                 decoration: InputDecoration(labelText: 'Nickname'),
-//                 validator: (value) {
-//                   if (value!.isEmpty) {
-//                     return 'Please enter a nickname';
-//                   }
-//                   return null;
-//                 },
-//               ),
-
-//               Checkbox(
-//                 onChanged: _nicknameController,
-//                 decoration: InputDecoration(labelText: 'Nickname'),
-//                 validator: (value) {
-//                   if (value!.isEmpty) {
-//                     return 'Please enter a nickname';
-//                   }
-//                   return null;
-//                 },
-//               ),
-
-//               SizedBox(height: 16.0),
-//               ElevatedButton(
-//                 onPressed: _saveNickname,
-//                 child: Text('Save'),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Future<void> _saveNickname() async {
-//     final user = FirebaseAuth.instance.currentUser;
-//     await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
-//       'nickname': _nicknameController.text.trim(),
-//     }, SetOptions(merge: true));
-//   }
-
-//   // Future<void> _saveNickname() async {
-//   //   if (_formKey.currentState!.validate()) {
-//   //     final user = FirebaseAuth.instance.currentUser;
-//   //     final nickname = _nicknameController.text.trim();
-
-//   //     await FirebaseFirestore.instance
-//   //         .collection('users')
-//   //         .doc(user!.uid)
-//   //         .set({'nickname': nickname});
-
-//   //     Navigator.pop(context);
-//   //   }
-//   // }
-
 // }
 
 Future<XFile?> selectAndSaveImages(ImageSource _imagesource) async {
-
   XFile? selectedImage = await ImagePicker().pickImage(source: _imagesource);
   if (selectedImage != null) {
     developer.log('selectedImage is not null ');
@@ -644,32 +459,109 @@ Future<Reference> saveImageToCloudStorage(XFile imageFile) async {
   String savedImagePath = '${appDirectory.path}/$fileName';
   File(imageFile.path).copy(savedImagePath);
   return storageReference;
+}
 
+Future<File?> getImageFile(String storagePath) async {
+  final tempDir = await getTemporaryDirectory();
+  final fileName = storagePath.split('/').last;
+  final file = File('${tempDir.path}/$fileName');
+
+  // If the file do not exists try to download
+  if (!file.existsSync()) {
+  //if (true) {
+    try {
+      file.create(recursive: true);
+    
+      final ref =  FirebaseStorage.instance.ref(storagePath);
+      await ref.writeToFile(file);
+    //  await FirebaseStorage.instance.ref(storagePath).writeToFile(file);
+    } catch (e) {
+      // If there is an error delete the created file
+      await file.delete(recursive: true);
+      return null;
+    }
+  }
+  return file;
+}
+
+// class CircleClipper extends CustomClipper<Path> {
+//   @override
+//   Path getClip(Size size) {
+//     final path = Path();
+//     final radius = size.width / 2.0; // Assumes the width and height are the same
+
+//     path.addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius));
+    
+//     return path;
+//   }
+
+//   @override
+//   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+//     return false; // In most cases, you don't need to recalculate the clip path
+//   }
+// }
+
+
+
+
+class AvatarImage extends StatelessWidget {
+
+  final String storagePath;
+
+  //const CheckInContainer({super.key});
+  const AvatarImage({required this.storagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<File?>(
+      future: getImageFile(storagePath),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // Show a loading indicator while fetching the file.
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData || snapshot.data == null) {
+          return Text('No image available');
+        } else {
+          // Create an ImageProvider from the fetched File.
+          final imageProvider = FileImage(snapshot.data!);
+
+          // Use the imageProvider with an Image widget or any other widget that accepts an ImageProvider.
+          return CircleAvatar(
+  radius: 40.0,
+  backgroundImage: imageProvider);
+        }
+      },
+    );
+  }
+  
+  // @override
+  // Future<Object> obtainKey(ImageConfiguration configuration) {
+  //   // TODO: implement obtainKey
+  //   throw UnimplementedError();
+  // }
 }
 
 
+// Future<void> downloadFile(String storagePath, File localFile) async {
+//   try {
+//     final Reference storageReference =
+//         FirebaseStorage.instance.ref(storagePath);
 
-  Future<File?> getImageFile(String storagePath) async {
-    final tempDir = await getTemporaryDirectory();
-    final fileName = storagePath.split('/').last;
-    final file = File('${tempDir.path}/$fileName');
+//     // Check if the file exists.
+//     final bool doesExist = await storageReference.exists();
 
-    // If the file do not exists try to download
-    if (!file.existsSync()) {
-      try {
-        file.create(recursive: true);
-        await FirebaseStorage.instance.ref(storagePath).writeToFile(file);
-      } catch (e) {
-        // If there is an error delete the created file
-        await file.delete(recursive: true);
-        return null;
-      }
-    }
-    return file;
-  }
-
-
-
- 
-   
+//     if (doesExist) {
+//       // If the file exists, download it to the local file.
+//       await storageReference.writeToFile(localFile);
+//       print('File downloaded successfully.');
+//     } else {
+//       print('File does not exist.');
+//       // Handle the case where the file is missing, e.g., show an error message.
+//     }
+//   } catch (e) {
+//     print('Error downloading file: $e');
+//     // Handle other potential errors that might occur during the download.
+//   }
+// }
 

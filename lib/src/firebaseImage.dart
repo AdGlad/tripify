@@ -62,8 +62,8 @@ class _FirebaseImageState extends State<FirebaseImage> {
     }
     return Image.file(
       _file!,
-      width: 300,
-      height: 300,
+      width: 500,
+      height: 500,
     );
 
     

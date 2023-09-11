@@ -5,7 +5,6 @@ import '../../state/applicationstate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:developer' as developer;
 
-
 class CheckInContainer extends StatefulWidget {
   final BuildContext context;
   final UserProfile? user;
@@ -30,13 +29,12 @@ class _CheckInContainerState extends State<CheckInContainer> {
       _isLoadingPhoto = !_isLoadingPhoto;
     });
   }
+
   void _toggleLoadingLocation() {
     setState(() {
       _isLoadingLocation = !_isLoadingLocation;
     });
   }
-
-
 
   @override
   void initState() {
@@ -48,10 +46,12 @@ class _CheckInContainerState extends State<CheckInContainer> {
 
   void _startLocationUpdates() {
     _locationStream = _geolocator.getPositionStream();
-    _locationStream.listen((Position position) {
+    _locationStream.first.then((Position position) {
+      // _locationStream.listen((Position position) {
       setState(() {
         _currentPosition = position;
       });
+      _locationStream.first.then((Position value) => null);
     });
 
     // Also, listen for changes in location services authorization.
@@ -64,10 +64,6 @@ class _CheckInContainerState extends State<CheckInContainer> {
     });
   }
 
-
-
-
-  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,14 +81,14 @@ class _CheckInContainerState extends State<CheckInContainer> {
           child: Column(
             children: [
               Text('Check-in',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w700,
-                                  )),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w700,
+                  )),
               Center(
                 child: Row(
-mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -101,11 +97,13 @@ mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       ),
                       onPressed: () async {
                         // await showPopupForm(context);
-              
+
                         _toggleLoadingLocation();
 
-                        developer.log('_currentPosition.latitude ${_currentPosition.latitude}');
+                        developer.log(
+                            '_currentPosition.latitude ${_currentPosition.latitude}');
 
+                        _startLocationUpdates();
                         await saveMobileLocation(
                             context,
                             //_currentPosition.latitude,
@@ -121,8 +119,7 @@ mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       },
                       child: _isLoadingLocation
                           ? CircularProgressIndicator()
-                          : 
-                          FittedBox(
+                          : FittedBox(
                               fit: BoxFit.fill,
                               child: Text('Location',
                                   style: TextStyle(
@@ -139,7 +136,7 @@ mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       ),
                       onPressed: () async {
                         // await showPopupForm(context);
-              
+
                         _toggleLoadingPhoto();
                         await savePhotoLocation(
                             context,
@@ -150,11 +147,9 @@ mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         //   updateStats(widget.appState.userTotals);
                         _toggleLoadingPhoto();
                       },
-                      child:
-                       _isLoadingPhoto
+                      child: _isLoadingPhoto
                           ? CircularProgressIndicator()
-                          :
-                          FittedBox(
+                          : FittedBox(
                               fit: BoxFit.fill,
                               child: Text('  Photo  ',
                                   style: TextStyle(

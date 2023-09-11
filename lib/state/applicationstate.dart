@@ -15,7 +15,7 @@ import 'package:flutter/services.dart';
 //        EmailAuthProvider,
 //        PhoneAuthProvider; // new
 import 'package:gtk_flutter/model/placehistory.dart';
-import 'package:gtk_flutter/model/poi-to-visit.dart';
+import 'package:gtk_flutter/model/topPoi.dart';
 import 'package:gtk_flutter/model/users.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../firebase_options.dart';
@@ -72,6 +72,9 @@ class ApplicationState extends ChangeNotifier {
 
   List<Poi> _poiList = [];
   List<Poi> get poiList => _poiList;
+  
+  //List<PlaceHistory> _tripList = [];
+  //List<PlaceHistory> get tripList => _tripList;
 
 //  UserTotals _userTotals = UserTotals();
 //  UserTotals get userTotals => _userTotals;

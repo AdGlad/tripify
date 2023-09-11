@@ -184,6 +184,7 @@ Text(
                    //     alignment: Alignment.center,
                   children: [
                                       Container(
+                                     //   alignment: Alignment.centerLeft,
                         height: 200,
                         child:
                             //                        ListView.builder(
@@ -222,10 +223,12 @@ Text(
                             //       );
                             //     }),
                             ListView.builder(
+                              shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
                                 itemCount: currentPlaceHistory.imagePaths?.length,
                                 itemBuilder: (context, index) {
                                   return Container(
+                                   // alignment: Alignment.centerLeft,
                                     height: 100,
                                     child: Padding(
                                       padding: EdgeInsets.all(8.0),

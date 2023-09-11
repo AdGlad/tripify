@@ -6,24 +6,26 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:provider/provider.dart';
 
 
-part 'poi-to-visit.g.dart';
+part 'topPoi.g.dart';
 
 @firestoreSerializable
-class PoiToVisit {
-  PoiToVisit({
+class TopPoi {
+  TopPoi({
     required this.groupId,
+     this.title,
      this.description,
   });
 
-  factory PoiToVisit.fromJson(Map<String, Object?> json) =>
-      _$PoiToVisitFromJson(json);
+  factory TopPoi.fromJson(Map<String, Object?> json) =>
+      _$TopPoiFromJson(json);
 
   @Id()
   final String groupId;
+  String? title;
   String? description;
 
 
-  Map<String, Object?> toJson() => _$PoiToVisitToJson(this);
+  Map<String, Object?> toJson() => _$TopPoiToJson(this);
 }
 
 @firestoreSerializable
@@ -86,9 +88,9 @@ const firestoreSerializable = JsonSerializable(
   createFieldMap: true,
 );
 
-@Collection<PoiToVisit>('poi-to-visit')
-@Collection<Poi>('poi-to-visit/*/poi')
+@Collection<TopPoi>('toppoi')
+@Collection<Poi>('toppoi/*/poi')
 
-final poitovisitRef = PoiToVisitCollectionReference();
+final toppoiRef = TopPoiCollectionReference();
 //final poiRef = PoiCollectionReference();
 
