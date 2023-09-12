@@ -12,6 +12,8 @@ import 'UserInfo/UserInfoPage.dart';
 import 'placelistpage.dart';
 import 'dart:developer' as developer;
 
+import 'topPoi.dart';
+
 //import 'country/poiCard.dart';
 
 //import 'country/poiCard.dart';
@@ -63,22 +65,25 @@ class _PoiListState extends State<PoiList> {
     
                 Poi poi = querySnapshot.docs[index].data;
     
-                return GestureDetector(
+                return 
+                
+                GestureDetector(
                     // child: Text("poi.properties!")
                    // child: PoitCard(poi, context) //Text(poi.properties?['name'])
-                    child: PoitImageCard(poi: poi, context: context, poiList: appState.userProfile!.poi) //Text(poi.properties?['name'])
+                    child: Hero(
+                      tag: "PointOfInterest",
+                      child: PoitImageCard(poi: poi, context: context, poiList: appState.userProfile!.poi)) //Text(poi.properties?['name'])
                     //    child: Text(poiToVisit.description!)
     
                     //   child: PoiCard(poi, context)
-                    // ,onTap: () {
-                    //       // Navigator.push(
-                    //       //   context,
-                    //       //   MaterialPageRoute(
-                    //       //                 builder: (context) => PoiMapPage(
-                    //       //                 poi: poi.groupId)
-                    //       //           ),
-                    //       // );
-                    // }
+                    ,onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                          builder: (context) => PoiLocation(poi: poi, poiList:  appState.userProfile!.poi,context: context)
+                                    ),
+                          );
+                    }
                     );
               },
             );
@@ -139,13 +144,13 @@ class _PoiListState extends State<PoiList> {
 // }
 
 class PoiLocation extends StatelessWidget {
-String? poi_name;
+Poi poi;
 List<Map<String, dynamic>>? poiList;
 final BuildContext context;
 
  // const poiLocatoion({Key? key}) : super(key: key);
  //  PoiLocation({ this.placehistoryId, required this.context});
-   PoiLocation({ this.poi_name, this.poiList, required this.context});
+   PoiLocation({ required this.poi, this.poiList, required this.context});
 
  //PlaceHistory? poiPlaceHistory = await fetchPlacehistoryDoc( poi.poiId);
 
@@ -155,7 +160,12 @@ final BuildContext context;
       appBar: AppBar(
         title: Text('Screen'),
       ),
-      body: Text('PoiLocation $poi_name')
+      body:  Container(height: 150,
+        child: Hero(
+          tag: "PointOfInterest",
+          child: PoitImageCard(poi: poi, context: context, poiList: poiList)))
+      //topPoiCard(TopPoi poi, BuildContext: context)
+      //  Text('PoiLocation ${poi.poiId}'),
     
    );
   // ));
@@ -219,17 +229,8 @@ class PoitImageCard extends StatelessWidget {
             margin: EdgeInsets.all(5.0),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: GestureDetector(
-                    onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                //      builder: (context) => PoiLocation(placehistoryId: vistedPlacehistoryId,context: context) // placescard(poiPlaceHistory, context)
-                      builder: (context) => PoiLocation(poi_name: poi.poiId,poiList:  poiList,context: context) // placescard(poiPlaceHistory, context)
-                  //  countrycode: currentcountry.countryCode!),
-                ));
-              },
-              child: Column(
+            child: 
+              Column(
                 children: [
                   Container(
                     //  color: Color.fromARGB(255, 81, 126, 231),
@@ -265,7 +266,53 @@ class PoitImageCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+            // GestureDetector(
+            //         onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //     //      builder: (context) => PoiLocation(placehistoryId: vistedPlacehistoryId,context: context) // placescard(poiPlaceHistory, context)
+            //           builder: (context) => PoiLocation(poi: poi,poiList:  poiList,context: context) // placescard(poiPlaceHistory, context)
+            //       //  countrycode: currentcountry.countryCode!),
+            //     ));
+            //   },
+            //   child: Column(
+            //     children: [
+            //       Container(
+            //         //  color: Color.fromARGB(255, 81, 126, 231),
+            //         margin: EdgeInsets.all(5),
+            //         child: Row(
+            //           children: [
+            //             // Icon( Icons.location_on, color: Colors.white, size: 25),
+            //             Container(
+            //               margin: EdgeInsets.all(5),
+            //               child: Row(
+            //                 crossAxisAlignment: CrossAxisAlignment.start,
+            //                 children: [
+            //                   CircleAvatar(
+            //                       radius: 40.0, backgroundImage: imageProvider),
+            //                   Container(
+            //                     child: Text(poi.properties?['name']!,
+            //                         textAlign: TextAlign.left,
+            //                         style: TextStyle(
+            //                           color:(poihasbeenvisted)
+            //                               ? Color.fromARGB(255, 49, 52, 59) 
+            //                               :Colors.white,
+            //                           fontSize: 20.0,
+            //                           fontWeight: FontWeight.w700,
+            //                         )),
+            //                   ),
+            //                   //    Icon(Icons.star_border, color: Colors.white, size: 25),
+            //                   // (poihasbeenvisted) ? Icon(Icons.star, color: Colors.amber, size: 25) : Icon(Icons.star_border, color: Colors.white, size: 25),
+            //                 ],
+            //               ),
+            //             )
+            //           ],
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           );
         }
       },
