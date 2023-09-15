@@ -106,6 +106,9 @@ class ApplicationState extends ChangeNotifier {
   List<IsoCountry2> _IsoCountry2List = [];
   List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
 
+  Map<String, dynamic> _placehistoryMap = {};
+  Map<String, dynamic> get placehistoryMap => _placehistoryMap;
+
   Map<String, dynamic> _countryrecords = {};
   Map<String, dynamic> get countryrecords => _countryrecords;
 
@@ -618,6 +621,7 @@ class ApplicationState extends ChangeNotifier {
         .listen((snapshot) {
       _placeHistory = [];
 
+
       for (final document in snapshot.docs) {
         //  globals.new_latitude = document.data()['latitude'] as double;
         //  globals.new_longitude = document.data()['longitude'] as double;
@@ -625,7 +629,12 @@ class ApplicationState extends ChangeNotifier {
         DateTime currentArrivaldate =
             DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
-        _placeHistory.add(PlaceHistory(
+         _placehistoryMap[document.id] = document.data();
+// _placeHistory.add(PlaceHistory.fromJson(document.data()));
+
+       _placeHistory.add(PlaceHistory(
+
+       // _placeHistory[document.id] = PlaceHistory(
             userId: FirebaseAuth.instance.currentUser!.uid,
             name: document.data()['name'] as String,
             latitude: document.data()['latitude'] as double,
