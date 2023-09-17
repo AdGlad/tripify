@@ -186,60 +186,31 @@ Text(
                                       Container(
                                      //   alignment: Alignment.centerLeft,
                         height: 200,
+                        //width: 200,
                         child:
-                            //                        ListView.builder(
-                            //   itemCount: currentPlaceHistory.imagePaths?.length,
-                            //   itemBuilder: (context, index) {
-                            //     return FutureBuilder(
-                            //       future: _storageReference.child(currentPlaceHistory.imagePaths![index]).getDownloadURL(),
-                            //       builder: (context, snapshot) {
-                            //         if (snapshot.connectionState == ConnectionState.waiting) {
-                            //           return CircularProgressIndicator();
-                            //         } else if (snapshot.hasError) {
-                            //           return Text('Error: ${snapshot.error}');
-                            //         } else if (snapshot.hasData) {
-                            //           String imageUrl = snapshot.data.toString();
-                            //           return ListTile(
-                            //             title: Text('Image ${index + 1}'),
-                            //             leading: Image.network(imageUrl),
-                            //           );
-                            //         } else {
-                            //           return Text('No image available.');
-                            //         }
-                            //       },
-                            //     );
-                            //   },
-                            // ),
-                            // ListView.builder(
-                            //     scrollDirection: Axis.horizontal,
-                            //     itemCount: currentPlaceHistory.imagePaths?.length,
-                            //     itemBuilder: (context, index) {
-                            //       return Padding(
-                            //         padding: EdgeInsets.all(8.0),
-                            //         child:
-                            //         currentPlaceHistory.imagePaths?[index] != null ?
-                            //         Image.file(File(currentPlaceHistory.imagePaths![index]))
-                            //              : Text(' '),
-                            //       );
-                            //     }),
                             ListView.builder(
                               shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
                                 itemCount: currentPlaceHistory.imagePaths?.length,
                                 itemBuilder: (context, index) {
                                   return Container(
+                                    //color: Colors.blue,
                                    // alignment: Alignment.centerLeft,
-                                    height: 100,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: currentPlaceHistory
+                                    height: 200,
+                                    width: 300,
+                                    child:
+                                    // Padding(
+                                     // padding: EdgeInsets.all(8.0),
+                                    //  child: 
+                                      
+                                      currentPlaceHistory
                                                   .imagePaths?[index] !=
                                               null
                                           ? FirebaseImage(
                                               storagePath: currentPlaceHistory
                                                   .imagePaths![index])
                                           : Text(' '),
-                                    ),
+                                   // ),
                                   );
                                 }),
                       ),

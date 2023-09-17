@@ -40,12 +40,12 @@ class _LocationMapPageState extends State<LocationMapPage> {
     var markerImage = await loadMarkerImage();
     controller.addImage('QuokkaMarker', markerImage);
     List<Symbol> symbols = [];
-    developer.log('Icon locations of the map ');
+    //developer.log('Icon locations of the map ');
 
 
     for (var location in placeHistory) {
-      developer.log(
-          '${location.latitude.toString()} ,${location.latitude.toString()}');
+    //  developer.log(
+    //      '${location.latitude.toString()} ,${location.latitude.toString()}');
 
       await controller.addSymbol(SymbolOptions(
         // geometry: LatLng(location['latitude'], location['longitude']),

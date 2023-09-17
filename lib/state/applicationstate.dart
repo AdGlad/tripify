@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ffi';
 //import 'dart:ffi';
 
 //import 'package:firebase_auth/firebase_auth.dart';
@@ -623,40 +624,52 @@ class ApplicationState extends ChangeNotifier {
 
 
       for (final document in snapshot.docs) {
-        //  globals.new_latitude = document.data()['latitude'] as double;
-        //  globals.new_longitude = document.data()['longitude'] as double;
-        int timeInMillis = document.data()['timestamp'] as int;
-        DateTime currentArrivaldate =
-            DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
          _placehistoryMap[document.id] = document.data();
-// _placeHistory.add(PlaceHistory.fromJson(document.data()));
+          if (document.id == 'cS54TdeyKjrvhUMQhdB6') {
+            developer.log('listenForPlaceHistory  ${document.id}');
 
-       _placeHistory.add(PlaceHistory(
+          }
 
-       // _placeHistory[document.id] = PlaceHistory(
-            userId: FirebaseAuth.instance.currentUser!.uid,
-            name: document.data()['name'] as String,
-            latitude: document.data()['latitude'] as double,
-            longitude: document.data()['longitude'] as double,
-            streetAddress: document.data()['streetAddress'] as String,
-            city: document.data()['city'] as String,
-            countryName: document.data()['countryName'] as String,
-            countryCode: document.data()['countryCode'] as String,
-            postal: document.data()['postal'] as String?,
-            region: document.data()['region'] as String?,
-            regionCode: document.data()['regionCode'] as String?,
-            timezone: document.data()['timezone'] as String?,
-            elevation: document.data()['elevation'] as int?,
-            visitnumber: document.data()['visitnumber'] as int?,
-            description: document.data()['description'] as String?,
-            rating: document.data()['rating'] as String?,
-            poi: document.data()['poi'] as String?,
-            // imagePaths: document.data()['imagePaths'] as List<String>?,
-            imagePaths: (document.data()['imagePaths'] as List<dynamic>?)
-                ?.cast<String>(),
-            arrivaldate: currentArrivaldate));
+//         _placeHistory.add(placeHistoryfunc( document.data()));
+//         //  globals.new_latitude = document.data()['latitude'] as double;
+//         //  globals.new_longitude = document.data()['longitude'] as double;
+//         int timeInMillis = document.data()['timestamp'] as int;
+//         DateTime currentArrivaldate =
+//             DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
+// // _placeHistory.add(PlaceHistory.fromJson(document.data()));
+
+//        _placeHistory.add(PlaceHistory(
+
+//        // _placeHistory[document.id] = PlaceHistory(
+//             userId: FirebaseAuth.instance.currentUser!.uid,
+//             name: document.data()['name'] as String,
+//             latitude: document.data()['latitude'] as double,
+//             longitude: document.data()['longitude'] as double,
+//             streetAddress: document.data()['streetAddress'] as String,
+//             city: document.data()['city'] as String,
+//             countryName: document.data()['countryName'] as String,
+//             countryCode: document.data()['countryCode'] as String,
+//             postal: document.data()['postal'] as String?,
+//             region: document.data()['region'] as String?,
+//             regionCode: document.data()['regionCode'] as String?,
+//             timezone: document.data()['timezone'] as String?,
+//             elevation: document.data()['elevation'] as int?,
+//             visitnumber: document.data()['visitnumber'] as int?,
+//             description: document.data()['description'] as String?,
+//             rating: document.data()['rating'] as String?,
+//             poi: document.data()['poi'] as String?,
+//             // imagePaths: document.data()['imagePaths'] as List<String>?,
+//             imagePaths: (document.data()['imagePaths'] as List<dynamic>?)
+//                 ?.cast<String>(),
+     //       arrivaldate: currentArrivaldate));
+        _placeHistory.add(placeHistoryfunc( document.data()));
+         _placehistoryMap[document.id] = document.data();
+          if (document.id == 'cS54TdeyKjrvhUMQhdB6') {
+            developer.log('_placeHistory.add  ${document.id}');
+
+          }
         developer.log('_placeHistory.add  in ');
       }
 
@@ -776,4 +789,53 @@ class ApplicationState extends ChangeNotifier {
 
     // return users;
   }
+}
+
+PlaceHistory placeHistoryfunc(Map<String, dynamic> documentData) {
+        int timeInMillis = documentData['timestamp'] as int;
+        DateTime currentArrivaldate =
+            DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+
+       dynamic poiData = documentData['poi'];
+ String? poi;
+// Check if poiData is of type String or null
+if (poiData is String || poiData == null) {
+  // Cast poiData to String? (nullable String)
+   poi = poiData as String?;
+  
+  // Now you can use poi as a nullable String
+  // Do whatever you need to do with poi
+} else 
+{
+poi = poiData.toString();  // Handle the case where poiData is of a different type (e.g., int)
+  // You can decide what to do here based on your requirements
+}
+
+       final _placeHistory = PlaceHistory(
+            userId: FirebaseAuth.instance.currentUser!.uid,
+            name: documentData['name'] as String,
+            latitude: documentData['latitude'] as double,
+            longitude: documentData['longitude'] as double,
+            streetAddress: documentData['streetAddress'] as String,
+            city: documentData['city'] as String,
+            countryName: documentData['countryName'] as String,
+            countryCode: documentData['countryCode'] as String,
+            postal: documentData['postal'] as String?,
+            region: documentData['region'] as String?,
+            regionCode: documentData['regionCode'] as String?,
+            timezone: documentData['timezone'] as String?,
+            elevation: documentData['elevation'] as int?,
+            visitnumber: documentData['visitnumber'] as int?,
+            description: documentData['description'] as String?,
+            rating: documentData['rating'] as String?,
+        //    poi: documentData['poi'] as String?,
+            poi: poi,
+            // imagePaths: documentData()['imagePaths'] as List<String>?,
+            imagePaths: (documentData['imagePaths'] as List<dynamic>?)
+                ?.cast<String>(),
+            arrivaldate: currentArrivaldate);
+
+        developer.log('_placeHistory.add  in ');
+    
+      return _placeHistory;
 }

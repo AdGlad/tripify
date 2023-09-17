@@ -127,7 +127,7 @@ Future saveLocation(
   PlaceHistory newPlaceHistory;
   Future newplace;
   bool _latestLocation = false;
-
+  List<Poi> _localPlaces=[];
   // selectedImages = [];
   // imagePaths = [];
   int _newCountryCount = 0;
@@ -143,8 +143,18 @@ Future saveLocation(
   //developer.log('photoLocation is false');
   //_latitude = newPlace.latitude;
   //_longitude = newPlace.longitude;
+
+
+  
   _latitude = latitude;
   _longitude = longitude;
+// Laura NSW longitude 150.3315 latitude -33.7141
+ // _longitude = 150.3315;
+ // _latitude = -33.7141;
+
+  // Manly NSW longitude 151.2886 latitude -33.7981
+  // _longitude = 151.2886;
+  //_latitude = -33.7981;
 
   String _userId = FirebaseAuth.instance.currentUser!.uid;
   CurrentUser currentUser = CurrentUser(
@@ -161,8 +171,9 @@ Future saveLocation(
   //  .then((value) async {
   // int currentVisitNumber;
   int newVisitNumber;
+   _localPlaces = await fetchLocalPlaces(_latitude, _longitude);
 
-  bool? saveform = await popupForm(context, newPlaceHistory, mobileLocation);
+  bool? saveform = await popupForm(context, newPlaceHistory, mobileLocation, _localPlaces);
 
   if (saveform == true) {
     developer.log(
@@ -713,9 +724,8 @@ Future<DocumentReference> addPlaceHistory(WriteBatch batch,
 /////// New Sequence  //////
 
 Future<bool?> popupForm(
-    BuildContext context, PlaceHistory newPlaceHistory, bool mobileLocation
-    //   WriteBatch batch,
-//DocumentReference<Object?> placeHistoryId
+    BuildContext context, PlaceHistory newPlaceHistory, bool mobileLocation, List<Poi>   localPlaces 
+
     ) async {
   return showDialog<bool>(
     context: context,
@@ -726,25 +736,11 @@ Future<bool?> popupForm(
               ' ${newPlaceHistory.countryName} ' +
               ' ${newPlaceHistory.city}'),
           content:
-              // Text('Do you want to save the form?'),
-              //   SingleChildScrollView(
-              //    child:
               Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
-                  // Text(
-                  //   'Address: ',
-                  //   textAlign: TextAlign.left,
-                  //   style: TextStyle(
-                  //     color: const Color.fromARGB(255, 176, 75, 75),
-                  //     fontSize: 10.0,
-                  //     fontWeight: FontWeight.w900,
-                  //   ),
-                  //   softWrap: true,
-                  //   maxLines: 2,
-                  // ),
                   Expanded(
                     child: Text('${newPlaceHistory.streetAddress}',
                         textAlign: TextAlign.left,
@@ -756,6 +752,26 @@ Future<bool?> popupForm(
                   ),
                 ],
               ),
+
+              Center(
+          child: DropdownButton<Poi>(
+            value: localPlaces.isNotEmpty ? localPlaces[0] : null, // Set the initial selected value
+            items: localPlaces.map((Poi poi) {
+              return DropdownMenuItem<Poi>(
+                value: poi,
+                child: Text(poi.name??"No Name"),
+              );
+            }).toList(),
+            onChanged: (Poi? selectedPoi) {
+              // Handle the selection of a place
+              if (selectedPoi != null) {
+                print('Selected place: ${selectedPoi.name}');
+                descriptionController.text = 'Visting ${selectedPoi.name}';
+
+              }
+            },
+          ),
+        ),
               TextFormField(
                 autofocus: true,
                 controller: descriptionController,
@@ -1069,4 +1085,61 @@ Future<void>? checkPoi(
           'No Match ${poi.name} Distance=$distanceInMeters Radius=${poi.poiRadius ?? 1000}');
     }
   }
+}
+
+
+
+
+Future<List<Poi>> fetchLocalPlaces(
+    double? latitude, double? longitude) async {
+   List<Poi> _localPlaces=[];   
+  var jsonString;
+  String accessToken =
+      "pk.eyJ1IjoidHJpcGlmeSIsImEiOiJjbGRmaWdkcHgwaGJpM25wZTh0eDAwN2JoIn0.H_QiLx6jgdQXVX4OqzKCVw";
+
+  String urlString = "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/tilequery/" + 
+      longitude.toString() +
+      "," +
+      latitude.toString() +
+    //  ".json?radius=200&limit=10&dedupe&layers=poi_label&access_token=" +
+      ".json?radius=200&limit=20&layers=poi_label&&access_token=" +
+      accessToken;
+
+  var res = await http.get(
+    Uri.parse(urlString),
+  );
+ 
+  jsonString = jsonDecode(res.body);
+  developer.log('urlString $urlString');
+
+
+  var features = jsonString['features'];
+
+
+    for (var feature in features) {
+
+  developer.log('feature ${feature['properties']['name']}');
+
+    _localPlaces.add(Poi(
+      poiId: feature['id'].toString(),
+      latitude: feature['geometry']['coordinates'][1] as double?,
+      longitude: feature['geometry']['coordinates'][0] as double?,
+      geometry: feature['geometry'] as Map<dynamic, dynamic>?,
+      id: feature['id'] as int?,
+      properties: feature['properties'] as Map<String, dynamic>?,
+      category: feature['properties']['category_en'] as String?,
+      poiclass: feature['properties']['class'] as String?,
+      iso_3166_1: feature['properties']['iso_3166_1'] as String?,
+      iso_3166_2: feature['properties']['iso_3166_2'] as String?,
+      maki: feature['properties']['maki'] as String?,
+      name: (feature['properties']['name'] as String?)??"No Name",
+      type: feature['properties']['type'] as String?,
+      imagePath: feature['properties']['imagePath'] as String?,
+      poiRadius: feature['properties']['poiRadius'] as double?,
+      groupId: feature['properties']['groupId'] as String?,
+    ));
+    }
+//  }).toList();
+return _localPlaces;
+
 }
