@@ -194,7 +194,7 @@ List<dynamic> filterExpressions = [];
                       // target: LatLng(5, 46),
                       //  target: LatLng(-4.6796, 55.4920),
                       target: LatLng(35, 20),
-                      zoom: 1.0,
+                      zoom: 0.1,
                       //zoom: 8.50,
                     ),
                   ),

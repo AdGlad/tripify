@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../model/topPoi.dart';
 import '../state/applicationstate.dart';
 import 'poiList.dart';
+import 'dart:developer' as developer;
+
 //import 'poiList.dart';
  class TopPoiList extends StatefulWidget {
      const TopPoiList({super.key});
@@ -24,42 +26,61 @@ class _TopPoiListState extends State<TopPoiList> {
         title: const Text('Top Locations'),
       ),
       body:
-    FirestoreBuilder<TopPoiQuerySnapshot>(
-      ref: toppoiRef,
-      builder: (context, AsyncSnapshot<TopPoiQuerySnapshot> snapshot, Widget? child) {
-        if (snapshot.hasError) return Text('Something went wrong!');
-        if (!snapshot.hasData) return Text('Loading poi-to-visit...');
+    Column(
 
-        // Access the QuerySnapshot
-        TopPoiQuerySnapshot querySnapshot = snapshot.requireData;
-
-        return 
+      children: [
         Container(
-          child: Consumer<ApplicationState>(
-              builder: (context, appState, _) => 
-        ListView.builder(
-          itemCount: querySnapshot.docs.length,
-          itemBuilder: (context, index) {
-            // Access the User instance
-            TopPoi topPoi = querySnapshot.docs[index].data;
+          height: 200,
+          child: Text('Top Bucket List Locations In The World',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 25.0,
+                fontWeight: FontWeight.w900,
+              )),
+        ),
 
-            return GestureDetector(child: topPoiCard(topPoi, context)
-            ,onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                                  builder: (context) => 
-                                  PoiList(poiToVisit: topPoi)
-                                  // PoiList(TopPoi: topPoi)
-                            ),
-                  );
+        Container(
+          height: 400,
+          child: FirestoreBuilder<TopPoiQuerySnapshot>(
+            ref: toppoiRef,
+            builder: (context, AsyncSnapshot<TopPoiQuerySnapshot> snapshot, Widget? child) {
+              if (snapshot.hasError) return Text('Something went wrong!');
+              if (!snapshot.hasData) return Text('Loading poi-to-visit...');
+        
+              // Access the QuerySnapshot
+              TopPoiQuerySnapshot querySnapshot = snapshot.requireData;
+        
+              return 
+              Container(
+                child: Consumer<ApplicationState>(
+                    builder: (context, appState, _) => 
+              ListView.builder(
+                itemCount: querySnapshot.docs.length,
+                itemBuilder: (context, index) {
+                  // Access the User instance
+                  TopPoi topPoi = querySnapshot.docs[index].data;
+        
+                  return GestureDetector(child: topPoiCard(topPoi, context)
+                  ,onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                                        builder: (context) => 
+                                        PoiList(poiToVisit: topPoi)
+                                        // PoiList(TopPoi: topPoi)
+                                  ),
+                        );
+                  }
+                        );
+                },
+              )
+                ));
+                
             }
-                  );
-          },
-        )
-          ));
-          
-      }
+          ),
+        ),
+      ],
     ));
   }
 }
@@ -108,6 +129,7 @@ Widget topPoiCard(TopPoi topPoi, BuildContext context) {
                           fontSize: 15.0,
                           fontWeight: FontWeight.w700,
                         )),
+
                   ],
                 ),
               )

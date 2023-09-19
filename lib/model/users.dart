@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gtk_flutter/model/topPoi.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:provider/provider.dart';
@@ -153,6 +154,8 @@ class FriendRequest {
 @Collection<UserProfile>('users')
 @Collection<FriendRequest>('users/*/friendRequests')
 @Collection<Friend>('users/*/friends')
+@Collection<Poi>('users/blpoi')
+
 final usersRef = UserProfileCollectionReference();
 //final friendrequestsRef = FriendRequestCollectionReference();
 //FriendRequestCollectionReference friendrequestsRef = usersRef.doc('myDocumentID').addresses;

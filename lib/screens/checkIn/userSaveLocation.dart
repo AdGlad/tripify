@@ -1120,6 +1120,8 @@ Future<List<Poi>> fetchLocalPlaces(
 
   developer.log('feature ${feature['properties']['name']}');
 
+     if (feature['properties']['name'] != null  && feature['properties']['name'] != '') {
+
     _localPlaces.add(Poi(
       poiId: feature['id'].toString(),
       latitude: feature['geometry']['coordinates'][1] as double?,
@@ -1138,6 +1140,7 @@ Future<List<Poi>> fetchLocalPlaces(
       poiRadius: feature['properties']['poiRadius'] as double?,
       groupId: feature['properties']['groupId'] as String?,
     ));
+     }
     }
 //  }).toList();
 return _localPlaces;

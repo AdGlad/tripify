@@ -1,6 +1,10 @@
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:gtk_flutter/screens/country/LocationMapPage.dart';
 import 'package:path_provider/path_provider.dart';
 import '../model/placehistory.dart';
@@ -9,6 +13,9 @@ import 'dart:io';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:ui' as ui;
+import 'package:flutter/services.dart';
+
 
 import '../src/firebaseImage.dart';
 import 'country/ActiveCountryPage.dart';
@@ -125,193 +132,228 @@ class _PlaceHistorylistState extends State<PlaceHistorylist> {
         });
   }
 }
+//GlobalKey _globalKey = GlobalKey();
+
+// final key = GlobalKey();
+
+// Future<void> _takeScreenShot(context) async {
+//     final files = <XFile>[];
+
+// final boundary = key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+// final image = await boundary?.toImage();
+// final byteData = await image?.toByteData(format: ImageByteFormat.png);
+// final imageBytes = byteData?.buffer.asUint8List();
+// if (imageBytes != null) {
+//   final directory = await getApplicationDocumentsDirectory();
+//   final imagePath = await File('${directory.path}/container_image.png').create();
+//   await imagePath.writeAsBytes(imageBytes);
+
+//         files.add(XFile(imagePath.path, name: "Screenshot.png"));
+
+//     final result = await Share.shareXFiles(
+//       files,
+//       text: "Tripify",
+//       subject: 'In Australia',
+//     );
+// }
+// }
+
 
 Widget placescard(PlaceHistory currentPlaceHistory, BuildContext context) {
   late Reference _storageReference;
   _storageReference = FirebaseStorage.instance
       .ref()
       .child(FirebaseAuth.instance.currentUser!.uid);
-
-  return Card(
-    color: Color.fromARGB(255, 49, 52, 59),
-    //shadowColor: Colors.blueAccent,
-    elevation: 8.0,
-    margin: EdgeInsets.all(2.0),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-    child: Column(
-      children: [
-        Container(
-          alignment: Alignment.topCenter,
-          margin: EdgeInsets.all(2),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text( CountryFlag(currentPlaceHistory.countryCode!)+
-                currentPlaceHistory.region! + ' ' +currentPlaceHistory.city!,
-                style: TextStyle(
-                  color: Color.fromARGB(255, 26, 173, 182),
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-               Text(currentPlaceHistory.poi!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w700,
-                          )),
-
-Text(
-                          currentPlaceHistory.arrivaldate != null
-                              ?
-                               //'Arrival Date: ' +
-                
-                                  (DateFormat('dd MMMM yyyy hh:mm a ')
-                                      .format(currentPlaceHistory.arrivaldate!))
-                              : 'No arrival date',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w700,
-                          )),
-
-              //     ),
-              (  currentPlaceHistory.imagePaths != null  &&  currentPlaceHistory.imagePaths!.length > 0) ? Container(
-                margin: EdgeInsets.all(5),
-                child:  Stack(
-                   //     alignment: Alignment.center,
-                  children: [
-                                      Container(
-                                     //   alignment: Alignment.centerLeft,
-                        height: 200,
-                        //width: 200,
-                        child:
-                            ListView.builder(
-                              shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: currentPlaceHistory.imagePaths?.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    //color: Colors.blue,
-                                   // alignment: Alignment.centerLeft,
-                                    height: 200,
-                                    width: 300,
-                                    child:
-                                    // Padding(
-                                     // padding: EdgeInsets.all(8.0),
-                                    //  child: 
-                                      
-                                      currentPlaceHistory
-                                                  .imagePaths?[index] !=
-                                              null
-                                          ? FirebaseImage(
-                                              storagePath: currentPlaceHistory
-                                                  .imagePaths![index])
-                                          : Text(' '),
-                                   // ),
-                                  );
-                                }),
-                      ),
-                    Column(
-                    //crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Text(currentPlaceHistory.streetAddress!,
-                      //     textAlign: TextAlign.center,
-                      //     style: TextStyle(
-                      //       color: Colors.white,
-                      //       fontSize: 15.0,
-                      //       fontWeight: FontWeight.w700,
-                      //     )),
-                
-                      // Text(
-                      //     currentPlaceHistory.arrivaldate != null
-                      //         ?
-                      //          //'Arrival Date: ' +
-                
-                      //             (DateFormat('dd MMMM yyyy hh:mm a ')
-                      //                 .format(currentPlaceHistory.arrivaldate!))
-                      //         : 'No arrival date',
-                      //     textAlign: TextAlign.center,
-                      //     style: TextStyle(
-                      //       color: Colors.white,
-                      //       fontSize: 15.0,
-                      //       fontWeight: FontWeight.w700,
-                      //     )),
-
-                                          ],
-                  ),
-
-                  ]
-                ),
-              ): Text(''),
-                                    Text( ' ${currentPlaceHistory.description}'
-                            ,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w700,
-                          )),
-            ],
-          ),
-        ),
-        ButtonBar(
-          alignment: MainAxisAlignment.end,
+  return 
+  //RepaintBoundary(
+   // key: key,
+   // child: 
+    Container(
+      child: Card(
+        color: Color.fromARGB(255, 49, 52, 59),
+        //shadowColor: Colors.blueAccent,
+        elevation: 8.0,
+        margin: EdgeInsets.all(2.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: Column(
           children: [
-            IconButton(
-              color: Color.fromARGB(255, 26, 173, 182),
-              onPressed: () {
-                // _fluttershareImages( currentPlaceHistory!);
-                _shareImages(currentPlaceHistory);
-              },
-              icon: const Icon(Icons.share),
-              tooltip: 'Share',
-            ),
-            // IconButton(
-            //   color: Color.fromARGB(255, 26, 173, 182),
-            //   onPressed: () {
-            //     if (currentPlaceHistory!.imagePaths!.isNotEmpty) {
-            //       Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) => ImageGallery(
-            //                 imagePaths: currentPlaceHistory.imagePaths!)
-            //             //ImageGallery( places: places
-            //             //documentId: 'Y9yviPMmXlk8eFfNRld3'
-            //             ,
-            //           )
-
-            //           //  countrycode: currentcountry.countryCode!),
-            //           //);
-            //           );
-            //     }
-            //   },
-            //   icon: const Icon(Icons.image),
-            //   tooltip: 'Pics',
-            // ),
-            IconButton(
-              color: Color.fromARGB(255, 26, 173, 182),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          LocationMapPage(placeHistory: currentPlaceHistory
-                              //latlng: LatLng(currentPlaceHistory.l//atitude!,
-                              //currentPlaceHistory.longitude!
+            Container(
+              alignment: Alignment.topCenter,
+              margin: EdgeInsets.all(2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text( CountryFlag(currentPlaceHistory.countryCode!)+
+                    currentPlaceHistory.region! + ' ' +currentPlaceHistory.city!,
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 26, 173, 182),
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                   Text(currentPlaceHistory.poi!,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w700,
                               )),
-                  //  countrycode: currentcountry.countryCode!),
-                );
-              },
-              icon: const Icon(Icons.map),
-              tooltip: 'Map',
+    
+    Text(
+                              currentPlaceHistory.arrivaldate != null
+                                  ?
+                                   //'Arrival Date: ' +
+                    
+                                      (DateFormat('dd MMMM yyyy hh:mm a ')
+                                          .format(currentPlaceHistory.arrivaldate!))
+                                  : 'No arrival date',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w700,
+                              )),
+    
+                  //     ),
+                  (  currentPlaceHistory.imagePaths != null  &&  currentPlaceHistory.imagePaths!.length > 0) ? Container(
+                    margin: EdgeInsets.all(5),
+                    child:  Stack(
+                       //     alignment: Alignment.center,
+                      children: [
+                                          Container(
+                                         //   alignment: Alignment.centerLeft,
+                            height: 200,
+                            //width: 200,
+                            child:
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: currentPlaceHistory.imagePaths?.length,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        //color: Colors.blue,
+                                       // alignment: Alignment.centerLeft,
+                                        height: 200,
+                                        width: 300,
+                                        child:
+                                        // Padding(
+                                         // padding: EdgeInsets.all(8.0),
+                                        //  child: 
+                                          
+                                          currentPlaceHistory
+                                                      .imagePaths?[index] !=
+                                                  null
+                                              ? FirebaseImage(
+                                                  storagePath: currentPlaceHistory
+                                                      .imagePaths![index])
+                                              : Text(' '),
+                                       // ),
+                                      );
+                                    }),
+                          ),
+                        Column(
+                        //crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Text(currentPlaceHistory.streetAddress!,
+                          //     textAlign: TextAlign.center,
+                          //     style: TextStyle(
+                          //       color: Colors.white,
+                          //       fontSize: 15.0,
+                          //       fontWeight: FontWeight.w700,
+                          //     )),
+                    
+                          // Text(
+                          //     currentPlaceHistory.arrivaldate != null
+                          //         ?
+                          //          //'Arrival Date: ' +
+                    
+                          //             (DateFormat('dd MMMM yyyy hh:mm a ')
+                          //                 .format(currentPlaceHistory.arrivaldate!))
+                          //         : 'No arrival date',
+                          //     textAlign: TextAlign.center,
+                          //     style: TextStyle(
+                          //       color: Colors.white,
+                          //       fontSize: 15.0,
+                          //       fontWeight: FontWeight.w700,
+                          //     )),
+    
+                                              ],
+                      ),
+    
+                      ]
+                    ),
+                  ): Text(''),
+                                        Text( ' ${currentPlaceHistory.description}'
+                                ,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w700,
+                              )),
+                ],
+              ),
             ),
+            ButtonBar(
+              alignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  color: Color.fromARGB(255, 26, 173, 182),
+                  onPressed: () {
+                    // _fluttershareImages( currentPlaceHistory!);
+                  //  _takeScreenShot(context);
+                    _shareImages(currentPlaceHistory);
+                  },
+                  icon: const Icon(Icons.share),
+                  tooltip: 'Share',
+                ),
+                // IconButton(
+                //   color: Color.fromARGB(255, 26, 173, 182),
+                //   onPressed: () {
+                //     if (currentPlaceHistory!.imagePaths!.isNotEmpty) {
+                //       Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (context) => ImageGallery(
+                //                 imagePaths: currentPlaceHistory.imagePaths!)
+                //             //ImageGallery( places: places
+                //             //documentId: 'Y9yviPMmXlk8eFfNRld3'
+                //             ,
+                //           )
+    
+                //           //  countrycode: currentcountry.countryCode!),
+                //           //);
+                //           );
+                //     }
+                //   },
+                //   icon: const Icon(Icons.image),
+                //   tooltip: 'Pics',
+                // ),
+                IconButton(
+                  color: Color.fromARGB(255, 26, 173, 182),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              LocationMapPage(placeHistory: currentPlaceHistory
+                                  //latlng: LatLng(currentPlaceHistory.l//atitude!,
+                                  //currentPlaceHistory.longitude!
+                                  )),
+                      //  countrycode: currentcountry.countryCode!),
+                    );
+                  },
+                  icon: const Icon(Icons.map),
+                  tooltip: 'Map',
+                ),
+              ],
+            )
           ],
-        )
-      ],
-    ),
+        ),
+ //     ));
+  //   ) 
+  // 
+  ),
   );
 }
 

@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/screens/placelistpage.dart';
 import 'package:gtk_flutter/screens/regionlistpage.dart';
@@ -31,6 +33,12 @@ class PoiList extends StatefulWidget {
 class _PoiListState extends State<PoiList> {
   @override
   Widget build(BuildContext context) {
+
+final userdocRef = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid);
+      
+
     return Container(
       child: Consumer<ApplicationState>(
           builder: (context, appState, _) => Scaffold(
@@ -64,35 +72,40 @@ class _PoiListState extends State<PoiList> {
                         Poi poi = querySnapshot.docs[index].data;
 
                         return GestureDetector(
-                          // child: Text("poi.properties!")
-                          // child: PoitCard(poi, context) //Text(poi.properties?['name'])
-                          child:
-                              //Hero(
-                              //     tag: "PointOfInterest2",
-                              //     child:
+                            // child: Text("poi.properties!")
+                            // child: PoitCard(poi, context) //Text(poi.properties?['name'])
+                            child:
+                                //Hero(
+                                //     tag: "PointOfInterest2",
+                                //     child:
 
-                              PoitImageCard(
-                                  poi: poi,
-                                  context: context,
-                                  poiList: appState.userProfile!.poi),
-                          //            ), //Text(poi.properties?['name'])
-                          //    child: Text(poiToVisit.description!)
-            onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                                  builder: (context) => 
-                                  PoiDetails(poi: poi,poiList: appState.userProfile!.poi, context: context)
-                                  // PoiList(TopPoi: topPoi)
-                            ),
-                  );
-            }
+                                PoitImageCard(
+                                    poi: poi,
+                                    context: context,
+                                    poiList: appState.userProfile!.poi,
+                                    userdocref:
+                                         userdocRef),
+                            //            ), //Text(poi.properties?['name'])
+                            //    child: Text(poiToVisit.description!)
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PoiDetails(
+                                        poi: poi,
+                                        poiList: appState.userProfile!.poi,
+                                        context: context,
+                                         )
+                                    // PoiList(TopPoi: topPoi)
+                                    ),
+                              );
+                            }
 
-                          // onTap: () =>
-                          //     //    developer.log('GestureDetector PointOfInterest ')
-                          //     _PoiLocationPage(
-                          //         poi, appState.userProfile!.poi, context),
-                        );
+                            // onTap: () =>
+                            //     //    developer.log('GestureDetector PointOfInterest ')
+                            //     _PoiLocationPage(
+                            //         poi, appState.userProfile!.poi, context),
+                            );
                       },
                     );
                   }))),
@@ -100,14 +113,13 @@ class _PoiListState extends State<PoiList> {
   }
 }
 
-
 // void _PoiLocationPage(
 //     Poi poi, List<Map<String, dynamic>>? poiList, BuildContext context) {
 //   List<String> _VistsToPoi = VistsToPoi(poi.poiId, poiList);
 //   bool _visited = checkPoi(poi.poiId, poiList);
 //   Navigator.of(context).push(
 
-//     MaterialPageRoute<void>(      
+//     MaterialPageRoute<void>(
 //         builder: (BuildContext context) => Scaffold(
 //               appBar: AppBar(
 //                 title: Text('Poi Visits'),
@@ -158,9 +170,10 @@ class PoitImageCard extends StatelessWidget {
   final Poi poi;
   final BuildContext context;
   final List<Map<String, dynamic>>? poiList;
+  final DocumentReference<Map<String, dynamic>>  userdocref;
 
   //const CheckInContainer({super.key});
-  const PoitImageCard({required this.poi, required this.context, this.poiList});
+  const PoitImageCard({required this.poi, required this.context, this.poiList,required this.userdocref});
 
   @override
   Widget build(BuildContext context) {
@@ -191,43 +204,52 @@ class PoitImageCard extends StatelessWidget {
                     margin: EdgeInsets.all(5.0),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        Container(
-                          //  color: Color.fromARGB(255, 81, 126, 231),
-                          margin: EdgeInsets.all(5),
-                          child: Row(
-                            children: [
-                              // Icon( Icons.location_on, color: Colors.white, size: 25),
-                              Container(
-                                margin: EdgeInsets.all(5),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CircleAvatar(
-                                        radius: 40.0,
-                                        backgroundImage: imageProvider),
-                                    Container(
-                                      child: Text(poi.properties?['name']!,
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            color: (poihasbeenvisted)
-                                                ? Color.fromARGB(
-                                                    255, 49, 52, 59)
-                                                : Colors.white,
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w700,
-                                          )),
-                                    ),
-                                    //    Icon(Icons.star_border, color: Colors.white, size: 25),
-                                    // (poihasbeenvisted) ? Icon(Icons.star, color: Colors.amber, size: 25) : Icon(Icons.star_border, color: Colors.white, size: 25),
-                                  ],
-                                ),
-                              )
-                            ],
+                    child: Container(
+                      margin: EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,   //center,   // Center horizontally
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                              radius: 30.0, backgroundImage: imageProvider),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                           //   color: Colors.blue,
+                              child: Center(
+                                heightFactor: 2,
+                                child: Text(poi.properties?['name']!,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: (poihasbeenvisted)
+                                          ? Color.fromARGB(255, 49, 52, 59)
+                                          : Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w700,
+                                    )),
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                          //    Icon(Icons.star_border, color: Colors.white, size: 25),
+                          // (poihasbeenvisted) ? Icon(Icons.star, color: Colors.amber, size: 25) : Icon(Icons.star_border, color: Colors.white, size: 25),
+                          Container(
+                           // color: Colors.deepPurpleAccent,
+                            child: IconButton(
+                              icon: Icon(Icons.add_location_rounded,
+                                  color: Colors.white, size: 25),
+                              tooltip: 'Add to bucket list',
+                              onPressed: () {
+          userdocref.update(
+          {
+            "blpoi": FieldValue.arrayUnion([poi.toJson()]),
+          }
+          );
+                                developer.log('IconButton');
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 }
@@ -385,13 +407,12 @@ bool checkPoi(String? poi_name, List<Map<String, dynamic>>? poiList) {
   return _exists;
 }
 
-
 class PoiDetails extends StatefulWidget {
-    Poi poi;
-    List<Map<String, dynamic>>? poiList;
-    BuildContext context;
+  Poi poi;
+  List<Map<String, dynamic>>? poiList;
+  BuildContext context;
 
-   PoiDetails({required this.poi, this.poiList, required this.context});
+  PoiDetails({required this.poi, this.poiList, required this.context});
 
   @override
   State<PoiDetails> createState() => _PoiDetailsState();
@@ -400,70 +421,70 @@ class PoiDetails extends StatefulWidget {
 class _PoiDetailsState extends State<PoiDetails> {
   @override
   Widget build(BuildContext context) {
- List<String> _VistsToPoi = VistsToPoi(widget.poi.poiId, widget.poiList);
-  bool _visited = (_VistsToPoi.length > 0) ? true : false;
+    List<String> _VistsToPoi = VistsToPoi(widget.poi.poiId, widget.poiList);
+    bool _visited = (_VistsToPoi.length > 0) ? true : false;
 
-        return 
-        Consumer<ApplicationState>(
-            builder: (context, appState, _) => Scaffold(
-          appBar: AppBar(
-            title: Text('Screen'),
-          ),
-          body: Column(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    //  child:
-                    //  Hero(
-                    //    tag: "PointOfInterest1",
-                    child: Container(
-                        //  height: 50,
-                        child: PoitHeroCard(
-                            visited: _visited, poi: widget.poi, context: context)),
+    return Consumer<ApplicationState>(
+      builder: (context, appState, _) => Scaffold(
+        appBar: AppBar(
+          title: Text('Screen'),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              //  child:
+              //  Hero(
+              //    tag: "PointOfInterest1",
+              child: Container(
+                  //  height: 50,
+                  child: PoitHeroCard(
+                      visited: _visited, poi: widget.poi, context: context)),
+            ),
+            // ),
+            //  poiMapContainer(BuildContext: context,   Poi: poi
+            Expanded(
+              flex: 2,
+              child: poiMapContainer(context, widget.poi
+                  //latlng: LatLng(currentPlaceHistory.l//atitude!,
+                  //currentPlaceHistory.longitude!
                   ),
-                  // ),
-                  //  poiMapContainer(BuildContext: context,   Poi: poi
-                  Expanded(
-                    flex: 2,
-                    child: poiMapContainer(context, widget.poi
-                        //latlng: LatLng(currentPlaceHistory.l//atitude!,
-                        //currentPlaceHistory.longitude!
-                        ),
-                  ),
-                  Expanded(
-                      flex: 2,
-                      child: //Container(color: Colors.blue,)
-                          Container(
-                        padding:
-                            EdgeInsets.all(16.0), // Adjust padding as needed
-                        child: ListView.builder(
-                            itemCount: _VistsToPoi.length,
-                            itemBuilder: (context, index) {
-                                    developer.log('VistsToPoi ${_VistsToPoi[index]}');
-                               //  developer.log('placeHistoryfunc ${appState.placehistoryMap['YzoXWQaGDDG09ztXgnri']['name']}');
-                             //       developer.log('placeHistoryfunc ${placeHistoryfunc( appState.placehistoryMap['cS54TdeyKjrvhUMQhdB6'] ).poiName!}');
+            ),
+            Expanded(
+                flex: 2,
+                child: //Container(color: Colors.blue,)
+                    Container(
+                  padding: EdgeInsets.all(16.0), // Adjust padding as needed
+                  child: ListView.builder(
+                      itemCount: _VistsToPoi.length,
+                      itemBuilder: (context, index) {
+                        developer.log('VistsToPoi ${_VistsToPoi[index]}');
+                        //  developer.log('placeHistoryfunc ${appState.placehistoryMap['YzoXWQaGDDG09ztXgnri']['name']}');
+                        //       developer.log('placeHistoryfunc ${placeHistoryfunc( appState.placehistoryMap['cS54TdeyKjrvhUMQhdB6'] ).poiName!}');
 
-                              return  placescard(
-                           placeHistoryfunc( appState.placehistoryMap[_VistsToPoi[index]] ), context);
-                              
-                              // ListTile(
-                              //   title: Text(
-                              //  //   _VistsToPoi[index]
-                              //    //appState.placehistoryMap[_VistsToPoi[index]]['name']
-                              //  //  appState.placehistoryMap['YzoXWQaGDDG09ztXgnri']['name']
-                              // //   appState.placehistoryMap['Yikj2KOQUbNgEiiiAUch']['name']
-                              //   // appState.placehistoryMap['cS54TdeyKjrvhUMQhdB6']['name']
-                              //  //   placeHistoryfunc( appState.placehistoryMap[_VistsToPoi[index]] )
-                              //     placeHistoryfunc( appState.placehistoryMap[_VistsToPoi[index]] ).name!
-                              //   //  placeHistoryfunc( appState.placehistoryMap['YzoXWQaGDDG09ztXgnri'] ).poiName!
-                              //     ),
-                              //   // You can add more customization to ListTile if needed
-                              // );
-                            }),
-                      ))
-                ],
-              ),
-          ),
-        );
-      }
-    }
+                        return placescard(
+                            placeHistoryfunc(
+                                appState.placehistoryMap[_VistsToPoi[index]]),
+                            context);
+
+                        // ListTile(
+                        //   title: Text(
+                        //  //   _VistsToPoi[index]
+                        //    //appState.placehistoryMap[_VistsToPoi[index]]['name']
+                        //  //  appState.placehistoryMap['YzoXWQaGDDG09ztXgnri']['name']
+                        // //   appState.placehistoryMap['Yikj2KOQUbNgEiiiAUch']['name']
+                        //   // appState.placehistoryMap['cS54TdeyKjrvhUMQhdB6']['name']
+                        //  //   placeHistoryfunc( appState.placehistoryMap[_VistsToPoi[index]] )
+                        //     placeHistoryfunc( appState.placehistoryMap[_VistsToPoi[index]] ).name!
+                        //   //  placeHistoryfunc( appState.placehistoryMap['YzoXWQaGDDG09ztXgnri'] ).poiName!
+                        //     ),
+                        //   // You can add more customization to ListTile if needed
+                        // );
+                      }),
+                ))
+          ],
+        ),
+      ),
+    );
+  }
+}

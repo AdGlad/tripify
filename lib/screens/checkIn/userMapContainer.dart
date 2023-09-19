@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gtk_flutter/model/users.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+
+import '../../src/firebaseImage.dart';
+import '../UserInfo/UserInfoPage.dart';
 
 MapboxMapController? mapController;
 
@@ -45,8 +50,13 @@ Container UserMapContainer(BuildContext context, UserProfile? user
     //    filter: _filter);
 
     Future<Uint8List> loadMarkerImage() async {
+
+    //File? avatarfile = await getImageFile(user!.avatar! );
+    //Uint8List uint8List = await avatarfile!.readAsBytes();
+   // var byteData = ByteData.sublistView(Uint8List.fromList(uint8List));
       var byteData = await rootBundle.load("assets/Quokka-PNG-Pic.png");
       return byteData.buffer.asUint8List();
+    //}
     }
 
     var markerImage = await loadMarkerImage();
@@ -106,12 +116,6 @@ Container UserMapContainer(BuildContext context, UserProfile? user
               onStyleLoadedCallback: _onStyleLoaded,
               initialCameraPosition: CameraPosition(
                 target: LatLng(
-                  //   19.4333, // Mexico
-                  //  -99.1333, // Mexico
-                  //   appState.currentPlace?.latitude ?? newPlace!.latitude!,
-                  //   appState.currentPlace?.longitude ?? newPlace!.longitude!,
-                  //user?.latestlatitude??0.0,
-                  //user?.latestlongitude??0.0,
                   user!.latestlatitude!,
                   user!.latestlongitude!,
                 ),
