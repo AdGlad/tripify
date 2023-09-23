@@ -54,7 +54,6 @@ class ApplicationState extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? _friendSubscription;
   StreamSubscription<QuerySnapshot>? _poiListsSubscription;
   StreamSubscription<QuerySnapshot>? _poiSubscription;
-  
 
   List<UserProfile> _users = [];
   List<UserProfile> get users => _users;
@@ -73,7 +72,10 @@ class ApplicationState extends ChangeNotifier {
 
   List<Poi> _poiList = [];
   List<Poi> get poiList => _poiList;
-  
+
+  List<Poi> _blpoiList = [];
+  List<Poi> get blpoiList => _blpoiList;
+
   //List<PlaceHistory> _tripList = [];
   //List<PlaceHistory> get tripList => _tripList;
 
@@ -106,6 +108,10 @@ class ApplicationState extends ChangeNotifier {
 //List<IsoCountry2>  _IsoCountry2List = [];
   List<IsoCountry2> _IsoCountry2List = [];
   List<IsoCountry2> get IsoCountry2List => _IsoCountry2List;
+
+  Map<String, dynamic> _poiMap = {};
+  Map<String, dynamic> get poiMap => _poiMap;
+
 
   Map<String, dynamic> _placehistoryMap = {};
   Map<String, dynamic> get placehistoryMap => _placehistoryMap;
@@ -185,7 +191,7 @@ class ApplicationState extends ChangeNotifier {
         listenForCurrrentPlace(FirebaseAuth.instance.currentUser!.uid);
         listenForPlaceHistory(FirebaseAuth.instance.currentUser!.uid);
         listenForAllFriends(FirebaseAuth.instance.currentUser!.uid);
-        listenForAllPois();
+        listenForTopPois()();
 
         notifyListeners();
 
@@ -383,15 +389,37 @@ class ApplicationState extends ChangeNotifier {
         _userProfile?.countrycodelist =
             _countryListData?.map((e) => e.toString()).toList();
 
+        List<Map<String, dynamic>> poiList =
+            List<Map<String, dynamic>>.from(userData['poi']);
+        _userProfile?.poi = poiList;
 
-        List<Map<String, dynamic>> poiList = List<Map<String, dynamic>>.from(userData['poi']);
-        _userProfile?.poi =poiList;
-        
+        List<Map<String, dynamic>> blpoiList =
+            List<Map<String, dynamic>>.from(userData['blpoi']);
+        _userProfile?.blpoi = blpoiList;
+
+        _blpoiList = [];
+
+                      _poiMap['Bucket List'] ??= {
+                                      'description': 'Your Bucket List',
+              'title': 'Bucket List',
+                      };
+
+        blpoiList.forEach((bucketListPoiMap) {
+         // _poiMap['Bucket List'][bucketListPoiMap['id']] = bucketListPoiMap;
+
+           _poiMap['Bucket List'][bucketListPoiMap['id']] =  {
+               bucketListPoiMap,
+            };
+
+
+          _blpoiList.add(poifunc(bucketListPoiMap, 'Bucket List'));
+        });
+
+      developer.log('User _poiMap $_poiMap ');
         List<dynamic>? _countryvisitListData =
             userData['countryvisitlist'] ?? [];
         _userProfile?.countryvisitlist =
             _countryvisitListData?.map((e) => e.toString()).toList();
-
 
         // _userProfile?.lastRecordedDate = userData['lastRecordedDate'].toDate()
         //     as DateTime?; //  ?? DateTime.now();
@@ -622,54 +650,9 @@ class ApplicationState extends ChangeNotifier {
         .listen((snapshot) {
       _placeHistory = [];
 
-
       for (final document in snapshot.docs) {
-
-         _placehistoryMap[document.id] = document.data();
-          if (document.id == 'cS54TdeyKjrvhUMQhdB6') {
-            developer.log('listenForPlaceHistory  ${document.id}');
-
-          }
-
-//         _placeHistory.add(placeHistoryfunc( document.data()));
-//         //  globals.new_latitude = document.data()['latitude'] as double;
-//         //  globals.new_longitude = document.data()['longitude'] as double;
-//         int timeInMillis = document.data()['timestamp'] as int;
-//         DateTime currentArrivaldate =
-//             DateTime.fromMillisecondsSinceEpoch(timeInMillis);
-
-// // _placeHistory.add(PlaceHistory.fromJson(document.data()));
-
-//        _placeHistory.add(PlaceHistory(
-
-//        // _placeHistory[document.id] = PlaceHistory(
-//             userId: FirebaseAuth.instance.currentUser!.uid,
-//             name: document.data()['name'] as String,
-//             latitude: document.data()['latitude'] as double,
-//             longitude: document.data()['longitude'] as double,
-//             streetAddress: document.data()['streetAddress'] as String,
-//             city: document.data()['city'] as String,
-//             countryName: document.data()['countryName'] as String,
-//             countryCode: document.data()['countryCode'] as String,
-//             postal: document.data()['postal'] as String?,
-//             region: document.data()['region'] as String?,
-//             regionCode: document.data()['regionCode'] as String?,
-//             timezone: document.data()['timezone'] as String?,
-//             elevation: document.data()['elevation'] as int?,
-//             visitnumber: document.data()['visitnumber'] as int?,
-//             description: document.data()['description'] as String?,
-//             rating: document.data()['rating'] as String?,
-//             poi: document.data()['poi'] as String?,
-//             // imagePaths: document.data()['imagePaths'] as List<String>?,
-//             imagePaths: (document.data()['imagePaths'] as List<dynamic>?)
-//                 ?.cast<String>(),
-     //       arrivaldate: currentArrivaldate));
-        _placeHistory.add(placeHistoryfunc( document.data()));
-         _placehistoryMap[document.id] = document.data();
-          if (document.id == 'cS54TdeyKjrvhUMQhdB6') {
-            developer.log('_placeHistory.add  ${document.id}');
-
-          }
+        _placeHistory.add(placeHistoryfunc(document.data()));
+        _placehistoryMap[document.id] = document.data();
         developer.log('_placeHistory.add  in ');
       }
 
@@ -714,128 +697,125 @@ class ApplicationState extends ChangeNotifier {
     // return users;
   }
 
-  listenForAllPois() {
+  listenForTopPois() {
     // List<UserProfile> users = [];
-    developer.log('listenForAllPois start ');
+    developer.log('listenForTopPois() start ');
     _poiList = [];
-     _poiListsSubscription = FirebaseFirestore.instance
-         .collection('poi-to-visit')
-       //  .doc('top100places')
-       //  .collection('poi')
-       //  .orderBy('description', descending: true)
-         .snapshots()
-         .listen((snapshot) {
-       for (final poiGroupDoc in snapshot.docs) {
-        // developer
-        //     .log('poi-to-visit desc ${poiGroupDoc.data()['description']} ');
-        // developer.log('poi-to-visit id ${poiGroupDoc.id}');
-
-        //_poiSubscription = FirebaseFirestore.instance
-       FirebaseFirestore.instance
-           .collection('poi-to-visit')
-           // .collection('poi-to-visit')
-             .doc(poiGroupDoc.id)
-           //  .doc('top100places')
-              .collection('poi')
-          //   .where('id', isEqualTo: 'Eiffel Tower')
-        //    .orderBy('description', descending: true)
-           .snapshots()
+    _poiListsSubscription = FirebaseFirestore.instance
+      //  .collection('poi-to-visit')
+        .collection('toppoi')
+        .snapshots()
+        .listen((snapshot) {
+      for (final poiGroupDoc in snapshot.docs) {
+        FirebaseFirestore.instance
+              //  .collection('poi-to-visit')
+            .collection('toppoi')
+            .doc(poiGroupDoc.id)
+            .collection('poi')
+            .snapshots()
             .listen((poisnapshot) {
+              developer.log('toppoi _poiMap poiGroupDoc ${poiGroupDoc.id} }');
+
+              _poiMap[poiGroupDoc.id] ??= {'description': poiGroupDoc['description'],
+              'title': poiGroupDoc['title'],};
+
+
+              developer.log('toppoi check _poiMap $_poiMap }');
+
+
           for (final poiDoc in poisnapshot.docs) {
-            developer.log('poiDoc id ${poiDoc.id}');
-            developer.log('poiDoc in');
+            developer.log('toppoi poiDoc id ${poiDoc.id}');
 
-            _poiList.add(Poi(poiId: poiDoc.data()['properties']['name'],
-                groupId: poiGroupDoc.id,
-                geometry: poiDoc.data()['geometry'],
-                id: poiDoc.data()['id'],
-                poiRadius: poiDoc.data()['poiRadius']??0,
-                properties: poiDoc.data()['properties'],
-                category: poiDoc.data()['properties']['category_en'],
-                poiclass: poiDoc.data()['properties']['class'],
-                iso_3166_1: poiDoc.data()['properties']['iso_3166_1'],
-                iso_3166_2: poiDoc.data()['properties']['iso_3166_2'],
-                maki: poiDoc.data()['properties']['maki'],
-                name: poiDoc.data()['properties']['name'],
-                type: poiDoc.data()['properties']['type'],
-                longitude: poiDoc.data()['geometry']['coordinates'][0],
-                latitude: poiDoc.data()['geometry']['coordinates'][1],
-                ));
+//          _poiMap[poiGroupDoc.id][poiDoc.id] = poiDoc.data();
+            _poiMap[poiGroupDoc.id][poiDoc.id] = {
+               poiDoc.data(),
 
-            developer.log('******************************************');
-
-            //  developer.log('poi-to-visit id ${poiGroupDoc.id}');
-
-            // developer
-            //     .log('pois details ${poiDoc.data()['properties']['class']} ');
-            // developer.log(
-            //     'pois details ${poiDoc.data()['properties']['category_en']} ');
-            // developer.log(
-            //     'pois details ${poiDoc.data()['properties']['iso_3166_1']} ');
-            // developer.log('pois details ${poiDoc.id} ');
-            // developer.log(
-            //     'pois details ${poiDoc.data()['geometry']['coordinates'][0]} ');
-            // developer.log(
-            //     'pois details ${poiDoc.data()['geometry']['coordinates'][1]} ');
+            };
+          
+            _poiList.add(poifunc(poiDoc.data(), poiGroupDoc.id));
+           developer.log('_poiMap ${_poiMap[poiGroupDoc.id][poiDoc.id]} }');
           }
-        }
-        );
+        });
       }
 
-      developer.log('listenForAllFriends end ');
-    }
-    );
-   // notifyListeners();
+      developer.log('listenForTopPois() end ');
+      developer.log('full _poiMap $_poiMap ');
+    });
+    // notifyListeners();
 
     // return users;
   }
 }
 
-PlaceHistory placeHistoryfunc(Map<String, dynamic> documentData) {
-        int timeInMillis = documentData['timestamp'] as int;
-        DateTime currentArrivaldate =
-            DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+Poi poifunc(Map<String, dynamic> documentData, String poiGroupDocId) {
+  final _poi = Poi(
+    poiId: documentData['properties']['name'],
+    groupId: poiGroupDocId,
+    geometry: documentData['geometry'],
+    id: documentData['id'],
+    poiRadius: documentData['poiRadius'] ?? 0,
+    properties: documentData['properties'],
+    category: documentData['properties']['category_en'],
+    poiclass: documentData['properties']['class'],
+    iso_3166_1: documentData['properties']['iso_3166_1'],
+    iso_3166_2: documentData['properties']['iso_3166_2'],
+    maki: documentData['properties']['maki'],
+    name: documentData['properties']['name'],
+    type: documentData['properties']['type'],
+    longitude: documentData['geometry']['coordinates'][0],
+    latitude: documentData['geometry']['coordinates'][1],
+  );
 
-       dynamic poiData = documentData['poi'];
- String? poi;
-// Check if poiData is of type String or null
-if (poiData is String || poiData == null) {
-  // Cast poiData to String? (nullable String)
-   poi = poiData as String?;
-  
-  // Now you can use poi as a nullable String
-  // Do whatever you need to do with poi
-} else 
-{
-poi = poiData.toString();  // Handle the case where poiData is of a different type (e.g., int)
-  // You can decide what to do here based on your requirements
+  developer.log('_poi.add  in ');
+
+  return _poi;
 }
 
-       final _placeHistory = PlaceHistory(
-            userId: FirebaseAuth.instance.currentUser!.uid,
-            name: documentData['name'] as String,
-            latitude: documentData['latitude'] as double,
-            longitude: documentData['longitude'] as double,
-            streetAddress: documentData['streetAddress'] as String,
-            city: documentData['city'] as String,
-            countryName: documentData['countryName'] as String,
-            countryCode: documentData['countryCode'] as String,
-            postal: documentData['postal'] as String?,
-            region: documentData['region'] as String?,
-            regionCode: documentData['regionCode'] as String?,
-            timezone: documentData['timezone'] as String?,
-            elevation: documentData['elevation'] as int?,
-            visitnumber: documentData['visitnumber'] as int?,
-            description: documentData['description'] as String?,
-            rating: documentData['rating'] as String?,
-        //    poi: documentData['poi'] as String?,
-            poi: poi,
-            // imagePaths: documentData()['imagePaths'] as List<String>?,
-            imagePaths: (documentData['imagePaths'] as List<dynamic>?)
-                ?.cast<String>(),
-            arrivaldate: currentArrivaldate);
+PlaceHistory placeHistoryfunc(Map<String, dynamic> documentData) {
+  int timeInMillis = documentData['timestamp'] as int;
+  DateTime currentArrivaldate =
+      DateTime.fromMillisecondsSinceEpoch(timeInMillis);
 
-        developer.log('_placeHistory.add  in ');
-    
-      return _placeHistory;
+  dynamic poiData = documentData['poi'];
+  String? poi;
+// Check if poiData is of type String or null
+  if (poiData is String || poiData == null) {
+    // Cast poiData to String? (nullable String)
+    poi = poiData as String?;
+
+    // Now you can use poi as a nullable String
+    // Do whatever you need to do with poi
+  } else {
+    poi = poiData
+        .toString(); // Handle the case where poiData is of a different type (e.g., int)
+    // You can decide what to do here based on your requirements
+  }
+
+  final _placeHistory = PlaceHistory(
+      userId: FirebaseAuth.instance.currentUser!.uid,
+      name: documentData['name'] as String,
+      latitude: documentData['latitude'] as double,
+      longitude: documentData['longitude'] as double,
+      streetAddress: documentData['streetAddress'] as String,
+      city: documentData['city'] as String,
+      countryName: documentData['countryName'] as String,
+      countryCode: documentData['countryCode'] as String,
+      postal: documentData['postal'] as String?,
+      region: documentData['region'] as String?,
+      regionCode: documentData['regionCode'] as String?,
+      timezone: documentData['timezone'] as String?,
+      elevation: documentData['elevation'] as int?,
+      visitnumber: documentData['visitnumber'] as int?,
+      description: documentData['description'] as String?,
+      rating: documentData['rating'] as String?,
+      //    poi: documentData['poi'] as String?,
+      poi: poi,
+      // imagePaths: documentData()['imagePaths'] as List<String>?,
+      imagePaths:
+          (documentData['imagePaths'] as List<dynamic>?)?.cast<String>(),
+      arrivaldate: currentArrivaldate);
+
+  developer.log('_placeHistory.add  in ');
+
+  return _placeHistory;
 }

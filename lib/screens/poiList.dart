@@ -45,7 +45,10 @@ final userdocRef = FirebaseFirestore.instance
               appBar: AppBar(
                 title: Text('Top ' + widget.poiToVisit.description!),
               ),
-              body: FirestoreBuilder<PoiQuerySnapshot>(
+              body: 
+              
+              
+              FirestoreBuilder<PoiQuerySnapshot>(
                   //   return FirestoreBuilder<TopPoiQuerySnapshot>(
                   //  ref: poitovisitRef.doc(widget.poiToVisit.groupId).poi,
                   ref: toppoiRef.doc(widget.poiToVisit.groupId).poi,

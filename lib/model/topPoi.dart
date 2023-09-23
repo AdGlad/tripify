@@ -12,8 +12,8 @@ part 'topPoi.g.dart';
 class TopPoi {
   TopPoi({
     required this.groupId,
-     this.title,
-     this.description,
+    required this.title,
+    required this.description,
   });
 
   factory TopPoi.fromJson(Map<String, Object?> json) =>

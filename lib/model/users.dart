@@ -46,6 +46,7 @@ class UserProfile {
     this.countrycodelist,
     this.countryvisitlist,
     this.poi,
+    this.blpoi,
   });
 
   factory UserProfile.fromJson(Map<String, Object?> json) =>
@@ -83,6 +84,7 @@ class UserProfile {
   List<String>? countrycodelist;
   List<String>? countryvisitlist;
   List<Map<String, dynamic>>? poi;
+  List<Map<String, dynamic>>? blpoi;
 
 
 
@@ -154,7 +156,6 @@ class FriendRequest {
 @Collection<UserProfile>('users')
 @Collection<FriendRequest>('users/*/friendRequests')
 @Collection<Friend>('users/*/friends')
-@Collection<Poi>('users/blpoi')
 
 final usersRef = UserProfileCollectionReference();
 //final friendrequestsRef = FriendRequestCollectionReference();

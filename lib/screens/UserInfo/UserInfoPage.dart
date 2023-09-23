@@ -406,7 +406,7 @@ child:  AvatarImage(storagePath:applicationState.userProfile!.avatar!)
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TopPoiList(),
+                            builder: (context) => topPoiList(),
                           ),
                         );
 
