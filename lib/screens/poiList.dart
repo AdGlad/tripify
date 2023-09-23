@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/screens/placelistpage.dart';
 import 'package:gtk_flutter/screens/regionlistpage.dart';
+import 'package:gtk_flutter/screens/topPoi.dart';
 import 'package:provider/provider.dart';
 import '../model/topPoi.dart';
 import '../state/applicationstate.dart';
@@ -20,11 +21,11 @@ import 'dart:developer' as developer;
 //import 'country/poiCard.dart';
 
 class PoiList extends StatefulWidget {
-  TopPoi poiToVisit;
+  TopPoi topPoi;
 
   //   String groupId;
 
-  PoiList({required this.poiToVisit});
+  PoiList({required this.topPoi});
 
   @override
   State<PoiList> createState() => _PoiListState();
@@ -33,85 +34,114 @@ class PoiList extends StatefulWidget {
 class _PoiListState extends State<PoiList> {
   @override
   Widget build(BuildContext context) {
-
-final userdocRef = FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser!.uid);
-      
+     final userdocRef = FirebaseFirestore.instance
+         .collection('users')
+         .doc(FirebaseAuth.instance.currentUser!.uid);
 
     return Container(
       child: Consumer<ApplicationState>(
           builder: (context, appState, _) => Scaffold(
               appBar: AppBar(
-                title: Text('Top ' + widget.poiToVisit.description!),
+                title: Text('Top ' + widget.topPoi.description!),
               ),
-              body: 
-              
-              
-              FirestoreBuilder<PoiQuerySnapshot>(
-                  //   return FirestoreBuilder<TopPoiQuerySnapshot>(
-                  //  ref: poitovisitRef.doc(widget.poiToVisit.groupId).poi,
-                  ref: toppoiRef.doc(widget.poiToVisit.groupId).poi,
-                  // ref: poitovisitRef.doc('DUMMY'),
-                  builder: (context, AsyncSnapshot<PoiQuerySnapshot> snapshot,
-                      Widget? child) {
-                    //   builder: (context, AsyncSnapshot<PoiQuerySnapshot> snapshot, Widget? child) {
-                    if (snapshot.hasError) return Text('Something went wrong!');
-                    if (!snapshot.hasData)
-                      return Text('Loading poi-to-visit...');
+              body: Container(
+              //  height: 300,
+                child: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: appState.poiMap[widget.topPoi.groupId]['poi'].length, //entries.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Map<String, dynamic>  poivalue = appState.poiMap[widget.topPoi.groupId]['poi'][index];
+                      Poi poi = poifunc(poivalue,widget.topPoi.groupId);
+                      return GestureDetector(
+                          child: Container(
+                            child: PoitImageCard(poi: poi, context: context,poiList: appState.userProfile!.poi, userdocref: userdocRef)
+                            
 
-                    // Access the QuerySnapshot
-                    PoiQuerySnapshot querySnapshot = snapshot.requireData;
-                    //        TopPoiQuerySnapshot querySnapshot = snapshot.requireData;
+                          ),
+                                      onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                                  builder: (context) => 
+                                  PoiDetails(poi: poi,poiList: appState.userProfile!.poi, context: context)
+                                  // PoiList(TopPoi: topPoi)
+                            ),
+                  );
+            }
+                          
+                          )
+                          ;
+                    })
 
-                    //  TopPoi querySnapshot = snapshot.requireData;
+                )
 
-                    return ListView.builder(
-                      itemCount: querySnapshot.docs.length,
-                      itemBuilder: (context, index) {
-                        // Access the User instance
-                        //                TopPoi poiToVisit = querySnapshot.docs[index].data;
+              // FirestoreBuilder<PoiQuerySnapshot>(
+              //     //   return FirestoreBuilder<TopPoiQuerySnapshot>(
+              //     //  ref: poitovisitRef.doc(widget.poiToVisit.groupId).poi,
+              //     ref: toppoiRef.doc(widget.poiToVisit.groupId).poi,
+              //     // ref: poitovisitRef.doc('DUMMY'),
+              //     builder: (context, AsyncSnapshot<PoiQuerySnapshot> snapshot,
+              //         Widget? child) {
+              //       //   builder: (context, AsyncSnapshot<PoiQuerySnapshot> snapshot, Widget? child) {
+              //       if (snapshot.hasError) return Text('Something went wrong!');
+              //       if (!snapshot.hasData)
+              //         return Text('Loading poi-to-visit...');
 
-                        Poi poi = querySnapshot.docs[index].data;
+              //       // Access the QuerySnapshot
+              //       PoiQuerySnapshot querySnapshot = snapshot.requireData;
+              //       //        TopPoiQuerySnapshot querySnapshot = snapshot.requireData;
 
-                        return GestureDetector(
-                            // child: Text("poi.properties!")
-                            // child: PoitCard(poi, context) //Text(poi.properties?['name'])
-                            child:
-                                //Hero(
-                                //     tag: "PointOfInterest2",
-                                //     child:
+              //       //  TopPoi querySnapshot = snapshot.requireData;
 
-                                PoitImageCard(
-                                    poi: poi,
-                                    context: context,
-                                    poiList: appState.userProfile!.poi,
-                                    userdocref:
-                                         userdocRef),
-                            //            ), //Text(poi.properties?['name'])
-                            //    child: Text(poiToVisit.description!)
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PoiDetails(
-                                        poi: poi,
-                                        poiList: appState.userProfile!.poi,
-                                        context: context,
-                                         )
-                                    // PoiList(TopPoi: topPoi)
-                                    ),
-                              );
-                            }
+              //       return ListView.builder(
+              //         itemCount: querySnapshot.docs.length,
+              //         itemBuilder: (context, index) {
+              //           // Access the User instance
+              //           //                TopPoi poiToVisit = querySnapshot.docs[index].data;
 
-                            // onTap: () =>
-                            //     //    developer.log('GestureDetector PointOfInterest ')
-                            //     _PoiLocationPage(
-                            //         poi, appState.userProfile!.poi, context),
-                            );
-                      },
-                    );
-                  }))),
+              //           Poi poi = querySnapshot.docs[index].data;
+
+              //           return GestureDetector(
+              //               // child: Text("poi.properties!")
+              //               // child: PoitCard(poi, context) //Text(poi.properties?['name'])
+              //               child:
+              //                   //Hero(
+              //                   //     tag: "PointOfInterest2",
+              //                   //     child:
+
+              //                   PoitImageCard(
+              //                       poi: poi,
+              //                       context: context,
+              //                       poiList: appState.userProfile!.poi,
+              //                       userdocref:
+              //                            userdocRef),
+              //               //            ), //Text(poi.properties?['name'])
+              //               //    child: Text(poiToVisit.description!)
+              //               onTap: () {
+              //                 Navigator.push(
+              //                   context,
+              //                   MaterialPageRoute(
+              //                       builder: (context) => PoiDetails(
+              //                           poi: poi,
+              //                           poiList: appState.userProfile!.poi,
+              //                           context: context,
+              //                            )
+              //                       // PoiList(TopPoi: topPoi)
+              //                       ),
+              //                 );
+              //               }
+
+              //               // onTap: () =>
+              //               //     //    developer.log('GestureDetector PointOfInterest ')
+              //               //     _PoiLocationPage(
+              //               //         poi, appState.userProfile!.poi, context),
+              //               );
+              //         },
+              //       );
+              //     }
+              //     )
+
+              )),
     );
   }
 }
@@ -173,10 +203,14 @@ class PoitImageCard extends StatelessWidget {
   final Poi poi;
   final BuildContext context;
   final List<Map<String, dynamic>>? poiList;
-  final DocumentReference<Map<String, dynamic>>  userdocref;
+  final DocumentReference<Map<String, dynamic>> userdocref;
 
   //const CheckInContainer({super.key});
-  const PoitImageCard({required this.poi, required this.context, this.poiList,required this.userdocref});
+  const PoitImageCard(
+      {required this.poi,
+      required this.context,
+      this.poiList,
+      required this.userdocref});
 
   @override
   Widget build(BuildContext context) {
@@ -199,6 +233,8 @@ class PoitImageCard extends StatelessWidget {
                 } else {
                   final imageProvider = FileImage(snapshot.data!);
                   bool poihasbeenvisted = checkPoi(poi.poiId, poiList);
+                  bool isnotbucketlist = true;
+                  isnotbucketlist = (poi.groupId != 'Bucket List');
                   return Card(
                     color: (poihasbeenvisted)
                         ? Color.fromARGB(255, 251, 214, 6)
@@ -210,7 +246,8 @@ class PoitImageCard extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.all(5.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,   //center,   // Center horizontally
+                        mainAxisAlignment: MainAxisAlignment
+                            .spaceEvenly, //center,   // Center horizontally
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CircleAvatar(
@@ -218,7 +255,7 @@ class PoitImageCard extends StatelessWidget {
                           Expanded(
                             flex: 2,
                             child: Container(
-                           //   color: Colors.blue,
+                              //   color: Colors.blue,
                               child: Center(
                                 heightFactor: 2,
                                 child: Text(poi.properties?['name']!,
@@ -235,22 +272,22 @@ class PoitImageCard extends StatelessWidget {
                           ),
                           //    Icon(Icons.star_border, color: Colors.white, size: 25),
                           // (poihasbeenvisted) ? Icon(Icons.star, color: Colors.amber, size: 25) : Icon(Icons.star_border, color: Colors.white, size: 25),
-                          Container(
-                           // color: Colors.deepPurpleAccent,
-                            child: IconButton(
+                          
+                         Container(
+                            // color: Colors.deepPurpleAccent,
+                            child:  (isnotbucketlist) ? IconButton(
                               icon: Icon(Icons.add_location_rounded,
                                   color: Colors.white, size: 25),
                               tooltip: 'Add to bucket list',
                               onPressed: () {
-          userdocref.update(
-          {
-            "blpoi": FieldValue.arrayUnion([poi.toJson()]),
-          }
-          );
+                                userdocref.update({
+                                  "blpoi":
+                                      FieldValue.arrayUnion([poi.toJson()]),
+                                });
                                 developer.log('IconButton');
                               },
-                            ),
-                          )
+                            ): null,
+                          ) 
                         ],
                       ),
                     ),

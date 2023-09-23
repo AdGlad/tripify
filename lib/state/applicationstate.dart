@@ -398,18 +398,25 @@ class ApplicationState extends ChangeNotifier {
         _userProfile?.blpoi = blpoiList;
 
         _blpoiList = [];
+        //_poiMap['Bucket List']['poi'] = [];
 
                       _poiMap['Bucket List'] ??= {
                                       'description': 'Your Bucket List',
               'title': 'Bucket List',
+                         'poi': [],
+              
                       };
+        _poiMap['Bucket List']['poi'].clear();
 
         blpoiList.forEach((bucketListPoiMap) {
          // _poiMap['Bucket List'][bucketListPoiMap['id']] = bucketListPoiMap;
 
-           _poiMap['Bucket List'][bucketListPoiMap['id']] =  {
-               bucketListPoiMap,
-            };
+              _poiMap['Bucket List']['poi'].add(bucketListPoiMap) ;
+
+
+         //  _poiMap['Bucket List']['poi'][bucketListPoiMap['id']] =  {  
+         //      bucketListPoiMap,
+         //   };
 
 
           _blpoiList.add(poifunc(bucketListPoiMap, 'Bucket List'));
@@ -717,7 +724,11 @@ class ApplicationState extends ChangeNotifier {
               developer.log('toppoi _poiMap poiGroupDoc ${poiGroupDoc.id} }');
 
               _poiMap[poiGroupDoc.id] ??= {'description': poiGroupDoc['description'],
-              'title': poiGroupDoc['title'],};
+              'title': poiGroupDoc['title']
+              ,
+                         'poi': [],
+};
+        _poiMap[poiGroupDoc.id]['poi'] = [];
 
 
               developer.log('toppoi check _poiMap $_poiMap }');
@@ -726,11 +737,9 @@ class ApplicationState extends ChangeNotifier {
           for (final poiDoc in poisnapshot.docs) {
             developer.log('toppoi poiDoc id ${poiDoc.id}');
 
-//          _poiMap[poiGroupDoc.id][poiDoc.id] = poiDoc.data();
-            _poiMap[poiGroupDoc.id][poiDoc.id] = {
-               poiDoc.data(),
 
-            };
+              _poiMap[poiGroupDoc.id]['poi'].add(poiDoc.data()) ;
+
           
             _poiList.add(poifunc(poiDoc.data(), poiGroupDoc.id));
            developer.log('_poiMap ${_poiMap[poiGroupDoc.id][poiDoc.id]} }');

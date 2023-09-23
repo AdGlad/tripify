@@ -44,14 +44,16 @@ class _topPoiListState extends State<topPoiList> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      PoiList(poiToVisit: _toppoi)
+                                      PoiList(topPoi: _toppoi)
                                   // PoiList(TopPoi: topPoi)
                                   ),
                             );
                           });
                     })
 
-                )));
+                )
+                )
+                );
   }
 }
 
