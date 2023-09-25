@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gtk_flutter/model/users.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../src/firebaseImage.dart';
 import '../UserInfo/UserInfoPage.dart';
@@ -49,12 +51,24 @@ Container UserMapContainer(BuildContext context, UserProfile? user
     //     // filter: _filter
     //    filter: _filter);
 
+  
+
+  Future<Uint8List> fileToUint8List(File file) async {
+  final List<int> bytes = await file.readAsBytes();
+  return Uint8List.fromList(bytes);
+}
+
     Future<Uint8List> loadMarkerImage() async {
 
-    //File? avatarfile = await getImageFile(user!.avatar! );
-    //Uint8List uint8List = await avatarfile!.readAsBytes();
-   // var byteData = ByteData.sublistView(Uint8List.fromList(uint8List));
+    File? avatarfile = await getImageFile(user!.avatar! );
+    Uint8List uint8List = await avatarfile!.readAsBytes();
+   //var byteData = ByteData.sublistView(Uint8List.fromList(uint8List));
+  //final File? iconimage = await getImageFile("images/0qlNcVgclFZNSASXXPbX44ae1vo2/image_picker_23DB7424-17CB-4F69-AD84-0006CC60DF81-22716-00000B523613886F.jpg");
+   
+  //final List<int> bytes = await iconimage!.readAsBytes();      
       var byteData = await rootBundle.load("assets/Quokka-PNG-Pic.png");
+     //   return Uint8List.fromList(bytes);
+
       return byteData.buffer.asUint8List();
     //}
     }
@@ -143,4 +157,26 @@ Container UserMapContainer(BuildContext context, UserProfile? user
           ),
         ),
       )); // Container
+}
+Future<File?> getImageFile(String storagePath) async {
+  final tempDir = await getTemporaryDirectory();
+  final fileName = storagePath.split('/').last;
+  final file = File('${tempDir.path}/$fileName');
+
+  // If the file do not exists try to download
+  if (!file.existsSync()) {
+  //if (true) {
+    try {
+      file.create(recursive: true);
+    
+      final ref =  FirebaseStorage.instance.ref(storagePath);
+      await ref.writeToFile(file);
+    //  await FirebaseStorage.instance.ref(storagePath).writeToFile(file);
+    } catch (e) {
+      // If there is an error delete the created file
+      await file.delete(recursive: true);
+      return null;
+    }
+  }
+  return file;
 }

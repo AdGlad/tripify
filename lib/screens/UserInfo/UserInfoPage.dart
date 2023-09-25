@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 //import 'dart:js_interop';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gtk_flutter/screens/UserInfo/UserStatsContainer.dart';
+//import 'package:gtk_flutter/screens/UserInfo/crop.dart';
+import 'package:gtk_flutter/screens/UserInfo/profileimagelogic.dart';
+import 'package:gtk_flutter/screens/UserInfo/profilepage.dart';
 import 'package:gtk_flutter/screens/findfriendpage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,7 +22,8 @@ import 'listfriends.dart';
 import '../../state/applicationstate.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-
+import 'package:image/image.dart' as img;
+import 'dart:ui' as ui;
 
 String? _avatar;
 File? _avatarFile;
@@ -56,6 +61,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   String _errorMessage = '';
   //String? _email;
   String? _avatar;
+  
 
   @override
   void initState() {
@@ -178,19 +184,21 @@ class _UserInfoPageState extends State<UserInfoPage> {
                         onTap: () async {
                           // Add your onTap logic here
                           print('CircleAvatar tapped!');
+
                           XFile? avatarXFile =
-                              await selectAndSaveImages(ImageSource.gallery);
+                              await pickImageFromSource(ImageSource.gallery);
+                          //     String? _avatar = await writeimage(avatarXFile);
+                          //   XFile? avatarclipedXFile =  await saveClippedImage(avatarXFile!);
                           Reference imagePath =
                               await saveImageToCloudStorage(avatarXFile!);
                           _avatar = imagePath.fullPath;
-                          //_avatarFile = await getImageFile(_avatar!);
-                          developer.log(
-                              ' imageFile is not null ${imagePath.fullPath}   ');
+                          _avatarFile = await getImageFile(_avatar!);
+                          developer.log(' imageFile is not null $_avatar ');
                           _saveUserInfo();
                         },
-child:  AvatarImage(storagePath:applicationState.userProfile!.avatar!)
-
-                        ),
+                        child: AvatarImage(
+                            storagePath:
+                                applicationState.userProfile!.avatar!)),
                   ),
 
                   SizedBox(height: 16.0),
@@ -312,11 +320,44 @@ child:  AvatarImage(storagePath:applicationState.userProfile!.avatar!)
                   //                     '',
                   //                     Icons.map_outlined,
                   //                     'Countries')),
+                  SizedBox(height: 16.0),
+
+
+// Expanded(
+//                 child: Crop(
+//                   key: cropKey,
+//                   image: FileImage(_avatarFile!),
+//                   aspectRatio: 1.0, // To crop it as a circle
+//                   maximumScale: 2.0, // Adjust maximum scale as needed
+//                 ),
+//               ),
+              
+                  Container(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(
+                            Size(200, 48)), // Set the desired width and height
+                      ),
+                      // style: ButtonStyle.lerp(a, b, t),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                          //  builder: (context) => CropImageScreen(),
+                            builder: (context) => ProfilePage1(),
+                         //   builder: (context) => CropSample(),
+                          ),
+                        );
+                      },
+                      child: Text('User Profile'),
+                    ),
+                  ),
                   Center(
                       child: Consumer<ApplicationState>(
                           builder: (context, appState, _) => Container(
                               child: userStatsContainer(
                                   appState.userProfile, context)))),
+
                   Container(
                     child: ElevatedButton(
                       style: ButtonStyle(
@@ -430,7 +471,7 @@ child:  AvatarImage(storagePath:applicationState.userProfile!.avatar!)
 }
 // }
 
-Future<XFile?> selectAndSaveImages(ImageSource _imagesource) async {
+Future<XFile?> pickImageFromSource(ImageSource _imagesource) async {
   XFile? selectedImage = await ImagePicker().pickImage(source: _imagesource);
   if (selectedImage != null) {
     developer.log('selectedImage is not null ');
@@ -441,25 +482,207 @@ Future<XFile?> selectAndSaveImages(ImageSource _imagesource) async {
   // developer.log('imagePaths 4 Length $selectedImage ');
 }
 
+Future<String?> saveClippedImage(XFile sourceImage) async {
+  final image = img.decodeImage(File(sourceImage.path).readAsBytesSync());
+
+  // Create a circular mask
+  final mask = img.Image(image!.width, image.height);
+  img.fill(mask, img.getColor(255, 255, 255, 0)); // Transparent
+
+  // Draw the clipped image
+  img.drawCircle(mask, image.width ~/ 2, image.height ~/ 2,
+      (image.width / 2).round(), img.getColor(255, 255, 255, 255));
+
+  // Resize the clipped image to a square
+  //final clippedImage = img.copyCrop(mask, 0, 0, image.width, image.height);
+
+  // Get the directory for saving the clipped image
+  final appDir = await getApplicationDocumentsDirectory();
+  final clippedImagePath = '${appDir.path}/clipped_image.jpg';
+
+  // Save the clipped image to the file system
+  //File(clippedImagePath).writeAsBytesSync(img.encodeJpg(clippedImage));
+
+  return clippedImagePath;
+}
+
 Future<Reference> saveImageToCloudStorage(XFile imageFile) async {
-  String fileName = imageFile.name;
+  String fileName = imageFile!.name;
   File? _image = File(imageFile.path);
 
-  Reference storageReference = FirebaseStorage.instance
-      .ref()
-      .child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
-  UploadTask uploadTask = storageReference.putFile(_image);
+  Reference storageReference = FirebaseStorage.instance.ref().child(
+      'images/${FirebaseAuth.instance.currentUser!.uid}/compressed/$fileName');
 
-  await uploadTask.whenComplete(() => print('Image uploaded'));
+  Reference storageReferenceCompressed = FirebaseStorage.instance.ref().child(
+      'images/${FirebaseAuth.instance.currentUser!.uid}/compressed/$fileName');
 
-//final storageRef = FirebaseStorage.instance.ref();
+  Reference storageReferenceThumbnail = FirebaseStorage.instance.ref().child(
+      'images/${FirebaseAuth.instance.currentUser!.uid}/thumbnail/$fileName');
 
+  Reference storageReferenceClipped = FirebaseStorage.instance.ref().child(
+      'images/${FirebaseAuth.instance.currentUser!.uid}/clipped/$fileName');
+  
+
+  File? _imageThumbnail = await createThumbnail(_image, 80, 80);
+
+  final compressedImageData = await compressImage(imageFile.path);
+  final metadata = SettableMetadata(contentType: 'image/jpeg');
+
+
+  File? _imageClipped = await createClippedCircle(_image);
+
+  UploadTask uploadTaskOrig = storageReference.putFile(_image);
+  //UploadTask uploadTaskClipped = storageReferenceClipped.putFile(_imageClipped);
+  UploadTask uploadTaskThumbnail =
+      storageReferenceThumbnail.putFile(_imageThumbnail);
+  UploadTask uploadTaskCompressed =
+      storageReference.putData(compressedImageData!, metadata);
+
+
+
+  //UploadTask uploadTaskThumbnail = storageReferencethumbnail.putFile(_image);
+
+  await uploadTaskOrig.whenComplete(() => print('Image Orig uploaded'));
+  await uploadTaskThumbnail
+      .whenComplete(() => print('Image Thumbnail uploaded'));
+  await uploadTaskCompressed
+      .whenComplete(() => print('Image Compressed uploaded'));
+ // await uploadTaskClipped
+ //     .whenComplete(() => print('Image Clipped uploaded'));
   Directory appDirectory = await getApplicationDocumentsDirectory();
-  //String fileName = imageFile.path.split('/').last;
+  //String fileName = _clippedImage.path.split('/').last;
   String savedImagePath = '${appDirectory.path}/$fileName';
-  File(imageFile.path).copy(savedImagePath);
+  File(imageFile!.path).copy(savedImagePath);
   return storageReference;
 }
+// Future<Reference> saveImageToCloudStorage(XFile imageFile) async {
+//   String fileName = imageFile.name;
+//   File? _image = File(imageFile.path);
+
+//   Reference storageReference = FirebaseStorage.instance
+//       .ref()
+//       .child('images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
+//   UploadTask uploadTask = storageReference.putFile(_image);
+
+//   await uploadTask.whenComplete(() => print('Image uploaded'));
+
+// //final storageRef = FirebaseStorage.instance.ref();
+
+//   Directory appDirectory = await getApplicationDocumentsDirectory();
+//   //String fileName = imageFile.path.split('/').last;
+//   String savedImagePath = '${appDirectory.path}/$fileName';
+//   File(imageFile.path).copy(savedImagePath);
+//   return storageReference;
+// }
+
+Future<File> createClippedCircle(File imageFile) async {
+  final bytes = await imageFile.readAsBytes();
+  final originalImage = await decodeImageFromList(bytes);
+
+  if (originalImage == null) {
+    throw Exception("Failed to decode the image.");
+  }
+
+  // Ensure the image is a square by selecting the smaller dimension
+  final size = originalImage.width < originalImage.height
+      ? originalImage.width
+      : originalImage.height;
+
+  // Create a circular mask
+  final recorder = ui.PictureRecorder();
+  final canvas = Canvas(recorder, Rect.fromPoints(Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
+  final paint = Paint()
+    ..color = const Color(0xFFFFFFFF) // White
+    ..style = PaintingStyle.fill;
+
+  canvas.drawCircle(Offset(size.toDouble() / 2, size.toDouble() / 2), size.toDouble() / 2, paint);
+  final mask = await recorder.endRecording().toImage(size, size);
+  final maskBytes = await mask.toByteData(format: ui.ImageByteFormat.png);
+  final maskImageData = Uint8List.sublistView(maskBytes!.buffer.asUint8List());
+
+  // Apply the circular mask to the original image
+  final clippedImage = img.Image(size, size);
+  final maskImage = img.decodeImage(Uint8List.fromList(maskImageData));
+  final originalImageData = Uint8List.fromList(bytes);
+
+  for (var y = 0; y < size; y++) {
+    for (var x = 0; x < size; x++) {
+      final maskPixel = maskImage!.getPixel(x, y);
+      if (maskPixel == img.getColor(255, 255, 255, 255)) {
+        final pixelIndex = (y * size + x) * 4; // 4 bytes per pixel (RGBA)
+        final r = originalImageData[pixelIndex];
+        final g = originalImageData[pixelIndex + 1];
+        final b = originalImageData[pixelIndex + 2];
+        final a = originalImageData[pixelIndex + 3];
+        clippedImage.setPixel(x, y, img.getColor(r, g, b, a));
+      }
+    }
+  }
+
+  // Create a new File to save the clipped image
+  final appDir = await getApplicationDocumentsDirectory();
+  final clippedImageFile = File('${appDir.path}/${imageFile.path.split('/').last.replaceAll('.jpg', '_clipped.jpg')}');
+
+  // Save the clipped image to the new File
+  clippedImageFile.writeAsBytesSync(img.encodeJpg(clippedImage));
+
+  return clippedImageFile;
+}
+
+
+// Future<File> createClippedCircle(File imageFile) async {
+//   final bytes = await imageFile.readAsBytes();
+//   final originalImage = await decodeImageFromList(bytes);
+
+//   if (originalImage == null) {
+//     throw Exception("Failed to decode the image.");
+//   }
+
+//   // Ensure the image is a square by selecting the smaller dimension
+//   final size = originalImage.width < originalImage.height
+//       ? originalImage.width
+//       : originalImage.height;
+
+//   // Create a circular mask
+//   final recorder = ui.PictureRecorder();
+//   final canvas = Canvas(recorder, Rect.fromPoints(Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
+//   final paint = Paint()
+//     ..color = const Color(0xFFFFFFFF) // White
+//     ..style = PaintingStyle.fill;
+
+//   canvas.drawCircle(Offset(size.toDouble() / 2, size.toDouble() / 2), size.toDouble() / 2, paint);
+//   final mask = await recorder.endRecording().toImage(size, size);
+//   final maskBytes = await mask.toByteData(format: ui.ImageByteFormat.png);
+//   final maskImageData = Uint8List.sublistView(maskBytes!.buffer.asUint8List());
+
+//   // Apply the circular mask to the original image
+//   final clippedImage = img.Image(size, size);
+//   final maskImage = img.decodeImage(Uint8List.fromList(maskImageData));
+
+//   for (var y = 0; y < size; y++) {
+//     for (var x = 0; x < size; x++) {
+//       if (maskImage!.getPixel(x, y) == img.getColor(255, 255, 255, 255)) {
+//         for (var y = 0; y < size; y++) {
+//           for (var x = 0; x < size; x++) {
+//             final pixel = x >= 0 && x < originalImage.width && y >= 0 && y < originalImage.height
+//               ? originalImage.getPixel(x, y)
+//               : 0xFFFFFFFF; // Default to white if pixel is out of bounds
+//             clippedImage.setPixelRgba(x, y, img.getRed(pixel), img.getGreen(pixel), img.getBlue(pixel), img.getAlpha(pixel));
+//           }
+//         }
+//       }
+//     }
+//   }
+
+  // Create a new File to save the clipped image
+//   final appDir = await getApplicationDocumentsDirectory();
+//   final clippedImageFile = File('${appDir.path}/${imageFile.path.split('/').last.replaceAll('.jpg', '_clipped.jpg')}');
+
+//   // Save the clipped image to the new File
+//   clippedImageFile.writeAsBytesSync(img.encodeJpg(clippedImage));
+
+//   return clippedImageFile;
+// }
 
 Future<File?> getImageFile(String storagePath) async {
   final tempDir = await getTemporaryDirectory();
@@ -468,13 +691,13 @@ Future<File?> getImageFile(String storagePath) async {
 
   // If the file do not exists try to download
   if (!file.existsSync()) {
-  //if (true) {
+    //if (true) {
     try {
       file.create(recursive: true);
-    
-      final ref =  FirebaseStorage.instance.ref(storagePath);
+
+      final ref = FirebaseStorage.instance.ref(storagePath);
       await ref.writeToFile(file);
-    //  await FirebaseStorage.instance.ref(storagePath).writeToFile(file);
+      //  await FirebaseStorage.instance.ref(storagePath).writeToFile(file);
     } catch (e) {
       // If there is an error delete the created file
       await file.delete(recursive: true);
@@ -491,7 +714,7 @@ Future<File?> getImageFile(String storagePath) async {
 //     final radius = size.width / 2.0; // Assumes the width and height are the same
 
 //     path.addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius));
-    
+
 //     return path;
 //   }
 
@@ -501,11 +724,7 @@ Future<File?> getImageFile(String storagePath) async {
 //   }
 // }
 
-
-
-
 class AvatarImage extends StatelessWidget {
-
   final String storagePath;
 
   //const CheckInContainer({super.key});
@@ -527,21 +746,18 @@ class AvatarImage extends StatelessWidget {
           final imageProvider = FileImage(snapshot.data!);
 
           // Use the imageProvider with an Image widget or any other widget that accepts an ImageProvider.
-          return CircleAvatar(
-  radius: 40.0,
-  backgroundImage: imageProvider);
+          return CircleAvatar(radius: 40.0, backgroundImage: imageProvider);
         }
       },
     );
   }
-  
+
   // @override
   // Future<Object> obtainKey(ImageConfiguration configuration) {
   //   // TODO: implement obtainKey
   //   throw UnimplementedError();
   // }
 }
-
 
 // Future<void> downloadFile(String storagePath, File localFile) async {
 //   try {
@@ -565,3 +781,60 @@ class AvatarImage extends StatelessWidget {
 //   }
 // }
 
+Future<File> createThumbnail(File imageFile, int width, int height) async {
+  final bytes = await imageFile.readAsBytes();
+  final originalImage = img.decodeImage(bytes);
+
+  if (originalImage == null) {
+    throw Exception("Failed to decode the image.");
+  }
+
+  // Resize the image to the desired dimensions (thumbnail size)
+  final thumbnail = img.copyResize(originalImage, width: width, height: height);
+
+  // Create a new File to save the thumbnail
+  final thumbnailFile = File(imageFile.path.replaceAll(
+      '.jpg', '_thumbnail.jpg')); // Adjust the file extension as needed
+
+  // Save the thumbnail to the new File
+  thumbnailFile.writeAsBytesSync(img.encodeJpg(thumbnail));
+
+  return thumbnailFile;
+}
+
+
+
+
+
+// Future<File> createClippedCircle(File imageFile) async {
+//   final bytes = await imageFile.readAsBytes();
+//   final originalImage = img.decodeImage(bytes);
+
+//   if (originalImage == null) {
+//     throw Exception("Failed to decode the image.");
+//   }
+
+//   // Ensure the image is a square by selecting the smaller dimension
+//   final size = originalImage.width < originalImage.height
+//       ? originalImage.width
+//       : originalImage.height;
+
+//   // Create a circular mask
+//   final mask = img.Image(size, size);
+//   img.fill(mask, img.getColor(255, 255, 255, 0)); // Transparent
+
+//   // Draw the clipped image as a circle
+//   img.drawCircle(mask, size ~/ 2, size ~/ 2, size ~/ 2, img.getColor(255, 255, 255, 255));
+
+//   // Apply the circular mask to the original image
+//   final clippedImage = img.copyCrop(originalImage, 0, 0, size, size);
+//   img.blit(clippedImage, mask);
+
+//   // Create a new File to save the clipped image
+//   final clippedImageFile = File(imageFile.path.replaceAll('.jpg', '_clipped.jpg')); // Adjust the file extension as needed
+
+//   // Save the clipped image to the new File
+//   clippedImageFile.writeAsBytesSync(img.encodeJpg(clippedImage));
+
+//   return clippedImageFile;
+// }
