@@ -295,8 +295,10 @@ Future saveLocation(
 
     developer
         .log('newPlaceHistory.arrivaldate ${newPlaceHistory.arrivaldate} ');
-    developer.log('currentPlace!.arrivaldate ${currentPlace!.arrivaldate} ');
-    if (newPlaceHistory.arrivaldate!.isAfter(currentPlace!.arrivaldate!)) {
+        
+   // developer.log('currentPlace!.arrivaldate ${currentPlace!.arrivaldate} ');
+
+    if (newPlaceHistory.arrivaldate!.isAfter((currentPlace?.arrivaldate)??DateTime.now().subtract(Duration(days: 1)))) {
       _latestLocation = true;
     } else {
       _latestLocation = false;

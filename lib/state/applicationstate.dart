@@ -112,7 +112,6 @@ class ApplicationState extends ChangeNotifier {
   Map<String, dynamic> _poiMap = {};
   Map<String, dynamic> get poiMap => _poiMap;
 
-
   Map<String, dynamic> _placehistoryMap = {};
   Map<String, dynamic> get placehistoryMap => _placehistoryMap;
 
@@ -400,29 +399,26 @@ class ApplicationState extends ChangeNotifier {
         _blpoiList = [];
         //_poiMap['Bucket List']['poi'] = [];
 
-                      _poiMap['Bucket List'] ??= {
-                                      'description': 'Your Bucket List',
-              'title': 'Bucket List',
-                         'poi': [],
-              
-                      };
+        _poiMap['Bucket List'] ??= {
+          'description': 'Your Bucket List',
+          'title': 'Bucket List',
+          'poi': [],
+        };
         _poiMap['Bucket List']['poi'].clear();
 
         blpoiList.forEach((bucketListPoiMap) {
-         // _poiMap['Bucket List'][bucketListPoiMap['id']] = bucketListPoiMap;
+          // _poiMap['Bucket List'][bucketListPoiMap['id']] = bucketListPoiMap;
 
-              _poiMap['Bucket List']['poi'].add(bucketListPoiMap) ;
+          _poiMap['Bucket List']['poi'].add(bucketListPoiMap);
 
-
-         //  _poiMap['Bucket List']['poi'][bucketListPoiMap['id']] =  {  
-         //      bucketListPoiMap,
-         //   };
-
+          //  _poiMap['Bucket List']['poi'][bucketListPoiMap['id']] =  {
+          //      bucketListPoiMap,
+          //   };
 
           _blpoiList.add(poifunc(bucketListPoiMap, 'Bucket List'));
         });
 
-      developer.log('User _poiMap $_poiMap ');
+        developer.log('User _poiMap $_poiMap ');
         List<dynamic>? _countryvisitListData =
             userData['countryvisitlist'] ?? [];
         _userProfile?.countryvisitlist =
@@ -592,9 +588,13 @@ class ApplicationState extends ChangeNotifier {
         .listen(onError: (error) => print("Listen failed: $error"), (snapshot) {
       _currentPlace = null;
 
+    final document = snapshot.docs[0];
+
       developer.log('listenForCurrrentPlace In ');
 
-      for (final document in snapshot.docs) {
+  if (snapshot.docs.isNotEmpty) {
+
+    //  for (final document in snapshot.docs) {
         globals.new_latitude = document.data()['latitude'] as double;
         globals.new_longitude = document.data()['longitude'] as double;
         int timeInMillis = document.data()['timestamp'] as int;
@@ -634,15 +634,41 @@ class ApplicationState extends ChangeNotifier {
             //imagePaths: document.data()['imagePaths'] as List<String>?,
             imagePaths: imagePath,
             arrivaldate: currentArrivaldate);
-
+  }
+  else {
+    // Set _currentPlace to default values when the snapshot is empty
+    _currentPlace = PlaceHistory(
+        userId: FirebaseAuth.instance.currentUser!.uid,
+        name: 'First Place',
+        latitude: 0.0,
+        longitude: 0.0,
+        // Set other default values here...
+        arrivaldate: DateTime.now().subtract(Duration(days: 1))  
+        );
+  }
         developer.log('listenForCurrrentPlace out ');
-      }
+    //  }
       developer.log('listenForCurrrentPlace notifyListeners before');
 
       //   notifyListeners();
       developer.log('listenForCurrrentPlace notifyListeners after 1');
     });
+
     developer.log('return currentPlace ');
+
+    if (_currentPlace == null){
+      _currentPlace = PlaceHistory(
+        userId: FirebaseAuth.instance.currentUser!.uid,
+        name: 'First Place',
+        latitude: 0.0,
+        longitude: 0.0,
+        // Set other default values here...
+        arrivaldate: DateTime.now().subtract(Duration(days: 1))  
+        );
+  }
+
+
+
 
     // return currentPlace;
   }
@@ -709,40 +735,36 @@ class ApplicationState extends ChangeNotifier {
     developer.log('listenForTopPois() start ');
     _poiList = [];
     _poiListsSubscription = FirebaseFirestore.instance
-      //  .collection('poi-to-visit')
+        //  .collection('poi-to-visit')
         .collection('toppoi')
         .snapshots()
         .listen((snapshot) {
       for (final poiGroupDoc in snapshot.docs) {
         FirebaseFirestore.instance
-              //  .collection('poi-to-visit')
+            //  .collection('poi-to-visit')
             .collection('toppoi')
             .doc(poiGroupDoc.id)
             .collection('poi')
             .snapshots()
             .listen((poisnapshot) {
-              developer.log('toppoi _poiMap poiGroupDoc ${poiGroupDoc.id} }');
+          developer.log('toppoi _poiMap poiGroupDoc ${poiGroupDoc.id} }');
 
-              _poiMap[poiGroupDoc.id] ??= {'description': poiGroupDoc['description'],
-              'title': poiGroupDoc['title']
-              ,
-                         'poi': [],
-};
-        _poiMap[poiGroupDoc.id]['poi'] = [];
+          _poiMap[poiGroupDoc.id] ??= {
+            'description': poiGroupDoc['description'],
+            'title': poiGroupDoc['title'],
+            'poi': [],
+          };
+          _poiMap[poiGroupDoc.id]['poi'] = [];
 
-
-              developer.log('toppoi check _poiMap $_poiMap }');
-
+          developer.log('toppoi check _poiMap $_poiMap }');
 
           for (final poiDoc in poisnapshot.docs) {
             developer.log('toppoi poiDoc id ${poiDoc.id}');
 
+            _poiMap[poiGroupDoc.id]['poi'].add(poiDoc.data());
 
-              _poiMap[poiGroupDoc.id]['poi'].add(poiDoc.data()) ;
-
-          
             _poiList.add(poifunc(poiDoc.data(), poiGroupDoc.id));
-           developer.log('_poiMap ${_poiMap[poiGroupDoc.id][poiDoc.id]} }');
+            developer.log('_poiMap ${_poiMap[poiGroupDoc.id][poiDoc.id]} }');
           }
         });
       }
