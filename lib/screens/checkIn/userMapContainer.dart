@@ -53,6 +53,8 @@ Container UserMapContainer(BuildContext context, UserProfile? user
 
   
 
+
+
   Future<Uint8List> fileToUint8List(File file) async {
   final List<int> bytes = await file.readAsBytes();
   return Uint8List.fromList(bytes);
@@ -61,25 +63,27 @@ Container UserMapContainer(BuildContext context, UserProfile? user
     Future<Uint8List> loadMarkerImage() async {
 
     File? avatarfile = await getImageFile(user!.avatar! );
-    Uint8List uint8List = await avatarfile!.readAsBytes();
+    final filetoU8= fileToUint8List(avatarfile!);
+
+   // Uint8List uint8List = await avatarfile!.readAsBytes();
    //var byteData = ByteData.sublistView(Uint8List.fromList(uint8List));
   //final File? iconimage = await getImageFile("images/0qlNcVgclFZNSASXXPbX44ae1vo2/image_picker_23DB7424-17CB-4F69-AD84-0006CC60DF81-22716-00000B523613886F.jpg");
    
   //final List<int> bytes = await iconimage!.readAsBytes();      
-      var byteData = await rootBundle.load("assets/Quokka-PNG-Pic.png");
+    //  var byteData = await rootBundle.load("assets/Quokka-PNG-Pic.png");
      //   return Uint8List.fromList(bytes);
-
-      return byteData.buffer.asUint8List();
+return filetoU8;
+//      return byteData.buffer.asUint8List();
     //}
     }
 
     var markerImage = await loadMarkerImage();
 
-    controller.addImage('QuokkaMarker', markerImage);
+    controller.addImage('Avatar', markerImage);
 
     await controller.addSymbol(SymbolOptions(
-      iconSize: 0.2,
-      iconImage: "QuokkaMarker",
+      iconSize: 0.75,
+      iconImage: "Avatar",
       // geometry: LatLng(-33.760181, 151.284136),
       geometry:
           //LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),

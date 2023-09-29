@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 //import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart'
@@ -6,9 +7,44 @@ import 'package:firebase_auth/firebase_auth.dart'
 
 import 'package:go_router/go_router.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
+import 'package:http/http.dart' as http;
 
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:gtk_flutter/src/ad_helper.dart';
+
+Future<http.Response> downloadImage(String imageUrl) async {
+  final response = await http.get(Uri.parse(imageUrl));
+  return response;
+}
+
+Future<String?> uploadImageToFirestore(String image, String userId) async {
+  //try {
+
+    final response = await downloadImage(image);
+    final imageBytes = response.bodyBytes;
+    final filename = 'avatar_'+ userId +'.jpg';
+    final storage = FirebaseStorage.instance;
+    final ref = storage.ref().child('images').child(filename); // Specify the desired storage path
+    final xfileAvatar = await uint8ListToXFile(imageBytes,filename);
+    //final storageReference = await saveImageToCloudStorage( xfileAvatar!, 'Compress');
+    final storageReference = await saveImageToCloudStorage( xfileAvatar!, 'CropCircle');
+
+    final fullPath = storageReference.fullPath;
+   // final uploadTask = ref.putData(imageBytes);
+
+   // await uploadTask.whenComplete(() => null);
+
+    //final imageUrl = await ref.getDownloadURL();
+    //return imageUrl;
+//  } catch (e) {
+ //   print('Error uploading image to Firestore: $e');
+ //   return null;
+ // }
+    return fullPath;
+
+}
+
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -18,6 +54,9 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
+//String? imageUrl;
+String? avatar_path;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,7 +86,7 @@ class _SignInState extends State<SignIn> {
           );
           context.push(uri.toString());
         })),
-        AuthStateChangeAction(((context, state) {
+        AuthStateChangeAction(((context, state) async {
           if (state is SignedIn || state is UserCreated) {
             var user = (state is SignedIn)
                 ? state.user
@@ -57,6 +96,15 @@ class _SignInState extends State<SignIn> {
             }
             if (state is UserCreated) {
               // Create profile record
+
+              if (user.photoURL != null)
+              {
+                avatar_path = await uploadImageToFirestore(user.photoURL!,user.uid );
+              // avatar_path = 'images/avatar_'+ user.uid +'.jpg';  
+               //avatar_path = avatarReference.fullPath;  
+              } else {
+                avatar_path = 'images/Quokka-Avatar.png';
+              }
               FirebaseFirestore.instance
                   .collection('users')
                   .doc(user.uid)
@@ -66,7 +114,7 @@ class _SignInState extends State<SignIn> {
                 'nickname': (user.displayName ?? 'nickname').toLowerCase(),
                 'email': user.email ?? 'email',
              //   'avatar': user.photoURL ?? 'images/0qlNcVgclFZNSASXXPbX44ae1vo2/avatar/avatar_image_cropper_98290CA2-814D-4DAA-8075-05CAB4DBB10F-12470-0000064D2AB5DF33.jpg',
-                'avatar': 'images/Quokka-Avatar.png',
+                'avatar': avatar_path,
                 // 'age': int.parse(_ageController.text),
                 'friend': 0,
                 'league': 0,

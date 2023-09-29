@@ -10,6 +10,7 @@ import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:gtk_flutter/screens/UserInfo/cropImage.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer' as developer;
+import 'package:image_picker/image_picker.dart';
 
 import '../../state/applicationstate.dart';
 
@@ -39,7 +40,10 @@ class _ProfilePage1State extends State<ProfilePage1> {
       //  _avatarNew =true;
 
       _avatar = newAvatar;
-      Reference avatarReference = await saveImagePathToCloudStorage(newAvatar);
+
+      Reference avatarReference = await saveImageToCloudStorage(XFile(_avatar!),'CropCircle');
+     // Reference avatarReference = await saveImagePathToCloudStorage(newAvatar);
+    //  Reference avatarReference = await saveImagePathToCloudStorage(newAvatar);
       _saveUserAvatar(avatarReference.fullPath);
     });
   }
@@ -225,7 +229,8 @@ class _TopPortion extends StatelessWidget {
                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: CircleAvatar(
+                  child: 
+                  CircleAvatar(
                     radius: 20,
                     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     child: Container(
@@ -234,6 +239,9 @@ class _TopPortion extends StatelessWidget {
                           color: Colors.green, shape: BoxShape.circle),
                     ),
                   ),
+
+
+                  
                 ),
               ],
             ),

@@ -522,7 +522,7 @@ Reference storageReferenceCompressed = FirebaseStorage.instance.ref().child(
      'images/${FirebaseAuth.instance.currentUser!.uid}/$fileName');
   
   final compressedImageData = await compressImage(imagePath, quality: 80);
-  final metadata = SettableMetadata(contentType: 'image/jpeg');
+  final metadata = SettableMetadata(contentType: 'image/png');
   UploadTask uploadTaskCompressed =
       storageReferenceCompressed.putData(compressedImageData!, metadata);
 await uploadTaskCompressed
@@ -543,6 +543,17 @@ File uint8ListToFile(Uint8List uint8list, String filePath) {
   return file;
 }
 
+Future<XFile?> uint8ListToXFile(Uint8List uint8list, String fileName) async {
+  try {
+    final directory = await getTemporaryDirectory();
+    final file = File('${directory.path}/$fileName');
+    await file.writeAsBytes(uint8list);
+    return XFile(file.path);
+  } catch (e) {
+    print('Error converting Uint8List to XFile: $e');
+    return null;
+  }
+}
 
 Future<Reference> saveImageToCloudStorage(XFile imageFile,String filetype) async {
   String fileName = imageFile!.name;
@@ -567,7 +578,10 @@ Future<Reference> saveImageToCloudStorage(XFile imageFile,String filetype) async
 } else if (filetype=='CropCircle')
 {
       imageDirectory = '/cropcircle';
-     _imageToSave = await createCropCircle(_image,80);
+     // _imageToSave = await cropImage(_image,80);
+    _imageToSave = (await  cropImageCircular(_image))!;
+   //   _image = await cropImage(imageFile.path);
+    // _imageToSave = await createCropCircle(_image,80);
 
 } else {
   imageDirectory = '/original';
@@ -576,7 +590,10 @@ Future<Reference> saveImageToCloudStorage(XFile imageFile,String filetype) async
 
   storageReference = FirebaseStorage.instance.ref().child(
       'images/${FirebaseAuth.instance.currentUser!.uid}' + imageDirectory + '/$fileName');
-       uploadTask =      storageReference.putFile(_imageToSave);
+
+      final metadata = SettableMetadata(contentType: 'image/png');
+
+       uploadTask =      storageReference.putFile(_imageToSave,metadata);
       await uploadTask.whenComplete(() => print('Image $filetype uploaded'));
 
    return storageReference;
@@ -766,10 +783,10 @@ Future<File> createThumbnail(File imageFile, int width, int height) async {
 
   // Create a new File to save the thumbnail
   final thumbnailFile = File(imageFile.path.replaceAll(
-      '.jpg', '_thumbnail.jpg')); // Adjust the file extension as needed
+      '.jpg', '_thumbnail.png')); // Adjust the file extension as needed
 
   // Save the thumbnail to the new File
-  thumbnailFile.writeAsBytesSync(img.encodeJpg(thumbnail));
+  thumbnailFile.writeAsBytesSync(img.encodePng(thumbnail));
 
   return thumbnailFile;
 }
@@ -803,15 +820,98 @@ Future<File> createCropCircle(File imageFile, int quality) async {
 
   // Create a new File to save the thumbnail
   final cropCirclelFile = File(imageFile.path.replaceAll(
-      '.jpg', '_thumbnail.jpg')); // Adjust the file extension as needed
+      '.jpg', '_cropped.png')); // Adjust the file extension as needed
 
   // Save the thumbnail to the new File
-  cropCirclelFile.writeAsBytesSync(img.encodeJpg(cropCircle,quality: quality));
+  //cropCirclelFile.writeAsBytesSync(img.encodeJpg(cropCircle,quality: quality));
+  cropCirclelFile.writeAsBytesSync(img.encodePng(cropCircle));
   developer.log('createCropCircle end' );
 
 
   return cropCirclelFile;
 }
+
+Future<File> cropImage(File imageFile ,int quality) async {
+    final bytes = await imageFile.readAsBytes();
+  final originalImage = img.decodeImage(bytes);
+
+if (originalImage == null) {
+    throw Exception("Failed to decode the image.");
+  }
+   int size = originalImage.width < originalImage.height
+      ? originalImage.width
+      : originalImage.height;
+
+  double result = size /2; // pi; // Divide by Pi
+
+  int radiusSize = result.round();
+  //int radiusSize = 1000;
+
+  developer.log('originalImage.width ${originalImage.width}' );
+  developer.log('originalImage.height ${originalImage.height}' );
+
+  // Load the image using the image package
+  final image = img.decodeImage(imageFile.readAsBytesSync());
+
+  // if (image == null) {
+  //   // Handle the case where the image cannot be loaded
+  //   return null;
+  // }
+
+  // Create a circular mask with a transparent background
+  final mask = img.Image(image!.width, image.height)
+    ..fill(img.getColor(0, 0, 0, 0)); // Transparent background
+
+  // Create a circular shape in the mask with full transparency
+  img.fillCircle(mask, image.width ~/ 2, image.height ~/ 2, image.width ~/ 2,
+      img.getColor(0, 0, 0, 0)); // Transparent circle
+
+  // Apply the circular mask to the original image
+ // final croppedImage = img.copy(image, mask);
+  final croppedImage = img.copyInto(image, mask,
+      dstX: 0, dstY: 0, srcX: 0, srcY: 0, srcW: image.width, srcH: image.height);
+
+  final cropCirclelFile = File(imageFile.path.replaceAll(
+      '.jpg', '_cropped.png')); // Adjust the file extension as needed
+
+  // Save the thumbnail to the new File
+  //cropCirclelFile.writeAsBytesSync(img.encodeJpg(croppedImage,quality: quality));
+  cropCirclelFile.writeAsBytesSync(img.encodePng(croppedImage));
+  developer.log('createCropCircle end' );
+
+
+  return cropCirclelFile;
+
+  //return croppedImage;
+}
+// Future<img.Image?> cropImage(String imagePath ) async {
+//   // Load the image using the image package
+//   final image = img.decodeImage(File(imagePath).readAsBytesSync());
+
+//   if (image == null) {
+//     // Handle the case where the image cannot be loaded
+//     return null;
+//   }
+
+//   // Create a circular mask with a transparent background
+//   final mask = img.Image(image.width, image.height)
+//     ..fill(img.getColor(0, 0, 0, 0)); // Transparent background
+
+//   // Create a circular shape in the mask with full transparency
+//   img.fillCircle(mask, image.width ~/ 2, image.height ~/ 2, image.width ~/ 2,
+//       img.getColor(0, 0, 0, 0)); // Transparent circle
+
+//   // Apply the circular mask to the original image
+//  // final croppedImage = img.copy(image, mask);
+//   final croppedImage = img.copyInto(image, mask,
+//       dstX: 0, dstY: 0, srcX: 0, srcY: 0, srcW: image.width, srcH: image.height);
+
+//   return croppedImage;
+// }
+
+
+
+
 
 
 
@@ -850,5 +950,82 @@ Future<File> createCropCircle(File imageFile, int quality) async {
 
 
 
+Future<File?> cropImageCircular(File imageFile) async {
+  // Load the image using the image package
+  final image = img.decodeImage(imageFile.readAsBytesSync());
 
+  if (image == null) {
+    // Handle the case where the image cannot be loaded
+    return null;
+  }
 
+  // Create a circular mask with a transparent background
+  final mask = img.Image(image.width, image.height,
+      channels: img.Channels.rgba); // Transparent background
+
+  // Create a circular shape in the mask with full transparency
+  img.fillCircle(mask, image.width ~/ 2, image.height ~/ 2, image.width ~/ 2,
+      img.getColor(0, 0, 0, 0)); // Transparent circle
+
+  // Apply the circular mask to the original image
+  final croppedImage = img.copyInto(image, mask,
+      dstX: 0,
+      dstY: 0,
+      srcX: 0,
+      srcY: 0,
+      srcW: image.width,
+      srcH: image.height);
+
+  // Save the cropped image to a temporary file
+  final tempDir = Directory.systemTemp;
+  final tempFile = File('${tempDir.path}/cropped_image.png');
+  tempFile.writeAsBytesSync(img.encodePng(croppedImage));
+
+  return tempFile;
+}
+
+// img.Image? cropImageCircular(File imageFile) {
+//   // Load the image using the image package
+//   final image = img.decodeImage(imageFile.readAsBytesSync());
+
+//   if (image == null) {
+//     // Handle the case where the image cannot be loaded
+//     return null;
+//   }
+
+//   // Create a circular mask with a transparent background
+//   final mask = img.Image(image.width, image.height,
+//       channels: img.Channels.rgba); // Transparent background
+
+//   // Create a circular shape in the mask with full transparency
+//   img.fillCircle(mask, image.width ~/ 2, image.height ~/ 2, image.width ~/ 2,
+//       img.getColor(0, 0, 0, 0)); // Transparent circle
+
+//   // Apply the circular mask to the original image
+//   final croppedImage = img.copyInto(image, mask,
+//       dstX: 0,
+//       dstY: 0,
+//       srcX: 0,
+//       srcY: 0,
+//       srcW: image.width,
+//       srcH: image.height);
+
+//   return croppedImage;
+// }
+
+// Future<void> saveCroppedImageToStorage(File croppedImageFile, String storagePath) async {
+//   try {
+// //    final FirebaseApp app = await Firebase.initializeApp();
+//   //  final FirebaseStorage storage = FirebaseStorage.instanceFor(app: app);
+
+//     final Reference ref = storage.ref().child(storagePath);
+//     final UploadTask uploadTask = ref.putFile(croppedImageFile);
+
+//     await uploadTask.whenComplete(() => null);
+
+//     final imageUrl = await ref.getDownloadURL();
+//     print('Image uploaded to Firebase Storage: $imageUrl');
+//   } catch (e) {
+//     print('Error uploading image to Firebase Storage: $e');
+//   }
+// }

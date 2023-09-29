@@ -347,7 +347,7 @@ class _CropPageState extends State<CropPage> {
         maxWidth: 200,
         sourcePath: _pickedFile!.path,
         //   aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1), // To maintain a square aspect ratio
-        compressFormat: ImageCompressFormat.jpg,
+        compressFormat: ImageCompressFormat.png,
         compressQuality: 100,
         cropStyle: CropStyle.circle,
         uiSettings: [
