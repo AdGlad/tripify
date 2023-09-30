@@ -18,63 +18,30 @@ Container UserMapContainer(BuildContext context, UserProfile? user
   void _onMapCreated(MapboxMapController controller) async {
     String sourceId = 'country-boundaries';
     String layerId = 'country-boundaries';
-    dynamic _filter = 
-    [
+    dynamic _filter = [
       "any",
       ["==", "iso_3166_1_alpha_3", "AUS"],
-    ]; 
-    //    dynamic _filter = 
-    // [
-    //   "any",
-    //   ["==", "name", "Empire State Building"],
-    // ];
-
-    // controller.setFilter('poi-lable', [ "any", ["==", "name", "Empire State Building"]]);   
-     controller.removeLayer('poi-labels');
+    ];
+    controller.removeLayer('poi-labels');
 
     controller.addSource(
         sourceId,
         VectorSourceProperties(
           url: "mapbox://mapbox.country-boundaries-v1",
-        //  url: "mapbox://mapbox.mapbox-streets_v8",
         ));
 
-    // controller.addLayer(
-    //     sourceId,
-    //     layerId,
-    //     FillLayerProperties(
-    //       fillColor: '#F96167', //Coral #F96167
-    //       fillOpacity: 0.2,
-    //     ),
-    //     sourceLayer: "country_boundaries",
-    //    // sourceLayer: "poi_label",
-    //     // filter: _filter
-    //    filter: _filter);
 
-  
-
-
-
-  Future<Uint8List> fileToUint8List(File file) async {
-  final List<int> bytes = await file.readAsBytes();
-  return Uint8List.fromList(bytes);
-}
+    Future<Uint8List> fileToUint8List(File file) async {
+      final List<int> bytes = await file.readAsBytes();
+      return Uint8List.fromList(bytes);
+    }
 
     Future<Uint8List> loadMarkerImage() async {
-
-    File? avatarfile = await getImageFile(user!.avatar! );
-    final filetoU8= fileToUint8List(avatarfile!);
-
-   // Uint8List uint8List = await avatarfile!.readAsBytes();
-   //var byteData = ByteData.sublistView(Uint8List.fromList(uint8List));
-  //final File? iconimage = await getImageFile("images/0qlNcVgclFZNSASXXPbX44ae1vo2/image_picker_23DB7424-17CB-4F69-AD84-0006CC60DF81-22716-00000B523613886F.jpg");
-   
-  //final List<int> bytes = await iconimage!.readAsBytes();      
-    //  var byteData = await rootBundle.load("assets/Quokka-PNG-Pic.png");
-     //   return Uint8List.fromList(bytes);
-return filetoU8;
+      File? avatarfile = await getImageFile(user!.avatar!);
+      final filetoU8 = fileToUint8List(avatarfile!);
+      return filetoU8;
 //      return byteData.buffer.asUint8List();
-    //}
+      //}
     }
 
     var markerImage = await loadMarkerImage();
@@ -86,8 +53,7 @@ return filetoU8;
       iconImage: "Avatar",
       // geometry: LatLng(-33.760181, 151.284136),
       geometry:
-          //LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
-          // LatLng(globals.new_latitude!, globals.new_longitude!),
+
           LatLng(user?.latestlatitude ?? 0.0, user?.latestlongitude ?? 0.0),
 
 //          LatLng(_currentPlace!.latitude!, _currentPlace!.longitude!),
@@ -162,6 +128,7 @@ return filetoU8;
         ),
       )); // Container
 }
+
 Future<File?> getImageFile(String storagePath) async {
   final tempDir = await getTemporaryDirectory();
   final fileName = storagePath.split('/').last;
@@ -169,13 +136,13 @@ Future<File?> getImageFile(String storagePath) async {
 
   // If the file do not exists try to download
   if (!file.existsSync()) {
-  //if (true) {
+    //if (true) {
     try {
       file.create(recursive: true);
-    
-      final ref =  FirebaseStorage.instance.ref(storagePath);
+
+      final ref = FirebaseStorage.instance.ref(storagePath);
       await ref.writeToFile(file);
-    //  await FirebaseStorage.instance.ref(storagePath).writeToFile(file);
+      //  await FirebaseStorage.instance.ref(storagePath).writeToFile(file);
     } catch (e) {
       // If there is an error delete the created file
       await file.delete(recursive: true);

@@ -56,7 +56,7 @@ class UserInfoPage extends StatefulWidget {
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
-  final _formKey = GlobalKey<FormState>();
+  final _userinfoformKey = GlobalKey<FormState>();
   final _nicknameController = TextEditingController();
   //final _ageController = TextEditingController();
   //int _friendable = 0;
@@ -178,7 +178,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             //   title: Text('User Info'),
             // ),
             body: Form(
-              key: _formKey,
+              key: _userinfoformKey,
               child: ListView(
                 //     padding: EdgeInsets.all(5),
                 children: [
@@ -308,7 +308,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       ),
                       // style: ButtonStyle.lerp(a, b, t),
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                        if (_userinfoformKey.currentState!.validate()) {
                           _saveUserInfo();
                           //     Navigator.pop(context);
                         }

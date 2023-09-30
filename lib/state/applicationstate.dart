@@ -330,71 +330,80 @@ class ApplicationState extends ChangeNotifier {
 
       //Check if the document exists
       if (userSnapshot.exists) {
+
+        
         // Get the user's data as a Map
         Map<String, dynamic>? userData =
             userSnapshot.data() as Map<String, dynamic>;
-        // UserProfile? userProfile = userProfilefunc(userData,  userId );
+        _userProfile = userProfilefunc(userData);
 
-        Timestamp? joinDateTimestamp = userData['joinDate'];
-        DateTime joinDate = joinDateTimestamp?.toDate() ?? DateTime.now();
+        // Timestamp? joinDateTimestamp = userData['joinDate'];
+        // DateTime joinDate = joinDateTimestamp?.toDate() ?? DateTime.now();
 
-        Timestamp? lastRecordedTimestamp = userData['lastRecordedDate'];
-        DateTime lastRecordedDate =
-            lastRecordedTimestamp?.toDate() ?? DateTime.now();
+        // Timestamp? lastRecordedTimestamp = userData['lastRecordedDate'];
+        // DateTime lastRecordedDate =
+        //     lastRecordedTimestamp?.toDate() ?? DateTime.now();
+        // _userProfile?.userId =
+        //     userData['userId'] ?? 'userId'; // event.get("userId") ?? "userId";
+        // _userProfile?.email = userData['email'] as String? ?? 'email';
 
-        //DateTime joinDate = ((userData['joinDate'] as Timestamp?.toDate()?? DateTime.now() ;
-        //  DateTime lastRecordedDate =
-        //      ((userData['lastRecordedDate'] as Timestamp).toDate())?? DateTime.now();
-        // Extract the user's age and address from the data
-        _userProfile?.userId =
-            userData['userId'] ?? 'userId'; // event.get("userId") ?? "userId";
-        _userProfile?.email = userData['email'] as String? ?? 'email';
+        // _userProfile?.nickname = userData['nickname'] as String? ?? 'nickname';
+        // _userProfile?.avatar = userData['avatar'] as String? ?? 'avatar';
+        // // _userProfile?.photo = userData['photo'] as String? ?? 'photo';
+        // _userProfile?.language = userData['language'] as String? ?? 'language';
+        // _userProfile?.joinDate = joinDate;
+        // //  _userProfile?.joinDate = userData['joinDate'].toDate() as DateTime? ;//?? DateTime.now() as DateTime? ;
+        // _userProfile?.friend = userData['friend'] as int? ?? 0;
+        // _userProfile?.league = userData['league'] as int? ?? 0;
+        // _userProfile?.countrycount = userData['countrycount'] as int? ?? 0;
+        // _userProfile?.visitcount = userData['visitcount'] as int? ?? 0;
+        // _userProfile?.distancetotal = (userData['distancetotal'] as int? ?? 0);
+        // _userProfile?.regioncount = userData['regioncount'] as int? ?? 0;
+        // _userProfile?.placescount = userData['placescount'] as int? ?? 0;
+        // _userProfile?.currentstreak = userData['currentstreak'] as int? ?? 0;
 
-        _userProfile?.nickname = userData['nickname'] as String? ?? 'nickname';
-        _userProfile?.avatar = userData['avatar'] as String? ?? 'avatar';
-        // _userProfile?.photo = userData['photo'] as String? ?? 'photo';
-        _userProfile?.language = userData['language'] as String? ?? 'language';
-        _userProfile?.joinDate = joinDate;
-        //  _userProfile?.joinDate = userData['joinDate'].toDate() as DateTime? ;//?? DateTime.now() as DateTime? ;
-        _userProfile?.friend = userData['friend'] as int? ?? 0;
-        _userProfile?.league = userData['league'] as int? ?? 0;
-        _userProfile?.countrycount = userData['countrycount'] as int? ?? 0;
-        _userProfile?.visitcount = userData['visitcount'] as int? ?? 0;
-        _userProfile?.distancetotal = (userData['distancetotal'] as int? ?? 0);
-        _userProfile?.regioncount = userData['regioncount'] as int? ?? 0;
-        _userProfile?.placescount = userData['placescount'] as int? ?? 0;
-        _userProfile?.currentstreak = userData['currentstreak'] as int? ?? 0;
+        // //  _userProfile?.currentstreak = userData['lastRecordedDate'] ?? 0;
+        // _userProfile?.latestlatitude =
+        //     (userData['latestlatitude'] as double?) ?? 0.0;
+        // _userProfile?.latestlongitude =
+        //     (userData['latestlongitude'] as double?) ?? 0.0;
+        // _userProfile?.lateststreetAddress =
+        //     userData['lateststreetAddress'] as String? ?? 'lateststreetAddress';
+        // _userProfile?.latestcity =
+        //     userData['latestcity'] as String? ?? 'latestcity';
+        // _userProfile?.latestcountryName =
+        //     userData['latestcountryName'] as String? ?? 'latestcountryName';
+        // _userProfile?.latestcountryCode =
+        //     userData['latestcountryCode'] as String? ?? 'latestcountryCode';
+        // _userProfile?.latestpostal =
+        //     userData['latestpostal'] as String? ?? 'latestpostal';
+        // _userProfile?.latestregion =
+        //     userData['latestregion'] as String? ?? 'latestregion';
+        // _userProfile?.latestregionCode =
+        //     userData['latestregionCode'] as String? ?? 'latestregionCode';
+        // List<dynamic>? _countryListData = userData['countrycodelist'] ?? [];
+        // _userProfile?.countrycodelist =
+        //     _countryListData?.map((e) => e.toString()).toList();
 
-        //  _userProfile?.currentstreak = userData['lastRecordedDate'] ?? 0;
-        _userProfile?.latestlatitude =
-            (userData['latestlatitude'] as double?) ?? 0.0;
-        _userProfile?.latestlongitude =
-            (userData['latestlongitude'] as double?) ?? 0.0;
-        _userProfile?.lateststreetAddress =
-            userData['lateststreetAddress'] as String? ?? 'lateststreetAddress';
-        _userProfile?.latestcity =
-            userData['latestcity'] as String? ?? 'latestcity';
-        _userProfile?.latestcountryName =
-            userData['latestcountryName'] as String? ?? 'latestcountryName';
-        _userProfile?.latestcountryCode =
-            userData['latestcountryCode'] as String? ?? 'latestcountryCode';
-        _userProfile?.latestpostal =
-            userData['latestpostal'] as String? ?? 'latestpostal';
-        _userProfile?.latestregion =
-            userData['latestregion'] as String? ?? 'latestregion';
-        _userProfile?.latestregionCode =
-            userData['latestregionCode'] as String? ?? 'latestregionCode';
-        List<dynamic>? _countryListData = userData['countrycodelist'] ?? [];
-        _userProfile?.countrycodelist =
-            _countryListData?.map((e) => e.toString()).toList();
 
-        List<Map<String, dynamic>> poiList =
-            List<Map<String, dynamic>>.from(userData['poi']);
-        _userProfile?.poi = poiList;
+  List<Map<String, dynamic>> poiList = userData['poi'] != null
+      ? List<Map<String, dynamic>>.from(userData['poi']!)
+      : <Map<String, dynamic>>[];
 
-        List<Map<String, dynamic>> blpoiList =
-            List<Map<String, dynamic>>.from(userData['blpoi']);
-        _userProfile?.blpoi = blpoiList;
+  List<Map<String, dynamic>> blpoiList = userData['blpoi'] != null
+      ? List<Map<String, dynamic>>.from(userData['blpoi']!)
+      : <Map<String, dynamic>>[];
+
+        // List<Map<String, dynamic>> poiList =
+        //     List<Map<String, dynamic>>.from(userData['poi']);
+        // _userProfile?.poi = poiList;
+
+        // List<Map<String, dynamic>> blpoiList =
+        //     List<Map<String, dynamic>>.from(userData['blpoi']);
+        // _userProfile?.blpoi = blpoiList;
+
+
+
 
         _blpoiList = [];
         //_poiMap['Bucket List']['poi'] = [];
@@ -430,9 +439,13 @@ class ApplicationState extends ChangeNotifier {
         // Print the user's ID, age, and address to the console
         print('User ${_userProfile?.userId}');
         notifyListeners();
+
+
       } else {
         print('User document for $userId does not exist.');
       }
+
+
     });
     notifyListeners();
 
@@ -453,65 +466,66 @@ class ApplicationState extends ChangeNotifier {
       _users = [];
 
       for (final document in snapshot.docs) {
-        //   DateTime joinDate =
-        //       (document.data()['joinDate'] ?? DateTime.now()) as DateTime;
+        _users.add(userProfilefunc(document.data()));
+        // //   DateTime joinDate =
+        // //       (document.data()['joinDate'] ?? DateTime.now()) as DateTime;
 
-        dynamic joinDateData = document.data()['joinDate'];
-        DateTime joinDate;
+        // dynamic joinDateData = document.data()['joinDate'];
+        // DateTime joinDate;
 
-        if (joinDateData is Timestamp) {
-          joinDate = joinDateData.toDate();
-        } else if (joinDateData is DateTime) {
-          joinDate = joinDateData;
-        } else {
-          // Handle the case where joinDateData is null or has an unsupported type.
-          // For example, you can assign a default value:
-          joinDate = DateTime.now();
-        }
+        // if (joinDateData is Timestamp) {
+        //   joinDate = joinDateData.toDate();
+        // } else if (joinDateData is DateTime) {
+        //   joinDate = joinDateData;
+        // } else {
+        //   // Handle the case where joinDateData is null or has an unsupported type.
+        //   // For example, you can assign a default value:
+        //   joinDate = DateTime.now();
+        // }
 
-        //   DateTime lastRecordedDate =
-        //       (document.data()['lastRecordedDate'] ?? DateTime.now()) as DateTime;
+        // //   DateTime lastRecordedDate =
+        // //       (document.data()['lastRecordedDate'] ?? DateTime.now()) as DateTime;
 
-        dynamic lastRecordedDateData = document.data()['joinDate'];
-        DateTime lastRecordedDate;
+        // dynamic lastRecordedDateData = document.data()['joinDate'];
+        // DateTime lastRecordedDate;
 
-        if (lastRecordedDateData is Timestamp) {
-          lastRecordedDate = lastRecordedDateData.toDate();
-        } else if (lastRecordedDateData is DateTime) {
-          lastRecordedDate = lastRecordedDateData;
-        } else {
-          // Handle the case where joinDateData is null or has an unsupported type.
-          // For example, you can assign a default value:
-          lastRecordedDate = DateTime.now();
-        }
+        // if (lastRecordedDateData is Timestamp) {
+        //   lastRecordedDate = lastRecordedDateData.toDate();
+        // } else if (lastRecordedDateData is DateTime) {
+        //   lastRecordedDate = lastRecordedDateData;
+        // } else {
+        //   // Handle the case where joinDateData is null or has an unsupported type.
+        //   // For example, you can assign a default value:
+        //   lastRecordedDate = DateTime.now();
+        // }
 
-        //  final data =  document.data();
-        //  users.add( UserProfile.fromJson(data));
+        // //  final data =  document.data();
+        // //  users.add( UserProfile.fromJson(data));
 
-        _users.add(UserProfile(
-          id: document.id,
-          userId: document.data()['userId'] ?? 'userId',
-          email: document.data()['email'] ?? 'email',
-          nickname: document.data()['nickname'] ?? 'nickname',
-          avatar: document.data()['avatar'] ?? 'avatar',
-          // photo: document.data()['photo"']  ?? 'photo' as String,
-          language: document.data()['language'] ?? 'language',
-          joinDate: joinDate,
-          //    joinDate: document.data()['joinDate']?.toDate ?? DateTime.now(),
-          //  joinDate: DateTime.tryParse(document.data()['joinDate']),
-          friend: document.data()['friend'] as int? ?? 0,
-          league: document.data()['league'] as int? ?? 0,
-          countrycount: document.data()['countrycount'] as int? ?? 0,
-          visitcount: document.data()['visitcount'] as int? ?? 0,
-          distancetotal: document.data()['distancetotal'] as int? ?? 0,
-          regioncount: document.data()['regioncount'] as int? ?? 0,
-          placescount: document.data()['placescount'] as int? ?? 0,
-          currentstreak: document.data()['currentstreak'] as int? ?? 0,
-          lastRecordedDate: lastRecordedDate,
-          //    lastRecordedDate: document.data()['lastRecordedDate']?.toDate ?? DateTime.now(),
-          // lastRecordedDate: document.data()['lastRecordedDate'].toDate as DateTime?,
-          //              lastRecordedDate: DateTime.tryParse(document.data()['lastRecordedDate']),
-        ));
+        // _users.add(UserProfile(
+        //   id: document.id,
+        //   userId: document.data()['userId'] ?? 'userId',
+        //   email: document.data()['email'] ?? 'email',
+        //   nickname: document.data()['nickname'] ?? 'nickname',
+        //   avatar: document.data()['avatar'] ?? 'avatar',
+        //   // photo: document.data()['photo"']  ?? 'photo' as String,
+        //   language: document.data()['language'] ?? 'language',
+        //   joinDate: joinDate,
+        //   //    joinDate: document.data()['joinDate']?.toDate ?? DateTime.now(),
+        //   //  joinDate: DateTime.tryParse(document.data()['joinDate']),
+        //   friend: document.data()['friend'] as int? ?? 0,
+        //   league: document.data()['league'] as int? ?? 0,
+        //   countrycount: document.data()['countrycount'] as int? ?? 0,
+        //   visitcount: document.data()['visitcount'] as int? ?? 0,
+        //   distancetotal: document.data()['distancetotal'] as int? ?? 0,
+        //   regioncount: document.data()['regioncount'] as int? ?? 0,
+        //   placescount: document.data()['placescount'] as int? ?? 0,
+        //   currentstreak: document.data()['currentstreak'] as int? ?? 0,
+        //   lastRecordedDate: lastRecordedDate,
+        //   //    lastRecordedDate: document.data()['lastRecordedDate']?.toDate ?? DateTime.now(),
+        //   // lastRecordedDate: document.data()['lastRecordedDate'].toDate as DateTime?,
+        //   //              lastRecordedDate: DateTime.tryParse(document.data()['lastRecordedDate']),
+        // ));
 
         // );
       }
@@ -588,13 +602,12 @@ class ApplicationState extends ChangeNotifier {
         .listen(onError: (error) => print("Listen failed: $error"), (snapshot) {
       _currentPlace = null;
 
-    final document = snapshot.docs[0];
+      final document = snapshot.docs[0];
 
       developer.log('listenForCurrrentPlace In ');
 
-  if (snapshot.docs.isNotEmpty) {
-
-    //  for (final document in snapshot.docs) {
+      if (snapshot.docs.isNotEmpty) {
+        //  for (final document in snapshot.docs) {
         globals.new_latitude = document.data()['latitude'] as double;
         globals.new_longitude = document.data()['longitude'] as double;
         int timeInMillis = document.data()['timestamp'] as int;
@@ -634,20 +647,18 @@ class ApplicationState extends ChangeNotifier {
             //imagePaths: document.data()['imagePaths'] as List<String>?,
             imagePaths: imagePath,
             arrivaldate: currentArrivaldate);
-  }
-  else {
-    // Set _currentPlace to default values when the snapshot is empty
-    _currentPlace = PlaceHistory(
-        userId: FirebaseAuth.instance.currentUser!.uid,
-        name: 'First Place',
-        latitude: 0.0,
-        longitude: 0.0,
-        // Set other default values here...
-        arrivaldate: DateTime.now().subtract(Duration(days: 1))  
-        );
-  }
-        developer.log('listenForCurrrentPlace out ');
-    //  }
+      } else {
+        // Set _currentPlace to default values when the snapshot is empty
+        _currentPlace = PlaceHistory(
+            userId: FirebaseAuth.instance.currentUser!.uid,
+            name: 'First Place',
+            latitude: 0.0,
+            longitude: 0.0,
+            // Set other default values here...
+            arrivaldate: DateTime.now().subtract(Duration(days: 1)));
+      }
+      developer.log('listenForCurrrentPlace out ');
+      //  }
       developer.log('listenForCurrrentPlace notifyListeners before');
 
       //   notifyListeners();
@@ -656,19 +667,15 @@ class ApplicationState extends ChangeNotifier {
 
     developer.log('return currentPlace ');
 
-    if (_currentPlace == null){
+    if (_currentPlace == null) {
       _currentPlace = PlaceHistory(
-        userId: FirebaseAuth.instance.currentUser!.uid,
-        name: 'First Place',
-        latitude: 0.0,
-        longitude: 0.0,
-        // Set other default values here...
-        arrivaldate: DateTime.now().subtract(Duration(days: 1))  
-        );
-  }
-
-
-
+          userId: FirebaseAuth.instance.currentUser!.uid,
+          name: 'First Place',
+          latitude: 0.0,
+          longitude: 0.0,
+          // Set other default values here...
+          arrivaldate: DateTime.now().subtract(Duration(days: 1)));
+    }
 
     // return currentPlace;
   }
@@ -849,4 +856,95 @@ PlaceHistory placeHistoryfunc(Map<String, dynamic> documentData) {
   developer.log('_placeHistory.add  in ');
 
   return _placeHistory;
+}
+
+UserProfile userProfilefunc(Map<String, dynamic> documentData) {
+  developer.log('userProfilefunc in ${documentData['userId']} ');
+
+  dynamic joinDateData = documentData['joinDate'];
+  DateTime joinDate;
+
+  if (joinDateData is Timestamp) {
+    joinDate = joinDateData.toDate();
+  } else if (joinDateData is DateTime) {
+    joinDate = joinDateData;
+  } else {
+    // Handle the case where joinDateData is null or has an unsupported type.
+    // For example, you can assign a default value:
+    joinDate = DateTime.now();
+  }
+
+  //   DateTime lastRecordedDate =
+  //       (document.data()['lastRecordedDate'] ?? DateTime.now()) as DateTime;
+
+  dynamic lastRecordedDateData = documentData['joinDate'];
+  DateTime lastRecordedDate;
+
+  if (lastRecordedDateData is Timestamp) {
+    lastRecordedDate = lastRecordedDateData.toDate();
+  } else if (lastRecordedDateData is DateTime) {
+    lastRecordedDate = lastRecordedDateData;
+  } else {
+    // Handle the case where joinDateData is null or has an unsupported type.
+    // For example, you can assign a default value:
+    lastRecordedDate = DateTime.now();
+  }
+
+  //  final data =  document.data();
+  //  users.add( UserProfile.fromJson(data));
+  List<dynamic>? _countryListData = documentData['countrycodelist'] ?? [];
+
+  List<Map<String, dynamic>> poiList = documentData['poi'] != null
+      ? List<Map<String, dynamic>>.from(documentData['poi']!)
+      : <Map<String, dynamic>>[];
+
+  List<Map<String, dynamic>> blpoiList = documentData['blpoi'] != null
+      ? List<Map<String, dynamic>>.from(documentData['blpoi']!)
+      : <Map<String, dynamic>>[];
+  // List<Map<String, dynamic>> poiList =
+  //     List<Map<String, dynamic>>.from(documentData['poi']);
+  //     List<Map<String, dynamic>> blpoiList =
+//            List<Map<String, dynamic>>.from(documentData['blpoi']);
+
+  List<dynamic>? _countryvisitListData = documentData['countryvisitlist'] ?? [];
+
+  final _userProfile = UserProfile(
+    id: documentData['userId'],
+    userId: documentData['userId'] ?? 'userId',
+    email: documentData['email'] ?? 'email',
+    nickname: documentData['nickname'] ?? 'nickname',
+    avatar: documentData['avatar'] ?? 'avatar',
+    // photo: documentData['photo"']  ?? 'photo' as String,
+    language: documentData['language'] ?? 'language',
+    joinDate: joinDate,
+    //    joinDate: document.data()['joinDate']?.toDate ?? DateTime.now(),
+    //  joinDate: DateTime.tryParse(document.data()['joinDate']),
+    friend: documentData['friend'] as int? ?? 0,
+    league: documentData['league'] as int? ?? 0,
+    countrycount: documentData['countrycount'] as int? ?? 0,
+    visitcount: documentData['visitcount'] as int? ?? 0,
+    distancetotal: documentData['distancetotal'] as int? ?? 0,
+    regioncount: documentData['regioncount'] as int? ?? 0,
+    placescount: documentData['placescount'] as int? ?? 0,
+    currentstreak: documentData['currentstreak'] as int? ?? 0,
+    latestlatitude: documentData['latestlatitude'] as double? ?? 0.0,
+    latestlongitude: documentData['latestlongitude'] as double? ?? 0.0,
+    lateststreetAddress:
+        documentData['lateststreetAddress'] as String? ?? 'lateststreetAddress',
+    latestcity: documentData['latestcity'] as String? ?? 'latestcity',
+    latestcountryName:
+        documentData['latestcountryName'] as String? ?? 'latestcountryName',
+    latestcountryCode:
+        documentData['latestcountryCode'] as String? ?? 'latestcountryCode',
+    latestpostal: documentData['latestpostal'] as String? ?? 'latestpostal',
+    latestregion: documentData['latestregion'] as String? ?? 'latestregion',
+    latestregionCode:
+        documentData['latestregionCode'] as String? ?? 'latestregionCode',
+    countrycodelist: _countryListData?.map((e) => e.toString()).toList(),
+    poi: poiList,
+    blpoi: blpoiList,
+    countryvisitlist: _countryvisitListData!.map((e) => e.toString()).toList(),
+  );
+
+  return _userProfile;
 }

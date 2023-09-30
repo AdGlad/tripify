@@ -14,6 +14,9 @@ import 'package:screenshot/screenshot.dart';
 import '../../state/applicationstate.dart';
 import 'dart:developer' as developer;
 
+
+
+
 class LocationMapPage extends StatefulWidget {
   // final LatLng latlng;
   final PlaceHistory placeHistory;
@@ -24,6 +27,8 @@ class LocationMapPage extends StatefulWidget {
   @override
   _LocationMapPageState createState() => _LocationMapPageState();
 }
+
+
 
 class _LocationMapPageState extends State<LocationMapPage> {
   final _controller = ScreenshotController();
@@ -36,16 +41,14 @@ class _LocationMapPageState extends State<LocationMapPage> {
 
   void _onMapCreated(
       List<PlaceHistory> placeHistory, MapboxMapController controller) async {
-
     var markerImage = await loadMarkerImage();
     controller.addImage('QuokkaMarker', markerImage);
     List<Symbol> symbols = [];
     //developer.log('Icon locations of the map ');
 
-
     for (var location in placeHistory) {
-    //  developer.log(
-    //      '${location.latitude.toString()} ,${location.latitude.toString()}');
+      //  developer.log(
+      //      '${location.latitude.toString()} ,${location.latitude.toString()}');
 
       await controller.addSymbol(SymbolOptions(
         // geometry: LatLng(location['latitude'], location['longitude']),
@@ -61,7 +64,6 @@ class _LocationMapPageState extends State<LocationMapPage> {
         textSize: 18,
       ));
     }
-
 
     _mapController = controller;
   }
