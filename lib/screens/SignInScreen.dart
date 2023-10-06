@@ -7,8 +7,11 @@ import 'package:firebase_auth/firebase_auth.dart'
 
 import 'package:go_router/go_router.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:gtk_flutter/odm/userprofile.dart';
 import 'package:gtk_flutter/screens/UserInfo/UserInfoPage.dart';
 import 'package:http/http.dart' as http;
+
+import '../src/geoposition.dart';
 
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:gtk_flutter/src/ad_helper.dart';
@@ -21,30 +24,32 @@ Future<http.Response> downloadImage(String imageUrl) async {
 Future<String?> uploadImageToFirestore(String image, String userId) async {
   //try {
 
-    final response = await downloadImage(image);
-    final imageBytes = response.bodyBytes;
-    final filename = 'avatar_'+ userId +'.jpg';
-    final storage = FirebaseStorage.instance;
-    final ref = storage.ref().child('images').child(filename); // Specify the desired storage path
-    final xfileAvatar = await uint8ListToXFile(imageBytes,filename);
-    //final storageReference = await saveImageToCloudStorage( xfileAvatar!, 'Compress');
-    final storageReference = await saveImageToCloudStorage( xfileAvatar!, 'CropCircle');
+  final response = await downloadImage(image);
+  final imageBytes = response.bodyBytes;
+  final filename = 'avatar_' + userId + '.jpg';
+  final storage = FirebaseStorage.instance;
+  final ref = storage
+      .ref()
+      .child('images')
+      .child(filename); // Specify the desired storage path
+  final xfileAvatar = await uint8ListToXFile(imageBytes, filename);
+  //final storageReference = await saveImageToCloudStorage( xfileAvatar!, 'Compress');
+  final storageReference =
+      await saveImageToCloudStorage(xfileAvatar!, 'CropCircle');
 
-    final fullPath = storageReference.fullPath;
-   // final uploadTask = ref.putData(imageBytes);
+  final fullPath = storageReference.fullPath;
+  // final uploadTask = ref.putData(imageBytes);
 
-   // await uploadTask.whenComplete(() => null);
+  // await uploadTask.whenComplete(() => null);
 
-    //final imageUrl = await ref.getDownloadURL();
-    //return imageUrl;
+  //final imageUrl = await ref.getDownloadURL();
+  //return imageUrl;
 //  } catch (e) {
- //   print('Error uploading image to Firestore: $e');
- //   return null;
- // }
-    return fullPath;
-
+  //   print('Error uploading image to Firestore: $e');
+  //   return null;
+  // }
+  return fullPath;
 }
-
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -54,9 +59,8 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-
 //String? imageUrl;
-String? avatar_path;
+  String? avatar_path;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,38 +101,55 @@ String? avatar_path;
             if (state is UserCreated) {
               // Create profile record
 
-              if (user.photoURL != null)
-              {
-                avatar_path = await uploadImageToFirestore(user.photoURL!,user.uid );
-              // avatar_path = 'images/avatar_'+ user.uid +'.jpg';  
-               //avatar_path = avatarReference.fullPath;  
+              if (user.photoURL != null) {
+                avatar_path =
+                    await uploadImageToFirestore(user.photoURL!, user.uid);
+                // avatar_path = 'images/avatar_'+ user.uid +'.jpg';
+                //avatar_path = avatarReference.fullPath;
               } else {
                 avatar_path = 'images/Quokka-Avatar.png';
               }
+
+              final _position = await geoposition();
+
+              UserProfile _newUser = UserProfile(id: FirebaseAuth.instance.currentUser!.uid,
+              userId: FirebaseAuth.instance.currentUser!.uid,
+                nickname: (user.displayName ?? 'nickname').toLowerCase(),
+                email: user.email ?? 'email',
+                avatar: avatar_path,
+                language: 'en',
+                joinDate: DateTime.now(),
+                currentstreak: 1,
+                lastRecordedDate: DateTime.now(),
+                latestlongitude: (_position?.longitude)??0.0,
+                latestlatitude: (_position?.latitude)??0.0,
+              );
+
               FirebaseFirestore.instance
                   .collection('users')
                   .doc(user.uid)
-                  .set({
-                // set({
-                'userId': FirebaseAuth.instance.currentUser!.uid,
-                'nickname': (user.displayName ?? 'nickname').toLowerCase(),
-                'email': user.email ?? 'email',
-             //   'avatar': user.photoURL ?? 'images/0qlNcVgclFZNSASXXPbX44ae1vo2/avatar/avatar_image_cropper_98290CA2-814D-4DAA-8075-05CAB4DBB10F-12470-0000064D2AB5DF33.jpg',
-                'avatar': avatar_path,
-                // 'age': int.parse(_ageController.text),
-                'friend': 0,
-                'league': 0,
-                'language': 'en',
-                'joinDate': DateTime.now(),
-                'countrycount': 0,
-                'visitcount': 0,
-                'distancetotal': 0,
-                'regioncount': 0,
-                'placescount': 0,
-                'currentstreak': 1,
-                'lastRecordedDate': DateTime.now(),
+                  .set(_newUser.toJson());  
 
-              });
+              // FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+              //   // set({
+              //   'userId': FirebaseAuth.instance.currentUser!.uid,
+              //   'nickname': (user.displayName ?? 'nickname').toLowerCase(),
+              //   'email': user.email ?? 'email',
+              //   //   'avatar': user.photoURL ?? 'images/0qlNcVgclFZNSASXXPbX44ae1vo2/avatar/avatar_image_cropper_98290CA2-814D-4DAA-8075-05CAB4DBB10F-12470-0000064D2AB5DF33.jpg',
+              //   'avatar': avatar_path,
+              //   // 'age': int.parse(_ageController.text),
+              //   'friend': 0,
+              //   'league': 0,
+              //   'language': 'en',
+              //   'joinDate': DateTime.now(),
+              //   'countrycount': 0,
+              //   'visitcount': 0,
+              //   'distancetotal': 0,
+              //   'regioncount': 0,
+              //   'placescount': 0,
+              //   'currentstreak': 1,
+              //   'lastRecordedDate': DateTime.now(),
+              // });
 
               // user.updateDisplayName(user.email!.split('@')[0]);
             }

@@ -24,4 +24,14 @@ class Region {
             .map((e) => PlaceHistory.fromJson(e))
             .toList(),
       );
+
+      Map<String, dynamic> toJson() {
+  return {
+    'apiregionCode': apiregionCode,
+    'countryCode': countryCode,
+    'region': region,
+    'regionCode': regionCode,
+    'placehistory': placehistory?.map((e) => e.toJson()).toList(),
+  };
+}
 }

@@ -136,6 +136,40 @@ class PlaceHistory {
     //   postal: json['postal'],
     // );
   }
+
+  Map<String, dynamic> toJson() {
+  return {
+    'id': id,
+    'name': name,
+    'location': location,
+    'latitude': latitude,
+    'longitude': longitude,
+    'distance': distance,
+    'streetAddress': streetAddress,
+    'city': city,
+    'countryName': countryName,
+    'countryCode': countryCode,
+    'postal': postal,
+    'region': region,
+    'regionCode': regionCode,
+    'apiregionCode': apiregionCode,
+    'timezone': timezone,
+    'elevation': elevation,
+    'timestamp': timestamp,
+    'arrivaldate': arrivaldate?.millisecondsSinceEpoch,
+    'visitnumber': visitnumber,
+    'userId': userId,
+    'description': description,
+    'rating': rating,
+    'poi': poi,
+    'poiId': poiId?.toString(),
+    'poiName': poiName,
+    'poiGroupIds': poiGroupIds,
+    'imagePaths': imagePaths,
+    'locationRaw': locationRaw,
+  };
+}
+
   
 PlaceHistory placeHistoryfunc(Map<String, dynamic> documentData) {
   int timeInMillis = documentData['timestamp'] as int;

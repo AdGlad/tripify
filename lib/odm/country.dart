@@ -31,4 +31,17 @@ class Country {
             .map((e) => Region.fromJson(e))
             .toList(),
       );
+
+      Map<String, dynamic> toJson() {
+  return {
+    'alpha3code': alpha3code,
+    'arrivaldate': arrivaldate,
+    'callingcode': callingcode,
+    'capital': capital,
+    'countryCode': countryCode,
+    'countryName': countryName,
+    'regions': regions?.map((e) => e.toJson()).toList(),
+  };
+}
+
 }

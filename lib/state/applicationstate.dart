@@ -31,7 +31,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../map/src/isocountry2.dart';
 import '../odm/getUserProfile.dart';
-import '../odm/userProfile.dart';
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
@@ -70,10 +69,6 @@ class ApplicationState extends ChangeNotifier {
 //  List<TripHistory> get tripHistory => _tripHistory;
 
 
-
-
-  UserProfileFull? _userProfileFull;
-  UserProfileFull? get userProfileFull => _userProfileFull;
 
   UserProfile? _userProfile;
   UserProfile? get userProfile => _userProfile;
@@ -192,7 +187,7 @@ class ApplicationState extends ChangeNotifier {
 
         developer.log('currentUser ${FirebaseAuth.instance.currentUser!.uid}');
        // getUserProfile(FirebaseAuth.instance.currentUser!.uid);
-        _userProfileFull = await getUserProfile("Meuk8uRhFqYRvglKQTZ2");
+        getUserProfile("Meuk8uRhFqYRvglKQTZ2");
 
 
         
